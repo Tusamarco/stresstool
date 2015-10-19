@@ -1,0 +1,95 @@
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/stresstool/!svn/ver/15/src/net/tc/utils
+END
+OneToManyHashMap.java
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/stresstool/!svn/ver/9/src/net/tc/utils/OneToManyHashMap.java
+END
+TimeTools.java
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/stresstool/!svn/ver/9/src/net/tc/utils/TimeTools.java
+END
+Text.java
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/stresstool/!svn/ver/9/src/net/tc/utils/Text.java
+END
+MathU.java
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/stresstool/!svn/ver/11/src/net/tc/utils/MathU.java
+END
+Utility.java
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/stresstool/!svn/ver/14/src/net/tc/utils/Utility.java
+END
+HTML.java
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/stresstool/!svn/ver/9/src/net/tc/utils/HTML.java
+END
+ObjectHandler.java
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/stresstool/!svn/ver/9/src/net/tc/utils/ObjectHandler.java
+END
+Autocountx.hbm.xml
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/stresstool/!svn/ver/9/src/net/tc/utils/Autocountx.hbm.xml
+END
+SynchronizedMap.java
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/stresstool/!svn/ver/15/src/net/tc/utils/SynchronizedMap.java
+END
+Autocount.hbm.xml
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/stresstool/!svn/ver/9/src/net/tc/utils/Autocount.hbm.xml
+END
+IniFile.java
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/stresstool/!svn/ver/9/src/net/tc/utils/IniFile.java
+END
+OneToManyMap.java
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/stresstool/!svn/ver/9/src/net/tc/utils/OneToManyMap.java
+END
+ISMAFileFilter.java
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/stresstool/!svn/ver/15/src/net/tc/utils/ISMAFileFilter.java
+END
+ObjectUtils.java
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/stresstool/!svn/ver/9/src/net/tc/utils/ObjectUtils.java
+END
+Utils.java
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/stresstool/!svn/ver/9/src/net/tc/utils/Utils.java
+END

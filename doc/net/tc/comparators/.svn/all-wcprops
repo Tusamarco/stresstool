@@ -1,0 +1,119 @@
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/stresstool/!svn/ver/10/doc/net/tc/comparators
+END
+DomainsOrderComparator.html
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/stresstool/!svn/ver/10/doc/net/tc/comparators/DomainsOrderComparator.html
+END
+collectionsOrderComparator.html
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/stresstool/!svn/ver/10/doc/net/tc/comparators/collectionsOrderComparator.html
+END
+ElementsOrderComparator.html
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/stresstool/!svn/ver/10/doc/net/tc/comparators/ElementsOrderComparator.html
+END
+MultilingualComparator.html
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/stresstool/!svn/ver/10/doc/net/tc/comparators/MultilingualComparator.html
+END
+OrderByTimeProperty.html
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/stresstool/!svn/ver/10/doc/net/tc/comparators/OrderByTimeProperty.html
+END
+StringComparator.html
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/stresstool/!svn/ver/10/doc/net/tc/comparators/StringComparator.html
+END
+ObjectMultilingualComparator.html
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/stresstool/!svn/ver/10/doc/net/tc/comparators/ObjectMultilingualComparator.html
+END
+package-frame.html
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/stresstool/!svn/ver/10/doc/net/tc/comparators/package-frame.html
+END
+package-tree.html
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/stresstool/!svn/ver/10/doc/net/tc/comparators/package-tree.html
+END
+ItemsOrderComparator.html
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/stresstool/!svn/ver/10/doc/net/tc/comparators/ItemsOrderComparator.html
+END
+SubsetOrderComparator.html
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/stresstool/!svn/ver/10/doc/net/tc/comparators/SubsetOrderComparator.html
+END
+OrderBySystemTime.html
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/stresstool/!svn/ver/10/doc/net/tc/comparators/OrderBySystemTime.html
+END
+package-use.html
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/stresstool/!svn/ver/10/doc/net/tc/comparators/package-use.html
+END
+SortableByOrder.html
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/stresstool/!svn/ver/10/doc/net/tc/comparators/SortableByOrder.html
+END
+package-summary.html
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/stresstool/!svn/ver/10/doc/net/tc/comparators/package-summary.html
+END
+AreasOrderComparator.html
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/stresstool/!svn/ver/10/doc/net/tc/comparators/AreasOrderComparator.html
+END
+OrderByOrderProperty.html
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/stresstool/!svn/ver/10/doc/net/tc/comparators/OrderByOrderProperty.html
+END
+SortableByTime.html
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/stresstool/!svn/ver/10/doc/net/tc/comparators/SortableByTime.html
+END
+CollectionsSortByOrderComparator.html
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/stresstool/!svn/ver/10/doc/net/tc/comparators/CollectionsSortByOrderComparator.html
+END

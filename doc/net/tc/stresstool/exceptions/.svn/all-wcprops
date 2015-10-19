@@ -1,0 +1,59 @@
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/stresstool/!svn/ver/10/doc/net/tc/stresstool/exceptions
+END
+package-frame.html
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/stresstool/!svn/ver/10/doc/net/tc/stresstool/exceptions/package-frame.html
+END
+StressToolConfigurationException.html
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/stresstool/!svn/ver/10/doc/net/tc/stresstool/exceptions/StressToolConfigurationException.html
+END
+package-tree.html
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/stresstool/!svn/ver/10/doc/net/tc/stresstool/exceptions/package-tree.html
+END
+StressToolGenericException.html
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/stresstool/!svn/ver/10/doc/net/tc/stresstool/exceptions/StressToolGenericException.html
+END
+StressToolMonitorException.html
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/stresstool/!svn/ver/10/doc/net/tc/stresstool/exceptions/StressToolMonitorException.html
+END
+package-use.html
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/stresstool/!svn/ver/10/doc/net/tc/stresstool/exceptions/package-use.html
+END
+package-summary.html
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/stresstool/!svn/ver/10/doc/net/tc/stresstool/exceptions/package-summary.html
+END
+StressToolActionException.html
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/stresstool/!svn/ver/10/doc/net/tc/stresstool/exceptions/StressToolActionException.html
+END
+ExceptionMessages.html
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/stresstool/!svn/ver/10/doc/net/tc/stresstool/exceptions/ExceptionMessages.html
+END

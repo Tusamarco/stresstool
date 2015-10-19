@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/stresstool/!svn/ver/17/src/net/tc/stresstool/config
+END
+ConfigValue.java
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/stresstool/!svn/ver/15/src/net/tc/stresstool/config/ConfigValue.java
+END
+ConfigurationImplementation.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/stresstool/!svn/ver/17/src/net/tc/stresstool/config/ConfigurationImplementation.java
+END
+Configuration.java
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/stresstool/!svn/ver/15/src/net/tc/stresstool/config/Configuration.java
+END
+config.ucd
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/stresstool/!svn/ver/15/src/net/tc/stresstool/config/config.ucd
+END
+Configurator.java
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/stresstool/!svn/ver/17/src/net/tc/stresstool/config/Configurator.java
+END

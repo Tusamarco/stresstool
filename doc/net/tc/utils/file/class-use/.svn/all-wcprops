@@ -1,0 +1,71 @@
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/stresstool/!svn/ver/10/doc/net/tc/utils/file/class-use
+END
+FileDataReader.html
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/stresstool/!svn/ver/10/doc/net/tc/utils/file/class-use/FileDataReader.html
+END
+FileDataWriter.html
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/stresstool/!svn/ver/10/doc/net/tc/utils/file/class-use/FileDataWriter.html
+END
+UploadableFile.html
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/stresstool/!svn/ver/10/doc/net/tc/utils/file/class-use/UploadableFile.html
+END
+uploadableFileImpl.html
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/stresstool/!svn/ver/10/doc/net/tc/utils/file/class-use/uploadableFileImpl.html
+END
+FilesUploader.html
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/stresstool/!svn/ver/10/doc/net/tc/utils/file/class-use/FilesUploader.html
+END
+FileDispatcher.html
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/stresstool/!svn/ver/10/doc/net/tc/utils/file/class-use/FileDispatcher.html
+END
+BufferdFileOutputStream.html
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/stresstool/!svn/ver/10/doc/net/tc/utils/file/class-use/BufferdFileOutputStream.html
+END
+fileNameFilter.html
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/stresstool/!svn/ver/10/doc/net/tc/utils/file/class-use/fileNameFilter.html
+END
+FileHandler.html
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/stresstool/!svn/ver/10/doc/net/tc/utils/file/class-use/FileHandler.html
+END
+BufferdFileInputStream.html
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/stresstool/!svn/ver/10/doc/net/tc/utils/file/class-use/BufferdFileInputStream.html
+END
+FileUploader.html
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/stresstool/!svn/ver/10/doc/net/tc/utils/file/class-use/FileUploader.html
+END

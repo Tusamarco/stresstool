@@ -1,0 +1,59 @@
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/stresstool/!svn/ver/17/src/net/tc/stresstool/statistics
+END
+StatsCollection.java
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/stresstool/!svn/ver/15/src/net/tc/stresstool/statistics/StatsCollection.java
+END
+ActionGroups.java
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/stresstool/!svn/ver/15/src/net/tc/stresstool/statistics/ActionGroups.java
+END
+StatCollector.java
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/stresstool/!svn/ver/15/src/net/tc/stresstool/statistics/StatCollector.java
+END
+EventCollection.java
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/stresstool/!svn/ver/15/src/net/tc/stresstool/statistics/EventCollection.java
+END
+StatEvent.java
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/stresstool/!svn/ver/15/src/net/tc/stresstool/statistics/StatEvent.java
+END
+statistics.ucd
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/stresstool/!svn/ver/15/src/net/tc/stresstool/statistics/statistics.ucd
+END
+ActionCollection.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/stresstool/!svn/ver/15/src/net/tc/stresstool/statistics/ActionCollection.java
+END
+StatsGroups.java
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/stresstool/!svn/ver/15/src/net/tc/stresstool/statistics/StatsGroups.java
+END
+ActionTHElement.java
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/stresstool/!svn/ver/15/src/net/tc/stresstool/statistics/ActionTHElement.java
+END

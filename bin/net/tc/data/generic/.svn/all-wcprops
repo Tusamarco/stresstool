@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/stresstool/!svn/ver/15/src/net/tc/data/generic
+END
+baseObject.java
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/stresstool/!svn/ver/15/src/net/tc/data/generic/baseObject.java
+END
+baseObject.jbx
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/stresstool/!svn/ver/9/src/net/tc/data/generic/baseObject.jbx
+END
+dataObject.java
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/stresstool/!svn/ver/9/src/net/tc/data/generic/dataObject.java
+END

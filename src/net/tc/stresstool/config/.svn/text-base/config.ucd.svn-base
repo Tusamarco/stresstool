@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<editmodel:ClassDiagramEditModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:editmodel="editmodel.xmi" xmlns:options="options.xmi" name="config" size="1177,650" id="net.tc.stresstool.config" metadata="uml2-1.0" initialized="true" tag="10" key="32303037303533312D313020737472657373746F6F6C">
+  <children xsi:type="editmodel:ClassEditModel" name="Configurator" location="72,15" size="209,248" id="net.tc.stresstool.config/Configurator">
+    <children xsi:type="editmodel:CompartmentEditModel" size="186,72">
+      <children xsi:type="editmodel:AttributeEditModel" name="aCTION_SECTION_NAME" id="net.tc.stresstool.config/Configurator#aCTION_SECTION_NAME"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="lOGS_SECTION_NAME" id="net.tc.stresstool.config/Configurator#lOGS_SECTION_NAME"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="mAIN_SECTION_NAME" id="net.tc.stresstool.config/Configurator#mAIN_SECTION_NAME"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="sTATS_SECTION_NAME" id="net.tc.stresstool.config/Configurator#sTATS_SECTION_NAME"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="152,126">
+      <children xsi:type="editmodel:MethodEditModel" name="Configurator" id="net.tc.stresstool.config/Configurator#Configurator()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getConfiguration" id="net.tc.stresstool.config/Configurator#getConfiguration(Ljava.lang.String;Ljava.lang.Class;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getConfiguration" id="net.tc.stresstool.config/Configurator#getConfiguration(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getConfigurations" id="net.tc.stresstool.config/Configurator#getConfigurations()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getSectionsName" id="net.tc.stresstool.config/Configurator#getSectionsName()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="loadNewConfiguration" id="net.tc.stresstool.config/Configurator#loadNewConfiguration(Ljava.lang.String;Ljava.lang.Class;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="printConfiguration" id="net.tc.stresstool.config/Configurator#printConfiguration(Lorg.apache.log4j.Logger;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.2/@sourceConnections.1" name="ConfigValue" location="360,247" size="210,176" id="net.tc.stresstool.config/ConfigValue">
+    <children xsi:type="editmodel:CompartmentEditModel" size="187,72">
+      <children xsi:type="editmodel:AttributeEditModel" name="id" id="net.tc.stresstool.config/ConfigValue#id"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="implementingClass" id="net.tc.stresstool.config/ConfigValue#implementingClass"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="sectionName" id="net.tc.stresstool.config/ConfigValue#sectionName"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="timestamp" id="net.tc.stresstool.config/ConfigValue#timestamp"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="95,54">
+      <children xsi:type="editmodel:MethodEditModel" name="ConfigValue" id="net.tc.stresstool.config/ConfigValue#ConfigValue(Ljava.lang.String;Ljava.lang.String;Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="ConfigValue" id="net.tc.stresstool.config/ConfigValue#ConfigValue(Ljava.lang.String;Ljava.lang.String;Ljava.lang.String;Ljava.lang.Class;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setValue" id="net.tc.stresstool.config/ConfigValue#setValue(Ljava.lang.String;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="ConfigurationImplementation" location="300,15" size="263,176" id="net.tc.stresstool.config/ConfigurationImplementation">
+    <children xsi:type="editmodel:CompartmentEditModel" size="130,18">
+      <children xsi:type="editmodel:AttributeEditModel" name="sectionName" id="net.tc.stresstool.config/ConfigurationImplementation#sectionName"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="190,108">
+      <children xsi:type="editmodel:MethodEditModel" name="ConfigurationImplementation" id="net.tc.stresstool.config/ConfigurationImplementation#ConfigurationImplementation(Ljava.lang.String;Ljava.util.Map;Ljava.lang.Class;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getConfigurationFile" id="net.tc.stresstool.config/ConfigurationImplementation#getConfigurationFile()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getParameter" id="net.tc.stresstool.config/ConfigurationImplementation#getParameter(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getParametersName" id="net.tc.stresstool.config/ConfigurationImplementation#getParametersName()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setConfigurationFile" id="net.tc.stresstool.config/ConfigurationImplementation#setConfigurationFile(Ljava.io.File;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setParameter" id="net.tc.stresstool.config/ConfigurationImplementation#setParameter(Lnet.tc.stresstool.config.ConfigValue;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" autoLocated="true" id="net.tc.stresstool.config/Configuration&lt;-net.tc.stresstool.config/ConfigurationImplementation" source="//@children.2" target="//@children.3" targetEnd="//@children.2/@sourceConnections.0/@children.1" sourceEnd="//@children.2/@sourceConnections.0/@children.0" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="15,176" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="195,0"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:AssociationEditModel" autoLocated="true" id="net.tc.stresstool.config/ConfigValue@mapValues+net.tc.stresstool.config/ConfigurationImplementation@" source="//@children.2" target="//@children.1" targetEnd="//@children.2/@sourceConnections.1/@children.2" label="//@children.2/@sourceConnections.1/@children.0" sourceEnd="//@children.2/@sourceConnections.1/@children.1" connectionRouterKind="Manhattan">
+      <children xsi:type="editmodel:WireLabelEditModel" size="0,13" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="161,176" id="net.tc.stresstool.config/ConfigValue@mapValues+net.tc.stresstool.config/ConfigurationImplementation@|net.tc.stresstool.config/ConfigurationImplementation#" attachSource="true">
+        <children xsi:type="editmodel:QualifierAttributeEditModel" name="toLowerCase" location="418,187" size="86,22" id=""/>
+      </children>
+      <children xsi:type="editmodel:AssociationEndEditModel" name="mapValues" location="101,0" id="net.tc.stresstool.config/ConfigValue@mapValues+net.tc.stresstool.config/ConfigurationImplementation@|net.tc.stresstool.config/ConfigValue#mapValues" multiplicityLabel="//@children.2/@sourceConnections.1/@children.2/@children.1" roleLabel="//@children.2/@sourceConnections.1/@children.2/@children.0" navigable="true">
+        <children xsi:type="editmodel:LabelEditModel" name=" - mapValues" location="468,227" size="70,13" anchorKind="LastPart"/>
+        <children xsi:type="editmodel:LabelEditModel" name="1" location="447,227" size="7,13" anchorKind="LastPart"/>
+      </children>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:InterfaceEditModel" targetConnections="//@children.2/@sourceConnections.0" name="Configuration" location="120,360" size="212,153" id="net.tc.stresstool.config/Configuration">
+    <children xsi:type="editmodel:CompartmentEditModel" size="189,54">
+      <children xsi:type="editmodel:AttributeEditModel" name="configurationFile" id="net.tc.stresstool.config/Configuration#configurationFile"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="parametersName" id="net.tc.stresstool.config/Configuration#parametersName"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="sectionName" id="net.tc.stresstool.config/Configuration#sectionName"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="104,36">
+      <children xsi:type="editmodel:MethodEditModel" name="getParameter" id="net.tc.stresstool.config/Configuration#getParameter(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setParameter" id="net.tc.stresstool.config/Configuration#setParameter(Lnet.tc.stresstool.config.ConfigValue;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <diagramOptions xsi:type="options:ClassDiagramOptions" level="-1" showScope="InPackage" properties="wireOptions=3;Product=eUML2"/>
+  <boardSetting snapToGeometry="true" gridEnabled="true" gridSpacing="15,15" gridOrigin="0,0" rulerUnit="pixel" gridVisibility="false">
+    <leftRuler/>
+    <topRuler/>
+  </boardSetting>
+  <classDiagramPreferences xsi:type="editmodel:UMLClassDiagramPreference" showPopupBars="true" showConnectionHandles="true" attributeSorter="Natural" methodSorter="Natural" showClassStereotype="true" showPackageStereotype="true" showDependencyStereotype="true" showInterfaceStereotype="true" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+</editmodel:ClassDiagramEditModel>

@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/stresstool/!svn/ver/17/src/net/tc/stresstool/statistics/providers
+END
+StatsProvider.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/stresstool/!svn/ver/15/src/net/tc/stresstool/statistics/providers/StatsProvider.java
+END
+MySQLSuper.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/stresstool/!svn/ver/17/src/net/tc/stresstool/statistics/providers/MySQLSuper.java
+END
+MySQLStatus.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/stresstool/!svn/ver/14/src/net/tc/stresstool/statistics/providers/MySQLStatus.java
+END
+Reporter.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/stresstool/!svn/ver/15/src/net/tc/stresstool/statistics/providers/Reporter.java
+END

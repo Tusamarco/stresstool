@@ -1,0 +1,71 @@
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/stresstool/!svn/ver/21/src/net/tc/data/db
+END
+Table.java
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/stresstool/!svn/ver/21/src/net/tc/data/db/Table.java
+END
+PrimaryKey.java
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/stresstool/!svn/ver/21/src/net/tc/data/db/PrimaryKey.java
+END
+PartitionDefinition.java
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/stresstool/!svn/ver/21/src/net/tc/data/db/PartitionDefinition.java
+END
+Attribute.java
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/stresstool/!svn/ver/21/src/net/tc/data/db/Attribute.java
+END
+Partition.java
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/stresstool/!svn/ver/21/src/net/tc/data/db/Partition.java
+END
+SubPartition.java
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/stresstool/!svn/ver/21/src/net/tc/data/db/SubPartition.java
+END
+Row.java
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/stresstool/!svn/ver/21/src/net/tc/data/db/Row.java
+END
+IndexMeta.java
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/stresstool/!svn/ver/21/src/net/tc/data/db/IndexMeta.java
+END
+view.java
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/stresstool/!svn/ver/21/src/net/tc/data/db/view.java
+END
+Index.java
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/stresstool/!svn/ver/21/src/net/tc/data/db/Index.java
+END
+Schema.java
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/stresstool/!svn/ver/21/src/net/tc/data/db/Schema.java
+END

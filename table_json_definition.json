@@ -1,0 +1,110 @@
+mysql> show create table tbtest1\G
+*************************** 1. row ***************************
+       Table: tbtest1
+Create Table: CREATE TABLE `tbtest1` (
+  `autoInc` bigint(11) NOT NULL AUTO_INCREMENT,
+  `a` int(11) NOT NULL,
+  `uuid` char(36) NOT NULL,
+  `serverid` smallint(6) NOT NULL,
+  `b` varchar(100) NOT NULL,
+  `c` char(200) NOT NULL,
+  `counter` bigint(20) DEFAULT NULL,
+  `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `partitionid` int(11) NOT NULL DEFAULT '0',
+  `strrecordtype` char(3) DEFAULT NULL,
+  PRIMARY KEY (`autoInc`),
+  KEY `IDX_a` (`a`),
+  KEY `IDX_uuid` (`uuid`)
+) ENGINE=InnoDB AUTO_INCREMENT=408408 DEFAULT CHARSET=latin1
+1 row in set (0.00 sec)
+
+mysql> show create table tbtest_child1\G
+*************************** 1. row ***************************
+       Table: tbtest_child1
+Create Table: CREATE TABLE `tbtest_child1` (
+  `a` int(11) NOT NULL,
+  `serverid` smallint(6) NOT NULL,
+  `bb` int(11) NOT NULL AUTO_INCREMENT,
+  `partitionid` int(11) NOT NULL DEFAULT '0',
+  `stroperation` varchar(254) DEFAULT NULL,
+  `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`a`,`bb`),
+  UNIQUE KEY `bb` (`bb`),
+  KEY `serverid` (`serverid`)
+) ENGINE=InnoDB AUTO_INCREMENT=5350 DEFAULT CHARSET=latin1
+1 row in set (0.00 sec
+
+{
+	"database":"test",
+	"tables":{
+		"table":[
+				{
+					"database":"test",
+					"tablename":"tbtest",
+					"engine":"innodb",
+					"primarykey":["autoinc"],
+					"autoincrementvalue":5340,
+					"defaultcharset":"latin1",
+					"keys":
+							{
+							"key":
+								[
+									{"name":"IDX_a","unique":false,"attributes":["a"]},
+									{"name":"IDX_uuid","unique":false,"attributes":["uuid"]},			
+									{"name":"IDX_uuid","unique":true,"attributes":["unique"]}			
+								]
+							},
+					"haspartition":false,	
+					"fields":{
+						"field":
+							[
+								{"name":"autoInc","datatype":"bigint","datadimension":"11","default":"none","null":false,"autoincrement":true},
+								{"name":"uuid","datatype":"char","datadimension":"36","default":"none","null":false},				
+								{"name":"serverid","datatype":"smallint","datadimension":"6","default":"none","null":false},				
+								{"name":"b","datatype":"varchar","datadimension":"100","default":"none","null":false},
+								{"name":"c","datatype":"char","datadimension":"200","default":"none","null":false},
+								{"name":"counter","datatype":"bigint","datadimension":"20","default":"none","null":true},								
+								{"name":"time","datatype":"timestamp","default":"none","ON UPDATE":"CURRENT_TIMESTAMP","null":false},
+								{"name":"partitionid","datatype":"int","datadimension":"11","default":"0","null":true},								
+								{"name":"strrecordtype","datatype":"char","datadimension":"3","default":"","null":true}				
+							]
+					},
+					"partitionDefinition":{
+	
+					}
+				},
+								{
+					"database":"test",
+					"tablename":"tbtest_child",
+					"engine":"innodb",
+					"primarykey":["a","bb"],
+					"autoincrementvalue":5340,
+					"defaultcharset":"latin1",
+					"keys":
+							{
+							"key":
+								[
+									{"name":"serverid","unique":false,"attributes":["serverid"]},			
+									{"name":"bb","unique":true,"attributes":["bb"]}			
+								]
+							},
+					"haspartition":false,	
+					"fields":{
+						"field":
+							[
+								{"name":"a","datatype":"int","datadimension":"11","default":"none","null":false},
+								{"name":"serverid","datatype":"smallint","datadimension":"6","default":"none","null":false},				
+								{"name":"bb","datatype":"int","datadimension":"11","default":"none","null":false,"autoincrement":true},
+								{"name":"partitionid","datatype":"int","datadimension":"11","default":"0","null":true},								
+								{"name":"stroperation","datatype":"varchar","datadimension":"254","default":"","null":true},				
+								{"name":"time","datatype":"timestamp","default":"none","ON UPDATE":"CURRENT_TIMESTAMP","null":false}
+							]
+					},
+					"partitionDefinition":{
+	
+					}
+				}
+
+			]
+		}
+}

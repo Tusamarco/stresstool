@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<editmodel:ClassDiagramEditModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:editmodel="editmodel.xmi" xmlns:options="options.xmi" name="actions" size="1563,790" id="net.tc.stresstool.actions" metadata="uml2-1.0" initialized="true" zoom="0.75" tag="10" key="32303037303533312D313020737472657373746F6F6C">
+  <children xsi:type="editmodel:ClassEditModel" name="Launcher" location="59,30" size="156,248" id="net.tc.stresstool.actions/Launcher" runTimeClassModel="CreateStructure(),Launcher(),CreateDelete(),LoadData(),CreateInsert(),DropTables(),CreateSelects(),validatePermission(),LaunchActions(),TruncateTables(),CreateUpdate()">
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="133,198">
+      <children xsi:type="editmodel:MethodEditModel" name="CreateDelete" id="net.tc.stresstool.actions/Launcher#CreateDelete()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="CreateInsert" id="net.tc.stresstool.actions/Launcher#CreateInsert()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="CreateSelects" id="net.tc.stresstool.actions/Launcher#CreateSelects()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="CreateStructure" id="net.tc.stresstool.actions/Launcher#CreateStructure()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="CreateUpdate" id="net.tc.stresstool.actions/Launcher#CreateUpdate()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="DropTables" id="net.tc.stresstool.actions/Launcher#DropTables()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="LaunchActions" id="net.tc.stresstool.actions/Launcher#LaunchActions()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="Launcher" id="net.tc.stresstool.actions/Launcher#Launcher(Lnet.tc.stresstool.config.Configurator;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="LoadData" id="net.tc.stresstool.actions/Launcher#LoadData()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="TruncateTables" id="net.tc.stresstool.actions/Launcher#TruncateTables()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="validatePermission" id="net.tc.stresstool.actions/Launcher#validatePermission(Lnet.tc.stresstool.config.Configuration;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:InterfaceEditModel" name="CreateAction" location="269,23" size="192,261" id="net.tc.stresstool.actions/CreateAction" runTimeClassModel="CreateStructure(),DropStructure(),CreateActionTablePrimary(),getActionTableSecondary(),setActionTablePrimary(),LoadData(),getActionTablePrimary(),CreateSchema(),setActionTableSecondary(),DropSchema(),TruncateTables()">
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="169,198">
+      <children xsi:type="editmodel:MethodEditModel" name="CreateStructure" id="net.tc.stresstool.actions/CreateAction#CreateStructure()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="DropStructure" id="net.tc.stresstool.actions/CreateAction#DropStructure()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="LoadData" id="net.tc.stresstool.actions/CreateAction#LoadData()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="TruncateTables" id="net.tc.stresstool.actions/CreateAction#TruncateTables()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="CreateActionTablePrimary" id="net.tc.stresstool.actions/CreateAction#CreateActionTablePrimary()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getActionTablePrimary" id="net.tc.stresstool.actions/CreateAction#getActionTablePrimary()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setActionTablePrimary" id="net.tc.stresstool.actions/CreateAction#setActionTablePrimary()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getActionTableSecondary" id="net.tc.stresstool.actions/CreateAction#getActionTableSecondary()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setActionTableSecondary" id="net.tc.stresstool.actions/CreateAction#setActionTableSecondary()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="CreateSchema" id="net.tc.stresstool.actions/CreateAction#CreateSchema()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="DropSchema" id="net.tc.stresstool.actions/CreateAction#DropSchema()"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:InterfaceEditModel" name="StressAction" location="524,29" size="195,423" id="net.tc.stresstool.actions/StressAction" runTimeClassModel="getClassName(),setConfiguration(Lnet.tc.stresstool.config.ConfigurationImplementation;),setDBType(Ljava.lang.String;),getLoops(),ExecuteAction(),setSleepTime(J),setId(J),getLastExecutionTime(),getActionType(),getId(),getConfiguration(),isActive(),getActionStatus(),getCurrentLoop(),getLastThinkTime(),setConnectionInformation(),setActionTablePrimary(Ljava.lang.String;),setLoops(I),getSleepTime(),setActionTableSecondary()">
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="172,360">
+      <children xsi:type="editmodel:MethodEditModel" name="getId" id="net.tc.stresstool.actions/StressAction#getId()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setId" id="net.tc.stresstool.actions/StressAction#setId(J)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setConnectionInformation" id="net.tc.stresstool.actions/StressAction#setConnectionInformation(Ljava.util.Map;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setDBType" id="net.tc.stresstool.actions/StressAction#setDBType(Lnet.tc.stresstool.DbType;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="isActive" id="net.tc.stresstool.actions/StressAction#isActive()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getLastExecutionTime" id="net.tc.stresstool.actions/StressAction#getLastExecutionTime()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getLastThinkTime" id="net.tc.stresstool.actions/StressAction#getLastThinkTime()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setSleepTime" id="net.tc.stresstool.actions/StressAction#setSleepTime(J)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getSleepTime" id="net.tc.stresstool.actions/StressAction#getSleepTime()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setLoops" id="net.tc.stresstool.actions/StressAction#setLoops(I)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getLoops" id="net.tc.stresstool.actions/StressAction#getLoops()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getCurrentLoop" id="net.tc.stresstool.actions/StressAction#getCurrentLoop()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getClassName" id="net.tc.stresstool.actions/StressAction#getClassName()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getActionType" id="net.tc.stresstool.actions/StressAction#getActionType()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setConfiguration" id="net.tc.stresstool.actions/StressAction#setConfiguration(Lnet.tc.stresstool.config.ConfigurationImplementation;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getConfiguration" id="net.tc.stresstool.actions/StressAction#getConfiguration()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="ExecuteAction" id="net.tc.stresstool.actions/StressAction#ExecuteAction()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setActionTablePrimary" id="net.tc.stresstool.actions/StressAction#setActionTablePrimary(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setActionTableSecondary" id="net.tc.stresstool.actions/StressAction#setActionTableSecondary(LStress;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getActionStatus" id="net.tc.stresstool.actions/StressAction#getActionStatus()"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="ActionStatus" location="67,315" size="199,248" id="net.tc.stresstool.actions/ActionStatus" runTimeClassModel="id,averageThinkingTime,averageResponseTime,totalExecutionTime,lastReponseTime,lastThinkingTime,averageRowsAffected,ActionStatus(),isActive(),currentLoop,lastRowAffected">
+    <children xsi:type="editmodel:CompartmentEditModel" size="176,162">
+      <children xsi:type="editmodel:AttributeEditModel" name="averageResponseTime" id="net.tc.stresstool.actions/ActionStatus#averageResponseTime"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="averageRowsAffected" id="net.tc.stresstool.actions/ActionStatus#averageRowsAffected"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="averageThinkingTime" id="net.tc.stresstool.actions/ActionStatus#averageThinkingTime"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="currentLoop" id="net.tc.stresstool.actions/ActionStatus#currentLoop"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="id" id="net.tc.stresstool.actions/ActionStatus#id"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="lastReponseTime" id="net.tc.stresstool.actions/ActionStatus#lastReponseTime"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="lastRowAffected" id="net.tc.stresstool.actions/ActionStatus#lastRowAffected"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="lastThinkingTime" id="net.tc.stresstool.actions/ActionStatus#lastThinkingTime"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="totalExecutionTime" id="net.tc.stresstool.actions/ActionStatus#totalExecutionTime"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="99,36">
+      <children xsi:type="editmodel:MethodEditModel" name="ActionStatus" id="net.tc.stresstool.actions/ActionStatus#ActionStatus()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="isActive" id="net.tc.stresstool.actions/ActionStatus#isActive()"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:InterfaceEditModel" name="WriteAction" location="767,36" size="176,225" id="net.tc.stresstool.actions/WriteAction" runTimeClassModel="setBatchSize(I),getBatchSize(),setAutoIncrement(Z),setLazyness(Z),getInsertValueProvider(),getLazyInterval(),getLazyness(),isAutoincrement(),steLazyInterval(I)">
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="153,162">
+      <children xsi:type="editmodel:MethodEditModel" name="setBatchSize" id="net.tc.stresstool.actions/WriteAction#setBatchSize(I)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getBatchSize" id="net.tc.stresstool.actions/WriteAction#getBatchSize()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setAutoIncrement" id="net.tc.stresstool.actions/WriteAction#setAutoIncrement(Z)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="isAutoincrement" id="net.tc.stresstool.actions/WriteAction#isAutoincrement()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getInsertValueProvider" id="net.tc.stresstool.actions/WriteAction#getInsertValueProvider()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setLazyness" id="net.tc.stresstool.actions/WriteAction#setLazyness(Z)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getLazyness" id="net.tc.stresstool.actions/WriteAction#getLazyness()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="steLazyInterval" id="net.tc.stresstool.actions/WriteAction#seLazyInterval(I)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getLazyInterval" id="net.tc.stresstool.actions/WriteAction#getLazyInterval()"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:InterfaceEditModel" name="ReadAction" location="989,40" size="185,189" id="net.tc.stresstool.actions/ReadAction" runTimeClassModel="setLazyness(Z),setSelectMethod(),getLazyInterval(),getSelectMethod(Ljava.lang.String;),getLazyness(),setLazyInterval(I),setDataSelectorProvider()">
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="162,126">
+      <children xsi:type="editmodel:MethodEditModel" name="getLazyInterval" id="net.tc.stresstool.actions/ReadAction#getLazyInterval()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getLazyness" id="net.tc.stresstool.actions/ReadAction#getLazyness()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getSelectMethod" id="net.tc.stresstool.actions/ReadAction#getSelectMethod(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setDataSelectorProvider" id="net.tc.stresstool.actions/ReadAction#setDataSelectorProvider()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setLazyInterval" id="net.tc.stresstool.actions/ReadAction#setLazyInterval(I)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setLazyness" id="net.tc.stresstool.actions/ReadAction#setLazyness(Z)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setSelectMethod" id="net.tc.stresstool.actions/ReadAction#setSelectMethod()"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:InterfaceEditModel" name="DeleteAction" location="988,240" size="185,117" id="net.tc.stresstool.actions/DeleteAction" runTimeClassModel="setActionRange(I),setInterval(I),setDataSelectorProvider()">
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="162,54">
+      <children xsi:type="editmodel:MethodEditModel" name="setActionRange" id="net.tc.stresstool.actions/DeleteAction#setActionRange(I)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setDataSelectorProvider" id="net.tc.stresstool.actions/DeleteAction#setDataSelectorProvider()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setInterval" id="net.tc.stresstool.actions/DeleteAction#setInterval(I)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="ActionTable" location="284,315" size="159,130" id="net.tc.stresstool.actions/ActionTable" runTimeClassModel="attributeMap,level,engine,tableName,attributesNumber,setAttributeMap">
+    <children xsi:type="editmodel:CompartmentEditModel" size="136,90">
+      <children xsi:type="editmodel:AttributeEditModel" name="attributeMap" id="net.tc.stresstool.actions/ActionTable#attributeMap"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="attributesNumber" id="net.tc.stresstool.actions/ActionTable#attributesNumber"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="engine" id="net.tc.stresstool.actions/ActionTable#engine"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="level" id="net.tc.stresstool.actions/ActionTable#level"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="tableName" id="net.tc.stresstool.actions/ActionTable#tableName"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="WriteValueProvider" location="283,465" size="191,158" id="net.tc.stresstool.actions/WriteValueProvider" runTimeClassModel="getSQL(),fillTable(),actionTable,batchSize,lazy,refresh">
+    <children xsi:type="editmodel:CompartmentEditModel" size="152,72">
+      <children xsi:type="editmodel:AttributeEditModel" name="actionTable" id="net.tc.stresstool.actions/WriteValueProvider#actionTable"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="batchSize" id="net.tc.stresstool.actions/WriteValueProvider#batchSize"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="lazy" id="net.tc.stresstool.actions/WriteValueProvider#lazy"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="refresh" id="net.tc.stresstool.actions/WriteValueProvider#refresh"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="72,36">
+      <children xsi:type="editmodel:MethodEditModel" name="fillTable" id="net.tc.stresstool.actions/WriteValueProvider#fillTable()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getSQL" id="net.tc.stresstool.actions/WriteValueProvider#getSQL()"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="SelectValueProvider" location="524,480" size="229,212" id="net.tc.stresstool.actions/SelectValueProvider" runTimeClassModel="getSQL(),tableJoinLinker,hasJoin,joinLevel,resultSetLimit,setTableJoinLinker,ActionTableLinkerMap,lazy,refresh,actionTableSelectMap,setActionTableSelectMap">
+    <children xsi:type="editmodel:CompartmentEditModel" size="206,144">
+      <children xsi:type="editmodel:AttributeEditModel" name="ActionTableLinkerMap" id="net.tc.stresstool.actions/SelectValueProvider#ActionTableLinkerMap"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="actionTableSelectMap" id="net.tc.stresstool.actions/SelectValueProvider#actionTableSelectMap"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="hasJoin" id="net.tc.stresstool.actions/SelectValueProvider#hasJoin"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="joinLevel" id="net.tc.stresstool.actions/SelectValueProvider#joinLevel"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="lazy" id="net.tc.stresstool.actions/SelectValueProvider#lazy"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="refresh" id="net.tc.stresstool.actions/SelectValueProvider#refresh"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="resultSetLimit" id="net.tc.stresstool.actions/SelectValueProvider#resultSetLimit"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="tableJoinLinker" id="net.tc.stresstool.actions/SelectValueProvider#tableJoinLinker"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="69,18">
+      <children xsi:type="editmodel:MethodEditModel" name="getSQL" id="net.tc.stresstool.actions/SelectValueProvider#getSQL()"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="TableJoinLink" location="795,375" size="161,130" id="net.tc.stresstool.actions/TableJoinLink" runTimeClassModel="child,joinFieldParent,joinFieldChild,parent,joinType">
+    <children xsi:type="editmodel:CompartmentEditModel" size="138,90">
+      <children xsi:type="editmodel:AttributeEditModel" name="child" id="net.tc.stresstool.actions/TableJoinLink#child"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="joinFieldChild" id="net.tc.stresstool.actions/TableJoinLink#joinFieldChild"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="joinFieldParent" id="net.tc.stresstool.actions/TableJoinLink#joinFieldParent"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="joinType" id="net.tc.stresstool.actions/TableJoinLink#joinType"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="parent" id="net.tc.stresstool.actions/TableJoinLink#parent"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="TableAttributes" location="975,373" size="161,274" id="net.tc.stresstool.actions/TableAttributes" runTimeClassModel="isFilter,isNull,keyOrder,isUnsign,type,hasIndex,id,isCounter,isSelectable,isPrimaryKey,name,length,value">
+    <children xsi:type="editmodel:CompartmentEditModel" size="138,234">
+      <children xsi:type="editmodel:AttributeEditModel" name="hasIndex" id="net.tc.stresstool.actions/TableAttributes#hasIndex"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="id" id="net.tc.stresstool.actions/TableAttributes#id"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="isCounter" id="net.tc.stresstool.actions/TableAttributes#isCounter"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="isFilter" id="net.tc.stresstool.actions/TableAttributes#isFilter"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="isNull" id="net.tc.stresstool.actions/TableAttributes#isNull"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="isPrimaryKey" id="net.tc.stresstool.actions/TableAttributes#isPrimaryKey"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="isSelectable" id="net.tc.stresstool.actions/TableAttributes#isSelectable"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="isUnsign" id="net.tc.stresstool.actions/TableAttributes#isUnsign"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="keyOrder" id="net.tc.stresstool.actions/TableAttributes#keyOrder"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="length" id="net.tc.stresstool.actions/TableAttributes#length"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="name" id="net.tc.stresstool.actions/TableAttributes#name"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="type" id="net.tc.stresstool.actions/TableAttributes#type"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="value" id="net.tc.stresstool.actions/TableAttributes#value"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <diagramOptions xsi:type="options:ClassDiagramOptions" level="-1" showScope="InPackage" properties="wireOptions=3;Product=eUML2"/>
+  <boardSetting snapToGeometry="true" gridEnabled="true" gridSpacing="15,15" gridOrigin="0,0" rulerUnit="pixel" gridVisibility="false">
+    <leftRuler/>
+    <topRuler/>
+  </boardSetting>
+  <classDiagramPreferences xsi:type="editmodel:UMLClassDiagramPreference" showPopupBars="true" showConnectionHandles="true" attributeSorter="Natural" methodSorter="Natural" showClassStereotype="true" showPackageStereotype="true" showDependencyStereotype="true" showInterfaceStereotype="true" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+</editmodel:ClassDiagramEditModel>

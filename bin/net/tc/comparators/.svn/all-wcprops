@@ -1,0 +1,95 @@
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/stresstool/!svn/ver/15/src/net/tc/comparators
+END
+collectionsOrderComparator.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/stresstool/!svn/ver/15/src/net/tc/comparators/collectionsOrderComparator.java
+END
+ElementsOrderComparator.java
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/stresstool/!svn/ver/15/src/net/tc/comparators/ElementsOrderComparator.java
+END
+OrderByTimeProperty.java
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/stresstool/!svn/ver/15/src/net/tc/comparators/OrderByTimeProperty.java
+END
+MultilingualComparator.java
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/stresstool/!svn/ver/15/src/net/tc/comparators/MultilingualComparator.java
+END
+StringComparator.java
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/stresstool/!svn/ver/15/src/net/tc/comparators/StringComparator.java
+END
+ObjectMultilingualComparator.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/stresstool/!svn/ver/15/src/net/tc/comparators/ObjectMultilingualComparator.java
+END
+ItemsOrderComparator.java
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/stresstool/!svn/ver/15/src/net/tc/comparators/ItemsOrderComparator.java
+END
+SubsetOrderComparator.java
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/stresstool/!svn/ver/15/src/net/tc/comparators/SubsetOrderComparator.java
+END
+OrderBySystemTime.java
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/stresstool/!svn/ver/15/src/net/tc/comparators/OrderBySystemTime.java
+END
+SortableByOrder.java
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/stresstool/!svn/ver/9/src/net/tc/comparators/SortableByOrder.java
+END
+OrderByOrderProperty.java
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/stresstool/!svn/ver/15/src/net/tc/comparators/OrderByOrderProperty.java
+END
+AreasOrderComparator.java
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/stresstool/!svn/ver/15/src/net/tc/comparators/AreasOrderComparator.java
+END
+SortableByTime.java
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/stresstool/!svn/ver/9/src/net/tc/comparators/SortableByTime.java
+END
+CollectionsSortByOrderComparator.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/stresstool/!svn/ver/15/src/net/tc/comparators/CollectionsSortByOrderComparator.java
+END
+DomainsOrderComparator.java
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/stresstool/!svn/ver/15/src/net/tc/comparators/DomainsOrderComparator.java
+END
