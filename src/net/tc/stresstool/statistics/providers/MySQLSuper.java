@@ -28,7 +28,7 @@ import net.tc.utils.file.FileHandler;
 
 /**
  * @author  tusa
- * V3
+ * V4
  */
 public class MySQLSuper implements StatsProvider, Reporter {
 
