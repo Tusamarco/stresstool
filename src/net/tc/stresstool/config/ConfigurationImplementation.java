@@ -42,6 +42,19 @@ public class ConfigurationImplementation implements Configuration {
 		} 
 	}
 
+	@Deprecated
+	public ConfigurationImplementation(String SectionNameIn,String key,String value,Class implementingClass) throws StressToolException {
+		try{
+			setSectionName(SectionNameIn+"@"+implementingClass.getName());
+			ConfigValue tmpValue = new ConfigValue(getSectionName(),key,value,implementingClass); 
+			setParameter(tmpValue);
+		}
+		catch(Throwable th )
+		{
+			new StressToolConfigurationException(th).printStackTrace();
+		} 
+	}
+
 	@Override
 	public void setParameter(ConfigValue parameter) {
 		if(parameter != null 
@@ -94,6 +107,33 @@ public class ConfigurationImplementation implements Configuration {
 		return (Iterator) mapValues.keySet().iterator();
 	    }
 	    return null;
+	}
+	
+	/**
+	 * This method update a set of configuration values
+	 * and return boolean
+	 */
+	public boolean updateConfigValue(ConfigurationImplementation inConfig){
+	    boolean modified = false;
+	    if( inConfig != null 
+		    && inConfig.getSectionName() !=null 
+		    && !inConfig.getSectionName().equals("")
+		    ){
+
+		
+		Iterator it = inConfig.getParametersName();
+		while(it.hasNext()){
+		    ConfigValue cv = inConfig.getParameter((String)it.next());
+		    this.setParameter(cv);
+		    modified =true;
+			    
+		}
+		
+		
+	    }
+	    
+	    
+	    return modified;
 	}
 
 }

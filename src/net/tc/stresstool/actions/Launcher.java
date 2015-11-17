@@ -21,6 +21,7 @@ import net.tc.utils.SynchronizedMap;
 /**
  * @author tusa
  *
+ *This class is the main point from where all the actions are instantiate
  */
 
 public class Launcher {
@@ -28,8 +29,10 @@ public class Launcher {
     private Map connMapcoordinates =null;
     private String deleteClass = null;
     private String insertClass = null;
+    private String updateClass = null;
     private String selectClass = null;
-    private WriteAction writeImplementation = null; 
+    private WriteAction writeImplementation = null;
+    private WriteAction updateImplementation = null;
     private ReadAction readImplementation = null;
     private DeleteAction deleteImplementation = null;
     
@@ -132,6 +135,7 @@ public class Launcher {
     }
 
     /**
+     * This is the invocation to create the basic structure
      */
     public boolean CreateStructure() {
 	if(this.writeImplementation != null && 
@@ -216,7 +220,19 @@ public class Launcher {
 			    throw new StressToolConfigurationException(" Insert Class not define");
 			    
 			}
-			   
+
+			if(config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParameter("UpdateClass") != null &&
+				config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParameter("UpdateClass").getValue() != null){
+			    this.updateClass =(String) config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParameter("UpdateClass").getValue();
+			    
+			}
+			else{
+			    ExceptionMessages.setCurrentError(ExceptionMessages.ERROR_FATAL);
+			    throw new StressToolConfigurationException(" Insert Class not define");
+			    
+			}
+
+			
 			if(config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParameter("SelectClass") != null &&
 				config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParameter("SelectClass").getValue() != null){
 			    this.selectClass =(String) config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParameter("SelectClass").getValue();
@@ -263,18 +279,23 @@ public class Launcher {
 		try {
 		    
 		    /* insert class
+		     * Initialization
 		     * 
 		     */
 		    setParametersClassInsert();
+		    setParametersClassUpdate();
 
 		    /*
 		     * Select class
+		     * Initialization
 		     */
 		    setParametersClassSelect();
 		    
 		    
 		    /*
 		     * Set Delete class
+		     * Initialization
+		     * 
 		     */
 		    setParametersClassDelete();
 		    
@@ -315,6 +336,65 @@ public class Launcher {
 	return false;
     }
 
+    
+
+	/**
+	 * Method to set class parameters
+	 * 
+	 * 
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 * @throws ClassNotFoundException
+	 * @throws InvocationTargetException
+	 * @throws NoSuchMethodException
+	 * @throws StressToolException
+	 * @throws StressToolConfigurationException
+	 */
+	private void setParametersClassUpdate() throws InstantiationException,
+	IllegalAccessException, ClassNotFoundException,
+	InvocationTargetException, NoSuchMethodException,
+	StressToolException, StressToolConfigurationException {
+	    if(updateClass != null && !updateClass.equals("")){
+		updateImplementation = (WriteAction) Class.forName(updateClass).newInstance();
+		Map beanProperties = BeanUtils.describe(updateImplementation);
+		Iterator<String> it = config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParametersName();
+
+		StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).debug("Assign  Update class parameters [start] ");
+
+		while (it.hasNext()){
+		    String propertyName = it.next();
+		    if(beanProperties.containsKey(propertyName)){
+			if(BeanUtils.getProperty(((StressAction)updateImplementation), propertyName) != null){
+
+			    BeanUtils.setProperty(((StressAction)updateImplementation), propertyName, 
+				    config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParameter(propertyName).getValue());
+			    StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).debug(updateImplementation.getClass().getName() + " " +
+				    propertyName + " = " + config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParameter(propertyName).getValue());
+
+			}
+		    } 	
+		}
+
+		it = config.getConfiguration(updateClass,StressTool.class).getParametersName();
+		while (it.hasNext()){
+		    String propertyName = it.next();
+		    if(beanProperties.containsKey(propertyName)){
+			if(BeanUtils.getProperty((updateImplementation), propertyName) != null){
+
+			    BeanUtils.setProperty((updateImplementation), propertyName, 
+				    config.getConfiguration(updateClass,StressTool.class).getParameter(propertyName).getValue());
+			    StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).debug(updateImplementation.getClass().getName() + " " +
+				    propertyName + " = " + config.getConfiguration(updateClass,StressTool.class).getParameter(propertyName).getValue());
+
+			}
+		    }  	
+		}
+		((StressAction)updateImplementation).setId(4000);
+		((StressAction)updateImplementation).setActionType(StressActionBase.ACTION_TYPE_Update);
+
+		StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).debug("Assign  Update class parameters [end] ");
+	    }
+	}
 	/**
 	 * Method to set class parameters
 	 * 
@@ -474,6 +554,11 @@ public class Launcher {
 					    		propertyName + " = " + config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParameter(propertyName).getValue());
 		    			
 					}
+				    	else{
+				    	    	StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).warn(deleteImplementation.getClass().getName() + " " +
+				    		propertyName + " method accepting this parameter DO NOT EXIST in this class");
+				    	}
+				    	
 				  } 	
 				}
 				
@@ -489,9 +574,13 @@ public class Launcher {
 					    		propertyName + " = " + config.getConfiguration(deleteClass,StressTool.class).getParameter(propertyName).getValue());
 		    			
 					}
+				    	else{
+				    	    	StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).warn(deleteImplementation.getClass().getName() + " " +
+				    		propertyName + " method accepting this parameter DO NOT EXIST in this class");
+				    	}
 				  }  	
 				}
-				((StressAction)deleteImplementation).setId(2000);
+				((StressAction)deleteImplementation).setId(3000);
 				((StressAction)deleteImplementation).setActionType(StressActionBase.ACTION_TYPE_Insert);
 				
 				StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).debug("Assign  Delete class parameters [end] ");

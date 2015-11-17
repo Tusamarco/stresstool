@@ -207,6 +207,27 @@ public void putAll( Map t )
 	{ex.printStackTrace();}
 
 }
+public void putAll(Object key, Map t )
+{
+	if( t == null )
+		return;
+	try{
+	    	Map tMap = new SynchronizedMap(t.size());
+		Iterator it = t.keySet().iterator();
+		while( it.hasNext() )
+		{
+			Object tk = it.next();
+			Object tv = t.get( tk );
+			tMap.put(tk, tv);
+		}
+			put( key, tMap );
+		
+	}catch(Exception ex)
+	{ex.printStackTrace();}
+
+}
+
+
 public Iterator iterator()
 {
 	if(keys == null)

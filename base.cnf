@@ -4,7 +4,7 @@ database=test
 user=stress	
 password=tool
 connParameters=autoReconnect=true  
-creaeTable=true 
+createTable=true 
 dbType=MySQL 
 doDelete=false 
 doBatch=30
@@ -30,6 +30,7 @@ truncate=false
 DeleteClass=net.tc.stresstool.actions.DeleteBase 
 SelectClass=net.tc.stresstool.actions.SelectBase
 InsertClass=net.tc.stresstool.actions.InsertBase
+UpdateClass=net.tc.stresstool.actions.UpdateBase
 
 logPathStats=/tmp/stats.csv
 logPathStatReport=/tmp/reportstat.txt
@@ -71,7 +72,7 @@ joinField=a
 forceIndex=true
 indexName=IDX_a
 numberOfIntervalKeys=10000
-selectFilterMethod=range
+selectFilterMethod=in
 #range|in|match
 sleepSelect=0 
 
@@ -86,3 +87,14 @@ lazyCreation=true
 lazyInterval=5000
 batchSize=50
 jsonFile=/Users/marcotusa/programs/JBuilder/workspace/stresstool/json_definition.json
+
+
+[net.tc.stresstool.actions.UpdateBase]
+numberOfprimaryTables=30
+numberOfSecondaryTables=20
+useAutoIncrement=true
+joinField=a
+sleepWrite=1
+lazyCreation=true
+lazyInterval=5000
+batchSize=50

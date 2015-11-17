@@ -59,6 +59,9 @@ import net.tc.utils.Utility;
 
 /**
  * @author  tusa
+ * 
+ * Main class from where all starts
+ * 
  */
 public class StressTool {
 	/**
@@ -81,9 +84,12 @@ public class StressTool {
 
 	public StressTool(String[] args) {
         try {
+            	/*
+            	 * Configuration first 
+            	 */
 	        if(args.length >= 1 && args[0].indexOf("defaults-file") > 0){
 	        		  config = new Configurator();
-	        		  config.loadNewConfiguration(((String)args[0].split("=")[1]), this.getClass());
+	        		  config.loadNewConfiguration(args,((String)args[0].split("=")[1]), this.getClass());
 	        		  
 	        	
 	        }
@@ -164,6 +170,8 @@ public class StressTool {
 	/**
 	 * @param args
 	 * @throws StressToolConfigurationException 
+	 * 
+	 * The Main class instantiate a StressTool object and from there all starts
 	 */
 	public static void main(String[] args)  {
 
@@ -175,8 +183,10 @@ public class StressTool {
         System.exit(ExceptionMessages.getCurrentError());
 	}
 	
-	/* This method initialize the class loading the configuration and testing the logs defined in the configuration
-	 *  
+	/**
+	 * This method initialize the class loading the configuration and testing the logs defined in the configuration
+	 * @throws StressToolException
+	 * 
 	 */
 	private void init() throws StressToolException{
 	    Configuration logConf = null;
@@ -269,6 +279,7 @@ public class StressTool {
 
 	    StringBuffer sb = new StringBuffer();
 	    sb.append("/**\n");
+	    sb.append("value in args must be pass as <section>@parameter=value \n");
 	    sb.append("* connUrl jdbc url //jdbc:mysql://127.0.0.1:3320/test?user=test&password=test&autoReconnect=true\n");
 	    sb.append("* createtable  [true|false] = Create the tables on test DB\n");
 	    sb.append("* truncate  [true|false] = truncate tables on test DB\n");

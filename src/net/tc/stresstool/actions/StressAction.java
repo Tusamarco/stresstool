@@ -8,6 +8,7 @@ import net.tc.stresstool.config.ConfigurationImplementation;
 public interface StressAction {
 	 public static String ACTION_TYPE_Select = "Select";
 	    public static String ACTION_TYPE_Insert = "Insert";
+	    public static String ACTION_TYPE_Update = "Update";
 	    public static String ACTION_TYPE_Delete = "Delete";
 	    public static String ACTION_TYPE_Create = "Create";
 	    public static String ACTION_TYPE_Drop = "Drop";

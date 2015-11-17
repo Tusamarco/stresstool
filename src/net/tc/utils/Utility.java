@@ -4,9 +4,10 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Date;
 import java.beans.*;
-
 import java.lang.reflect.*;
+
 import org.apache.commons.beanutils.BeanUtils;
+
 import java.sql.*;
 import java.io.*;
 /*
@@ -86,6 +87,63 @@ import javax.imageio.ImageIO;
 	
     }
 
+    public static Map convertArgsToMap(String[] args){
+	if(args == null || args.length == 0)
+	    return null;
+	
+	Map argMap = new SynchronizedMap(0);
+	
+	/**
+	 * if one level is just cycling
+	 * if two levels using  @ (my standard)
+	 * Then double cycle
+	 */
+	boolean dc =false;
+	
+	for(int i = 0 ; i < args.length ; i++){
+	    if(args[i].indexOf("@") > -1){
+		dc = true;
+		break;
+	    }
+	}
+	if(dc){
+	    Map MapL1 = new SynchronizedMap(0);
+	    Map MapL2 = new SynchronizedMap(0);
+	    
+	    for(int i = 0 ; i < args.length ; i++){
+		String sectionName =(String)args[i].split("@")[0];
+		if(!MapL1.containsKey(sectionName)){
+		    String key = (String)args[i].split("@")[1].split("=")[0];
+		    String value = (String)args[i].split("@")[1].split("=")[1];
+		    MapL1.put(sectionName, null);
+		    MapL2.put(key, value);
+		    for(int il = 0 ; il < args.length ; il++){
+			if(args[il].split("@")[0].equals(sectionName)){
+			    if(!MapL2.containsKey(args[il].split("@")[1].split("=")[0])){
+				  MapL2.put(args[il].split("@")[1].split("=")[0],args[il].split("@")[1].split("=")[1]);
+			    }
+			}
+			
+		    }
+		    
+		    ((SynchronizedMap)argMap).putAll(sectionName, MapL2);
+		    MapL2.clear();
+		}
+		
+
+	    }
+	    return argMap;
+	    
+	}
+	else{
+	    for(int i = 0 ; i < args.length ; i++){
+		argMap.put(args[i].split("=")[0],args[i].split("=")[1]);
+	    }
+	    return argMap;
+	}
+	
+	
+    }
     public static String returnFormatExtention(int i)
     {
         switch (i)

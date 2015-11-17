@@ -95,8 +95,8 @@ public class StructureDefinitionParserMySQL implements
 					 * Parse Attributes 
 					 */
 					table.setMetaAttributes(new SynchronizedMap(0));
-					JSONObject attributes = (JSONObject)objectDefinition.get("attributes");
-					JSONArray arAttributes = (JSONArray)tables.get("attribute");
+					JSONObject attributes = (JSONObject)oTable.get("attributes");
+					JSONArray arAttributes = (JSONArray)attributes.get("attribute"); <---------------------------------------  IM HERE>
 					for(Object oa: arAttributes){
 						JSONObject oAttribute = (JSONObject) oa;
 						Attribute attribute = new Attribute();

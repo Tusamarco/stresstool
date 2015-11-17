@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--AgileJ Ltd. (http://www.agilej.com)--><ajsv>
+    <diagram creationDate="2015-Nov-16 10:50" licenseGrade="evaluation" licenseeName="anon" licenseeOrganization="unknown" populationMethod="manual" version="1.8.3.v20151019-2113">
+        <filterScript>
+
+// no filter script yet defined for this class diagram
+// use CTRL+SPACE for completion suggestions
+
+</filterScript>
+        <class className="net.tc.stresstool.statistics.StatCollector" project="stresstool" xLocation="116" yLocation="559"/>
+        <class className="net.tc.stresstool.actions.Launcher" project="stresstool" xLocation="1890" yLocation="791"/>
+        <class className="net.tc.stresstool.StressTool" project="stresstool" xLocation="1284" yLocation="100"/>
+        <class className="net.tc.stresstool.config.Configurator" project="stresstool" xLocation="923" yLocation="1192"/>
+        <class className="net.tc.stresstool.logs.LogProvider" project="stresstool" xLocation="100" yLocation="1216"/>
+    </diagram>
+</ajsv>
