@@ -1,12 +1,14 @@
 package net.tc.data.db;
 
+import java.util.ArrayList;
+
 public class Index {
 
 	private String tableName = null;
 	private boolean allowNull = false;
 	private String name = null;
 	private int seqInIndex = 1;
-	private String columnName = null;
+	private ArrayList columnsDefinition = null;
 	private String collation = null ;
 	private int cardinality = 0;
 	private int subPart = 0; //number of charcaters included in the index 0 means all
@@ -45,12 +47,17 @@ public class Index {
 	public void setSeqInIndex(int seqInIndex) {
 		this.seqInIndex = seqInIndex;
 	}
-	public String getColumnName() {
-		return columnName;
+	public ArrayList<String> getColumnsDefinition() {
+		return columnsDefinition;
 	}
-	public void setColumnName(String columnName) {
-		this.columnName = columnName;
+	public void setColumnsDefinition(ArrayList<String> columnsDefinition) {
+		this.columnsDefinition = columnsDefinition;
 	}
+
+	public void setColumnsDefinition(String columnDefinition) {
+		this.columnsDefinition.add(columnDefinition);
+	}
+	
 	public String getCollation() {
 		return collation;
 	}
@@ -87,7 +94,6 @@ public class Index {
 	public void setIndexType(String indexType) {
 		this.indexType = indexType;
 	}
-	
 	
 	
 }

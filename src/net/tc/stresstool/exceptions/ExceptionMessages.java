@@ -14,6 +14,7 @@ public class ExceptionMessages {
 	public static String ERROR_PORCESSING_STATS = "\nThere is a problem processing the statistics see details:";
 	public static String ERROR_CREATING_PROVIDER = "There is a problem creating the provider check below for more details:";
 	public static String ERROR_METHOD_IN_SUPERCLASS = "Invocation Error, this method should be implemented in a extending class with @Override";
+	public static String INVALID_PARTITION_TYPE = "The current partition declaration is invalid";
 	
 	public ExceptionMessages() {
 		// TODO Auto-generated constructor stub
