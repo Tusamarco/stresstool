@@ -2,6 +2,8 @@ package net.tc.jsonparser;
 
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Map;
 
 import net.tc.data.db.*;
 import net.tc.stresstool.StressTool;
@@ -77,8 +79,6 @@ public class StructureDefinitionParserMySQL implements
 					Table table = new Table();
 					table.setName((String)oTable.get("tablename"));
 
-					StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).debug("Parsing Json definition for table = " + dbName+"." + table.getName());
-
 					table.setSchemaName((String)oTable.get("database"));
 					if(oTable.get("autoincrementvalue")!=null){
 						((Long)oTable.get("autoincrementvalue")).longValue();
@@ -88,15 +88,41 @@ public class StructureDefinitionParserMySQL implements
 					table.setAutoincrementValue(oTable.get("autoincrementvalue")!=null?((Long)oTable.get("autoincrementvalue")).longValue():0);
 					table.setStorageEngine((String)oTable.get("engine")!=null?(String)oTable.get("engine"):null);
 					table.setDefaultCharacterSet((String)oTable.get("defaultcharset")!=null?(String)oTable.get("defaultcharset"):null);
-					if(oTable.get("haspartition") != null)
-						table.setHasPartition(((Boolean)oTable.get("haspartition")).booleanValue());
+					table.setDefaultCollation((String)oTable.get("defaultcollation")!=null?(String)oTable.get("defaultcollation"):null);
+					table.setHasPartition((Boolean)(oTable.get("haspartition")!=null?oTable.get("haspartition"):false));
+					
+					/*
+					 * browsing for PK
+					 */
+					if(oTable.get("primarykey") != null){
+					    PrimaryKey primaryKey = new PrimaryKey();
+					    SynchronizedMap indexMap = new SynchronizedMap(0);
+					    JSONArray arPK = (JSONArray)oTable.get("primarykey");
+					    
+					    int seq = 0;
+					    for(Object oPK: arPK){
+						    Index idx = new Index();
+						    idx.setAllowNull(false);
+						    idx.setSeqInIndex(seq++);
+						    idx.setName((String)oPK);
+						    idx.setTableName(table.getName());
+						    indexMap.put(idx.getName(), idx);
+						}
+					    primaryKey.setIndexes(indexMap);
+					    table.setPrimaryKey(primaryKey);
+					}
+					StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).debug("Parsing Json definition for table = " + dbName+"." + table.getName()
+					+ " Primary Key = " + Arrays.toString(table.getPrimaryKey().getIndexes().getKeyasOrderedStringArray()));
 
 					/***
 					 * Parse Attributes 
 					 */
 					table.setMetaAttributes(new SynchronizedMap(0));
 					JSONObject attributes = (JSONObject)oTable.get("attributes");
-					JSONArray arAttributes = (JSONArray)attributes.get("attribute"); <--------------vv-------------------------  IM HERE>
+					JSONArray arAttributes = (JSONArray)attributes.get("attribute");
+					/*
+					 * Loading attributes from Json file
+					 */
 					for(Object oa: arAttributes){
 						JSONObject oAttribute = (JSONObject) oa;
 						Attribute attribute = new Attribute();
@@ -109,7 +135,7 @@ public class StructureDefinitionParserMySQL implements
 						
 						attribute.setDataType((String)oAttribute.get("datatype"));
 						attribute.setDataDimension((String)oAttribute.get("datadimension")!= null?Integer.parseInt((String)oAttribute.get("datadimension")):0);
-						attribute.setAutoIncrement((String)oAttribute.get("autoincrement")!= null?true:false);
+						attribute.setAutoIncrement(oAttribute.get("autoincrement")!= null?true:false);
 						if(oAttribute.get("default") == null 
 								|| ((String)oAttribute.get("default")).equals("none")){
 								attribute.setDefaultValue((String)oAttribute.get("default"));
@@ -119,7 +145,7 @@ public class StructureDefinitionParserMySQL implements
 						}
 						attribute.setOnUpdate((String)oAttribute.get("onUpdate")!= null?(String)oAttribute.get("onUpdate"):null);
 						if(oAttribute.get("null") != null
-								&& ((String)oAttribute.get("null")).equals("false")){
+								&& (oAttribute.get("null")).equals("false")){
 							attribute.setNull(true);
 						}
 						else
@@ -133,29 +159,106 @@ public class StructureDefinitionParserMySQL implements
 					/***
 					 * Parse Indexes 
 					 */
-					if(tables.get("keys") != null){
+					if(oTable.get("keys") != null){
 						
-						JSONObject keys = (JSONObject)objectDefinition.get("keys");
+						JSONObject keys = (JSONObject)oTable.get("keys");
 						JSONArray arKeys = (JSONArray)keys.get("key");
 						for(Object ok: arKeys){
 							JSONObject oKey = (JSONObject) ok;
-							IndexMeta index = new IndexMeta();
+							Index index = new Index();
 							index.setName((String)oKey.get("name")!=null?(String)oKey.get("name"):null);
 							if(oKey.get("unique") != null
-									&& ((String)oKey.get("unique")).equals("true")){
+									&& (oKey.get("unique")).equals("true")){
 								index.setUnique(true);
 							}
 							else
 								index.setUnique(false);
 							index.setColumnsDefinition(new ArrayList());
-							JSONArray arCollDef = (JSONArray)keys.get("attributes");
+							JSONArray arCollDef = (JSONArray)oKey.get("attributes");
+							ArrayList arColKey = new ArrayList();
 							for(Object oColDef: arCollDef){
-								 
+							    arColKey.add(oColDef);
 							}
+							StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).debug("Parsing Json definition for Key = " 
+								+ dbName +"." 
+								+ table.getName() + "." 
+								+ index.getName() + " " 
+								+ " [ " + arColKey.toString() + " ]");
+							index.setColumnsDefinition(arColKey);
+							table.setIndex(index);
 						}
 					}
+					/**
+					 * Parse the Partitioning
+					 * 
+					 */
+					if(table.isHasPartition()){
+					    if(oTable.get("partitionDefinition") != null){
+						JSONObject oPartDef = (JSONObject)oTable.get("partitionDefinition");
+						PartitionDefinition partDef = new PartitionDefinition();
+						partDef.setTableName(table.getName());
+						partDef.setPartitionType((String)oPartDef.get("partitionBy")!=null?(String)oPartDef.get("partitionBy"):null);
+
+						JSONArray arCollDef = (JSONArray)oPartDef.get("attributes");
+						ArrayList arColPart = new ArrayList();
+						for(Object oColDef: arCollDef){
+						    arColPart.add(oColDef);
+						}
+						partDef.setAttributes(arColPart);
+						partDef.setFunction((String)oPartDef.get("function")!=null?(String)oPartDef.get("function"):null);
+						partDef.setInterval((String)oPartDef.get("interval")!=null?(String)oPartDef.get("interval"):null);
+						
+						partDef.setStartDate((String)oPartDef.get("starttime")!=null?(String)oPartDef.get("starttime"):null);
+						partDef.setEndDate((String)oPartDef.get("endtime")!=null?(String)oPartDef.get("endtime"):null);
+						partDef.setPartitionsSize((String) ((String)oPartDef.get("partitions")!=null?(String)oPartDef.get("partitions"):0));
+
+						StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).debug("Parsing Json definition for Partition = " 
+						+ dbName +"." 
+						+ table.getName() + "." 
+						+ partDef.getPartitionType() + " " + partDef.getFunction() );
+						
+						
+						if(partDef.getPartitionType().equals(PartitionDefinition.PARTITION_TYPE_RANGE)
+							&& (partDef.getStartDate() == null || partDef.getEndDate() == null ) ){
+						    	SynchronizedMap partitions = new SynchronizedMap();
+							JSONObject ranges = (JSONObject)oPartDef.get("ranges");
+							if(ranges.get("range") != null){
+        							JSONArray arRange = (JSONArray)ranges.get("range");
+        							for(Object oR: arRange){
+        							    JSONObject oRange = (JSONObject) oR;
+        							    Partition partition = new Partition();
+        							    partition.setName((String)oRange.get("name")!=null?(String)oRange.get("name"):null);
+        							    partition.setValueDeclaration((String)oRange.get("value")!=null?(String)oRange.get("value"):null);
+        							    partitions.put(partition.getName(), partition);
+        							}
+        							partDef.setPartitions(partitions);
+        							
+							}
+
+						}
+						if(partDef.getPartitionType().equals(PartitionDefinition.PARTITION_TYPE_LIST)){
+							JSONObject ranges = (JSONObject)oPartDef.get("lists");
+							if(ranges.get("list") != null){
+							    	SynchronizedMap partitions = new SynchronizedMap();
+							    	JSONArray arList = (JSONArray)ranges.get("list");
+        							for(Object oR: arList){
+        							    JSONObject oList = (JSONObject) oR;
+        							    Partition partition = new Partition();
+        							    partition.setName((String)oList.get("name")!=null?(String)oList.get("name"):null);
+        							    partition.setValueDeclaration((String)oList.get("value")!=null?(String)oList.get("value"):null);
+        							    partitions.put(partition.getName(), partition);
+        							}
+        							partDef.setPartitions(partitions);
+							}
+
+						}
+
+					    }
+					    
+					    
+					}
 					
-					
+					StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).debug("--------------------------------------");
 					schema.setTable(table);
 				}
 				

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--AgileJ Ltd. (http://www.agilej.com)--><ajsv>
+    <diagram creationDate="2015-Nov-17 16:20" licenseGrade="evaluation" licenseeName="anon" licenseeOrganization="unknown" populationMethod="manual" version="1.8.3.v20151019-2113">
+        <filterScript>
+
+// no filter script yet defined for this class diagram
+// use CTRL+SPACE for completion suggestions
+
+</filterScript>
+        <class className="net.tc.stresstool.statistics.ActionTHElement" project="stresstool" xLocation="3903" yLocation="386"/>
+        <class className="net.tc.stresstool.statistics.StatCollector" project="stresstool" xLocation="1669" yLocation="215"/>
+        <class className="net.tc.stresstool.statistics.StatsGroups" project="stresstool" xLocation="1331" yLocation="1074"/>
+        <class className="net.tc.stresstool.statistics.EventCollection" project="stresstool" xLocation="467" yLocation="1012"/>
+        <class className="net.tc.stresstool.statistics.StatsCollection" project="stresstool" xLocation="585" yLocation="533"/>
+        <class className="net.tc.stresstool.statistics.ActionCollection" project="stresstool" xLocation="3269" yLocation="612"/>
+        <class className="net.tc.stresstool.statistics.StatEvent" project="stresstool" xLocation="100" yLocation="100"/>
+        <class className="net.tc.stresstool.statistics.ActionGroups" project="stresstool" xLocation="2785" yLocation="757"/>
+    </diagram>
+</ajsv>

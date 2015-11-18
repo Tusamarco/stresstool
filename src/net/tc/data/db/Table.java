@@ -21,6 +21,15 @@ public class Table {
 	private String schemaName = null;
 	private long autoincrementValue = 0 ;
 	private SynchronizedMap metaAttributes = null;
+
+	
+	
+	public Table() {
+	    rows = new SynchronizedMap(0);
+	    indexes = new SynchronizedMap(0);
+	    metaAttributes = new SynchronizedMap(0);
+	}
+	
 	
 	public SynchronizedMap getMetaAttributes() {
 		return metaAttributes;

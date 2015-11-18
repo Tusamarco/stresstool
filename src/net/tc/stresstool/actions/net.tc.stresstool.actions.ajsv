@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--AgileJ Ltd. (http://www.agilej.com)--><ajsv>
+    <diagram creationDate="2015-Nov-17 16:19" licenseGrade="evaluation" licenseeName="anon" licenseeOrganization="unknown" populationMethod="Wizard+PACKAGE" version="1.8.3.v20151019-2113">
+        <filterScript>
+
+// no filter script yet defined for this class diagram
+// use CTRL+SPACE for completion suggestions
+
+</filterScript>
+        <class className="net.tc.stresstool.actions.TableAttributes" project="stresstool" xLocation="6046" yLocation="586"/>
+        <class className="net.tc.stresstool.actions.WriteAction" project="stresstool" xLocation="30" yLocation="2174"/>
+        <class className="net.tc.stresstool.actions.ActionStatus" project="stresstool" xLocation="6053" yLocation="1908"/>
+        <class className="net.tc.stresstool.actions.StressActionBase" project="stresstool" xLocation="3283" yLocation="30"/>
+        <class className="net.tc.stresstool.actions.TableJoinLink" project="stresstool" xLocation="3953" yLocation="2706"/>
+        <class className="net.tc.stresstool.actions.WriteValueProvider" project="stresstool" xLocation="1947" yLocation="2884"/>
+        <class className="net.tc.stresstool.actions.ActionTable" project="stresstool" xLocation="1993" yLocation="2220"/>
+        <class className="net.tc.stresstool.actions.UpdateBase" project="stresstool" xLocation="731" yLocation="1813"/>
+        <class className="net.tc.stresstool.actions.SelectValueProvider" project="stresstool" xLocation="5039" yLocation="2732"/>
+        <class className="net.tc.stresstool.actions.ReadAction" project="stresstool" xLocation="2540" yLocation="2220"/>
+        <class className="net.tc.stresstool.actions.DeleteAction" project="stresstool" xLocation="4193" yLocation="1747"/>
+        <class className="net.tc.stresstool.actions.SelectBase" project="stresstool" xLocation="2882" yLocation="2686"/>
+        <class className="net.tc.stresstool.actions.DeleteBase" project="stresstool" xLocation="4200" yLocation="2195"/>
+        <class className="net.tc.stresstool.actions.StressAction" project="stresstool" xLocation="5068" yLocation="748"/>
+        <class className="net.tc.stresstool.actions.InsertBase" project="stresstool" xLocation="1103" yLocation="2899"/>
+        <class className="net.tc.stresstool.actions.CreateAction" project="stresstool" xLocation="2247" yLocation="823"/>
+        <class className="net.tc.stresstool.actions.Launcher" project="stresstool" xLocation="1465" yLocation="1314"/>
+    </diagram>
+</ajsv>
