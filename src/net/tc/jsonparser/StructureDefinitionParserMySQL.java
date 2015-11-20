@@ -89,7 +89,12 @@ public class StructureDefinitionParserMySQL implements
 					table.setStorageEngine((String)oTable.get("engine")!=null?(String)oTable.get("engine"):null);
 					table.setDefaultCharacterSet((String)oTable.get("defaultcharset")!=null?(String)oTable.get("defaultcharset"):null);
 					table.setDefaultCollation((String)oTable.get("defaultcollation")!=null?(String)oTable.get("defaultcollation"):null);
+					table.setParentTable((String)oTable.get("parent")!=null?(String)oTable.get("parent"):null);
 					table.setHasPartition((Boolean)(oTable.get("haspartition")!=null?oTable.get("haspartition"):false));
+					table.setMultiple((Boolean)(oTable.get("multiple")!=null?oTable.get("multiple"):false));
+					table.setRowFormat(oTable.get("rowformat")!=null?(String)oTable.get("rowformat"):"");
+					table.setDataDirectory(oTable.get("datadir")!=null?(String)oTable.get("datadir"):"");
+					table.setTableSpace(oTable.get("tablespace")!=null?(String)oTable.get("tablespace"):"");
 					
 					/*
 					 * browsing for PK
@@ -159,6 +164,8 @@ public class StructureDefinitionParserMySQL implements
 					/***
 					 * Parse Indexes 
 					 */
+					
+					
 					if(oTable.get("keys") != null){
 						
 						JSONObject keys = (JSONObject)oTable.get("keys");
@@ -261,6 +268,7 @@ public class StructureDefinitionParserMySQL implements
 					StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).debug("--------------------------------------");
 					schema.setTable(table);
 				}
+				return schema;
 				
 			}
 //			else{
