@@ -7,17 +7,23 @@
 					"database":"test",
 					"tablename":"tbtest",
 					"engine":"innodb",
-					"primarykey":["autoinc"],
+					"primarykey":["autoInc"],
 					"autoincrementvalue":5340,
-					"defaultcharset":"latin1",
+					"defaultcharset":"utf8",
+					"defaultcollation":"utf8_bin",
 					"haspartition":false,
+					"tablespace":"",
+					"datadir":"",
+					"rowformat":"dynamic",
+					"multiple":true,
 					"keys":
 							{
 							"key":
 								[
 									{"name":"IDX_a","unique":false,"attributes":["a"]},
 									{"name":"IDX_uuid","unique":false,"attributes":["uuid"]},			
-									{"name":"IDX_uuid","unique":true,"attributes":["unique"]}			
+									{"name":"IDX_date","unique":false,"attributes":["date"]}			
+			
 								]
 							},	
 					"attributes":{
@@ -31,6 +37,7 @@
 								{"name":"counter","datatype":"bigint","datadimension":"20","default":"none","null":true},								
 								{"name":"time","datatype":"timestamp","default":"none","onUpdate":"CURRENT_TIMESTAMP","null":false},
 								{"name":"partitionid","datatype":"int","datadimension":"11","default":"0","null":true},								
+								{"name":"date","datatype":"date","default":"","null":false},
 								{"name":"strrecordtype","datatype":"char","datadimension":"3","default":"","null":true}				
 							]
 					},
@@ -40,11 +47,69 @@
 				},
 				{
 					"database":"test",
-					"tablename":"tbtest_child",
+					"tablename":"tbtestPart",
 					"engine":"innodb",
+					"multiple":false,
+					"primarykey":["date","autoInc"],
+					"autoincrementvalue":0,
+					"defaultcharset":"utf8",
+					"defaultcollation":"utf8_bin",
+					"tablespace":"",
+					"datadir":"",
+					"rowformat":"dynamic",
+					
+					"keys":
+							{
+							"key":
+								[
+									{"name":"IDX_a","unique":false,"attributes":["a"]},
+									{"name":"IDX_uuid","unique":false,"attributes":["uuid"]},
+									{"name":"IDX_autoinc","unique":false,"attributes":["autoInc"]}			
+								]
+							},
+					"haspartition":true,	
+					"attributes":{
+						"attribute":
+							[
+								{"name":"autoInc","datatype":"bigint","datadimension":"11","default":"none","null":false,"autoincrement":true},
+								{"name":"uuid","datatype":"char","datadimension":"36","default":"none","null":false},				
+								{"name":"serverid","datatype":"smallint","datadimension":"6","default":"none","null":false},				
+								{"name":"b","datatype":"varchar","datadimension":"100","default":"none","null":false},
+								{"name":"c","datatype":"char","datadimension":"200","default":"none","null":false},
+								{"name":"counter","datatype":"bigint","datadimension":"20","default":"none","null":true},								
+								{"name":"time","datatype":"timestamp","default":"none","ON UPDATE":"CURRENT_TIMESTAMP","null":false},
+								{"name":"partitionid","datatype":"int","datadimension":"11","default":"0","null":true},								
+								{"name":"date","datatype":"date","default":"","null":false},
+								{"name":"strrecordtype","datatype":"char","datadimension":"3","default":"","null":true}				
+							]
+					},
+					"partitionDefinition":{
+						"partitionBy":"range",
+						"subpartition":false,
+						"attributes":["date"],
+						"function":"to_days",
+						"interval":"week",
+						"starttime":"2015-11-01",
+						"endtime":"2016-01-31",
+						"partitions":"0",
+						"lists":{"list":[]}
+						"ranges":{"range":[]}
+	
+					}
+				},				
+				{
+					"database":"test",
+					"tablename":"tbtest_child",
+					"parent":"tbtest",
+					"engine":"innodb",
+					"multiple":true,
 					"primarykey":["a","bb"],
 					"autoincrementvalue":5340,
-					"defaultcharset":"latin1",
+					"defaultcharset":"utf8",
+					"defaultcollation":"utf8_bin",
+					"tablespace":"",
+					"datadir":"",
+					"rowformat":"dynamic",
 					"keys":
 							{
 							"key":
