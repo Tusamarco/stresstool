@@ -17,6 +17,12 @@ import net.tc.utils.SynchronizedMap;
 import net.tc.utils.TimeTools;
 import net.tc.utils.Utility;
 
+/**
+ * 
+ * @author tusa
+ * v1
+ */
+
 public class PartitionDefinition {
 	
 	public static final String PARTITION_TYPE_RANGE = "RANGE";
