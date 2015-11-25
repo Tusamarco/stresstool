@@ -391,6 +391,8 @@ public class Launcher {
 		}
 		((StressAction)updateImplementation).setId(4000);
 		((StressAction)updateImplementation).setActionType(StressActionBase.ACTION_TYPE_Update);
+		((StressAction)updateImplementation).setConnectionInformation(connMapcoordinates);
+		
 
 		StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).debug("Assign  Update class parameters [end] ");
 	    }
@@ -448,6 +450,7 @@ public class Launcher {
 				}
 				((StressAction)writeImplementation).setId(1000);
 				((StressAction)writeImplementation).setActionType(StressActionBase.ACTION_TYPE_Insert);
+				((StressAction)writeImplementation).setConnectionInformation(connMapcoordinates);
 				
 				StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).debug("Assign  Insert class parameters [end] ");
 		}
@@ -511,6 +514,7 @@ public class Launcher {
 				}
 				((StressAction)readImplementation).setId(2000);
 				((StressAction)readImplementation).setActionType(StressActionBase.ACTION_TYPE_Insert);
+				((StressAction)readImplementation).setConnectionInformation(connMapcoordinates);
 				
 				StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).debug("Assign  Select class parameters [end] ");
 		}
@@ -582,6 +586,7 @@ public class Launcher {
 				}
 				((StressAction)deleteImplementation).setId(3000);
 				((StressAction)deleteImplementation).setActionType(StressActionBase.ACTION_TYPE_Insert);
+				((StressAction)deleteImplementation).setConnectionInformation(connMapcoordinates);
 				
 				StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).debug("Assign  Delete class parameters [end] ");
 		}

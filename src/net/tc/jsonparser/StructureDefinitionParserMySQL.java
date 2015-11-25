@@ -141,8 +141,8 @@ public class StructureDefinitionParserMySQL implements
 						attribute.setDataType((String)oAttribute.get("datatype"));
 						attribute.setDataDimension((String)oAttribute.get("datadimension")!= null?Integer.parseInt((String)oAttribute.get("datadimension")):0);
 						attribute.setAutoIncrement(oAttribute.get("autoincrement")!= null?true:false);
-						if(oAttribute.get("default") == null 
-								|| ((String)oAttribute.get("default")).equals("none")){
+						if(oAttribute.get("default") != null 
+								&& !((String)oAttribute.get("default")).equals("")){
 								attribute.setDefaultValue((String)oAttribute.get("default"));
 						}
 						else{
@@ -174,9 +174,8 @@ public class StructureDefinitionParserMySQL implements
 							JSONObject oKey = (JSONObject) ok;
 							Index index = new Index();
 							index.setName((String)oKey.get("name")!=null?(String)oKey.get("name"):null);
-							if(oKey.get("unique") != null
-									&& (oKey.get("unique")).equals("true")){
-								index.setUnique(true);
+							if(oKey.get("unique") != null){
+								index.setUnique((Boolean)oKey.get("unique"));
 							}
 							else
 								index.setUnique(false);
@@ -215,8 +214,18 @@ public class StructureDefinitionParserMySQL implements
 						partDef.setFunction((String)oPartDef.get("function")!=null?(String)oPartDef.get("function"):null);
 						partDef.setInterval((String)oPartDef.get("interval")!=null?(String)oPartDef.get("interval"):null);
 						
-						partDef.setStartDate((String)oPartDef.get("starttime")!=null?(String)oPartDef.get("starttime"):null);
-						partDef.setEndDate((String)oPartDef.get("endtime")!=null?(String)oPartDef.get("endtime"):null);
+						if(oPartDef.get("starttime")!=null && !oPartDef.get("starttime").equals("")){
+						partDef.setStartDate((String)oPartDef.get("starttime"));
+						}
+						else{partDef.setStartDate(null);
+						}
+						if(oPartDef.get("endtime")!=null && !oPartDef.get("endtime").equals("")){
+						    partDef.setEndDate((String)(String)oPartDef.get("endtime"));
+						}
+						else{
+						    partDef.setEndDate(null);
+						}
+
 						partDef.setPartitionsSize((String) ((String)oPartDef.get("partitions")!=null?(String)oPartDef.get("partitions"):0));
 
 						StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).debug("Parsing Json definition for Partition = " 
@@ -259,9 +268,8 @@ public class StructureDefinitionParserMySQL implements
 							}
 
 						}
-
+						table.setPartitionDefinition(partDef);
 					    }
-					    
 					    
 					}
 					

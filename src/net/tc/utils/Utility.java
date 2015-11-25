@@ -161,10 +161,16 @@ import javax.imageio.ImageIO;
     public static String getYear()
     {
         GregorianCalendar calendar = new GregorianCalendar();
+        return getYear(calendar);
+    }
+
+    public static String getYear(Calendar calendar)
+    {
         String year = new Integer(calendar.get(GregorianCalendar.YEAR)).toString();
         return year;
     }
 
+    
     public static String getHour()
     {
         GregorianCalendar calendar = new GregorianCalendar();
@@ -214,6 +220,11 @@ import javax.imageio.ImageIO;
     public static String getMonth()
     {
         Calendar calendar = new GregorianCalendar();
+        return getMonth(calendar);
+    }
+    
+    public static String getMonth(Calendar calendar)
+    {
         int m = calendar.get(GregorianCalendar.MONTH);
         switch (m)
         {
@@ -300,6 +311,10 @@ import javax.imageio.ImageIO;
     public static String getMonthNumber()
   {
       Calendar calendar = new GregorianCalendar();
+      return  getMonthNumber(calendar);
+  }
+    public static String getMonthNumber(Calendar calendar)
+  {
       int m = calendar.get(GregorianCalendar.MONTH);
       String month = new Integer(m + 1).toString();
       if(month.length()<2)
@@ -307,15 +322,23 @@ import javax.imageio.ImageIO;
 
       return  month;
   }
+
+   
   public static String getDayNumber()
   {
     Calendar calendar = new GregorianCalendar();
+    return getDayNumber(calendar);
+  }
+  
+  public static String getDayNumber(Calendar calendar)
+  {
     int d = calendar.get(GregorianCalendar.DAY_OF_MONTH);
-    String day = new Integer(d + 1).toString();
+    String day = new Integer(d).toString();
     if(day.length()<2)
         day = "0"+day;
     return day;
   }
+  
 
   public boolean copyFile(String source, String destinationPath, String fileDestName)
   {
@@ -349,7 +372,6 @@ import javax.imageio.ImageIO;
       }
 
   }
-
 
   public boolean checkPath(String objectPath)
   {
@@ -422,5 +444,31 @@ import javax.imageio.ImageIO;
 //      }
 //  }
 //
+  
+  /**
+   * this method return a String with the content of an List in, if a delimiter is specified then it will be used otherwise  space will be
+   * @param list
+   * @param delimiter
+   * @return
+   */
+  public static String getArrayListAsDelimitedString(ArrayList list,String delimiter ){
+      if(list == null || delimiter == null)
+	  return null;
+      
+      String[] ar = (String[])((ArrayList)list).toArray(new String[list.size()]);
+      StringBuffer sb = new StringBuffer();
+      for (int i =0; i < ar.length ; i++){
+	  if(i > 0 && !delimiter.endsWith("")){
+	      sb.append(delimiter);
+	  }
+	  else if(i > 0){
+	      sb.append(" ");
+	  }
+	  sb.append(ar[i]);
+      }
+      
+      return sb.toString();
+      
+  }
 }
 

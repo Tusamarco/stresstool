@@ -400,6 +400,7 @@ public Object[] getValuesAsArrayOrderByKey(){
     }
     return null;
 }
+
 public Object[] getValuesAsArrayOrderByKey(Object[] keys){
     if(keys !=null && keys.length>0){
         Object[] values = new Object[keys.length];
@@ -437,5 +438,20 @@ public String[] getKeyasOrderedStringArray()
     }
     return oA;
 }
+
+public String getKeyasUnorderdString()
+{
+    if(keys == null)
+        return null;
+
+    StringBuffer sb = new StringBuffer();
+    for(int i = 0 ; i < keys.size() ; i++)
+    {
+	sb.append(i>0?",":"");
+        sb.append((String)keys.get(i).toString());
+    }
+    return sb.toString();
+}
+
 
 }

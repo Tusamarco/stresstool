@@ -4,6 +4,15 @@ import net.tc.utils.SynchronizedMap;
 
 public class Row {
 	private String name = null;
+	
+	public static final int ROW_FORMAT_INNODB_DEFAULT=0;
+	public static final int ROW_FORMAT_INNODB_DYNAMIC=1;
+	public static final int ROW_FORMAT_INNODB_FIXED=2;
+	public static final int ROW_FORMAT_INNODB_COMPRESSED=3;
+	public static final int ROW_FORMAT_INNODB_REDUNDANT=4;
+	public static final int ROW_FORMAT_INNODB_COMPACT=5;
+	
+	
 	public SynchronizedMap getAttributes() {
 		return attributes;
 	}

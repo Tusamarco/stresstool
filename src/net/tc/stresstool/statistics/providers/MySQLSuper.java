@@ -4,14 +4,21 @@ import java.io.File;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
 
+import net.tc.data.db.PartitionDefinition;
 import net.tc.stresstool.PerformanceEvaluator;
 import net.tc.stresstool.StressTool;
 import net.tc.stresstool.config.Configuration;
@@ -25,7 +32,7 @@ import net.tc.stresstool.statistics.StatsGroups;
 import net.tc.utils.SynchronizedMap;
 import net.tc.utils.Utility;
 import net.tc.utils.file.FileHandler;
-
+import net.tc.data.db.*;
 /**
  * @author  tusa
  * V4
@@ -558,7 +565,7 @@ public class MySQLSuper implements StatsProvider, Reporter {
 
     }
     
-    public static Connection initConnection(Map connMapcoordinates)
+    public synchronized static Connection initConnection(Map connMapcoordinates)
 	throws SQLException {
 	    Connection conn;
 	    if(connMapcoordinates.get("dbtype") != null &&  !((String)connMapcoordinates.get("dbtype")).toLowerCase().equals("MySQL".toLowerCase()))
@@ -579,4 +586,23 @@ public class MySQLSuper implements StatsProvider, Reporter {
     }
 
 
+	
+
+
+/*
+ * Calculate a partition set, base on the partition definition object
+ * 	"partitionDefinition":{
+	"partitionBy":"range",
+	"subpartition":false,
+	"attributes":["date"],
+	"function":"to_days",
+	"interval":"week",
+	"starttime":"2015-11-01",
+	"endtime":"2016-01-31",
+	"partitions":"0",
+	"lists":{"list":[]}
+	"ranges":{"range":[]}
+ 
+*/
 }
+

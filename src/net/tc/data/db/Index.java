@@ -1,8 +1,11 @@
 package net.tc.data.db;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
-public class Index {
+import net.tc.comparators.SortableByOrder;
+
+public class Index implements Comparator {
 
 	private String tableName = null;
 	private boolean allowNull = false;
@@ -11,11 +14,12 @@ public class Index {
 	private ArrayList columnsDefinition = null;
 	private String collation = null ;
 	private int cardinality = 0;
-	private int subPart = 0; //number of charcaters included in the index 0 means all
+	private int subPart = 0; //number of characters included in the index 0 means all
 	private boolean packed = false;
 	private boolean hasNulls = false;
 	private String indexType = null;
 	private boolean isUnique = false;
+	private boolean isPrimaryKey = false;
 			
 	public boolean isUnique() {
 		return isUnique;
@@ -94,6 +98,50 @@ public class Index {
 	public void setIndexType(String indexType) {
 		this.indexType = indexType;
 	}
+	/**
+	 * @return the isPrimaryKey
+	 */
+	public boolean isPrimaryKey() {
+	    return isPrimaryKey;
+	}
+	/**
+	 * @param isPrimaryKey the isPrimaryKey to set
+	 */
+	public void setPrimaryKey(boolean isPrimaryKey) {
+	    this.isPrimaryKey = isPrimaryKey;
+	}
 	
+    public int compare(Object o1, Object o2) {
+	if (o1 != null && o2 != null) {
+	    int a = 0;
+	    int b = 0;
+
+	    try {
+		a = ((Index) o1).getSeqInIndex();
+		b = ((Index) o2).getSeqInIndex();
+		return a - b;
+
+	    } catch (NumberFormatException ex) {
+		String as = (String) o1;
+		String bs = (String) o2;
+		return as.compareTo(bs);
+	    }
+
+	} else
+	    return 0;
+    }
+    public String getColumnsDefinitionAsString(){
+	if(this.getColumnsDefinition() != null){
+	    StringBuffer def = new StringBuffer();
+	    for (String sr : this.getColumnsDefinition() ){
+		if(def.length() > 1)
+		    def.append(", ");
+		def.append(sr);
+	    }
+	    return def.toString();
+	}
+	
+	return null;
+    }
 	
 }
