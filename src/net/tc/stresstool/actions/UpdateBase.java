@@ -40,7 +40,7 @@ public class UpdateBase extends StressActionBase implements WriteAction,
 		
 	}
 	@Override
-	public void TruncateTables() {
+	public void TruncateTables(String[] schema) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -70,13 +70,13 @@ public class UpdateBase extends StressActionBase implements WriteAction,
 		
 	}
 	@Override
-	public void CreateSchema() {
+	public boolean CreateSchema() {
 		try{
 
 			if(this.getJsonFile() == null){
 				StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).warn("Table structure definition from Json file is null for Insert Class");
 				StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).warn("check parameter : jsonfile");
-				return;
+				return false;
 			}
 
 			JSONParser parser = new JSONParser();
@@ -91,14 +91,17 @@ public class UpdateBase extends StressActionBase implements WriteAction,
 		    ExceptionMessages.setCurrentError(ExceptionMessages.ERROR_FATAL);
 		    try{throw new StressToolConfigurationException(e);}catch(Throwable th){th.printStackTrace();}
 		}
+		finally{
+		    return true;
+		}
 		
 	}
-	@Override
-	public void DropSchema() {
+	
+	public boolean  DropSchema(String[] schema) {
 		// TODO Auto-generated method stub
-		
+		return false;
 	}
-	@Override
+	
 	public void setBatchSize(int batchSize) {
 		this.batchSize = batchSize;
 		

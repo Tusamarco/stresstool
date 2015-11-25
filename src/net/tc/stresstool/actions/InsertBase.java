@@ -1,14 +1,23 @@
 package net.tc.stresstool.actions;
 
 import java.io.FileReader;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Map;
+import java.util.ArrayList;
 
 import net.tc.data.db.Schema;
+import net.tc.data.db.Table;
 import net.tc.jsonparser.*;
 import net.tc.stresstool.StressTool;
 import net.tc.stresstool.config.Configurator;
 import net.tc.stresstool.exceptions.ExceptionMessages;
 import net.tc.stresstool.exceptions.StressToolConfigurationException;
+import net.tc.stresstool.exceptions.StressToolSQLException;
 import net.tc.stresstool.logs.LogProvider;
+import net.tc.stresstool.statistics.providers.MySQLSuper;
+import net.tc.utils.SynchronizedMap;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -40,9 +49,39 @@ public class InsertBase extends StressActionBase implements WriteAction,
 		
 	}
 	@Override
-	public void TruncateTables() {
-		// TODO Auto-generated method stub
+	public void TruncateTables(String[] tables) {
+	    Map connectionMap = super.getConnectionInformation();
+	    StringBuffer sbTableDrop = new StringBuffer();
+	    
+	    if(tables !=null
+		    && tables.length > 0){
 		
+		try {
+		    Connection conn = MySQLSuper.initConnection(getConnectionInformation());
+		    Statement stmt = null;
+		    if(conn != null 
+			   && !conn.isClosed()){
+		    
+			stmt =conn.createStatement();
+			
+
+        		try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).info(" ==== TRUNCATE Tables, Please wait it may takes time ===="  );}catch(StressToolConfigurationException e){}
+        		for(String tb : tables){
+        		    String drop = "TRUNCATE TABLE IF EXISTS " + tb + " ;" ;
+        		    try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).info(drop);}catch(StressToolConfigurationException e){}
+        		    stmt.execute(drop);
+        		}
+		    }
+		    conn.close();
+		    conn = null;
+		} catch (SQLException e1) {
+		    // TODO Auto-generated catch block
+		    e1.printStackTrace();
+		}
+
+		
+	    }
+	    
 	}
 	@Override
 	public void CreateActionTablePrimary() {
@@ -69,33 +108,121 @@ public class InsertBase extends StressActionBase implements WriteAction,
 		// TODO Auto-generated method stub
 		
 	}
+	@SuppressWarnings("finally")
 	@Override
-	public void CreateSchema() {
+	public boolean  CreateSchema() {
 		try{
 
 			if(this.getJsonFile() == null){
 				StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).warn("Table structure definition from Json file is null for Insert Class");
 				StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).warn("check parameter : jsonfile");
-				return;
+				return false;
 			}
 
+			StringBuffer sbCreate = new StringBuffer();
+
+			
+			
 			JSONParser parser = new JSONParser();
 			StructureDefinitionParser strParser = new StructureDefinitionParserMySQL();
 			FileReader fr = new FileReader(this.getJsonFile());
 			Schema schema = strParser.parseSchema(parser, fr);
+
+			Map tableInstances = new SynchronizedMap(0);
+			tableInstances.put(Table.TABLE_PARENT, getNumberOfprimaryTables());
+			tableInstances.put(Table.TABLE_CHILD, getNumberOfSecondaryTables());			
 			
+			/*
+			 * First do the cleanup if set
+			 */
+			if(super.isDroptable()){
+			     this.DropSchema(schema.deployDropTable(tableInstances));
+			}
+			else if(super.isTruncate())
+			{
+			    this.TruncateTables(schema.deployDropTable(tableInstances));
+			}
+
+			
+			
+			/*
+			 * Once we got the schema from the Json file 
+			 * we will create it exploding the tables as indicate from the multiple attribute
+			 */
+			if(schema != null){
+			    sbCreate.append(schema.deploySchema((Map)tableInstances));
+			    try{StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).debug("Schema Definition SQL = [\n" + sbCreate.toString() + "\n ]"  );}catch(StressToolConfigurationException e){}
+			    try {
+				Connection conn = MySQLSuper.initConnection(getConnectionInformation());
+				Statement stmt = null;
+				if (conn != null && !conn.isClosed()) {
+				    stmt = conn.createStatement();
+				    try {StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).info(" ==== Creating schema ====");} catch (StressToolConfigurationException e) {}
+				    String[] sqlAr = sbCreate.toString().replaceAll("\n", "").split(";");
+				    for (String sql : sqlAr){
+					stmt.addBatch(sql);
+				    }
+				    try {StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).debug( sbCreate.toString());} catch (StressToolConfigurationException e) {}
+				    stmt.executeBatch();
+				}
+				conn.close();
+				conn = null;
+			    } catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			    }
+			}			
 				
 		}
 		catch(Exception e){
 			e.printStackTrace();
 		    ExceptionMessages.setCurrentError(ExceptionMessages.ERROR_FATAL);
 		    try{throw new StressToolConfigurationException(e);}catch(Throwable th){th.printStackTrace();}
+		
 		}
+		finally{
+		    return true;
+		}
+
+		
 		
 	}
 	@Override
-	public void DropSchema() {
-		// TODO Auto-generated method stub
+	public boolean  DropSchema(String[] tables) {
+	    Map connectionMap = super.getConnectionInformation();
+	    StringBuffer sbTableDrop = new StringBuffer();
+	    
+	    if(tables !=null
+		    && tables.length > 0){
+		
+		try {
+		    Connection conn = MySQLSuper.initConnection(getConnectionInformation());
+		    Statement stmt = null;
+		    if(conn != null 
+			   && !conn.isClosed()){
+		    
+			stmt =conn.createStatement();
+
+        		try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).info(" ==== Dropping Tables, Please wait it may takes time ===="  );}catch(StressToolConfigurationException e){}
+        		for(String tb : tables){
+        		    String drop = "DROP TABLE IF EXISTS " + tb + " ;" ;
+        		    try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).info(drop);}catch(StressToolConfigurationException e){}
+        		    stmt.execute(drop);
+        		}
+        		try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).info(" ==== Drop Tables END ===="  );}catch(StressToolConfigurationException e){}
+		    }
+		    conn.close();
+		    conn = null;
+		} catch (SQLException e1) {
+		    // TODO Auto-generated catch block
+		    e1.printStackTrace();
+		}
+
+		
+	    }
+	    
+	    
+	    return false;
 		
 	}
 	@Override
@@ -168,5 +295,4 @@ public class InsertBase extends StressActionBase implements WriteAction,
 	public void setSleepWrite(int sleepWrite) {
 		this.sleepWrite = sleepWrite;
 	}
-
 }

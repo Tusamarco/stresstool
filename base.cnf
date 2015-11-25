@@ -11,7 +11,7 @@ doBatch=30
 doReport=true 
 doSimple=false 
 doSimplePk=false 
-droptable=false
+droptable=true
 ignoreBinlog=false
 operationShort=true  
 poolNumber=10
@@ -65,9 +65,9 @@ processaverage=true
 sleepDelete=0 
 
 [net.tc.stresstool.actions.SelectBase]
-numberOfprimaryTables=30
-numberOfSecondaryTables=20
-numberOfJoinTables=8
+#numberOfprimaryTables=10
+#numberOfSecondaryTables=8
+numberOfJoinTables=2
 joinField=a
 forceIndex=true
 indexName=IDX_a
@@ -78,8 +78,8 @@ sleepSelect=0
 
 
 [net.tc.stresstool.actions.InsertBase]
-numberOfprimaryTables=30
-numberOfSecondaryTables=20
+numberOfprimaryTables=1
+numberOfSecondaryTables=1
 useAutoIncrement=true
 joinField=a
 sleepWrite=1
