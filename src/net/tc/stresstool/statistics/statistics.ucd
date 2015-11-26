@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<editmodel:ClassDiagramEditModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:editmodel="editmodel.xmi" xmlns:options="options.xmi" name="statistics" size="1805,634" id="net.tc.stresstool.statistics" metadata="uml2-1.0" initialized="true" zoom="0.75" scrolledX="-42" scrolledY="16" tag="10" key="32303037303533312D313020737472657373746F6F6C">
+  <children xsi:type="editmodel:ClassEditModel" name="ActionCollection" location="60,570" size="171,194" id="net.tc.stresstool.statistics/ActionCollection" runTimeClassModel="lastLoop,historyList,maxExecTime,action,ActionCollection(),collection,minExecTime,averageExecTime">
+    <children xsi:type="editmodel:CompartmentEditModel" size="148,126">
+      <children xsi:type="editmodel:AttributeEditModel" name="action" id="net.tc.stresstool.statistics/ActionCollection#action"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="averageExecTime" id="net.tc.stresstool.statistics/ActionCollection#averageExecTime"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="collection" id="net.tc.stresstool.statistics/ActionCollection#collection"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="historyList" id="net.tc.stresstool.statistics/ActionCollection#historyList"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="lastLoop" id="net.tc.stresstool.statistics/ActionCollection#lastLoop"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="maxExecTime" id="net.tc.stresstool.statistics/ActionCollection#maxExecTime"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="minExecTime" id="net.tc.stresstool.statistics/ActionCollection#minExecTime"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="118,18">
+      <children xsi:type="editmodel:MethodEditModel" name="ActionCollection" id="net.tc.stresstool.statistics/ActionCollection#ActionCollection()"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:AssociationEditModel" autoLocated="true" id="net.tc.stresstool.statistics/ActionCollection@deleteCollection+net.tc.stresstool.statistics/ActionGroups@" source="//@children.0" target="//@children.1" targetEnd="//@children.0/@sourceConnections.0/@children.2" label="//@children.0/@sourceConnections.0/@children.0" sourceEnd="//@children.0/@sourceConnections.0/@children.1" connectionRouterKind="Manhattan">
+      <children xsi:type="editmodel:WireLabelEditModel" size="0,13" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" name="deleteCollection" location="66,0" id="net.tc.stresstool.statistics/ActionCollection@deleteCollection+net.tc.stresstool.statistics/ActionGroups@|net.tc.stresstool.statistics/ActionCollection#deleteCollection" attachSource="true" multiplicityLabel="//@children.0/@sourceConnections.0/@children.1/@children.1" roleLabel="//@children.0/@sourceConnections.0/@children.1/@children.0" navigable="true" changeability="2">
+        <children xsi:type="editmodel:LabelEditModel" name=" ~ deleteCollection" location="132,549" size="104,13" anchorKind="FirstPart"/>
+        <children xsi:type="editmodel:LabelEditModel" name="0..1" location="98,549" size="20,13" anchorKind="FirstPart"/>
+      </children>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="93,140" id="net.tc.stresstool.statistics/ActionCollection@deleteCollection+net.tc.stresstool.statistics/ActionGroups@|net.tc.stresstool.statistics/ActionGroups#"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:AssociationEditModel" autoLocated="true" id="net.tc.stresstool.statistics/ActionCollection@selectCollection+net.tc.stresstool.statistics/ActionGroups@" source="//@children.0" target="//@children.1" targetEnd="//@children.0/@sourceConnections.1/@children.2" label="//@children.0/@sourceConnections.1/@children.0" sourceEnd="//@children.0/@sourceConnections.1/@children.1" connectionRouterKind="Manhattan">
+      <children xsi:type="editmodel:WireLabelEditModel" size="0,13" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" name="selectCollection" location="0,5" id="net.tc.stresstool.statistics/ActionCollection@selectCollection+net.tc.stresstool.statistics/ActionGroups@|net.tc.stresstool.statistics/ActionCollection#selectCollection" attachSource="true" multiplicityLabel="//@children.0/@sourceConnections.1/@children.1/@children.1" roleLabel="//@children.0/@sourceConnections.1/@children.1/@children.0" navigable="true" changeability="2">
+        <children xsi:type="editmodel:LabelEditModel" name=" ~ selectCollection" location="-49,581" size="102,13" anchorKind="FirstPart"/>
+        <children xsi:type="editmodel:LabelEditModel" name="0..1" location="33,554" size="20,13" anchorKind="FirstPart"/>
+      </children>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="73,140" id="net.tc.stresstool.statistics/ActionCollection@selectCollection+net.tc.stresstool.statistics/ActionGroups@|net.tc.stresstool.statistics/ActionGroups#"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:AssociationEditModel" autoLocated="true" id="net.tc.stresstool.statistics/ActionCollection@updateCollection+net.tc.stresstool.statistics/ActionGroups@" source="//@children.0" target="//@children.1" targetEnd="//@children.0/@sourceConnections.2/@children.2" label="//@children.0/@sourceConnections.2/@children.0" sourceEnd="//@children.0/@sourceConnections.2/@children.1" connectionRouterKind="Manhattan">
+      <children xsi:type="editmodel:WireLabelEditModel" size="0,13" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" name="updateCollection" location="171,45" id="net.tc.stresstool.statistics/ActionCollection@updateCollection+net.tc.stresstool.statistics/ActionGroups@|net.tc.stresstool.statistics/ActionCollection#updateCollection" attachSource="true" multiplicityLabel="//@children.0/@sourceConnections.2/@children.1/@children.1" roleLabel="//@children.0/@sourceConnections.2/@children.1/@children.0" navigable="true" changeability="2">
+        <children xsi:type="editmodel:LabelEditModel" name=" ~ updateCollection" location="237,621" size="108,13" anchorKind="FirstPart"/>
+        <children xsi:type="editmodel:LabelEditModel" name="0..1" location="237,594" size="20,13" anchorKind="FirstPart"/>
+      </children>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="123,140" id="net.tc.stresstool.statistics/ActionCollection@updateCollection+net.tc.stresstool.statistics/ActionGroups@|net.tc.stresstool.statistics/ActionGroups#"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:AssociationEditModel" autoLocated="true" id="net.tc.stresstool.statistics/ActionCollection@insertCollection+net.tc.stresstool.statistics/ActionGroups@" source="//@children.0" target="//@children.1" targetEnd="//@children.0/@sourceConnections.3/@children.2" label="//@children.0/@sourceConnections.3/@children.0" sourceEnd="//@children.0/@sourceConnections.3/@children.1" connectionRouterKind="Manhattan">
+      <children xsi:type="editmodel:WireLabelEditModel" size="0,13" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" name="insertCollection" location="171,25" id="net.tc.stresstool.statistics/ActionCollection@insertCollection+net.tc.stresstool.statistics/ActionGroups@|net.tc.stresstool.statistics/ActionCollection#insertCollection" attachSource="true" multiplicityLabel="//@children.0/@sourceConnections.3/@children.1/@children.1" roleLabel="//@children.0/@sourceConnections.3/@children.1/@children.0" navigable="true" changeability="2">
+        <children xsi:type="editmodel:LabelEditModel" name=" ~ insertCollection" location="237,601" size="100,13" anchorKind="FirstPart"/>
+        <children xsi:type="editmodel:LabelEditModel" name="0..1" location="237,574" size="20,13" anchorKind="FirstPart"/>
+      </children>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="113,140" id="net.tc.stresstool.statistics/ActionCollection@insertCollection+net.tc.stresstool.statistics/ActionGroups@|net.tc.stresstool.statistics/ActionGroups#"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.0/@sourceConnections.0 //@children.0/@sourceConnections.1 //@children.0/@sourceConnections.2 //@children.0/@sourceConnections.3" name="ActionGroups" location="33,329" size="161,140" id="net.tc.stresstool.statistics/ActionGroups" runTimeClassModel="id,startTime,groupName,ActionGroups(),lastSampleTime">
+    <children xsi:type="editmodel:CompartmentEditModel" size="138,72">
+      <children xsi:type="editmodel:AttributeEditModel" name="groupName" id="net.tc.stresstool.statistics/ActionGroups#groupName"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="id" id="net.tc.stresstool.statistics/ActionGroups#id"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="lastSampleTime" id="net.tc.stresstool.statistics/ActionGroups#lastSampleTime"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="startTime" id="net.tc.stresstool.statistics/ActionGroups#startTime"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="103,18">
+      <children xsi:type="editmodel:MethodEditModel" name="ActionGroups" id="net.tc.stresstool.statistics/ActionGroups#ActionGroups()"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:AssociationEditModel" autoLocated="true" id="net.tc.stresstool.statistics/ActionGroups@actionGroups+net.tc.stresstool.statistics/StatsCollection@" source="//@children.1" target="//@children.2" targetEnd="//@children.1/@sourceConnections.0/@children.2" label="//@children.1/@sourceConnections.0/@children.0" sourceEnd="//@children.1/@sourceConnections.0/@children.1" connectionRouterKind="Manhattan">
+      <children xsi:type="editmodel:WireLabelEditModel" size="0,13" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" name="actionGroups" location="161,78" id="net.tc.stresstool.statistics/ActionGroups@actionGroups+net.tc.stresstool.statistics/StatsCollection@|net.tc.stresstool.statistics/ActionGroups#actionGroups" attachSource="true" multiplicityLabel="//@children.1/@sourceConnections.0/@children.1/@children.1" roleLabel="//@children.1/@sourceConnections.0/@children.1/@children.0" navigable="true">
+        <children xsi:type="editmodel:LabelEditModel" name=" ~ actionGroups" location="200,386" size="88,13" anchorKind="FirstPart"/>
+        <children xsi:type="editmodel:LabelEditModel" name="0..1" location="200,413" size="20,13" anchorKind="FirstPart"/>
+      </children>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,62" id="net.tc.stresstool.statistics/ActionGroups@actionGroups+net.tc.stresstool.statistics/StatsCollection@|net.tc.stresstool.statistics/StatsCollection#">
+        <children xsi:type="editmodel:QualifierAttributeEditModel" name="actionName" location="238,396" size="81,22" id=""/>
+      </children>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.1/@sourceConnections.0" name="StatsCollection" location="314,345" size="184,194" id="net.tc.stresstool.statistics/StatsCollection" runTimeClassModel="processCollectedEvents(Ljava.lang.String;Ljava.util.Map;),statsHistory,feedGroup(Lnet.tc.stresstool.statistics.StatsGroups;Ljava.util.Map;),getStatGroups(Ljava.lang.String;),StatsCollection(),getActionGroups(Ljava.lang.String;),actionHistory,createStatsGroup(Ljava.lang.String;Ljava.util.Map;)">
+    <children xsi:type="editmodel:CompartmentEditModel" size="111,36">
+      <children xsi:type="editmodel:AttributeEditModel" name="actionHistory" id="net.tc.stresstool.statistics/StatsCollection#actionHistory"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="statsHistory" id="net.tc.stresstool.statistics/StatsCollection#statsHistory"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="161,108">
+      <children xsi:type="editmodel:MethodEditModel" name="StatsCollection" id="net.tc.stresstool.statistics/StatsCollection#StatsCollection()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="createStatsGroup" id="net.tc.stresstool.statistics/StatsCollection#createStatsGroup(Ljava.lang.String;Ljava.util.Map;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="feedGroup" id="net.tc.stresstool.statistics/StatsCollection#feedGroup(Lnet.tc.stresstool.statistics.StatsGroups;Ljava.util.Map;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getActionGroups" id="net.tc.stresstool.statistics/StatsCollection#getActionGroups(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getStatGroups" id="net.tc.stresstool.statistics/StatsCollection#getStatGroups(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="processCollectedEvents" id="net.tc.stresstool.statistics/StatsCollection#processCollectedEvents(Ljava.lang.String;Ljava.util.Map;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:AssociationEditModel" autoLocated="true" id="net.tc.stresstool.statistics/StatsCollection@statColl+net.tc.stresstool.statistics/StatCollector@" source="//@children.2" target="//@children.3" targetEnd="//@children.2/@sourceConnections.0/@children.2" label="//@children.2/@sourceConnections.0/@children.0" sourceEnd="//@children.2/@sourceConnections.0/@children.1" connectionRouterKind="Manhattan">
+      <children xsi:type="editmodel:WireLabelEditModel" size="0,13" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" name="statColl" location="86,0" id="net.tc.stresstool.statistics/StatsCollection@statColl+net.tc.stresstool.statistics/StatCollector@|net.tc.stresstool.statistics/StatsCollection#statColl" attachSource="true" multiplicityLabel="//@children.2/@sourceConnections.0/@children.1/@children.1" roleLabel="//@children.2/@sourceConnections.0/@children.1/@children.0" navigable="true">
+        <children xsi:type="editmodel:LabelEditModel" name=" ~ statColl" location="407,324" size="56,13" anchorKind="FirstPart"/>
+        <children xsi:type="editmodel:LabelEditModel" name="1" location="386,324" size="7,13" anchorKind="FirstPart"/>
+      </children>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="151,266" id="net.tc.stresstool.statistics/StatsCollection@statColl+net.tc.stresstool.statistics/StatCollector@|net.tc.stresstool.statistics/StatCollector#"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:AssociationEditModel" autoLocated="true" id="net.tc.stresstool.statistics/StatsGroups@statGroups+net.tc.stresstool.statistics/StatsCollection@" source="//@children.2" target="//@children.4" targetEnd="//@children.2/@sourceConnections.1/@children.2" label="//@children.2/@sourceConnections.1/@children.0" sourceEnd="//@children.2/@sourceConnections.1/@children.1" connectionRouterKind="Manhattan">
+      <children xsi:type="editmodel:WireLabelEditModel" size="0,13" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="184,119" id="net.tc.stresstool.statistics/StatsGroups@statGroups+net.tc.stresstool.statistics/StatsCollection@|net.tc.stresstool.statistics/StatsCollection#" attachSource="true">
+        <children xsi:type="editmodel:QualifierAttributeEditModel" name="statGroupName" location="494,453" size="101,22" id=""/>
+      </children>
+      <children xsi:type="editmodel:AssociationEndEditModel" name="statGroups" location="0,75" id="net.tc.stresstool.statistics/StatsGroups@statGroups+net.tc.stresstool.statistics/StatsCollection@|net.tc.stresstool.statistics/StatsGroups#statGroups" multiplicityLabel="//@children.2/@sourceConnections.1/@children.2/@children.1" roleLabel="//@children.2/@sourceConnections.1/@children.2/@children.0" navigable="true">
+        <children xsi:type="editmodel:LabelEditModel" name=" ~ statGroups" location="516,444" size="75,13" anchorKind="LastPart"/>
+        <children xsi:type="editmodel:LabelEditModel" name="0..1" location="571,471" size="20,13" anchorKind="LastPart"/>
+      </children>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.2/@sourceConnections.0 //@children.11/@sourceConnections.0" name="StatCollector" location="249,29" size="238,266" id="net.tc.stresstool.statistics/StatCollector" runTimeClassModel="rootPath,collectStatistics(),pROVIDER_PARAMETER_NAME,connectionInformation,conn,getReporter(),setRootPath(Lnet.tc.stresstool.config.Configurator;),flushrowonfile,setProviders(Ljava.util.Map;),getProviders(),StatCollector(Lnet.tc.stresstool.config.Configurator;Ljava.util.Map;),PrintFinalReport()">
+    <children xsi:type="editmodel:CompartmentEditModel" size="215,90">
+      <children xsi:type="editmodel:AttributeEditModel" name="conn" id="net.tc.stresstool.statistics/StatCollector#conn"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="connectionInformation" id="net.tc.stresstool.statistics/StatCollector#connectionInformation"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="flushrowonfile" id="net.tc.stresstool.statistics/StatCollector#flushrowonfile"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="pROVIDER_PARAMETER_NAME" id="net.tc.stresstool.statistics/StatCollector#pROVIDER_PARAMETER_NAME"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="rootPath" id="net.tc.stresstool.statistics/StatCollector#rootPath"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="116,126">
+      <children xsi:type="editmodel:MethodEditModel" name="PrintFinalReport" id="net.tc.stresstool.statistics/StatCollector#PrintFinalReport()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="StatCollector" id="net.tc.stresstool.statistics/StatCollector#StatCollector(Lnet.tc.stresstool.config.Configurator;Ljava.util.Map;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="collectStatistics" id="net.tc.stresstool.statistics/StatCollector#collectStatistics()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getProviders" id="net.tc.stresstool.statistics/StatCollector#getProviders()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getReporter" id="net.tc.stresstool.statistics/StatCollector#getReporter()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setProviders" id="net.tc.stresstool.statistics/StatCollector#setProviders(Ljava.util.Map;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setRootPath" id="net.tc.stresstool.statistics/StatCollector#setRootPath(Lnet.tc.stresstool.config.Configurator;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.2/@sourceConnections.1 //@children.9/@sourceConnections.2" name="StatsGroups" location="599,389" size="170,230" id="net.tc.stresstool.statistics/StatsGroups" runTimeClassModel="setEventCollection(Ljava.lang.String;Lnet.tc.stresstool.statistics.EventCollection;),id,startTime,groupName,getEventCollection(Ljava.lang.String;),historylength,StatsGroups(),StatsGroups(Ljava.lang.String;),parseaverage,lastSampleTime">
+    <children xsi:type="editmodel:CompartmentEditModel" size="147,108">
+      <children xsi:type="editmodel:AttributeEditModel" name="groupName" id="net.tc.stresstool.statistics/StatsGroups#groupName"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="historylength" id="net.tc.stresstool.statistics/StatsGroups#historylength"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="id" id="net.tc.stresstool.statistics/StatsGroups#id"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="lastSampleTime" id="net.tc.stresstool.statistics/StatsGroups#lastSampleTime"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="parseaverage" id="net.tc.stresstool.statistics/StatsGroups#parseaverage"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="startTime" id="net.tc.stresstool.statistics/StatsGroups#startTime"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="133,72">
+      <children xsi:type="editmodel:MethodEditModel" name="StatsGroups" id="net.tc.stresstool.statistics/StatsGroups#StatsGroups()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="StatsGroups" id="net.tc.stresstool.statistics/StatsGroups#StatsGroups(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getEventCollection" id="net.tc.stresstool.statistics/StatsGroups#getEventCollection(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setEventCollection" id="net.tc.stresstool.statistics/StatsGroups#setEventCollection(Ljava.lang.String;Lnet.tc.stresstool.statistics.EventCollection;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:AssociationEditModel" autoLocated="true" id="net.tc.stresstool.statistics/EventCollection@eventCollectionMap+net.tc.stresstool.statistics/StatsGroups@" source="//@children.4" target="//@children.5" targetEnd="//@children.4/@sourceConnections.0/@children.2" label="//@children.4/@sourceConnections.0/@children.0" sourceEnd="//@children.4/@sourceConnections.0/@children.1" connectionRouterKind="Manhattan">
+      <children xsi:type="editmodel:WireLabelEditModel" size="0,13" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="10,230" id="net.tc.stresstool.statistics/EventCollection@eventCollectionMap+net.tc.stresstool.statistics/StatsGroups@|net.tc.stresstool.statistics/StatsGroups#" attachSource="true">
+        <children xsi:type="editmodel:QualifierAttributeEditModel" name="eventName" location="599,615" size="78,22" id=""/>
+      </children>
+      <children xsi:type="editmodel:AssociationEndEditModel" name="eventCollectionMap" location="181,10" id="net.tc.stresstool.statistics/EventCollection@eventCollectionMap+net.tc.stresstool.statistics/StatsGroups@|net.tc.stresstool.statistics/EventCollection#eventCollectionMap" multiplicityLabel="//@children.4/@sourceConnections.0/@children.2/@children.1" roleLabel="//@children.4/@sourceConnections.0/@children.2/@children.0" navigable="true">
+        <children xsi:type="editmodel:LabelEditModel" name=" ~ eventCollectionMap" location="577,681" size="123,13" anchorKind="LastPart"/>
+        <children xsi:type="editmodel:LabelEditModel" name="0..1" location="577,654" size="20,13" anchorKind="LastPart"/>
+      </children>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.4/@sourceConnections.0" name="EventCollection" location="390,665" size="181,266" id="net.tc.stresstool.statistics/EventCollection" runTimeClassModel="historyList,processAverage,averageValue,setEvent(Lnet.tc.stresstool.statistics.StatEvent;),minValue,lastPurge,EventCollection(),setAverageValue(Ljava.lang.Long;),eventName,getEvent(Ljava.lang.Long;),maxValue,lastValue">
+    <children xsi:type="editmodel:CompartmentEditModel" size="158,144">
+      <children xsi:type="editmodel:AttributeEditModel" name="averageValue" id="net.tc.stresstool.statistics/EventCollection#averageValue"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="eventName" id="net.tc.stresstool.statistics/EventCollection#eventName"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="historyList" id="net.tc.stresstool.statistics/EventCollection#historyList"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="lastPurge" id="net.tc.stresstool.statistics/EventCollection#lastPurge"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="lastValue" id="net.tc.stresstool.statistics/EventCollection#lastValue"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="maxValue" id="net.tc.stresstool.statistics/EventCollection#maxValue"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="minValue" id="net.tc.stresstool.statistics/EventCollection#minValue"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="processAverage" id="net.tc.stresstool.statistics/EventCollection#processAverage"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="121,72">
+      <children xsi:type="editmodel:MethodEditModel" name="EventCollection" id="net.tc.stresstool.statistics/EventCollection#EventCollection()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getEvent" id="net.tc.stresstool.statistics/EventCollection#getEvent(Ljava.lang.Long;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setAverageValue" id="net.tc.stresstool.statistics/EventCollection#setAverageValue(Ljava.lang.Long;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setEvent" id="net.tc.stresstool.statistics/EventCollection#setEvent(Lnet.tc.stresstool.statistics.StatEvent;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:AssociationEditModel" autoLocated="true" id="net.tc.stresstool.statistics/StatEvent@collection+net.tc.stresstool.statistics/EventCollection@" source="//@children.5" target="//@children.6" targetEnd="//@children.5/@sourceConnections.0/@children.2" label="//@children.5/@sourceConnections.0/@children.0" sourceEnd="//@children.5/@sourceConnections.0/@children.1" connectionRouterKind="Manhattan">
+      <children xsi:type="editmodel:WireLabelEditModel" size="0,13" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="181,187" id="net.tc.stresstool.statistics/StatEvent@collection+net.tc.stresstool.statistics/EventCollection@|net.tc.stresstool.statistics/EventCollection#" attachSource="true">
+        <children xsi:type="editmodel:QualifierAttributeEditModel" name="new" location="567,841" size="38,22" id=""/>
+      </children>
+      <children xsi:type="editmodel:AssociationEndEditModel" name="collection" location="0,79" id="net.tc.stresstool.statistics/StatEvent@collection+net.tc.stresstool.statistics/EventCollection@|net.tc.stresstool.statistics/StatEvent#collection" multiplicityLabel="//@children.5/@sourceConnections.0/@children.2/@children.1" roleLabel="//@children.5/@sourceConnections.0/@children.2/@children.0" navigable="true">
+        <children xsi:type="editmodel:LabelEditModel" name=" ~ collection" location="567,832" size="68,13" anchorKind="LastPart"/>
+        <children xsi:type="editmodel:LabelEditModel" name="0..1" location="615,859" size="20,13" anchorKind="LastPart"/>
+      </children>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.5/@sourceConnections.0" name="StatEvent" location="643,773" size="162,266" id="net.tc.stresstool.statistics/StatEvent" runTimeClassModel="getValue(),id,time,StatEvent(),deltaValue,order,setValue(Ljava.lang.Object;),event,parent,absoluteValue,provider,collection">
+    <children xsi:type="editmodel:CompartmentEditModel" size="139,162">
+      <children xsi:type="editmodel:AttributeEditModel" name="absoluteValue" id="net.tc.stresstool.statistics/StatEvent#absoluteValue"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="collection" id="net.tc.stresstool.statistics/StatEvent#collection"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="deltaValue" id="net.tc.stresstool.statistics/StatEvent#deltaValue"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="event" id="net.tc.stresstool.statistics/StatEvent#event"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="id" id="net.tc.stresstool.statistics/StatEvent#id"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="order" id="net.tc.stresstool.statistics/StatEvent#order"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="parent" id="net.tc.stresstool.statistics/StatEvent#parent"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="provider" id="net.tc.stresstool.statistics/StatEvent#provider"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="time" id="net.tc.stresstool.statistics/StatEvent#time"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="83,54">
+      <children xsi:type="editmodel:MethodEditModel" name="StatEvent" id="net.tc.stresstool.statistics/StatEvent#StatEvent()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getValue" id="net.tc.stresstool.statistics/StatEvent#getValue()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setValue" id="net.tc.stresstool.statistics/StatEvent#setValue(Ljava.lang.Object;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="ActionTHElement" location="28,764" size="170,284" id="net.tc.stresstool.statistics/ActionTHElement" runTimeClassModel="isReady,setActive(Z),setReady(Z),executionTime,thId,endTime,isActive,startTime,id,ActionTHElement(),action,currentLoop,rowsProcessed">
+    <children xsi:type="editmodel:CompartmentEditModel" size="122,180">
+      <children xsi:type="editmodel:AttributeEditModel" name="action" id="net.tc.stresstool.statistics/ActionTHElement#action"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="currentLoop" id="net.tc.stresstool.statistics/ActionTHElement#currentLoop"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="endTime" id="net.tc.stresstool.statistics/ActionTHElement#endTime"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="executionTime" id="net.tc.stresstool.statistics/ActionTHElement#executionTime"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="id" id="net.tc.stresstool.statistics/ActionTHElement#id"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="isActive" id="net.tc.stresstool.statistics/ActionTHElement#isActive"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="isReady" id="net.tc.stresstool.statistics/ActionTHElement#isReady"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="rowsProcessed" id="net.tc.stresstool.statistics/ActionTHElement#rowsProcessed"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="startTime" id="net.tc.stresstool.statistics/ActionTHElement#startTime"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="thId" id="net.tc.stresstool.statistics/ActionTHElement#thId"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="124,54">
+      <children xsi:type="editmodel:MethodEditModel" name="ActionTHElement" id="net.tc.stresstool.statistics/ActionTHElement#ActionTHElement()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setActive" id="net.tc.stresstool.statistics/ActionTHElement#setActive(Z)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setReady" id="net.tc.stresstool.statistics/ActionTHElement#setReady(Z)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="MySQLStatus" location="1050,315" size="142,117" id="net.tc.stresstool.statistics.providers/MySQLStatus" runTimeClassModel="getStatus(Ljava.sql.Connection;),MySQLStatus(),printReport(Ljava.lang.String;Ljava.lang.StringBuffer;)">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="101,54">
+      <children xsi:type="editmodel:MethodEditModel" name="MySQLStatus" id="net.tc.stresstool.statistics.providers/MySQLStatus#MySQLStatus()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getStatus" id="net.tc.stresstool.statistics.providers/MySQLStatus#getStatus(Ljava.sql.Connection;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="printReport" id="net.tc.stresstool.statistics.providers/MySQLStatus#printReport(Ljava.lang.String;Ljava.lang.StringBuffer;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" autoLocated="true" id="net.tc.stresstool.statistics.providers/MySQLSuper&lt;-net.tc.stresstool.statistics.providers/MySQLStatus" source="//@children.8" target="//@children.9" targetEnd="//@children.8/@sourceConnections.0/@children.1" sourceEnd="//@children.8/@sourceConnections.0/@children.0" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="3,81" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="157,36"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" autoLocated="true" id="net.tc.stresstool.statistics.providers/StatsProvider&lt;-net.tc.stresstool.statistics.providers/MySQLStatus" source="//@children.8" target="//@children.11" targetEnd="//@children.8/@sourceConnections.1/@children.1" sourceEnd="//@children.8/@sourceConnections.1/@children.0" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="6,0" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="158,189"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" autoLocated="true" id="net.tc.stresstool.statistics.providers/Reporter&lt;-net.tc.stresstool.statistics.providers/MySQLStatus" source="//@children.8" target="//@children.10" targetEnd="//@children.8/@sourceConnections.2/@children.1" sourceEnd="//@children.8/@sourceConnections.2/@children.0" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="78,117" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="63,0"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.8/@sourceConnections.0" name="MySQLSuper" location="825,360" size="157,405" id="net.tc.stresstool.statistics.providers/MySQLSuper" runTimeClassModel="getRowData(Ljava.lang.StringBuffer;),getReporterName(),collectStatistics(Ljava.sql.Connection;),setStatsOutFile(Ljava.lang.String;),printReport(Ljava.lang.String;Ljava.lang.StringBuffer;),getProviderName(),getStatGroup(),MySQLSuper(),getHeaders(Ljava.lang.StringBuffer;),eventsName,getHeadersArray(Ljava.lang.String;),getStatsOutFile(),writeStatsOnFile(Ljava.util.Map;),getStatus(Ljava.sql.Connection;),getMetrics(),getRowDataArray([Ljava.lang.String;),writeReportOnFile(Ljava.lang.String;),setStats(Lnet.tc.stresstool.statistics.StatsGroups;),setFlushDataOnfile(Z)">
+    <children xsi:type="editmodel:CompartmentEditModel" size="127,18">
+      <children xsi:type="editmodel:AttributeEditModel" name="eventsName" id="net.tc.stresstool.statistics.providers/MySQLSuper#eventsName"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="134,324">
+      <children xsi:type="editmodel:MethodEditModel" name="MySQLSuper" id="net.tc.stresstool.statistics.providers/MySQLSuper#MySQLSuper()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="collectStatistics" id="net.tc.stresstool.statistics.providers/MySQLSuper#collectStatistics(Ljava.sql.Connection;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getHeaders" id="net.tc.stresstool.statistics.providers/MySQLSuper#getHeaders(Ljava.lang.StringBuffer;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getHeadersArray" id="net.tc.stresstool.statistics.providers/MySQLSuper#getHeadersArray(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getMetrics" id="net.tc.stresstool.statistics.providers/MySQLSuper#getMetrics()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getProviderName" id="net.tc.stresstool.statistics.providers/MySQLSuper#getProviderName()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getReporterName" id="net.tc.stresstool.statistics.providers/MySQLSuper#getReporterName()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getRowData" id="net.tc.stresstool.statistics.providers/MySQLSuper#getRowData(Ljava.lang.StringBuffer;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getRowDataArray" id="net.tc.stresstool.statistics.providers/MySQLSuper#getRowDataArray([Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getStatGroup" id="net.tc.stresstool.statistics.providers/MySQLSuper#getStatGroup()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getStatsOutFile" id="net.tc.stresstool.statistics.providers/MySQLSuper#getStatsOutFile()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getStatus" id="net.tc.stresstool.statistics.providers/MySQLSuper#getStatus(Ljava.sql.Connection;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="printReport" id="net.tc.stresstool.statistics.providers/MySQLSuper#printReport(Ljava.lang.String;Ljava.lang.StringBuffer;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setFlushDataOnfile" id="net.tc.stresstool.statistics.providers/MySQLSuper#setFlushDataOnfile(Z)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setStats" id="net.tc.stresstool.statistics.providers/MySQLSuper#setStats(Lnet.tc.stresstool.statistics.StatsGroups;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setStatsOutFile" id="net.tc.stresstool.statistics.providers/MySQLSuper#setStatsOutFile(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="writeReportOnFile" id="net.tc.stresstool.statistics.providers/MySQLSuper#writeReportOnFile(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="writeStatsOnFile" id="net.tc.stresstool.statistics.providers/MySQLSuper#writeStatsOnFile(Ljava.util.Map;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" autoLocated="true" id="net.tc.stresstool.statistics.providers/StatsProvider&lt;-net.tc.stresstool.statistics.providers/MySQLSuper" source="//@children.9" target="//@children.11" targetEnd="//@children.9/@sourceConnections.0/@children.1" sourceEnd="//@children.9/@sourceConnections.0/@children.0" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="68,0" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="89,238"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" autoLocated="true" id="net.tc.stresstool.statistics.providers/Reporter&lt;-net.tc.stresstool.statistics.providers/MySQLSuper" source="//@children.9" target="//@children.10" targetEnd="//@children.9/@sourceConnections.1/@children.1" sourceEnd="//@children.9/@sourceConnections.1/@children.0" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="157,238" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,118"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:AssociationEditModel" autoLocated="true" id="net.tc.stresstool.statistics/StatsGroups@reporterGroup+net.tc.stresstool.statistics.providers/MySQLSuper@" source="//@children.9" target="//@children.4" targetEnd="//@children.9/@sourceConnections.2/@children.2" label="//@children.9/@sourceConnections.2/@children.0" sourceEnd="//@children.9/@sourceConnections.2/@children.1" connectionRouterKind="Manhattan">
+      <children xsi:type="editmodel:WireLabelEditModel" size="0,13" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,144" id="net.tc.stresstool.statistics/StatsGroups@reporterGroup+net.tc.stresstool.statistics.providers/MySQLSuper@|net.tc.stresstool.statistics.providers/MySQLSuper#" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" name="reporterGroup" location="170,115" id="net.tc.stresstool.statistics/StatsGroups@reporterGroup+net.tc.stresstool.statistics.providers/MySQLSuper@|net.tc.stresstool.statistics/StatsGroups#reporterGroup" multiplicityLabel="//@children.9/@sourceConnections.2/@children.2/@children.1" roleLabel="//@children.9/@sourceConnections.2/@children.2/@children.0" navigable="true">
+        <children xsi:type="editmodel:LabelEditModel" name=" # reporterGroup" location="775,484" size="92,13" anchorKind="LastPart"/>
+        <children xsi:type="editmodel:LabelEditModel" name="1" location="775,511" size="7,13" anchorKind="LastPart"/>
+      </children>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:InterfaceEditModel" targetConnections="//@children.8/@sourceConnections.2 //@children.9/@sourceConnections.1" name="Reporter" location="1065,480" size="157,238" id="net.tc.stresstool.statistics.providers/Reporter" runTimeClassModel="getRowData(Ljava.lang.StringBuffer;),printReport(Ljava.lang.String;Ljava.lang.StringBuffer;),statGroup,getRowDataArray([Ljava.lang.String;),getHeaders(Ljava.lang.StringBuffer;),getHeadersArray(Ljava.lang.String;),writeReportOnFile(Ljava.lang.String;),setStats(Lnet.tc.stresstool.statistics.StatsGroups;),reporterName">
+    <children xsi:type="editmodel:CompartmentEditModel" size="134,36">
+      <children xsi:type="editmodel:AttributeEditModel" name="reporterName" id="net.tc.stresstool.statistics.providers/Reporter#reporterName"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="statGroup" id="net.tc.stresstool.statistics.providers/Reporter#statGroup"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="126,126">
+      <children xsi:type="editmodel:MethodEditModel" name="getHeaders" id="net.tc.stresstool.statistics.providers/Reporter#getHeaders(Ljava.lang.StringBuffer;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getHeadersArray" id="net.tc.stresstool.statistics.providers/Reporter#getHeadersArray(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getRowData" id="net.tc.stresstool.statistics.providers/Reporter#getRowData(Ljava.lang.StringBuffer;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getRowDataArray" id="net.tc.stresstool.statistics.providers/Reporter#getRowDataArray([Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="printReport" id="net.tc.stresstool.statistics.providers/Reporter#printReport(Ljava.lang.String;Ljava.lang.StringBuffer;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setStats" id="net.tc.stresstool.statistics.providers/Reporter#setStats(Lnet.tc.stresstool.statistics.StatsGroups;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="writeReportOnFile" id="net.tc.stresstool.statistics.providers/Reporter#writeReportOnFile(Ljava.lang.String;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:InterfaceEditModel" targetConnections="//@children.8/@sourceConnections.1 //@children.9/@sourceConnections.0" name="StatsProvider" location="804,42" size="158,238" id="net.tc.stresstool.statistics.providers/StatsProvider" runTimeClassModel="setStatsOutFile(Ljava.lang.String;),collectStatistics(Ljava.sql.Connection;),statGroup,metrics,providerName,writeStatsOnFile(Ljava.util.Map;),getEventsName(),statsOutFile,setFlushDataOnfile(Z)">
+    <children xsi:type="editmodel:CompartmentEditModel" size="135,72">
+      <children xsi:type="editmodel:AttributeEditModel" name="metrics" id="net.tc.stresstool.statistics.providers/StatsProvider#metrics"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="providerName" id="net.tc.stresstool.statistics.providers/StatsProvider#providerName"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="statGroup" id="net.tc.stresstool.statistics.providers/StatsProvider#statGroup"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="statsOutFile" id="net.tc.stresstool.statistics.providers/StatsProvider#statsOutFile"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="134,90">
+      <children xsi:type="editmodel:MethodEditModel" name="collectStatistics" id="net.tc.stresstool.statistics.providers/StatsProvider#collectStatistics(Ljava.sql.Connection;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getEventsName" id="net.tc.stresstool.statistics.providers/StatsProvider#getEventsName()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setFlushDataOnfile" id="net.tc.stresstool.statistics.providers/StatsProvider#setFlushDataOnfile(Z)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setStatsOutFile" id="net.tc.stresstool.statistics.providers/StatsProvider#setStatsOutFile(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="writeStatsOnFile" id="net.tc.stresstool.statistics.providers/StatsProvider#writeStatsOnFile(Ljava.util.Map;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:AssociationEditModel" autoLocated="true" id="net.tc.stresstool.statistics.providers/StatsProvider@providers+net.tc.stresstool.statistics/StatCollector@" source="//@children.11" target="//@children.3" targetEnd="//@children.11/@sourceConnections.0/@children.2" label="//@children.11/@sourceConnections.0/@children.0" sourceEnd="//@children.11/@sourceConnections.0/@children.1" connectionRouterKind="Manhattan">
+      <children xsi:type="editmodel:WireLabelEditModel" size="0,13" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" name="providers" location="0,118" id="net.tc.stresstool.statistics.providers/StatsProvider@providers+net.tc.stresstool.statistics/StatCollector@|net.tc.stresstool.statistics.providers/StatsProvider#providers" attachSource="true" multiplicityLabel="//@children.11/@sourceConnections.0/@children.1/@children.1" roleLabel="//@children.11/@sourceConnections.0/@children.1/@children.0" navigable="true">
+        <children xsi:type="editmodel:LabelEditModel" name=" ~ providers" location="731,140" size="66,13" anchorKind="FirstPart"/>
+        <children xsi:type="editmodel:LabelEditModel" name="0..1" location="777,167" size="20,13" anchorKind="FirstPart"/>
+      </children>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="238,131" id="net.tc.stresstool.statistics.providers/StatsProvider@providers+net.tc.stresstool.statistics/StatCollector@|net.tc.stresstool.statistics/StatCollector#">
+        <children xsi:type="editmodel:QualifierAttributeEditModel" name="sectionName" location="483,149" size="87,22" id=""/>
+      </children>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <diagramOptions xsi:type="options:ClassDiagramOptions" level="-1" showScope="InPackage" properties="wireOptions=3;Product=eUML2"/>
+  <boardSetting snapToGeometry="true" gridEnabled="true" gridSpacing="15,15" gridOrigin="0,0" rulerUnit="pixel" gridVisibility="false">
+    <leftRuler/>
+    <topRuler/>
+  </boardSetting>
+  <classDiagramPreferences xsi:type="editmodel:UMLClassDiagramPreference" showPopupBars="true" showConnectionHandles="true" attributeSorter="Natural" methodSorter="Natural" showClassStereotype="true" showPackageStereotype="true" showDependencyStereotype="true" showInterfaceStereotype="true" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+</editmodel:ClassDiagramEditModel>

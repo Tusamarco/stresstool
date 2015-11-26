@@ -1,0 +1,98 @@
+# Define some default values that can be overridden by system properties
+stresstool.root.logger=INFO
+stresstool.log.dir=/tmp/statlogs
+stresstool.log.file=stresstool.log
+
+#log4j.logger.APPLICATION=INFO,console,APPLICATION
+log4j.logger.APPLICATION=DEBUG,console,APPLICATION
+log4j.logger.ACTIONS=DEBUG,console,ACTIONS
+log4j.logger.MONITORS=DEBUG,MONITORS
+log4j.logger.STATS=INFO,STATS
+log4j.logger.PERFORMANCE=ERROR,console,PERFORMANCE
+
+# Define the root logger to the system property "stresstool.root.logger".
+log4j.rootLogger=${stresstool.root.logger}
+
+
+# Logging Threshold
+log4j.threshhold=ALL
+
+#
+# Action Appender
+#
+log4j.appender.ACTIONS=org.apache.log4j.RollingFileAppender
+log4j.appender.ACTIONS.File=${stresstool.log.dir}/actions.log
+log4j.appender.ACTIONS.MaxFileSize=50MB
+log4j.appender.ACTIONS.MaxBackupIndex=30
+log4j.appender.ACTIONS.layout=org.apache.log4j.PatternLayout
+log4j.appender.ACTIONS.layout.ConversionPattern=%d{ISO8601},%p,%m%n
+#log4j.appender.ACTIONS.layout.ConversionPattern=%d{ISO8601} %-5p %c{2} (%F:%M(%L)) - %m%n
+
+#
+# Monitor Appender
+#
+log4j.appender.MONITORS=org.apache.log4j.RollingFileAppender
+log4j.appender.MONITORS.File=${stresstool.log.dir}/monitors.log
+log4j.appender.MONITORS.MaxFileSize=50MB
+log4j.appender.MONITORS.MaxBackupIndex=30
+log4j.appender.MONITORS.layout=org.apache.log4j.PatternLayout
+log4j.appender.MONITORS.layout.ConversionPattern=%d{ISO8601},%p,%m%n
+#log4j.appender.MONITORS.layout.ConversionPattern=%d{ISO8601} %-5p %c{2} (%F:%M(%L)) - %m%n
+
+
+#
+# Statistics Appender
+#
+log4j.appender.STATS=org.apache.log4j.RollingFileAppender
+log4j.appender.STATS.File=${stresstool.log.dir}/STATS.log
+log4j.appender.STATS.MaxFileSize=50MB
+log4j.appender.STATS.MaxBackupIndex=30
+log4j.appender.STATS.layout=org.apache.log4j.PatternLayout
+log4j.appender.STATS.layout.ConversionPattern=%m%n
+#log4j.appender.STATS.layout.ConversionPattern=%d{ISO8601} %-5p %c{2} (%F:%M(%L)) - %m%n
+
+
+#
+# console
+# Add "console" to rootlogger above if you want to use this 
+#
+
+log4j.appender.console=org.apache.log4j.ConsoleAppender
+log4j.appender.console.target=System.out
+log4j.appender.console.layout=org.apache.log4j.PatternLayout
+log4j.appender.console.layout.ConversionPattern=%d{yy/MM/dd HH:mm:ss} %p [%c2]: %m%n
+
+#
+# Rolling File Appender
+#
+
+log4j.appender.APPLICATION=org.apache.log4j.RollingFileAppender
+log4j.appender.APPLICATION.File=${stresstool.log.dir}/${stresstool.log.file}
+log4j.appender.APPLICATION.MaxFileSize=50MB
+log4j.appender.APPLICATION.MaxBackupIndex=30
+log4j.appender.APPLICATION.layout=org.apache.log4j.PatternLayout
+log4j.appender.APPLICATION.layout.ConversionPattern=%d{ISO8601} %-5p %c{2} - %m%n
+
+
+log4j.appender.PERFORMANCE=org.apache.log4j.RollingFileAppender
+log4j.appender.PERFORMANCE.File=${stresstool.log.dir}/performance.txt
+log4j.appender.PERFORMANCE.MaxFileSize=50MB
+log4j.appender.PERFORMANCE.MaxBackupIndex=30
+log4j.appender.PERFORMANCE.layout=org.apache.log4j.PatternLayout
+log4j.appender.PERFORMANCE.layout.ConversionPattern=%d{ISO8601} %-5p %c{2} - %m%n
+#log4j.appender.PERFORMANCE.layout.ConversionPattern=%d{ISO8601} %-5p (%C:%M(%L)) - %m%n
+#%highlight{%d %-5level: (%C:%M(%L)) - %m%n throwable}{FATAL=white, ERROR=red, WARN=blue, INFO=black, DEBUG=green, TRACE=blue}
+#%d{ISO8601},%p,(%C - %M :%L), %m%n
+
+#
+# Null Appender
+# Trap security logger on the stresstool client side
+#
+log4j.appender.NullAppender=org.apache.log4j.varia.NullAppender
+
+#
+# Event Counter Appender
+# Sends counts of logging messages at different severity levels to stresstool Metrics.
+#
+#log4j.appender.EventCounter=org.apache.stresstool.metrics.jvm.EventCounter
+

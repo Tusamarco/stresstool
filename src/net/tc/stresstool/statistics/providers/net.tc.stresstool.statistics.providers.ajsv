@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--AgileJ Ltd. (http://www.agilej.com)--><ajsv>
+    <diagram creationDate="2015-Nov-17 16:17" licenseGrade="evaluation" licenseeName="anon" licenseeOrganization="unknown" populationMethod="Wizard+PACKAGE" version="1.8.3.v20151019-2113">
+        <filterScript>
+
+// no filter script yet defined for this class diagram
+// use CTRL+SPACE for completion suggestions
+
+</filterScript>
+        <class className="net.tc.stresstool.statistics.providers.MySQLSuper" project="stresstool" xLocation="883" yLocation="165"/>
+        <class className="net.tc.stresstool.statistics.providers.Reporter" project="stresstool" xLocation="30" yLocation="174"/>
+        <class className="net.tc.stresstool.statistics.providers.StatsProvider" project="stresstool" xLocation="2516" yLocation="136"/>
+        <class className="net.tc.stresstool.statistics.providers.MySQLStatus" project="stresstool" xLocation="1720" yLocation="30"/>
+    </diagram>
+</ajsv>

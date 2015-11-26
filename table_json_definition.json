@@ -1,0 +1,160 @@
+mysql> show create table tbtest1\G
+*************************** 1. row ***************************
+       Table: tbtest1
+Create Table: CREATE TABLE `tbtest1` (
+  `autoInc` bigint(11) NOT NULL AUTO_INCREMENT,
+  `a` int(11) NOT NULL,
+  `uuid` char(36) COLLATE utf8_bin NOT NULL,
+  `b` varchar(100) COLLATE utf8_bin NOT NULL,
+  `c` char(200) COLLATE utf8_bin NOT NULL,
+  `counter` bigint(20) DEFAULT NULL,
+  `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `partitionid` int(11) NOT NULL DEFAULT '0',
+  `date` date NOT NULL,
+  `strrecordtype` char(3) COLLATE utf8_bin DEFAULT NULL,
+  PRIMARY KEY (`autoInc`,`partitionid`),
+  KEY `IDX_a` (`a`),
+  KEY `IDX_uuid` (`uuid`),
+  KEY `IDX_date` (`date`)
+) ENGINE=InnoDB AUTO_INCREMENT=534588 DEFAULT CHARSET=utf8 COLLATE=utf8_bin 
+1 row in set (0.00 sec)
+
+mysql> show create table tbtest_child1\G
+*************************** 1. row ***************************
+       Table: tbtest_child1
+Create Table: CREATE TABLE `tbtest_child1` (
+  `a` int(11) NOT NULL,
+  `bb` int(11) NOT NULL AUTO_INCREMENT,
+  `date` date NOT NULL,
+  `partitionid` int(11) NOT NULL DEFAULT '0',
+  `stroperation` mediumtext COLLATE utf8_bin,
+  `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`a`,`bb`),
+  UNIQUE KEY `bb` (`bb`)
+) ENGINE=InnoDB AUTO_INCREMENT=26010 DEFAULT CHARSET=utf8 COLLATE=utf8_bin 
+1 row in set (0.00 sec
+
+{
+	"database":"test",
+	"tables":{
+		"table":[
+				{
+					"database":"test",
+					"tablename":"tbtest",
+					"engine":"innodb",
+					"primarykey":["autoInc","partitionid"],
+					"autoincrementvalue":0,
+					"defaultcharset":"utf8",
+					"defaultcollation":"utf8_bin",
+					"keys":
+							{
+							"key":
+								[
+									{"name":"IDX_a","unique":false,"attributes":["a"]},
+									{"name":"IDX_uuid","unique":false,"attributes":["uuid"]},
+									{"name":"IDX_date","unique":false,"attributes":["date"]}			
+								]
+							},
+					"haspartition":false,	
+					"fields":{
+						"field":
+							[
+								{"name":"autoInc","datatype":"bigint","datadimension":"11","default":"none","null":false,"autoincrement":true},
+								{"name":"uuid","datatype":"char","datadimension":"36","default":"none","null":false},				
+								{"name":"serverid","datatype":"smallint","datadimension":"6","default":"none","null":false},				
+								{"name":"b","datatype":"varchar","datadimension":"100","default":"none","null":false},
+								{"name":"c","datatype":"char","datadimension":"200","default":"none","null":false},
+								{"name":"counter","datatype":"bigint","datadimension":"20","default":"none","null":true},								
+								{"name":"time","datatype":"timestamp","default":"none","ON UPDATE":"CURRENT_TIMESTAMP","null":false},
+								{"name":"partitionid","datatype":"int","datadimension":"11","default":"0","null":true},								
+								{"name":"date","datatype":"date","default":"","null":false},
+								{"name":"strrecordtype","datatype":"char","datadimension":"3","default":"","null":true}				
+							]
+					},
+					"partitionDefinition":{
+	
+					}
+				},
+				{
+					"database":"test",
+					"tablename":"tbtestPart",
+					"engine":"innodb",
+					"primarykey":["date","autoInc"],
+					"autoincrementvalue":0,
+					"defaultcharset":"utf8",
+					"defaultcollation":"utf8_bin",
+					"keys":
+							{
+							"key":
+								[
+									{"name":"IDX_a","unique":false,"attributes":["a"]},
+									{"name":"IDX_uuid","unique":false,"attributes":["uuid"]},
+									{"name":"IDX_autoinc","unique":false,"attributes":["autoInc"]}			
+								]
+							},
+					"haspartition":true,	
+					"fields":{
+						"field":
+							[
+								{"name":"autoInc","datatype":"bigint","datadimension":"11","default":"none","null":false,"autoincrement":true},
+								{"name":"uuid","datatype":"char","datadimension":"36","default":"none","null":false},				
+								{"name":"serverid","datatype":"smallint","datadimension":"6","default":"none","null":false},				
+								{"name":"b","datatype":"varchar","datadimension":"100","default":"none","null":false},
+								{"name":"c","datatype":"char","datadimension":"200","default":"none","null":false},
+								{"name":"counter","datatype":"bigint","datadimension":"20","default":"none","null":true},								
+								{"name":"time","datatype":"timestamp","default":"none","ON UPDATE":"CURRENT_TIMESTAMP","null":false},
+								{"name":"partitionid","datatype":"int","datadimension":"11","default":"0","null":true},								
+								{"name":"date","datatype":"date","default":"","null":false},
+								{"name":"strrecordtype","datatype":"char","datadimension":"3","default":"","null":true}				
+							]
+					},
+					"partitionDefinition":{
+						"partitionBy":"range",
+						"subpartition":false,
+						"attributes":["date"],
+						"function":"to_days",
+						"interval":"week",
+						"starttime":"2015-11-01",
+						"endtime":"2016-01-31",
+						"partitions":"0",
+						"lists":{"list":[]}
+						"ranges":{"range":[]}
+	
+					}
+				},
+				{
+					"database":"test",
+					"tablename":"tbtest_child",
+					"engine":"innodb",
+					"primarykey":["a","bb"],
+					"autoincrementvalue":0,
+					"defaultcharset":"utf8",
+					"defaultcollation":"utf8_bin",
+					"keys":
+							{
+							"key":
+								[
+									{"name":"serverid","unique":false,"attributes":["serverid"]},			
+									{"name":"bb","unique":true,"attributes":["bb"]}			
+								]
+							},
+					"haspartition":false,	
+					"fields":{
+						"field":
+							[
+								{"name":"a","datatype":"int","datadimension":"11","default":"none","null":false},
+								{"name":"serverid","datatype":"smallint","datadimension":"6","default":"none","null":false},				
+								{"name":"bb","datatype":"int","datadimension":"11","default":"none","null":false,"autoincrement":true},
+								{"name":"partitionid","datatype":"int","datadimension":"11","default":"0","null":true},								
+								{"name":"stroperation","datatype":"varchar","datadimension":"254","default":"","null":true},				
+								{"name":"time","datatype":"timestamp","default":"none","ON UPDATE":"CURRENT_TIMESTAMP","null":false}
+							]
+					},
+					"partitionDefinition":{
+	
+					}
+				}
+
+			]
+		}
+}

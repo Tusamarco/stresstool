@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--AgileJ Ltd. (http://www.agilej.com)--><ajsv>
+    <diagram creationDate="2015-Nov-17 16:19" licenseGrade="evaluation" licenseeName="anon" licenseeOrganization="unknown" populationMethod="Wizard+PACKAGE" version="1.8.3.v20151019-2113">
+        <filterScript>
+
+// no filter script yet defined for this class diagram
+// use CTRL+SPACE for completion suggestions
+
+</filterScript>
+        <class className="net.tc.stresstool.config.ConfigurationImplementation" project="stresstool" xLocation="1164" yLocation="92"/>
+        <class className="net.tc.stresstool.config.Configurator" project="stresstool" xLocation="30" yLocation="44"/>
+        <class className="net.tc.stresstool.config.Configuration" project="stresstool" xLocation="3318" yLocation="43"/>
+        <class className="net.tc.stresstool.config.ConfigValue" project="stresstool" xLocation="2386" yLocation="30"/>
+    </diagram>
+</ajsv>
