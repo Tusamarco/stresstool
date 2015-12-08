@@ -23,6 +23,7 @@ import javax.imageio.ImageIO;
 */
  public  class  Utility
 {
+    static Random rnd = new Random();
     public Utility()
     {
     }
@@ -470,5 +471,62 @@ import javax.imageio.ImageIO;
       return sb.toString();
       
   }
+  
+  public static Long getNumberFromRandom(int index)
+  {
+//  	System.out.println(index);
+      return new Long(rnd.nextInt(index));
+
+  }
+
+  public static Long getNumberFromRandomMinMax(long min,long max)
+  {
+  	if(min == max) return new Long(max);
+  	
+      if(min == 0 && max == 0){
+      	return new Long(0);
+      }
+      	Long maxL = new Long(rnd.nextInt(new Long(max - min).intValue()) + min);
+  	if(maxL < new Long(min)){
+  		maxL = new Long(min * 2);
+  		if(maxL > new Long(max))
+  		    return new Long(max);
+  	}
+  	return maxL;
+
+  }
+
+  public static Long getNumberFromRandomMinMaxCeling(long min,long max,long celing)
+  {
+  	if(min == max) return new Long(max);
+  	
+      if(min == 0 && max == 0){
+      	return new Long(0);
+      }
+      
+  	Long maxL = new Long(rnd.nextLong());
+  	if(maxL < new Long(min)){
+  		maxL = new Long(min * 2);    		
+  	}
+  	
+  	if((maxL - new Long(min)) > celing){
+  		return Math.abs(new Long (min + celing));
+  	}
+  	return Math.abs(maxL);
+
+  }
+  public static boolean isNumeric(String str)  
+  {  
+  	 try  
+  	 {  
+  	    int i = Integer.parseInt(str);  
+  	}  
+  	catch(NumberFormatException nfe)  
+  	{  
+  		return false;  
+  	}  
+  	return true;  
+  }  
+
 }
 

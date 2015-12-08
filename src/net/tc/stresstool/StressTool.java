@@ -50,6 +50,7 @@ import net.tc.stresstool.exceptions.StressToolException;
 import net.tc.stresstool.logs.LogProvider;
 import net.tc.stresstool.messages.ApplicationMessages;
 import net.tc.stresstool.statistics.StatCollector;
+import net.tc.stresstool.value.ValueProvider;
 import net.tc.utils.SynchronizedMap;
 import net.tc.utils.Utility;
 
@@ -81,7 +82,8 @@ public class StressTool {
 	 * @uml.property  name="connectionInformation"
 	 */
 	private Map connectionInformation;
-
+	private ValueProvider valueProvider = null;
+	
 	public StressTool(String[] args) {
         try {
             	/*
@@ -138,6 +140,19 @@ public class StressTool {
 	            
 	        }
 	        
+	        if((String) config.getConfiguration(Configurator.MAIN_SECTION_NAME, StressTool.class).getParameter("datafilepath").getValue() !=null){
+	           
+	            logProvider.getLogger(LogProvider.LOG_APPLICATION).info("Data Load from file datafilepath = "
+	        	    + ((String) config.getConfiguration(Configurator.MAIN_SECTION_NAME, StressTool.class).getParameter("datafilepath").getValue())
+	        	    + " Starting now"
+	        	    );
+	            valueProvider = launcher.LoadData();
+	            logProvider.getLogger(LogProvider.LOG_APPLICATION).info("Data Load from file completed ");
+	        }
+	        
+	        /*
+	         * Create actions classes but not launch them
+	         */
 	        
 	        
 	        

@@ -26,12 +26,12 @@ import org.json.simple.parser.JSONParser;
 public class InsertBase extends StressActionBase implements WriteAction,
 	CreateAction {
 	
-    private int numberOfprimaryTables=30;
-    private int numberOfSecondaryTables=20;
+    private int numberOfprimaryTables=1;
+    private int numberOfSecondaryTables=0;
     
     private boolean useAutoIncrement=true;
     
-	private int sleepWrite=0;
+    private int sleepWrite=0;
     private boolean lazyCreation=true;
     private int lazyInterval=5000;
     private int batchSize = 0; 

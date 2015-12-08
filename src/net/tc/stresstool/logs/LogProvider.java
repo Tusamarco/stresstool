@@ -19,7 +19,7 @@ import net.tc.stresstool.exceptions.StressToolConfigurationException;
 import net.tc.stresstool.exceptions.StressToolException;
 import net.tc.utils.SynchronizedMap;
 import net.tc.utils.Utility;
-import net.tc.utils.Utils;
+
 
 /**
  * 

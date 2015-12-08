@@ -39,6 +39,7 @@ public class StressActionBase implements StressAction, Runnable {
     private String tableEngine= null;
     private boolean truncate=false;
     private String actionType = null;
+    private int actionCode = 0;
 
     private boolean isActive = false;
     private ActionStatus actionStatus = null; 
@@ -656,5 +657,19 @@ public class StressActionBase implements StressAction, Runnable {
 	public void setActionType(String actionType) {
         this.actionType = actionType;
     }
+
+	/**
+	 * @return the actionCode
+	 */
+	public int getActionCode() {
+	    return actionCode;
+	}
+
+	/**
+	 * @param actionCode the actionCode to set
+	 */
+	public void setActionCode(int actionCode) {
+	    this.actionCode = actionCode;
+	}
 
 }

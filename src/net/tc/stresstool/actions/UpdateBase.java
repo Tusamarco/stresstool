@@ -17,8 +17,8 @@ import org.json.simple.parser.JSONParser;
 public class UpdateBase extends StressActionBase implements WriteAction,
 	CreateAction {
 	
-    private int numberOfprimaryTables=30;
-    private int numberOfSecondaryTables=20;
+    private int numberOfprimaryTables=1;
+    private int numberOfSecondaryTables=0;
     
     private boolean useAutoIncrement=true;
     
@@ -71,30 +71,14 @@ public class UpdateBase extends StressActionBase implements WriteAction,
 	}
 	@Override
 	public boolean CreateSchema() {
-		try{
-
-			if(this.getJsonFile() == null){
-				StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).warn("Table structure definition from Json file is null for Insert Class");
-				StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).warn("check parameter : jsonfile");
-				return false;
-			}
-
-			JSONParser parser = new JSONParser();
-			StructureDefinitionParser strParser = new StructureDefinitionParserMySQL();
-			FileReader fr = new FileReader(this.getJsonFile());
-			Schema schema = strParser.parseSchema(parser, fr);
-			
-				
-		}
-		catch(Exception e){
-			e.printStackTrace();
-		    ExceptionMessages.setCurrentError(ExceptionMessages.ERROR_FATAL);
-		    try{throw new StressToolConfigurationException(e);}catch(Throwable th){th.printStackTrace();}
-		}
-		finally{
-		    return true;
-		}
-		
+	    try {
+		StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION)
+		.error("Table structure Can be create ONLY when using INSERT classes");
+	    } catch (StressToolConfigurationException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	    }
+	    return false;
 	}
 	
 	public boolean  DropSchema(String[] schema) {

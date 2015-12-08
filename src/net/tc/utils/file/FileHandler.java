@@ -4,9 +4,10 @@ import java.io.*;
 import java.util.*;
 
 import net.tc.utils.SynchronizedMap;
+
 import java.lang.ref.SoftReference;
 
-import net.tc.utils.Utils;
+
 
 public class FileHandler implements FileDataReader, FileDataWriter
 {
@@ -25,6 +26,7 @@ public class FileHandler implements FileDataReader, FileDataWriter
     /**
      */
     boolean filecreate = false;
+    boolean IN_FILE_FOR_WRITE = false;
     /**
      */
     long fileSize = 0;
@@ -43,7 +45,8 @@ public class FileHandler implements FileDataReader, FileDataWriter
     /**
      */
     FileWriter fw ;
-  
+    public static int FILE_FOR_READ = 1;
+    public static int FILE_FOR_WRITE = 2;
 
     public FileHandler()
         throws FileNotFoundException
@@ -56,17 +59,23 @@ public class FileHandler implements FileDataReader, FileDataWriter
         this.out = out;
         setSize(in.length());
     }
-    public FileHandler(String filePath)
+    public FileHandler(String filePath, int  read_or_write)
     {
+	if(read_or_write ==  this.FILE_FOR_WRITE){
+	    IN_FILE_FOR_WRITE = true;
+	
+	}
+	
         SoftReference sf = new SoftReference(new File(filePath));
          this.in = (File)sf.get();
-
+         
         if(this.in == null)
         {
             new FileNotFoundException();
             return;
         }
-        this.out = null;
+
+        
         setSize(in.length());
         if(!in.exists())
         {
@@ -88,12 +97,17 @@ public class FileHandler implements FileDataReader, FileDataWriter
             }
 
         }
-        try {
-			fw = new FileWriter( in );
+        if(IN_FILE_FOR_WRITE){
+            try {
+                    this.out = (File)sf.get();
+                    this.in = null;
+                    fw = new FileWriter( out );
 		} catch (IOException e) {
 
 			e.printStackTrace();
+		
 		}
+        }
     }
 
     public FileHandler(File in, File out, String outPath, boolean filecreate)
@@ -281,10 +295,10 @@ public class FileHandler implements FileDataReader, FileDataWriter
 
 
         try{
-            if ( in != null)// && in.exists())
+            if ( out != null)// && in.exists())
             {
 
-                FileWriter fw = new FileWriter( in ) ;
+                FileWriter fw = new FileWriter( out ) ;
                 fw.write(fr);
                 
 //                BufferedReader inb = new BufferedReader(fr);
@@ -320,10 +334,10 @@ public class FileHandler implements FileDataReader, FileDataWriter
 
 
         try{
-            if ( in != null)// && in.exists())
+            if ( out != null)// && in.exists())
             {
             	
-            	FileOutputStream outS = new FileOutputStream(in,true); 
+            	FileOutputStream outS = new FileOutputStream(out,true); 
             	ByteArrayInputStream inb = new ByteArrayInputStream(fr.getBytes());
             	int size = fr.length();
                 int i = 0;
@@ -412,16 +426,16 @@ public class FileHandler implements FileDataReader, FileDataWriter
 
     public boolean deleteFile()
     {
-        if(in != null && in.exists())
+        if(out != null && out.exists())
         {
             try{
-                if(!in.delete())
-                 {   in.deleteOnExit();
+                if(!out.delete())
+                 {   out.deleteOnExit();
                      return false;}
             }catch(Exception ex)
             {
                 try{
-                    in.deleteOnExit();
+                    out.deleteOnExit();
                     return true;
                 }
                 catch(Exception eex){ return false;}
@@ -588,6 +602,28 @@ public class FileHandler implements FileDataReader, FileDataWriter
 
 
         return null;
+    }
+    public String[] getTextFileAsStringArray(){
+	List<String> txt  = new ArrayList();
+	if(dataReader != null){
+	    String line = null;
+	    do{
+		line = null;
+		try {
+		    line = dataReader.readLine();
+		    txt.add(line);
+		} catch (IOException e) {
+		    // TODO Auto-generated catch block
+		    e.printStackTrace();
+		}
+	    }while (line !=null);
+	    if(txt == null || txt.size() < 1)
+		return null;
+	    
+	 return txt.toArray(new String[txt.size()]);   
+	}
+	
+	return null;
     }
     public Map getAllRowsAsMap()
     {

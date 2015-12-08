@@ -13,6 +13,10 @@ public interface StressAction {
 	    public static String ACTION_TYPE_Create = "Create";
 	    public static String ACTION_TYPE_Drop = "Drop";
 	    public static String ACTION_TYPE_Truncate = "Truncate";
+	    public static final int INSERT_ID_CONST =1000;
+	    public static final int SELECT_ID_CONST =2000; 
+	    public static final int DELETE_ID_CONST =3000;
+	    public static final int UPDATE_ID_CONST =4000;
 	    
 	/* (non-Javadoc)
 	 * @see net.tc.stresstool.actions.StressAction#ExecuteAction()

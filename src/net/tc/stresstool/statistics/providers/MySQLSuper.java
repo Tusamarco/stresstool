@@ -256,10 +256,10 @@ public class MySQLSuper implements StatsProvider, Reporter {
     public void setStatsOutFile(String rootPath) {
         if(rootPath != null && !rootPath.equals("")){
             try{
-        	statsFile = new FileHandler(rootPath + "/" +getStatGroup()+"_"+Utility.getTimestamp()+".txt");
+        	statsFile = new FileHandler(rootPath + "/" +getStatGroup()+"_"+Utility.getTimestamp()+".txt", FileHandler.FILE_FOR_WRITE );
         	
         	if(flushrowonfile){
-        	    csvFile = new FileHandler(rootPath + "/" +getStatGroup()+"_"+Utility.getTimestamp()+".csv");
+        	    csvFile = new FileHandler(rootPath + "/" +getStatGroup()+"_"+Utility.getTimestamp()+".csv", FileHandler.FILE_FOR_WRITE);
         	    
         	}
             }
