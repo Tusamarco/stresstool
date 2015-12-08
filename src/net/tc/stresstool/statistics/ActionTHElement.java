@@ -12,53 +12,37 @@ package net.tc.stresstool.statistics;
  * @author  tusa
  */
 public class ActionTHElement {
-    /**
-     * @uml.property  name="id"
-     */
+    public static int SEMAPHORE_NOT_INITIALIZED = 0;
+    public static int SEMAPHORE_GREEN = 1;
+    public static int SEMAPHORE_YELLOW = 2;
+    public static int SEMAPHORE_RED = 3;
+
     long id = 0;
-    /**
-     * @uml.property  name="thId"
-     */
     long thId =0 ;
-    /**
-     * @uml.property  name="startTime"
-     */
     long startTime = 0;
-    /**
-     * @uml.property  name="endTime"
-     */
     long endTime = 0;
-    /**
-     * @uml.property  name="action"
-     */
     String action;
-    /**
-     * @uml.property  name="currentLoop"
-     */
     int currentLoop = 0;
-    /**
-     * @uml.property  name="executionTime"
-     */
     int executionTime =0;
-    /**
-     * @uml.property  name="rowsProcessed"
-     */
     int rowsProcessed=0;
-    /**
-     * @uml.property  name="isActive"
-     */
     boolean isActive = false;
-    /**
-     * @uml.property  name="isReady"
-     */
-    boolean isReady = false;
+    int ready = SEMAPHORE_NOT_INITIALIZED;
     
+    public ActionTHElement(long thId, boolean isActive, int ready) {
+	this.thId = thId;
+	this.isActive = isActive;
+	this.ready = ready;
+    }
+
+    public ActionTHElement() {
+	// TODO Auto-generated constructor stub
+    }
 
     /**
      * @return    the thId
      * @uml.property  name="thId"
      */
-    public final long getThId() {
+    public  long getThId() {
         return thId;
     }
 
@@ -66,7 +50,7 @@ public class ActionTHElement {
      * @param thId    the thId to set
      * @uml.property  name="thId"
      */
-    public final void setThId(long thId) {
+    public  void setThId(long thId) {
         this.thId = thId;
     }
     
@@ -74,7 +58,7 @@ public class ActionTHElement {
      * @return    the id
      * @uml.property  name="id"
      */
-    public final long getId() {
+    public  long getId() {
         return id;
     }
 
@@ -82,7 +66,7 @@ public class ActionTHElement {
      * @param id    the id to set
      * @uml.property  name="id"
      */
-    public final void setId(long id) {
+    public  void setId(long id) {
         this.id = id;
     }
 
@@ -90,7 +74,7 @@ public class ActionTHElement {
      * @return    the startTime
      * @uml.property  name="startTime"
      */
-    public final long getStartTime() {
+    public  long getStartTime() {
         return startTime;
     }
 
@@ -98,7 +82,7 @@ public class ActionTHElement {
      * @param startTime    the startTime to set
      * @uml.property  name="startTime"
      */
-    public final void setStartTime(long startTime) {
+    public  void setStartTime(long startTime) {
         this.startTime = startTime;
     }
 
@@ -106,7 +90,7 @@ public class ActionTHElement {
      * @return    the endTime
      * @uml.property  name="endTime"
      */
-    public final long getEndTime() {
+    public  long getEndTime() {
         return endTime;
     }
 
@@ -114,7 +98,7 @@ public class ActionTHElement {
      * @param endTime    the endTime to set
      * @uml.property  name="endTime"
      */
-    public final void setEndTime(long endTime) {
+    public  void setEndTime(long endTime) {
         this.endTime = endTime;
     }
 
@@ -122,7 +106,7 @@ public class ActionTHElement {
      * @return    the action
      * @uml.property  name="action"
      */
-    public final String getAction() {
+    public  String getAction() {
         return action;
     }
 
@@ -130,7 +114,7 @@ public class ActionTHElement {
      * @param action    the action to set
      * @uml.property  name="action"
      */
-    public final void setAction(String action) {
+    public  void setAction(String action) {
         this.action = action;
     }
 
@@ -138,7 +122,7 @@ public class ActionTHElement {
      * @return    the currentLoop
      * @uml.property  name="currentLoop"
      */
-    public final int getCurrentLoop() {
+    public  int getCurrentLoop() {
         return currentLoop;
     }
 
@@ -146,7 +130,7 @@ public class ActionTHElement {
      * @param currentLoop    the currentLoop to set
      * @uml.property  name="currentLoop"
      */
-    public final void setCurrentLoop(int currentLoop) {
+    public  void setCurrentLoop(int currentLoop) {
         this.currentLoop = currentLoop;
     }
 
@@ -154,7 +138,7 @@ public class ActionTHElement {
      * @return    the executionTime
      * @uml.property  name="executionTime"
      */
-    public final int getExecutionTime() {
+    public  int getExecutionTime() {
         return executionTime;
     }
 
@@ -162,7 +146,7 @@ public class ActionTHElement {
      * @param executionTime    the executionTime to set
      * @uml.property  name="executionTime"
      */
-    public final void setExecutionTime(int executionTime) {
+    public  void setExecutionTime(int executionTime) {
         this.executionTime = executionTime;
     }
 
@@ -170,7 +154,7 @@ public class ActionTHElement {
      * @return    the rowsProcessed
      * @uml.property  name="rowsProcessed"
      */
-    public final int getRowsProcessed() {
+    public  int getRowsProcessed() {
         return rowsProcessed;
     }
 
@@ -178,7 +162,7 @@ public class ActionTHElement {
      * @param rowsProcessed    the rowsProcessed to set
      * @uml.property  name="rowsProcessed"
      */
-    public final void setRowsProcessed(int rowsProcessed) {
+    public  void setRowsProcessed(int rowsProcessed) {
         this.rowsProcessed = rowsProcessed;
     }
 
@@ -186,14 +170,14 @@ public class ActionTHElement {
      * @return    the isActive
      * @uml.property  name="isActive"
      */
-    public final boolean isActive() {
+    public  boolean isActive() {
         return isActive;
     }
 
     /**
      * @param isActive the isActive to set
      */
-    public final void setActive(boolean isActive) {
+    public  void setActive(boolean isActive) {
         this.isActive = isActive;
     }
 
@@ -201,19 +185,16 @@ public class ActionTHElement {
      * @return    the isReady
      * @uml.property  name="isReady"
      */
-    public final boolean isReady() {
-        return isReady;
+    public  int getReady() {
+        return ready;
     }
 
     /**
      * @param isReady the isReady to set
      */
-    public final void setReady(boolean isReady) {
-        this.isReady = isReady;
+    public  void setReady(int Ready) {
+        this.ready = Ready;
     }
 
-    public ActionTHElement() {
-	// TODO Auto-generated constructor stub
-    }
 
 }

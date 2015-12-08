@@ -6,18 +6,19 @@ public class SelectBase extends StressActionBase implements ReadAction{
 
 	
 	private int numberOfJoinTables=0;
-	private String joinField = null;
+	private String joinField = "";
 	private boolean forceIndex = false;
-	private String indexName= null;
+	private String indexName= "";
 	private int numberOfIntervalKeys =0 ;
-	private String selectFilterMethod = null; // #range|in|match
+	private String selectFilterMethod = "range"; // #range|in|match
 	private int sleepSelect = 0; 
 
 	private int numberOfprimaryTables=1;
-    private int numberOfSecondaryTables=0;
-
-    private boolean lazySelect=true;
-    private int lazyInterval=5000;
+	private int numberOfSecondaryTables=0;
+	private boolean lazySelect=true;
+	private int lazyInterval=5000;
+	private String tableEngine = "InnODB";
+	
     
 
     
@@ -109,6 +110,18 @@ public class SelectBase extends StressActionBase implements ReadAction{
 	public void setSleepRead(int sleepRead) {
 		sleepSelect = sleepRead;
 		
+	}
+	/**
+	 * @return the tableEngine
+	 */
+	public String getTableEngine() {
+	    return tableEngine;
+	}
+	/**
+	 * @param tableEngine the tableEngine to set
+	 */
+	public void setTableEngine(String tableEngine) {
+	    this.tableEngine = tableEngine;
 	}
 
 

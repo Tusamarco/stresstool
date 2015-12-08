@@ -71,6 +71,7 @@ public class StressTool {
 	 */
 	private Wini stressSettings;
 	private static Configurator config;
+	private static boolean StressToolRunning = false;
 	/**
 	 * @uml.property  name="applicationLogger"
 	 * @uml.associationEnd  
@@ -156,18 +157,23 @@ public class StressTool {
 	        
 	        
 	        
-
-	        for(int i = 0 ; i < 400; i++ ){
-	            stats.collectStatistics();
-	            try {
-			Thread.sleep(10);
-		    } catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		    }
+	        StressTool.setStressToolRunning(true);
+	        
+	         while(StressTool.isStressToolRunning()){
+	          for(int i = 0 ; i < 400; i++ ){
+	             stats.collectStatistics();
+        	     try {
+        		 Thread.sleep(10);
+        	     } catch (InterruptedException e) {
+        		 // TODO Auto-generated catch block
+        		 e.printStackTrace();
+        	     }
+	           }
+	          StressTool.setStressToolRunning(false);
+	         }
 	            
 	            
-	        }
+	        
 	        
 	        
 	        printReport(stats);
@@ -580,5 +586,27 @@ public class StressTool {
 	    
 	    
 	    return false;
+	}
+
+
+
+
+
+	/**
+	 * @return the stressToolRunning
+	 */
+	public static boolean isStressToolRunning() {
+	    return StressToolRunning;
+	}
+
+
+
+
+
+	/**
+	 * @param stressToolRunning the stressToolRunning to set
+	 */
+	public static void setStressToolRunning(boolean stressToolRunning) {
+	    StressToolRunning = stressToolRunning;
 	}
 }

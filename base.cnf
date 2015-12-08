@@ -25,7 +25,7 @@ sleepWrite=0
 sleepSelect=0 
 sleepDelete=0
 # table engine comma separated with % value; 
-tableEngine=InnoDB|60,MyISAM|40
+TableEngine=InnoDB|60,MyISAM|40
 truncate=false
 
 DeleteClass=net.tc.stresstool.actions.DeleteBase 
@@ -70,14 +70,14 @@ sleepDelete=0
 #for consistency the number of tables should never be higher than the ones declared in the Insert class
 #numberOfprimaryTables=10
 #numberOfSecondaryTables=8
-numberOfJoinTables=2
-joinField=a
-forceIndex=true
-indexName=IDX_a
-numberOfIntervalKeys=10000
-selectFilterMethod=in
+NumberOfJoinTables=2
+JoinField=a
+ForceIndex=true
+IndexName=IDX_a
+NumberOfIntervalKeys=10000
+SelectFilterMethod=in
 #range|in|match
-sleepSelect=0 
+SleepSelect=0 
 
 
 [net.tc.stresstool.actions.InsertBase]

@@ -14,6 +14,7 @@ import net.tc.stresstool.exceptions.ExceptionMessages;
 import net.tc.stresstool.exceptions.StressToolConfigurationException;
 import net.tc.stresstool.exceptions.StressToolException;
 import net.tc.stresstool.logs.LogProvider;
+import net.tc.stresstool.statistics.ActionTHElement;
 import net.tc.stresstool.statistics.StatCollector;
 import net.tc.stresstool.statistics.providers.StatsProvider;
 import net.tc.stresstool.value.BasicFileValueProvider;
@@ -368,7 +369,7 @@ public class Launcher {
         			StressActionBase sa = (StressActionBase)setParametersClassInsert();
         			sa.setActionType(StressAction.ACTION_TYPE_Insert);
         			sa.setActionCode(StressAction.INSERT_ID_CONST + iA);
-        			writeImplementationMap.put(StressAction.INSERT_ID_CONST + iA, sa);
+        			writeImplementationMap.put(new ActionTHElement(StressAction.INSERT_ID_CONST + iA,false,ActionTHElement.SEMAPHORE_GREEN), sa);
         		    }
         		    StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).debug("Assign  Insert class parameters [end] ");
 		    }
@@ -379,7 +380,7 @@ public class Launcher {
         			StressActionBase sa = (StressActionBase)setParametersClassUpdate();
         			sa.setActionType(StressAction.ACTION_TYPE_Update);
         			sa.setActionCode(StressAction.UPDATE_ID_CONST + iA);
-        			updateImplementationMap.put(StressAction.UPDATE_ID_CONST + iA, sa);
+        			updateImplementationMap.put(new ActionTHElement(StressAction.UPDATE_ID_CONST + iA,false,ActionTHElement.SEMAPHORE_GREEN), sa);
         		    }
         		    StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).debug("Assign  Update class parameters [end] ");
 		    }
@@ -395,7 +396,7 @@ public class Launcher {
         			StressActionBase sa = (StressActionBase)setParametersClassSelect();
         			sa.setActionType(StressAction.ACTION_TYPE_Select);
         			sa.setActionCode(StressAction.SELECT_ID_CONST + iA);
-        			readImplementationMap.put(StressAction.SELECT_ID_CONST + iA, sa);
+        			readImplementationMap.put(new ActionTHElement(StressAction.SELECT_ID_CONST + iA,false,ActionTHElement.SEMAPHORE_GREEN), sa);
         		    }
         		    StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).debug("Assign  Select class parameters [end] ");
 		    }
@@ -411,7 +412,7 @@ public class Launcher {
         			StressActionBase sa = (StressActionBase)setParametersClassDelete();
         			sa.setActionType(StressAction.ACTION_TYPE_Delete);
         			sa.setActionCode(StressAction.DELETE_ID_CONST + iA);
-        			deleteImplementationMap.put(StressAction.DELETE_ID_CONST + iA, sa);
+        			deleteImplementationMap.put(new ActionTHElement(StressAction.DELETE_ID_CONST + iA,false,ActionTHElement.SEMAPHORE_GREEN), sa);
         		    }
         		    StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).debug("Assign  Delete class parameters [end] ");
 		    }
@@ -489,6 +490,11 @@ public class Launcher {
 				    propertyName + " = " + config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParameter(propertyName).getValue());
 
 			}
+		    	else{
+		    	    	StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).debug(updateImplementation.getClass().getName() + " \"" +
+		    		propertyName + "\" method accepting this parameter DO NOT EXIST in this class");
+		    	}
+			
 		    } 	
 		}
 
@@ -504,6 +510,11 @@ public class Launcher {
 				    propertyName + " = " + config.getConfiguration(updateClass,StressTool.class).getParameter(propertyName).getValue());
 
 			}
+		    	else{
+		    	    	StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).warn(updateImplementation.getClass().getName() + " \"" +
+		    		propertyName + "\" method accepting this parameter DO NOT EXIST in this class");
+		    	}
+			
 		    }  	
 		}
 		((StressAction)updateImplementation).setId(4000);
@@ -549,6 +560,11 @@ public class Launcher {
 					    		propertyName + " = " + config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParameter(propertyName).getValue());
 		    			
 					}
+				    	else{
+				    	    	StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).debug(writeImplementation.getClass().getName() + " \"" +
+				    		propertyName + "\" method accepting this parameter DO NOT EXIST in this class");
+				    	}
+				    	
 				  } 	
 				}
 				
@@ -564,6 +580,11 @@ public class Launcher {
 					    		propertyName + " = " + config.getConfiguration(insertClass,StressTool.class).getParameter(propertyName).getValue());
 		    			
 					}
+				    	else{
+				    	    	StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).warn(writeImplementation.getClass().getName() + " \"" +
+				    		propertyName + "\" method accepting this parameter DO NOT EXIST in this class");
+				    	}
+				    	
 				  }  	
 				}
 				((StressAction)writeImplementation).setId(1000);
@@ -613,6 +634,11 @@ public class Launcher {
 					    		propertyName + " = " + config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParameter(propertyName).getValue());
 		    			
 					}
+				    	else{
+				    	    	StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).debug(readImplementation.getClass().getName() + " \"" +
+				    		propertyName + "\" method accepting this parameter DO NOT EXIST in this class");
+				    	}
+				    	
 				  } 	
 				}
 				
@@ -628,6 +654,11 @@ public class Launcher {
 					    		propertyName + " = " + config.getConfiguration(selectClass,StressTool.class).getParameter(propertyName).getValue());
 		    			
 					}
+				    	else{
+				    	    	StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).warn(readImplementation.getClass().getName() + " \"" +
+				    		propertyName + "\" method accepting this parameter DO NOT EXIST in this class");
+				    	}
+				    	
 				  }  	
 				}
 				((StressAction)readImplementation).setId(2000);
@@ -676,8 +707,8 @@ public class Launcher {
 		    			
 					}
 				    	else{
-				    	    	StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).warn(deleteImplementation.getClass().getName() + " " +
-				    		propertyName + " method accepting this parameter DO NOT EXIST in this class");
+				    	    	StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).debug(deleteImplementation.getClass().getName() + " \"" +
+				    		propertyName + "\" method accepting this parameter DO NOT EXIST in this class");
 				    	}
 				    	
 				  } 	
@@ -696,8 +727,8 @@ public class Launcher {
 		    			
 					}
 				    	else{
-				    	    	StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).warn(deleteImplementation.getClass().getName() + " " +
-				    		propertyName + " method accepting this parameter DO NOT EXIST in this class");
+				    	    	StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).warn(deleteImplementation.getClass().getName() + " \"" +
+				    		propertyName + "\" method accepting this parameter DO NOT EXIST in this class");
 				    	}
 				  }  	
 				}
@@ -709,5 +740,36 @@ public class Launcher {
 		}
 		return null;
 	}
+
+	/**
+	 * @return the writeImplementationMap
+	 */
+	public SynchronizedMap getWriteImplementationMap() {
+	    return writeImplementationMap;
+	}
+
+
+	/**
+	 * @return the updateImplementationMap
+	 */
+	public SynchronizedMap getUpdateImplementationMap() {
+	    return updateImplementationMap;
+	}
+
+	/**
+	 * @return the readImplementationMap
+	 */
+	public SynchronizedMap getReadImplementationMap() {
+	    return readImplementationMap;
+	}
+
+
+	/**
+	 * @return the deleteImplementationMap
+	 */
+	public SynchronizedMap getDeleteImplementationMap() {
+	    return deleteImplementationMap;
+	}
+
 		
 }

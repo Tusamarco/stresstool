@@ -36,6 +36,7 @@ public class InsertBase extends StressActionBase implements WriteAction,
     private int lazyInterval=5000;
     private int batchSize = 0; 
     private String jsonFile = "";
+    private String tableEngine = "InnoDB";
     
     public String getJsonFile() {
 		return jsonFile;
@@ -47,6 +48,10 @@ public class InsertBase extends StressActionBase implements WriteAction,
 	public void LoadData() {
 		// TODO Auto-generated method stub
 		
+	}
+	@Override
+	public void run(){
+	    
 	}
 	@Override
 	public void TruncateTables(String[] tables) {
@@ -294,5 +299,29 @@ public class InsertBase extends StressActionBase implements WriteAction,
 	}
 	public void setSleepWrite(int sleepWrite) {
 		this.sleepWrite = sleepWrite;
+	}
+	/**
+	 * @return the lazyCreation
+	 */
+	public boolean isLazyCreation() {
+	    return lazyCreation;
+	}
+	/**
+	 * @param lazyCreation the lazyCreation to set
+	 */
+	public void setLazyCreation(boolean lazyCreation) {
+	    this.lazyCreation = lazyCreation;
+	}
+	/**
+	 * @return the tableEngine
+	 */
+	public String getTableEngine() {
+	    return tableEngine;
+	}
+	/**
+	 * @param tableEngine the tableEngine to set
+	 */
+	public void setTableEngine(String tableEngine) {
+	    this.tableEngine = tableEngine;
 	}
 }
