@@ -1,4 +1,4 @@
-package net.tc.stresstool.statistics.providers;
+package net.tc.data.db;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -7,8 +7,7 @@ import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.Map;
 
-import net.tc.data.db.Partition;
-import net.tc.data.db.PartitionDefinition;
+import net.tc.stresstool.statistics.providers.MySQLSuper;
 import net.tc.utils.SynchronizedMap;
 import net.tc.utils.Utility;
 

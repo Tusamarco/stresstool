@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Map;
 import java.util.ArrayList;
+import java.util.concurrent.CountDownLatch;
 
 import net.tc.data.db.Schema;
 import net.tc.data.db.Table;
@@ -16,6 +17,7 @@ import net.tc.stresstool.exceptions.ExceptionMessages;
 import net.tc.stresstool.exceptions.StressToolConfigurationException;
 import net.tc.stresstool.exceptions.StressToolSQLException;
 import net.tc.stresstool.logs.LogProvider;
+import net.tc.stresstool.statistics.ActionTHElement;
 import net.tc.stresstool.statistics.providers.MySQLSuper;
 import net.tc.utils.SynchronizedMap;
 
@@ -48,10 +50,6 @@ public class InsertBase extends StressActionBase implements WriteAction,
 	public void LoadData() {
 		// TODO Auto-generated method stub
 		
-	}
-	@Override
-	public void run(){
-	    
 	}
 	@Override
 	public void TruncateTables(String[] tables) {
@@ -324,4 +322,26 @@ public class InsertBase extends StressActionBase implements WriteAction,
 	public void setTableEngine(String tableEngine) {
 	    this.tableEngine = tableEngine;
 	}
+	
+	/**
+	 * this is actually executing what the action is suppose to do
+	 */
+	@Override
+	public void ExecuteAction() {
+	    try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).info(" ==== ACTION "+ this.getTHInfo().getAction() +" Thread internal Id "+ this.getTHInfo().getId() +" Sys Thread Id "+ this.getTHInfo().getThId()+" started ===="  );}catch(StressToolConfigurationException e){}
+	    for(int i = 0 ; i  < 20; i++){
+		try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).info(" ==== ACTION "+ this.getTHInfo().getAction() +" Thread internal Id "+ this.getTHInfo().getId() +" running "+ i );}catch(StressToolConfigurationException e){}
+		try {
+		    Thread.sleep(500);
+		} catch (InterruptedException e) {
+		    // TODO Auto-generated catch block
+		    e.printStackTrace();
+		}
+	    }
+	    this.getTHInfo().setReady(ActionTHElement.SEMAPHORE_RED);
+	    try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).info(" ==== ACTION "+ this.getTHInfo().getAction() +" Thread internal Id "+ this.getTHInfo().getId() +" Sys Thread Id "+ this.getTHInfo().getThId()+" ended ===="  );}catch(StressToolConfigurationException e){}
+	    
+	
+	}
+
 }

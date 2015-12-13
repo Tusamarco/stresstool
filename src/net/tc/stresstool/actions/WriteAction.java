@@ -1,5 +1,7 @@
 package net.tc.stresstool.actions;
 
+import net.tc.stresstool.statistics.ActionTHElement;
+
 public interface WriteAction {
     public abstract void setUseAutoIncrement(boolean aoutoincrement);
     public abstract boolean isUseAutoIncrement();
@@ -19,5 +21,6 @@ public interface WriteAction {
 
 	public void setBatchSize(int batchSize);
 	public int getBatchSize();
-	
+	public ActionTHElement getTHInfo();
+	public void setTHInfo(ActionTHElement thInfo);
 }

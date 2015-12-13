@@ -1,10 +1,12 @@
 package net.tc.stresstool.actions;
 
 import java.util.Map;
+import java.util.concurrent.CountDownLatch;
 
 import net.tc.stresstool.DbType;
 import net.tc.stresstool.config.ConfigurationImplementation;
 import net.tc.stresstool.config.Configurator;
+import net.tc.stresstool.statistics.ActionTHElement;
 
 public class StressActionBase implements StressAction, Runnable {
     private Configurator config;
@@ -45,6 +47,8 @@ public class StressActionBase implements StressAction, Runnable {
     private ActionStatus actionStatus = null; 
     private long lastExecutionTime = 0;
     private long lastThinkTime = 0;    
+    private CountDownLatch latch = null;
+    private ActionTHElement thInfo = null;
     
 //    public static String ACTION_TYPE_Select = "Select";
 //    public static String ACTION_TYPE_Insert = "Insert";
@@ -53,10 +57,6 @@ public class StressActionBase implements StressAction, Runnable {
 //    public static String ACTION_TYPE_Drop = "Drop";
 //    public static String ACTION_TYPE_Truncate = "Truncate";
     
-    public StressActionBase() {
-	super();
-	
-    }
 
     /* (non-Javadoc)
 	 * @see net.tc.stresstool.actions.StressAction#ExecuteAction()
@@ -66,7 +66,7 @@ public class StressActionBase implements StressAction, Runnable {
 	 */
     @Override
 	public void ExecuteAction() {
-    	this.run();
+    	
     }
 
     /* (non-Javadoc)
@@ -523,7 +523,14 @@ public class StressActionBase implements StressAction, Runnable {
 	 */
     @Override
 	public void run() {
-	//TODO All action of the class goes here
+        	try {
+        	    latch.await();
+        	    this.ExecuteAction();
+        	    
+        	} catch (InterruptedException e) {
+        	    // TODO Auto-generated catch block
+        	    e.printStackTrace();
+        	} 
 	
     }
 
@@ -670,6 +677,32 @@ public class StressActionBase implements StressAction, Runnable {
 	 */
 	public void setActionCode(int actionCode) {
 	    this.actionCode = actionCode;
+	}
+
+	/**
+	 * @return the latch
+	 */
+	public CountDownLatch getLatch() {
+	    return latch;
+	}
+
+	/**
+	 * @param latch the latch to set
+	 */
+	public void setLatch(CountDownLatch latch) {
+	    this.latch = latch;
+	}
+
+	@Override
+	public void setTHInfo(ActionTHElement thInfo) {
+	    this.thInfo = thInfo;
+	    
+	}
+
+	@Override
+	public ActionTHElement getTHInfo() {
+	   
+	    return thInfo;
 	}
 
 }

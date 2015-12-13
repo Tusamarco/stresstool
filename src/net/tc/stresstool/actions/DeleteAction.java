@@ -2,6 +2,8 @@ package net.tc.stresstool.actions;
 
 import java.util.Map;
 
+import net.tc.stresstool.statistics.ActionTHElement;
+
 public interface DeleteAction {
 
     /**
@@ -15,5 +17,6 @@ public interface DeleteAction {
     /**
 			 */
     public abstract void setActionRange(int range);
-
+    public ActionTHElement getTHInfo();
+    public void setTHInfo(ActionTHElement thInfo);
 }

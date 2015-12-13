@@ -4,6 +4,7 @@ import java.util.Map;
 
 import net.tc.stresstool.DbType;
 import net.tc.stresstool.config.ConfigurationImplementation;
+import net.tc.stresstool.statistics.ActionTHElement;
 
 public interface StressAction {
 	 public static String ACTION_TYPE_Select = "Select";
@@ -338,5 +339,8 @@ public interface StressAction {
 	 * @see net.tc.stresstool.actions.StressAction#setActionType(java.lang.String)
 	 */
 	public abstract void setActionType(String actionType);
+	
+	public abstract void setTHInfo(ActionTHElement thInfo);
+	public abstract ActionTHElement getTHInfo();
 
 }

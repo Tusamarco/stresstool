@@ -4,6 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.concurrent.CountDownLatch;
 
 import org.apache.commons.beanutils.BeanUtils;
 
@@ -50,6 +51,15 @@ public class Launcher {
     float pctUpdate = 100;
     float pctSelect = 100;
     float pctDelete = 100;
+    private boolean actionInitialized = false;
+    private int  HardStopLimit=100;
+    private boolean UseHardStop=false;
+    private int StatIntervalMs=1000;
+    private int StatLoops = 100 ;
+    private int repeatNumber =0 ;
+    private int SemaphoreCountdownTime = 10;
+    private CountDownLatch latch = null;
+    
     
     public Launcher(Configurator configIn) {
 	if(configIn != null){
@@ -71,6 +81,12 @@ public class Launcher {
 	this.pctInsert = Integer.parseInt((String) configuration.getParameter("pctInsert").getValue());
 	this.pctSelect = Integer.parseInt((String) configuration.getParameter("pctSelect").getValue());
 	this.pctUpdate = Integer.parseInt((String) configuration.getParameter("pctUpdate").getValue());
+	this.setHardStopLimit( Integer.parseInt((String) configuration.getParameter("HardStopLimit").getValue()));
+	this.setStatIntervalMs( Integer.parseInt((String) configuration.getParameter("StatIntervalMs").getValue()) );
+	this.setStatLoops(  Integer.parseInt((String) configuration.getParameter("StatLoops").getValue()) );
+	this.setUseHardStop(Boolean.parseBoolean((String) configuration.getParameter("UseHardStop").getValue()));
+	this.setRepeatNumber(Integer.parseInt((String) configuration.getParameter("repeatNumber").getValue()) );
+	this.setSemaphoreCountdownTime(Integer.parseInt((String) configuration.getParameter("SemaphoreCountdownTime").getValue()) );
 	
     }
     /**
@@ -194,44 +210,202 @@ public class Launcher {
 	return null;
     }
 
-    /**
-     */
-    public void TruncateTables() {
-    }
-
-    /**
-     */
-    public void DropTables() {
-    }
-
-    /**
-		 */
-    public void CreateInsert() {
+//    /**
+//     */
+//    public void TruncateTables() {
+//    }
+//
+//    /**
+//     */
+//    public void DropTables() {
+//    }
+//
+//    /**
+//		 */
+    public boolean runInsert() {
+	
+	for(Object id:writeImplementationMap.getKeyasOrderedArray()){
+	    StressActionBase sb = (StressActionBase) writeImplementationMap.get(id);
+	    ActionTHElement thInfo =  sb.getTHInfo();
+	    if(thInfo.getReady() != ActionTHElement.SEMAPHORE_NOT_INITIALIZED){
+		continue;
+	    }
+	    thInfo.setActive(true);
+	    thInfo.setReady(ActionTHElement.SEMAPHORE_YELLOW);
+	    sb.setTHInfo(thInfo);
+	    Thread ths = new Thread((Runnable) sb);
+	    sb.getTHInfo().setThId(ths.getId());
+            ths.start();
+	    writeImplementationMap.put(id, sb);
+	} 
+	
+	return true;
+	
     }
 
     /**
 			 */
-    public void CreateUpdate() {
+    public boolean runUpdate() {
+	for(Object id:updateImplementationMap.getKeyasOrderedArray()){
+	    StressActionBase sb = (StressActionBase) updateImplementationMap.get(id);
+	    ActionTHElement thInfo =  sb.getTHInfo();
+	    if(thInfo.getReady() != ActionTHElement.SEMAPHORE_NOT_INITIALIZED){
+		continue;
+	    }
+	    thInfo.setActive(true);
+	    thInfo.setReady(ActionTHElement.SEMAPHORE_YELLOW);
+	    sb.setTHInfo(thInfo);
+	    Thread ths = new Thread((Runnable) sb);
+	    sb.getTHInfo().setThId(ths.getId());
+	    ths.start();
+	    updateImplementationMap.put(id, sb);
+	} 
+	
+	return true;
+	
+
     }
 
     /**
 				 */
-    public void CreateDelete() {
+    public boolean runDelete() {
+	for(Object id:deleteImplementationMap.getKeyasOrderedArray()){
+	    StressActionBase sb = (StressActionBase) deleteImplementationMap.get(id);
+	    ActionTHElement thInfo =  sb.getTHInfo();
+	    if(thInfo.getReady() != ActionTHElement.SEMAPHORE_NOT_INITIALIZED){
+		continue;
+	    }
+	    thInfo.setActive(true);
+	    thInfo.setReady(ActionTHElement.SEMAPHORE_YELLOW);
+	    sb.setTHInfo(thInfo);
+	    Thread ths = new Thread((Runnable) sb);
+	    sb.getTHInfo().setThId(ths.getId());
+            ths.start();
+	    deleteImplementationMap.put(id, sb);
+	} 
+	
+	return true;
+
     }
 
     /**
 					 */
-    public void CreateSelects() {
+    public boolean runSelects() {
+	for(Object id:readImplementationMap.getKeyasOrderedArray()){
+	    StressActionBase sb = (StressActionBase) readImplementationMap.get(id);
+	    ActionTHElement thInfo =  sb.getTHInfo();
+	    if(thInfo.getReady() != ActionTHElement.SEMAPHORE_NOT_INITIALIZED){
+		continue;
+	    }
+	    thInfo.setActive(true);
+	    thInfo.setReady(ActionTHElement.SEMAPHORE_YELLOW);
+	    sb.setTHInfo(thInfo);
+	    Thread ths = new Thread((Runnable) sb);
+	    sb.getTHInfo().setThId(ths.getId());
+            ths.start();
+	    readImplementationMap.put(id, sb);
+	} 
+	
+	return true;
+
     }
 
     /**
 						 */
-    public void LaunchActions() {
+    public boolean LaunchActions() {
+	int semaphore = this.checkForRunningOrBreak();
+	if(this.actionInitialized 
+		&& semaphore != ActionTHElement.SEMAPHORE_RED
+	){
+	    return true;
+	}
+	else if (semaphore == ActionTHElement.SEMAPHORE_RED){
+	    return false; 
+	}
 	
+	if(writeImplementationMap != null) this.actionInitialized=this.runInsert();
+	if(updateImplementationMap != null) this.actionInitialized=this.runUpdate();
+	if(readImplementationMap != null) this.actionInitialized=this.runSelects();
+	if(deleteImplementationMap != null)this.actionInitialized=this.runDelete();
 	
+	if(!this.actionInitialized)
+	    return false;
 	
+	for(int ic = 0; ic < SemaphoreCountdownTime ; ic++){
+	   try {Thread.sleep(1000);
+	   StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).info("Countdown to start the threads ("+ this.getSemaphoreCountdownTime() +") current : "+ (getSemaphoreCountdownTime() - ic));
+	    latch.countDown();
+	   } catch (Exception e) {e.printStackTrace();}
+	    
+	}
+//	this.LaunchActions();
+	return true;
     }
-    
+    /**
+     * we check for the running threads and decide if we want to interrupt the execution or not
+     * 
+     * @return
+     */
+    private int checkForRunningOrBreak(){
+	int selectSemaphore = ActionTHElement.SEMAPHORE_NOT_INITIALIZED;
+	int deleteSemaphore = ActionTHElement.SEMAPHORE_NOT_INITIALIZED;
+	int insertSemaphore = ActionTHElement.SEMAPHORE_NOT_INITIALIZED;
+	int updateSemaphore = ActionTHElement.SEMAPHORE_NOT_INITIALIZED;
+	
+	if(writeImplementationMap != null){
+        	for(Object thInfo:writeImplementationMap.getKeyasOrderedArray()){
+        	    if(
+        		    ((StressActionBase)(writeImplementationMap.get(thInfo))).getTHInfo().getReady() > ActionTHElement.SEMAPHORE_GREEN
+        		    )
+        	    {
+        		if(((StressActionBase)(writeImplementationMap.get(thInfo))).getTHInfo().getReady() <= insertSemaphore){
+        		    insertSemaphore = ((StressActionBase)(writeImplementationMap.get(thInfo))).getTHInfo().getReady();
+        		}
+        
+        	    }  
+        	}
+	}
+	if(updateImplementationMap != null){	
+        	for(Object thInfo:updateImplementationMap.getKeyasOrderedArray()){
+        	    if(
+        		    ((StressActionBase)(updateImplementationMap.get(thInfo))).getTHInfo().getReady() > ActionTHElement.SEMAPHORE_GREEN){
+        		if(((StressActionBase)(updateImplementationMap.get(thInfo))).getTHInfo().getReady() <= updateSemaphore){
+        		    updateSemaphore = ((StressActionBase)(updateImplementationMap.get(thInfo))).getTHInfo().getReady();
+        		}
+        
+        	    }  
+        	} 
+	}
+
+	if(readImplementationMap != null){
+        	for(Object thInfo:readImplementationMap.getKeyasOrderedArray()){
+        	    if(
+        		    ((StressActionBase)(readImplementationMap.get(thInfo))).getTHInfo().getReady() > ActionTHElement.SEMAPHORE_GREEN){
+        		if(((StressActionBase)(readImplementationMap.get(thInfo))).getTHInfo().getReady() <= selectSemaphore){
+        		    selectSemaphore = ((StressActionBase)(readImplementationMap.get(thInfo))).getTHInfo().getReady();
+        		}
+        		
+        	    }  
+        	} 
+	}
+	if(deleteImplementationMap != null){
+        	for(Object thInfo:deleteImplementationMap.getKeyasOrderedArray()){
+        	    if(((StressActionBase)(deleteImplementationMap.get(thInfo))).getTHInfo().getReady() > ActionTHElement.SEMAPHORE_GREEN){	  
+        		if(((StressActionBase)(deleteImplementationMap.get(thInfo))).getTHInfo().getReady() <= deleteSemaphore){
+        		    deleteSemaphore = ((StressActionBase)(deleteImplementationMap.get(thInfo))).getTHInfo().getReady();
+        		}
+        	    }  
+        	} 
+	}
+	
+	if(insertSemaphore < ActionTHElement.SEMAPHORE_RED && selectSemaphore == ActionTHElement.SEMAPHORE_RED )
+	    return ActionTHElement.SEMAPHORE_YELLOW;
+	else if((insertSemaphore == ActionTHElement.SEMAPHORE_RED || selectSemaphore == ActionTHElement.SEMAPHORE_RED) 
+		&& (updateSemaphore >= ActionTHElement.SEMAPHORE_YELLOW || deleteSemaphore >= ActionTHElement.SEMAPHORE_YELLOW))
+	    return ActionTHElement.SEMAPHORE_RED;
+	
+	return ActionTHElement.SEMAPHORE_YELLOW;
+    }
     /**
      * 
      * This method load the information into dummy class instance 
@@ -303,6 +477,12 @@ public class Launcher {
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
+	
+	/*
+	 * define the latch for parallel start 
+	 */
+	latch = new CountDownLatch(SemaphoreCountdownTime);
+	
 
 	/*
 	 * define how many threads must be run 
@@ -367,9 +547,12 @@ public class Launcher {
         		    for(int iA = 0 ; iA < aInsert; iA ++ ){
         			StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).debug("Assign  Insert class parameters ["+ (iA +1) +"] ");
         			StressActionBase sa = (StressActionBase)setParametersClassInsert();
+        			sa.setLatch(latch);
         			sa.setActionType(StressAction.ACTION_TYPE_Insert);
         			sa.setActionCode(StressAction.INSERT_ID_CONST + iA);
-        			writeImplementationMap.put(new ActionTHElement(StressAction.INSERT_ID_CONST + iA,false,ActionTHElement.SEMAPHORE_GREEN), sa);
+        			sa.setTHInfo(new ActionTHElement(StressAction.INSERT_ID_CONST + iA,false,ActionTHElement.SEMAPHORE_NOT_INITIALIZED));
+        			sa.getTHInfo().setAction(sa.getActionType());
+        			writeImplementationMap.put(new Integer(StressAction.INSERT_ID_CONST + iA), sa);
         		    }
         		    StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).debug("Assign  Insert class parameters [end] ");
 		    }
@@ -378,9 +561,12 @@ public class Launcher {
         		    for(int iA = 0 ; iA < aUpdate; iA ++ ){
         			StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).debug("Assign  Update class parameters ["+ (iA +1) +"] ");
         			StressActionBase sa = (StressActionBase)setParametersClassUpdate();
+        			sa.setLatch(latch);
         			sa.setActionType(StressAction.ACTION_TYPE_Update);
         			sa.setActionCode(StressAction.UPDATE_ID_CONST + iA);
-        			updateImplementationMap.put(new ActionTHElement(StressAction.UPDATE_ID_CONST + iA,false,ActionTHElement.SEMAPHORE_GREEN), sa);
+        			sa.setTHInfo(new ActionTHElement(StressAction.UPDATE_ID_CONST + iA,false,ActionTHElement.SEMAPHORE_NOT_INITIALIZED));
+        			sa.getTHInfo().setAction(sa.getActionType());
+        			updateImplementationMap.put(new Integer(StressAction.UPDATE_ID_CONST + iA), sa);
         		    }
         		    StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).debug("Assign  Update class parameters [end] ");
 		    }
@@ -391,12 +577,15 @@ public class Launcher {
 		    if (aSelect >= 1){
         		    StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).debug("Assign  Select class parameters [start] ");
         
-        		    for(int iA = 0 ; iA < aUpdate; iA ++ ){
+        		    for(int iA = 0 ; iA < aSelect; iA ++ ){
         			StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).debug("Assign  Select class parameters ["+ (iA +1) +"] ");
         			StressActionBase sa = (StressActionBase)setParametersClassSelect();
+        			sa.setLatch(latch);
         			sa.setActionType(StressAction.ACTION_TYPE_Select);
         			sa.setActionCode(StressAction.SELECT_ID_CONST + iA);
-        			readImplementationMap.put(new ActionTHElement(StressAction.SELECT_ID_CONST + iA,false,ActionTHElement.SEMAPHORE_GREEN), sa);
+        			sa.setTHInfo(new ActionTHElement(StressAction.SELECT_ID_CONST + iA,false,ActionTHElement.SEMAPHORE_NOT_INITIALIZED));
+        			sa.getTHInfo().setAction(sa.getActionType());
+        			readImplementationMap.put(new Integer(StressAction.SELECT_ID_CONST + iA), sa);
         		    }
         		    StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).debug("Assign  Select class parameters [end] ");
 		    }
@@ -407,12 +596,15 @@ public class Launcher {
 		     */
 		    if (aDelete >= 1){
         		    StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).debug("Assign  Delete class parameters [start] ");
-        		    for(int iA = 0 ; iA < aUpdate; iA ++ ){
+        		    for(int iA = 0 ; iA < aDelete; iA ++ ){
         			StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).debug("Assign  Delete class parameters ["+ (iA +1) +"] ");
         			StressActionBase sa = (StressActionBase)setParametersClassDelete();
+        			sa.setLatch(latch);        			
         			sa.setActionType(StressAction.ACTION_TYPE_Delete);
         			sa.setActionCode(StressAction.DELETE_ID_CONST + iA);
-        			deleteImplementationMap.put(new ActionTHElement(StressAction.DELETE_ID_CONST + iA,false,ActionTHElement.SEMAPHORE_GREEN), sa);
+        			sa.setTHInfo(new ActionTHElement(StressAction.DELETE_ID_CONST + iA,false,ActionTHElement.SEMAPHORE_NOT_INITIALIZED));
+        			sa.getTHInfo().setAction(sa.getActionType());
+        			deleteImplementationMap.put(new Integer(StressAction.DELETE_ID_CONST + iA), sa);
         		    }
         		    StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).debug("Assign  Delete class parameters [end] ");
 		    }
@@ -473,7 +665,7 @@ public class Launcher {
 	InvocationTargetException, NoSuchMethodException,
 	StressToolException, StressToolConfigurationException {
 	    if(updateClass != null && !updateClass.equals("")){
-		WriteAction updateImplementation = (WriteAction) Class.forName(updateClass).newInstance();
+		UpdateAction updateImplementation = (UpdateAction) Class.forName(updateClass).newInstance();
 		Map beanProperties = BeanUtils.describe(updateImplementation);
 		Iterator<String> it = config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParametersName();
 
@@ -769,6 +961,90 @@ public class Launcher {
 	 */
 	public SynchronizedMap getDeleteImplementationMap() {
 	    return deleteImplementationMap;
+	}
+
+	/**
+	 * @return the hardStopLimit
+	 */
+	public int getHardStopLimit() {
+	    return HardStopLimit;
+	}
+
+	/**
+	 * @param hardStopLimit the hardStopLimit to set
+	 */
+	public void setHardStopLimit(int hardStopLimit) {
+	    HardStopLimit = hardStopLimit;
+	}
+
+	/**
+	 * @return the useHardStop
+	 */
+	public boolean isUseHardStop() {
+	    return UseHardStop;
+	}
+
+	/**
+	 * @param useHardStop the useHardStop to set
+	 */
+	public void setUseHardStop(boolean useHardStop) {
+	    UseHardStop = useHardStop;
+	}
+
+	/**
+	 * @return the statIntervalMs
+	 */
+	public int getStatIntervalMs() {
+	    return StatIntervalMs;
+	}
+
+	/**
+	 * @param statIntervalMs the statIntervalMs to set
+	 */
+	public void setStatIntervalMs(int statIntervalMs) {
+	    StatIntervalMs = statIntervalMs;
+	}
+
+	/**
+	 * @return the statLoops
+	 */
+	public int getStatLoops() {
+	    return StatLoops;
+	}
+
+	/**
+	 * @param statLoops the statLoops to set
+	 */
+	public void setStatLoops(int statLoops) {
+	    StatLoops = statLoops;
+	}
+
+	/**
+	 * @return the repeatNumber
+	 */
+	public int getRepeatNumber() {
+	    return repeatNumber;
+	}
+
+	/**
+	 * @param repeatNumber the repeatNumber to set
+	 */
+	public void setRepeatNumber(int repeatNumber) {
+	    this.repeatNumber = repeatNumber;
+	}
+
+	/**
+	 * @return the semaphoreCountdownTime
+	 */
+	public int getSemaphoreCountdownTime() {
+	    return SemaphoreCountdownTime;
+	}
+
+	/**
+	 * @param semaphoreCountdownTime the semaphoreCountdownTime to set
+	 */
+	public void setSemaphoreCountdownTime(int semaphoreCountdownTime) {
+	    SemaphoreCountdownTime = semaphoreCountdownTime;
 	}
 
 		

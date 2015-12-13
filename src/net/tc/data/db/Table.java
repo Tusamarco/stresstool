@@ -7,7 +7,6 @@ import net.tc.stresstool.StressTool;
 import net.tc.stresstool.exceptions.StressToolConfigurationException;
 import net.tc.stresstool.logs.LogProvider;
 import net.tc.utils.SynchronizedMap;
-import net.tc.stresstool.statistics.providers.MySQLParitionHandler;
 
 public class Table {
     	public static final Integer TABLE_PARENT=0;

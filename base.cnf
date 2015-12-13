@@ -15,18 +15,20 @@ droptable=false
 ignoreBinlog=false
 operationShort=true  
 poolNumber=10
-pctInsert=50
+pctInsert=0
 pctUpdate=100 
 pctSelect=100 
 pctDelete=100 
-repeatNumber=100
-sleepFor=0
-sleepWrite=0
-sleepSelect=0 
-sleepDelete=0
+repeatNumber=1000
+HardStopLimit=100
+UseHardStop=true
+StatIntervalMs=1000
+StatLoops = 80
+SemaphoreCountdownTime = 1
 # table engine comma separated with % value; 
 TableEngine=InnoDB|60,MyISAM|40
 truncate=false
+
 
 DeleteClass=net.tc.stresstool.actions.DeleteBase 
 SelectClass=net.tc.stresstool.actions.SelectBase

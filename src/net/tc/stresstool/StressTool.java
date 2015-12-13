@@ -23,6 +23,7 @@ package net.tc.stresstool;
  * <p>Company: tusacentral</p>
  *
  */
+import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -39,6 +40,12 @@ import javax.naming.ConfigurationException;
 
 import org.apache.log4j.Logger;
 import org.ini4j.*;
+
+import com.googlecode.lanterna.*;
+import com.googlecode.lanterna.screen.Screen;
+import com.googlecode.lanterna.terminal.Terminal;
+import com.googlecode.lanterna.terminal.TerminalSize;
+import com.googlecode.lanterna.terminal.text.FixedTerminalSizeProvider;
 
 import net.tc.*;
 import net.tc.stresstool.actions.Launcher;
@@ -152,18 +159,60 @@ public class StressTool {
 	        }
 	        
 	        /*
-	         * Create actions classes but not launch them
+	         * Run the launcher to execute the threads
+	         * looping for a number of X loop = StatLoops if lower than repeatNumber
+	         * Or force the close if UseHardStop is true  
 	         */
-	        
-	        
+	        int loops = launcher.getStatLoops()< launcher.getRepeatNumber()?launcher.getStatLoops():launcher.getRepeatNumber();
 	        
 	        StressTool.setStressToolRunning(true);
 	        
-	         while(StressTool.isStressToolRunning()){
-	          for(int i = 0 ; i < 400; i++ ){
+	        Terminal terminal = TerminalFacade.createTerminal(System.in, System.out);
+//	        TerminalSize tSize =new TerminalSize(100,200);
+//	        Screen screen = new Screen(terminal, tSize);
+	        Screen screen = TerminalFacade.createScreen();
+	        TerminalSize ntSize = screen.getTerminalSize();
+	        int rows = (ntSize.getRows()-2);
+	        screen.startScreen();
+	        screen.putString(0, 0, "StL", Terminal.Color.WHITE, Terminal.Color.BLACK);
+	        screen.putString(4, 0, "Th1", Terminal.Color.WHITE, Terminal.Color.BLACK);
+	        for(int x = 0 ; x <= 80;x++){
+	            screen.putString(x, 1, "-", Terminal.Color.WHITE, Terminal.Color.BLACK);
+	        }
+	        screen.refresh();
+
+	        
+	        while(StressTool.isStressToolRunning()){
+	          int line =1;
+//	          int dot = 1;
+	          float curPct = (float) 0.0;
+	          float maxPct = loops;
+	          
+//	          int aInsert =  new Float( maxInsert).intValue();
+
+	          for(int i = 0 ; i < loops; i++ ){
 	             stats.collectStatistics();
+	             if(launcher.getStatLoops() > loops 
+	        	     && launcher.isUseHardStop())
+	        	 break;
+	             
+	             
+	             StressTool.setStressToolRunning(launcher.LaunchActions());
+	             logProvider.getLogger(LogProvider.LOG_APPLICATION).debug("Running loop = " + i);
+	             
+	             curPct=(rows * (line/maxPct));
+
+	             int dot = new Float((rows - curPct)+2).intValue();
+	             logProvider.getLogger(LogProvider.LOG_APPLICATION).debug("DOR POSITION = " + dot);
+	             screen.putString(1, dot, Integer.toString(i), Terminal.Color.RED, Terminal.Color.BLACK);
+	             screen.putString(5, dot, "|", Terminal.Color.GREEN, Terminal.Color.BLACK);
+	             screen.refresh();
+	             line++ ;
+	             if(!StressTool.isStressToolRunning())
+	        	 break;
+	             
         	     try {
-        		 Thread.sleep(10);
+        		 Thread.sleep(launcher.getStatIntervalMs());
         	     } catch (InterruptedException e) {
         		 // TODO Auto-generated catch block
         		 e.printStackTrace();
@@ -171,7 +220,7 @@ public class StressTool {
 	           }
 	          StressTool.setStressToolRunning(false);
 	         }
-	            
+	           screen.stopScreen();
 	            
 	        
 	        

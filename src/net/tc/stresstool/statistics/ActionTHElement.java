@@ -12,7 +12,7 @@ package net.tc.stresstool.statistics;
  * @author  tusa
  */
 public class ActionTHElement {
-    public static int SEMAPHORE_NOT_INITIALIZED = 0;
+    public static int SEMAPHORE_NOT_INITIALIZED = 100;
     public static int SEMAPHORE_GREEN = 1;
     public static int SEMAPHORE_YELLOW = 2;
     public static int SEMAPHORE_RED = 3;
@@ -28,8 +28,8 @@ public class ActionTHElement {
     boolean isActive = false;
     int ready = SEMAPHORE_NOT_INITIALIZED;
     
-    public ActionTHElement(long thId, boolean isActive, int ready) {
-	this.thId = thId;
+    public ActionTHElement(long Id, boolean isActive, int ready) {
+	this.id = Id;
 	this.isActive = isActive;
 	this.ready = ready;
     }
