@@ -29,6 +29,7 @@ public class ActionTHElement {
     long latency = 0;
     long minLatency = 0;
     long maxLatency = 0;
+    long totalEcecutionTime =0;
     int rowsProcessed=0;
     boolean isActive = false;
     int ready = SEMAPHORE_NOT_INITIALIZED;
@@ -143,7 +144,7 @@ public class ActionTHElement {
      * @return    the executionTime
      * @uml.property  name="executionTime"
      */
-    public  int getExecutionTime() {
+    public  long getExecutionTime() {
         return executionTime;
     }
 
@@ -212,35 +213,35 @@ public class ActionTHElement {
 	/**
 	 * @return the minExectime
 	 */
-	public synchronized int getMinExectime() {
+	public synchronized long getMinExectime() {
 		return minExectime;
 	}
 
 	/**
 	 * @return the maxExectime
 	 */
-	public synchronized int getMaxExectime() {
+	public synchronized long getMaxExectime() {
 		return maxExectime;
 	}
 
 	/**
 	 * @return the latency
 	 */
-	public synchronized int getLatency() {
+	public synchronized long getLatency() {
 		return latency;
 	}
 
 	/**
 	 * @return the minLatency
 	 */
-	public synchronized int getMinLatency() {
+	public synchronized long getMinLatency() {
 		return minLatency;
 	}
 
 	/**
 	 * @return the maxLatency
 	 */
-	public synchronized int getMaxLatency() {
+	public synchronized long getMaxLatency() {
 		return maxLatency;
 	}
 
@@ -257,6 +258,20 @@ public class ActionTHElement {
     			this.minLatency = latency;
     	}
 
+	}
+
+	/**
+	 * @return the totalEcecutionTime
+	 */
+	public long getTotalEcecutionTime() {
+	    return totalEcecutionTime;
+	}
+
+	/**
+	 * @param totalEcecutionTime the totalEcecutionTime to set
+	 */
+	public void setTotalEcecutionTime(long totalEcecutionTime) {
+	    this.totalEcecutionTime = totalEcecutionTime;
 	}
 
 

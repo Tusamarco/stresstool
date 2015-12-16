@@ -328,13 +328,21 @@ public class InsertBase extends StressActionBase implements WriteAction,
 	 */
 	@Override
 	public void ExecuteAction() {
-		long starTime = System.currentTimeMillis();
+		long startTime = System.currentTimeMillis();
 		
 		try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).info(" ==== ACTION "+ this.getTHInfo().getAction() +" Thread internal Id "+ this.getTHInfo().getId() +" Sys Thread Id "+ this.getTHInfo().getThId()+" started ===="  );}catch(StressToolConfigurationException e){}
 	    for(int i = 0 ; i  < 20; i++){
 	    	long startRunTime = System.currentTimeMillis();
 	    	try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).info(" ==== ACTION "+ this.getTHInfo().getAction() +" Thread internal Id "+ this.getTHInfo().getId() +" running "+ i );}catch(StressToolConfigurationException e){}
 			try {
+			    long startLatency = System.currentTimeMillis();
+			    /**
+			     * Db actions
+			     */
+			    
+			    long endLatency = System.currentTimeMillis();
+			    this.getTHInfo().setLatency(endLatency-startLatency);
+			    
 			    Thread.sleep(500);
 			} catch (InterruptedException e) {
 			    // TODO Auto-generated catch block
@@ -344,7 +352,7 @@ public class InsertBase extends StressActionBase implements WriteAction,
 			this.getTHInfo().setExecutionTime(endRunTime - startRunTime);
 	    }
 	    long endTime = System.currentTimeMillis();
-//	    this.getTHInfo().setExecutionTime();
+	    this.getTHInfo().setTotalEcecutionTime(endTime - startTime);
 	    this.getTHInfo().setReady(ActionTHElement.SEMAPHORE_RED);
 	    try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).info(" ==== ACTION "+ this.getTHInfo().getAction() +" Thread internal Id "+ this.getTHInfo().getId() +" Sys Thread Id "+ this.getTHInfo().getThId()+" ended ===="  );}catch(StressToolConfigurationException e){}
 	    
