@@ -23,7 +23,12 @@ public class ActionTHElement {
     long endTime = 0;
     String action;
     int currentLoop = 0;
-    int executionTime =0;
+    long executionTime =0;
+    long minExectime =0;
+    long maxExectime = 0;
+    long latency = 0;
+    long minLatency = 0;
+    long maxLatency = 0;
     int rowsProcessed=0;
     boolean isActive = false;
     int ready = SEMAPHORE_NOT_INITIALIZED;
@@ -145,8 +150,16 @@ public class ActionTHElement {
     /**
      * @param executionTime    the executionTime to set
      * @uml.property  name="executionTime"
+     * 
+     * set max min at the same time
      */
-    public  void setExecutionTime(int executionTime) {
+    public  void setExecutionTime(long executionTime) {
+    	if(executionTime > this.getMaxExectime()){
+    		this.maxExectime = executionTime;
+    	}
+    	else if(executionTime < this.getMinExectime()){
+    			this.minExectime = executionTime;
+    	}
         this.executionTime = executionTime;
     }
 
@@ -195,6 +208,56 @@ public class ActionTHElement {
     public  void setReady(int Ready) {
         this.ready = Ready;
     }
+
+	/**
+	 * @return the minExectime
+	 */
+	public synchronized int getMinExectime() {
+		return minExectime;
+	}
+
+	/**
+	 * @return the maxExectime
+	 */
+	public synchronized int getMaxExectime() {
+		return maxExectime;
+	}
+
+	/**
+	 * @return the latency
+	 */
+	public synchronized int getLatency() {
+		return latency;
+	}
+
+	/**
+	 * @return the minLatency
+	 */
+	public synchronized int getMinLatency() {
+		return minLatency;
+	}
+
+	/**
+	 * @return the maxLatency
+	 */
+	public synchronized int getMaxLatency() {
+		return maxLatency;
+	}
+
+	/**
+	 * @param latency the latency to set
+	 * set the max min at the same time
+	 */
+	public synchronized void setLatency(long latency) {
+		this.latency = latency;
+    	if(latency > this.getMaxLatency()){
+    		this.maxLatency = latency;
+    	}
+    	else if(latency < this.getMinLatency()){
+    			this.minLatency = latency;
+    	}
+
+	}
 
 
 }

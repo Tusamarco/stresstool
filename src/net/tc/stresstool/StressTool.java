@@ -173,10 +173,11 @@ public class StressTool {
 	        Screen screen = TerminalFacade.createScreen();
 	        TerminalSize ntSize = screen.getTerminalSize();
 	        int rows = (ntSize.getRows()-2);
+	        int columns = ntSize.getColumns();
 	        screen.startScreen();
 	        screen.putString(0, 0, "StL", Terminal.Color.WHITE, Terminal.Color.BLACK);
 	        screen.putString(4, 0, "Th1", Terminal.Color.WHITE, Terminal.Color.BLACK);
-	        for(int x = 0 ; x <= 80;x++){
+	        for(int x = 0 ; x <= columns;x++){
 	            screen.putString(x, 1, "-", Terminal.Color.WHITE, Terminal.Color.BLACK);
 	        }
 	        screen.refresh();
