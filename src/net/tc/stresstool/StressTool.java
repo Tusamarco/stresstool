@@ -69,7 +69,7 @@ import net.tc.utils.Utility;
  * @author  tusa
  * 
  * Main class from where all starts
- * v 1.06
+ * v 1.07
  */
 public class StressTool {
 	/**
