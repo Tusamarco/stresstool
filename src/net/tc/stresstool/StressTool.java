@@ -57,6 +57,7 @@ import net.tc.stresstool.exceptions.StressToolException;
 import net.tc.stresstool.logs.LogProvider;
 import net.tc.stresstool.messages.ApplicationMessages;
 import net.tc.stresstool.statistics.StatCollector;
+import net.tc.stresstool.statistics.providers.ConsoleStatePrinter;
 import net.tc.stresstool.value.ValueProvider;
 import net.tc.utils.SynchronizedMap;
 import net.tc.utils.Utility;
@@ -167,25 +168,11 @@ public class StressTool {
 	        
 	        StressTool.setStressToolRunning(true);
 	        
-	        Terminal terminal = TerminalFacade.createTerminal(System.in, System.out);
-//	        TerminalSize tSize =new TerminalSize(100,200);
-//	        Screen screen = new Screen(terminal, tSize);
-	        Screen screen = TerminalFacade.createScreen();
-	        TerminalSize ntSize = screen.getTerminalSize();
-	        int rows = (ntSize.getRows()-2);
-	        int columns = ntSize.getColumns();
-	        screen.startScreen();
-	        screen.putString(0, 0, "StL", Terminal.Color.WHITE, Terminal.Color.BLACK);
-	        screen.putString(4, 0, "Th1", Terminal.Color.WHITE, Terminal.Color.BLACK);
-	        for(int x = 0 ; x <= columns;x++){
-	            screen.putString(x, 1, "-", Terminal.Color.WHITE, Terminal.Color.BLACK);
-	        }
-	        screen.refresh();
+	        ConsoleStatePrinter consolePrinter =new ConsoleStatePrinter(launcher);
 
 	        
 	        while(StressTool.isStressToolRunning()){
 	          int line =1;
-//	          int dot = 1;
 	          float curPct = (float) 0.0;
 	          float maxPct = loops;
 	          
@@ -200,15 +187,9 @@ public class StressTool {
 	             
 	             StressTool.setStressToolRunning(launcher.LaunchActions());
 	             logProvider.getLogger(LogProvider.LOG_APPLICATION).debug("Running loop = " + i);
+	             consolePrinter.printLine(i);
 	             
-	             curPct=(rows * (line/maxPct));
-
-	             int dot = new Float((rows - curPct)+2).intValue();
-	             logProvider.getLogger(LogProvider.LOG_APPLICATION).debug("DOR POSITION = " + dot);
-	             screen.putString(1, dot, Integer.toString(i), Terminal.Color.RED, Terminal.Color.BLACK);
-	             screen.putString(5, dot, "|", Terminal.Color.GREEN, Terminal.Color.BLACK);
-	             screen.refresh();
-	             line++ ;
+	             
 	             if(!StressTool.isStressToolRunning())
 	        	 break;
 	             
@@ -221,7 +202,7 @@ public class StressTool {
 	           }
 	          StressTool.setStressToolRunning(false);
 	         }
-	           screen.stopScreen();
+	         
 	            
 	        
 	        
