@@ -20,6 +20,7 @@ import net.tc.stresstool.logs.LogProvider;
 import net.tc.stresstool.statistics.ActionTHElement;
 import net.tc.stresstool.statistics.providers.MySQLSuper;
 import net.tc.utils.SynchronizedMap;
+import net.tc.utils.Utility;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -331,7 +332,7 @@ public class InsertBase extends StressActionBase implements WriteAction,
 		long startTime = System.currentTimeMillis();
 		
 		try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).info(" ==== ACTION "+ this.getTHInfo().getAction() +" Thread internal Id "+ this.getTHInfo().getId() +" Sys Thread Id "+ this.getTHInfo().getThId()+" started ===="  );}catch(StressToolConfigurationException e){}
-	    for(int i = 0 ; i  < 20; i++){
+	    for(int i = 0 ; i  < this.getLoops() -10; i++){
 	    	long startRunTime = System.currentTimeMillis();
 	    	try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).info(" ==== ACTION "+ this.getTHInfo().getAction() +" Thread internal Id "+ this.getTHInfo().getId() +" running "+ i );}catch(StressToolConfigurationException e){}
 			try {
@@ -339,17 +340,19 @@ public class InsertBase extends StressActionBase implements WriteAction,
 			    /**
 			     * Db actions
 			     */
+			    Thread.sleep(Utility.getNumberFromRandomMinMax(100,500));
 			    
 			    long endLatency = System.currentTimeMillis();
 			    this.getTHInfo().setLatency(endLatency-startLatency);
 			    
-			    Thread.sleep(500);
+			    Thread.sleep(Utility.getNumberFromRandomMinMax(1000,5000));
 			} catch (InterruptedException e) {
 			    // TODO Auto-generated catch block
 			    e.printStackTrace();
 			}
 			long endRunTime = System.currentTimeMillis();
 			this.getTHInfo().setExecutionTime(endRunTime - startRunTime);
+			this.getTHInfo().setCurrentLoop(i);
 	    }
 	    long endTime = System.currentTimeMillis();
 	    this.getTHInfo().setTotalEcecutionTime(endTime - startTime);

@@ -158,7 +158,8 @@ public class ActionTHElement {
     	if(executionTime > this.getMaxExectime()){
     		this.maxExectime = executionTime;
     	}
-    	else if(executionTime < this.getMinExectime()){
+    	else if(executionTime < this.getMinExectime()
+    			||(this.getMinExectime() == 0 && executionTime > 0)){
     			this.minExectime = executionTime;
     	}
         this.executionTime = executionTime;
@@ -254,7 +255,8 @@ public class ActionTHElement {
     	if(latency > this.getMaxLatency()){
     		this.maxLatency = latency;
     	}
-    	else if(latency < this.getMinLatency()){
+    	else if(latency < this.getMinLatency() 
+    			|| (this.getMinLatency() == 0 && latency > 0)){
     			this.minLatency = latency;
     	}
 
