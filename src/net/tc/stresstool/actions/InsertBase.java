@@ -26,8 +26,9 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 /**
- * v 1.0
+ * v 1.1
  */
+
 public class InsertBase extends StressActionBase implements WriteAction,
 	CreateAction {
 	
