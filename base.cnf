@@ -1,5 +1,5 @@
 [main]
-connUrl=jdbc:mysql://192.168.0.3:3306
+connUrl=jdbc:mysql://127.0.0.1:3306
 database=test
 user=stress	
 password=tool
@@ -14,8 +14,8 @@ doSimplePk=false
 droptable=false
 ignoreBinlog=false
 operationShort=true  
-poolNumber=10
-pctInsert=0
+poolNumber=1
+pctInsert=100
 pctUpdate=100 
 pctSelect=100 
 pctDelete=100 
