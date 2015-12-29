@@ -8,6 +8,7 @@ import java.util.concurrent.CountDownLatch;
 
 import org.apache.commons.beanutils.BeanUtils;
 
+import net.tc.data.db.ConnectionProvider;
 import net.tc.stresstool.StressTool;
 import net.tc.stresstool.config.Configuration;
 import net.tc.stresstool.config.Configurator;
@@ -60,7 +61,7 @@ public class Launcher {
     private int SemaphoreCountdownTime = 10;
     private CountDownLatch latch = null;
     private int interactive =1 ; //# Interactive mode [0 no|1 console output|2 console output + not exit until question is answered ] default 1
-    
+    private ConnectionProvider connProvider = null;
     
     public Launcher(Configurator configIn) {
 	if(configIn != null){
@@ -96,17 +97,13 @@ public class Launcher {
     public Map validatePermission(Configuration configuration) {
 	
 	
-        Map connMapcoordinates = new SynchronizedMap(0) ;
+//        Map connMapcoordinates = new SynchronizedMap(0) ;
         boolean valid = false;
         String userName="";
         Map providers = new SynchronizedMap();
         
-        connMapcoordinates.put("jdbcUrl", configuration.getParameter("connUrl").getValue());
-        connMapcoordinates.put("database", configuration.getParameter("database").getValue());
-        connMapcoordinates.put("user", configuration.getParameter("user").getValue());
-        connMapcoordinates.put("password", configuration.getParameter("password").getValue());
-        connMapcoordinates.put("dbtype", configuration.getParameter("dbType").getValue());
-        connMapcoordinates.put("connparameters", configuration.getParameter("connParameters").getValue());
+        
+        this.connProvider = new ConnectionProvider(configuration);
 
 	Iterator it = config.getSectionsName();
 	
@@ -129,7 +126,7 @@ public class Launcher {
         		    	sp = (StatsProvider)Class.forName(providerNames[isp].trim()).newInstance();
            		    	
 			}
-        		    valid = sp.validatePermissions(connMapcoordinates);
+        		    valid = sp.validatePermissions(connProvider);
 		    }
 		}
 
@@ -587,6 +584,7 @@ public class Launcher {
         			StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).debug("Assign  Insert class parameters ["+ (iA +1) +"] ");
         			StressActionBase sa = (StressActionBase)setParametersClassInsert();
         			sa.setLatch(latch);
+        			sa.setConnProvider(this.connProvider);
         			sa.setActionType(StressAction.ACTION_TYPE_Insert);
         			sa.setActionCode(StressAction.INSERT_ID_CONST + iA);
         			sa.setTHInfo(new ActionTHElement(StressAction.INSERT_ID_CONST + iA,false,ActionTHElement.SEMAPHORE_NOT_INITIALIZED));
@@ -601,6 +599,7 @@ public class Launcher {
         			StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).debug("Assign  Update class parameters ["+ (iA +1) +"] ");
         			StressActionBase sa = (StressActionBase)setParametersClassUpdate();
         			sa.setLatch(latch);
+        			sa.setConnProvider(this.connProvider);
         			sa.setActionType(StressAction.ACTION_TYPE_Update);
         			sa.setActionCode(StressAction.UPDATE_ID_CONST + iA);
         			sa.setTHInfo(new ActionTHElement(StressAction.UPDATE_ID_CONST + iA,false,ActionTHElement.SEMAPHORE_NOT_INITIALIZED));
@@ -620,6 +619,7 @@ public class Launcher {
         			StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).debug("Assign  Select class parameters ["+ (iA +1) +"] ");
         			StressActionBase sa = (StressActionBase)setParametersClassSelect();
         			sa.setLatch(latch);
+        			sa.setConnProvider(this.connProvider);
         			sa.setActionType(StressAction.ACTION_TYPE_Select);
         			sa.setActionCode(StressAction.SELECT_ID_CONST + iA);
         			sa.setTHInfo(new ActionTHElement(StressAction.SELECT_ID_CONST + iA,false,ActionTHElement.SEMAPHORE_NOT_INITIALIZED));
@@ -638,7 +638,8 @@ public class Launcher {
         		    for(int iA = 0 ; iA < aDelete; iA ++ ){
         			StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).debug("Assign  Delete class parameters ["+ (iA +1) +"] ");
         			StressActionBase sa = (StressActionBase)setParametersClassDelete();
-        			sa.setLatch(latch);        			
+        			sa.setLatch(latch);   
+        			sa.setConnProvider(this.connProvider);
         			sa.setActionType(StressAction.ACTION_TYPE_Delete);
         			sa.setActionCode(StressAction.DELETE_ID_CONST + iA);
         			sa.setTHInfo(new ActionTHElement(StressAction.DELETE_ID_CONST + iA,false,ActionTHElement.SEMAPHORE_NOT_INITIALIZED));
@@ -1098,6 +1099,20 @@ public class Launcher {
 	 */
 	private void setInteractive(int interactive) {
 	    this.interactive = interactive;
+	}
+
+	/**
+	 * @return the connProvider
+	 */
+	public ConnectionProvider getConnProvider() {
+	    return connProvider;
+	}
+
+	/**
+	 * @param connProvider the connProvider to set
+	 */
+	public void setConnProvider(ConnectionProvider connProvider) {
+	    this.connProvider = connProvider;
 	}
 
 		

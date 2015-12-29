@@ -1,9 +1,17 @@
 [main]
+#connection oriented settings
 connUrl=jdbc:mysql://192.168.0.3:3306
 database=test
 user=stress	
 password=tool
 connParameters=autoReconnect=true  
+connectionPool=false
+connectionPoolClass= 
+selectForceAutocommitOff=false
+stikyconnection=false
+
+
+FKEnable=false
 createTable=true 
 dbType=MySQL 
 doDelete=false 
