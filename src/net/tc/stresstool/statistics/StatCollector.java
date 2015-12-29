@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import net.tc.data.db.ConnectionProvider;
 import net.tc.stresstool.PerformanceEvaluator;
 import net.tc.stresstool.StressTool;
 import net.tc.stresstool.config.ConfigValue;
@@ -103,7 +104,7 @@ public class StatCollector {
 	
         
     }
-    public StatCollector(Configurator configs,Map connectionInformationIn ) throws StressToolException {
+    public StatCollector(Configurator configs,ConnectionProvider connProvider ) throws StressToolException {
 	/* retrieve stat provider information and feed initial structure*/
 	Iterator it = configs.getSectionsName();
 	setRootPath(configs);
@@ -114,12 +115,10 @@ public class StatCollector {
 	
 	providers = getProviders(configs, it);
 	
-	/*assign connection informations*/
-	connectionInformation = connectionInformationIn;
-	
+
 	/*init connection*/
 	try {
-	    conn = StressTool.initConnection(connectionInformation);
+	    conn = connProvider.getSimpleConnection();
 	} catch (SQLException e) {
 	    throw new StressToolConfigurationException(e);
 	}

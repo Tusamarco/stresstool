@@ -13,6 +13,7 @@ import com.googlecode.lanterna.terminal.TerminalPosition;
 import com.googlecode.lanterna.terminal.TerminalSize;
 import com.googlecode.lanterna.terminal.text.FixedTerminalSizeProvider;
 
+import net.tc.data.db.ConnectionProvider;
 import net.tc.stresstool.StressTool;
 import net.tc.stresstool.actions.Launcher;
 import net.tc.stresstool.logs.LogProvider;
@@ -295,7 +296,7 @@ public class ConsoleStatePrinter implements StatsProvider,Reporter,Runnable {
 	}
 
 	@Override
-	public boolean validatePermissions(Map connectionConfiguration) {
+	public boolean validatePermissions(ConnectionProvider connProvider) {
 		// TODO Auto-generated method stub
 		return false;
 	}
