@@ -11,6 +11,7 @@ import net.tc.stresstool.exceptions.ExceptionMessages;
 import net.tc.stresstool.exceptions.StressToolConfigurationException;
 import net.tc.stresstool.logs.LogProvider;
 import net.tc.stresstool.statistics.ActionTHElement;
+import net.tc.utils.Utility;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -163,18 +164,15 @@ public class UpdateBase extends StressActionBase implements UpdateAction,
 	 */
 	@Override
 	public void ExecuteAction() {
-	    try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).info(" ==== ACTION "+ this.getTHInfo().getAction() +" Thread internal Id "+ this.getTHInfo().getId() +" Sys Thread Id "+ this.getTHInfo().getThId()+" started ===="  );}catch(StressToolConfigurationException e){}
-	    for(int i = 0 ; i  < 200; i++){
-		try {
-		    Thread.sleep(800);
-		} catch (InterruptedException e) {
-		    // TODO Auto-generated catch block
-		    e.printStackTrace();
-		}
-	    }
-	    this.getTHInfo().setReady(ActionTHElement.SEMAPHORE_RED);
-	    try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).info(" ==== ACTION "+ this.getTHInfo().getAction() +" Thread internal Id "+ this.getTHInfo().getId() +" Sys Thread Id "+ this.getTHInfo().getThId()+" ended ===="  );}catch(StressToolConfigurationException e){}
-
+            	/**
+            	 * Db actions
+            	 */
+            	try {
+            	Thread.sleep(Utility.getNumberFromRandomMinMax(1, 50));
+        		} catch (InterruptedException e) {
+        		    // TODO Auto-generated catch block
+        		    e.printStackTrace();
+        		}
 	    }
 	
 	

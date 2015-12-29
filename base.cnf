@@ -1,5 +1,5 @@
 [main]
-connUrl=jdbc:mysql://127.0.0.1:3306
+connUrl=jdbc:mysql://192.168.0.3:3306
 database=test
 user=stress	
 password=tool
@@ -23,11 +23,13 @@ repeatNumber=1000
 HardStopLimit=100
 UseHardStop=true
 StatIntervalMs=1000
-StatLoops = 80
+StatLoops = 20
 SemaphoreCountdownTime = 1
 # table engine comma separated with % value; 
 TableEngine=InnoDB|60,MyISAM|40
 truncate=false
+# Interactive mode [0 no|1 console output|2 console output + not exit until question is answered ] default 1 
+interactive = 2
 
 
 DeleteClass=net.tc.stresstool.actions.DeleteBase 

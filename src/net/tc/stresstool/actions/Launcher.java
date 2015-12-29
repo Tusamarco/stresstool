@@ -59,6 +59,7 @@ public class Launcher {
     private int repeatNumber =0 ;
     private int SemaphoreCountdownTime = 10;
     private CountDownLatch latch = null;
+    private int interactive =1 ; //# Interactive mode [0 no|1 console output|2 console output + not exit until question is answered ] default 1
     
     
     public Launcher(Configurator configIn) {
@@ -87,6 +88,7 @@ public class Launcher {
 	this.setUseHardStop(Boolean.parseBoolean((String) configuration.getParameter("UseHardStop").getValue()));
 	this.setRepeatNumber(Integer.parseInt((String) configuration.getParameter("repeatNumber").getValue()) );
 	this.setSemaphoreCountdownTime(Integer.parseInt((String) configuration.getParameter("SemaphoreCountdownTime").getValue()) );
+	this.setInteractive(Integer.parseInt((String) configuration.getParameter("interactive").getValue()));
 	
     }
     /**
@@ -341,6 +343,43 @@ public class Launcher {
 //	this.LaunchActions();
 	return true;
     }
+    public void terminateThreads() {
+	if(writeImplementationMap != null){
+	    for(Object key:writeImplementationMap.getKeyasOrderedArray()){
+		StressAction sbA = (StressAction)writeImplementationMap.get(key);
+		sbA = null;
+		writeImplementationMap.remove(key);
+	    }
+	}
+
+	if(updateImplementationMap != null){
+	    for(Object key:updateImplementationMap.getKeyasOrderedArray()){
+		StressAction sbA = (StressAction)updateImplementationMap.get(key);
+		sbA = null;
+		updateImplementationMap.remove(key);
+	    }
+
+	}
+	if(readImplementationMap != null){
+	    for(Object key:readImplementationMap.getKeyasOrderedArray()){
+		StressAction sbA = (StressAction)readImplementationMap.get(key);
+		sbA = null;
+		readImplementationMap.remove(key);
+	    }
+
+	}
+	if(deleteImplementationMap != null){
+	    for(Object key:deleteImplementationMap.getKeyasOrderedArray()){
+		StressAction sbA = (StressAction)deleteImplementationMap.get(key);
+		sbA = null;
+		deleteImplementationMap.remove(key);
+	    }
+
+	}
+
+	
+    }
+
     /**
      * we check for the running threads and decide if we want to interrupt the execution or not
      * 
@@ -1045,6 +1084,20 @@ public class Launcher {
 	 */
 	public void setSemaphoreCountdownTime(int semaphoreCountdownTime) {
 	    SemaphoreCountdownTime = semaphoreCountdownTime;
+	}
+
+	/**
+	 * @return the interactive
+	 */
+	public int getInteractive() {
+	    return interactive;
+	}
+
+	/**
+	 * @param interactive the interactive to set
+	 */
+	private void setInteractive(int interactive) {
+	    this.interactive = interactive;
 	}
 
 		

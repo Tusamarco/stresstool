@@ -151,6 +151,7 @@ public class MySQLStatus extends MySQLSuper implements StatsProvider, Reporter {
     //        pw.println("Total Number Of query Executed for writes = " + this.getTotalQueryToRunWrites());
     //        pw.println("Total Number Of query Executed for reads  = " + this.getTotalQueryToRunReads());
     //        pw.println("Total Number Of query Executed for deletes  = " + this.getTotalQueryToRunDeletes());
+       try{
             pw.println("------------------------------ "+this.getProviderName()+" DATABASE INFORMATION -----------------------------------------");
             pw.println("Provider  = " + getProviderName());
             pw.println("Start time  = " + Utility.getTimeStamp(reporterGroup.getStartTime(),"yy/MM/dd hh:mm:ss:SSSS a"));
@@ -286,7 +287,10 @@ public class MySQLStatus extends MySQLSuper implements StatsProvider, Reporter {
             pw.println("Number of Threads_connected = " + this.getResultByName("Threads_connected",false) );
             pw.println("Number of Threads_created = " + this.getResultByName("Threads_created",false) );
             pw.println("Number of Threads_running = " + this.getMaxResultByName("Threads_running",false) );
-    
+       }
+       catch(Throwable th){
+	   th.printStackTrace();
+       }
     
             if(flushrowonfile){
 	            writeReportOnFile(sw.toString());
