@@ -18,6 +18,7 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
+import net.tc.data.db.ConnectionProvider;
 import net.tc.data.db.PartitionDefinition;
 import net.tc.stresstool.PerformanceEvaluator;
 import net.tc.stresstool.StressTool;
@@ -334,7 +335,7 @@ public class MySQLSuper implements StatsProvider, Reporter {
     }
 
     @Override
-    public boolean validatePermissions(Map connectionConfiguration) {
+    public boolean validatePermissions(ConnectionProvider connProvider) {
 	Logger applicationLogger = null;
 	try {
 	    applicationLogger = StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION);
@@ -342,7 +343,7 @@ public class MySQLSuper implements StatsProvider, Reporter {
 	    // TODO Auto-generated catch block
 	    e1.printStackTrace();
 	}
-	if(connectionConfiguration == null)
+	if(connProvider == null)
 	    return false;
 	
     	/*Performance evaluation section [tail] start*/
@@ -365,7 +366,7 @@ public class MySQLSuper implements StatsProvider, Reporter {
         
         
         try {
-            conn = initConnection(connectionConfiguration);
+            conn = connProvider.getSimpleConnection();
             conn.setAutoCommit(false);
             stmt = conn.createStatement();
 
@@ -380,7 +381,7 @@ public class MySQLSuper implements StatsProvider, Reporter {
 		e.printStackTrace();
 	    }
 	    
-            applicationLogger.info("Checking Generic permissions on:" + connectionConfiguration.get("database"));
+            applicationLogger.info("Checking Generic permissions on:" + connProvider.getConnInfo().getDatabase());
             //CREATE TABLESPACE,FILE, PROCESS,REPLICATION CLIENT,SHOW DATABASES
             rs = stmt.executeQuery("select Process_priv, Repl_client_priv,Show_db_priv,File_priv,Create_tablespace_priv, CURRENT_USER() from mysql.user where user=substring(CURRENT_USER(),1,locate('@',CURRENT_USER())-1) and host=substring(CURRENT_USER(),locate('@',CURRENT_USER())+1)");
             while(rs.next()){
@@ -505,7 +506,7 @@ public class MySQLSuper implements StatsProvider, Reporter {
         
         if(!valid){
             applicationLogger.info("Permissions on global AND DB failed I cannot write on the DB");
-            applicationLogger.error("NOT sufficient  permissions on:" + connectionConfiguration.get("database")+ " for user:" + userName );
+            applicationLogger.error("NOT sufficient  permissions on:" + connProvider.getConnInfo().getDatabase()+ " for user:" + userName );
             applicationLogger.error("The following are expected ensure the user has them:");
             applicationLogger.error("Select_priv,\n" +
 	            		"Insert_priv,\n" +
@@ -525,10 +526,10 @@ public class MySQLSuper implements StatsProvider, Reporter {
 	            		"Trigger_priv \n" );
             applicationLogger.error("Try to issue: Grant ALTER,ALTER ROUTINE,CREATE,CREATE ROUTINE," +
             		"CREATE TEMPORARY TABLES,CREATE VIEW,DELETE,DROP,EVENT," +
-            "EXECUTE,INDEX,INSERT,LOCK TABLES,SELECT,TRIGGER,UPDATE on " + connectionConfiguration.get("database")+ ".* to " + connectionConfiguration.get("user") 
+            "EXECUTE,INDEX,INSERT,LOCK TABLES,SELECT,TRIGGER,UPDATE on " + connProvider.getConnInfo().getDatabase()+ ".* to " + connProvider.getConnInfo().getUser() 
             + "@'<host>' identified by '<secret>'");
             
-            applicationLogger.error("Try to issue: Grant CREATE TABLESPACE,FILE, PROCESS,REPLICATION CLIENT,SHOW DATABASES on *.* to " + connectionConfiguration.get("user") 
+            applicationLogger.error("Try to issue: Grant CREATE TABLESPACE,FILE, PROCESS,REPLICATION CLIENT,SHOW DATABASES on *.* to " + connProvider.getConnInfo().getUser() 
 	            + "@'<host>' identified by '<secret>'");
             
             ExceptionMessages.setCurrentError(ExceptionMessages.ERROR_FATAL);
@@ -564,7 +565,10 @@ public class MySQLSuper implements StatsProvider, Reporter {
 
 
     }
-    
+    @Deprecated
+    /*
+     * Do not use use ConnectionProvider instead from Launcher
+     */
     public synchronized static Connection initConnection(Map connMapcoordinates)
 	throws SQLException {
 	    Connection conn;

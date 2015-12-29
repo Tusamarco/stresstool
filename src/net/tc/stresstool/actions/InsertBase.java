@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
 
+import net.tc.data.db.ConnectionProvider;
 import net.tc.data.db.Schema;
 import net.tc.data.db.Table;
 import net.tc.jsonparser.*;
@@ -64,7 +65,7 @@ public class InsertBase extends StressActionBase implements WriteAction,
 		    && tables.length > 0){
 		
 		try {
-		    Connection conn = MySQLSuper.initConnection(getConnectionInformation());
+		    Connection conn = this.getConnProvider().getSimpleConnection();
 		    Statement stmt = null;
 		    if(conn != null 
 			   && !conn.isClosed()){
@@ -160,7 +161,7 @@ public class InsertBase extends StressActionBase implements WriteAction,
 			    sbCreate.append(schema.deploySchema((Map)tableInstances));
 			    try{StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).debug("Schema Definition SQL = [\n" + sbCreate.toString() + "\n ]"  );}catch(StressToolConfigurationException e){}
 			    try {
-				Connection conn = MySQLSuper.initConnection(getConnectionInformation());
+				Connection conn = getConnProvider().getSimpleConnection();
 				Statement stmt = null;
 				if (conn != null && !conn.isClosed()) {
 				    stmt = conn.createStatement();
@@ -203,7 +204,7 @@ public class InsertBase extends StressActionBase implements WriteAction,
 		    && tables.length > 0){
 		
 		try {
-		    Connection conn = MySQLSuper.initConnection(getConnectionInformation());
+		    Connection conn = getConnProvider().getSimpleConnection();
 		    Statement stmt = null;
 		    if(conn != null 
 			   && !conn.isClosed()){

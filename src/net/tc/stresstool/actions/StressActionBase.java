@@ -3,6 +3,7 @@ package net.tc.stresstool.actions;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
+import net.tc.data.db.ConnectionProvider;
 import net.tc.stresstool.DbType;
 import net.tc.stresstool.StressTool;
 import net.tc.stresstool.config.ConfigurationImplementation;
@@ -53,6 +54,7 @@ public class StressActionBase implements StressAction, Runnable {
     private long lastThinkTime = 0;    
     private CountDownLatch latch = null;
     private ActionTHElement thInfo = null;
+    private ConnectionProvider connProvider = null;
     
 //    public static String ACTION_TYPE_Select = "Select";
 //    public static String ACTION_TYPE_Insert = "Insert";
@@ -746,6 +748,20 @@ public class StressActionBase implements StressAction, Runnable {
 	public ActionTHElement getTHInfo() {
 	   
 	    return thInfo;
+	}
+
+	/**
+	 * @return the connProvider
+	 */
+	public ConnectionProvider getConnProvider() {
+	    return connProvider;
+	}
+
+	/**
+	 * @param connProvider the connProvider to set
+	 */
+	public void setConnProvider(ConnectionProvider connProvider) {
+	    this.connProvider = connProvider;
 	}
 
 }

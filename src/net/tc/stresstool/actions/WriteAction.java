@@ -1,5 +1,6 @@
 package net.tc.stresstool.actions;
 
+import net.tc.data.db.ConnectionProvider;
 import net.tc.stresstool.statistics.ActionTHElement;
 
 public interface WriteAction {
@@ -23,4 +24,5 @@ public interface WriteAction {
 	public int getBatchSize();
 	public ActionTHElement getTHInfo();
 	public void setTHInfo(ActionTHElement thInfo);
+	boolean CreateSchema();
 }

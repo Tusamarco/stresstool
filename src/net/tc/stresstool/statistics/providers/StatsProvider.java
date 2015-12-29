@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.util.Iterator;
 import java.util.Map;
 
+import net.tc.data.db.ConnectionProvider;
 import net.tc.utils.file.FileHandler;
 
 
@@ -33,6 +34,6 @@ public interface StatsProvider {
     	public String getProviderName();
     	public void setStatsOutFile(String rootPath);
     	public void setFlushDataOnfile(boolean flushrowonfile);
-    	public boolean validatePermissions(Map connectionConfiguration);
+    	public boolean validatePermissions(ConnectionProvider connProvider);
 //	Map getStatus(Connection conn);
 }

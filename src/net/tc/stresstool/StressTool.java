@@ -129,7 +129,7 @@ public class StressTool {
 	        
 	        config.printConfiguration(applicationLogger);
 	        
-	        StatCollector stats = new StatCollector(config,connectionInformation);
+	        StatCollector stats = new StatCollector(config,launcher.getConnProvider());
 
 	        /*
 	         * Inizialize  the launcher laoding all class informations
@@ -604,7 +604,13 @@ public class StressTool {
 
 
 
-
+@Deprecated 
+/**
+ * this method is not supported use ConnectionProvider instead
+ * @param connMapcoordinates
+ * @return
+ * @throws SQLException
+ */
 	public static Connection initConnection(Map connMapcoordinates)
 		throws SQLException {
 	    Connection conn;
