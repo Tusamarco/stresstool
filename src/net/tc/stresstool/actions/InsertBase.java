@@ -332,37 +332,15 @@ public class InsertBase extends StressActionBase implements WriteAction,
 	 */
 	@Override
 	public void ExecuteAction() {
-		long startTime = System.currentTimeMillis();
-		
-		try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).info(" ==== ACTION "+ this.getTHInfo().getAction() +" Thread internal Id "+ this.getTHInfo().getId() +" Sys Thread Id "+ this.getTHInfo().getThId()+" started ===="  );}catch(StressToolConfigurationException e){}
-	    for(int i = 0 ; i  < this.getLoops() -10; i++){
-	    	long startRunTime = System.currentTimeMillis();
-	    	try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).info(" ==== ACTION "+ this.getTHInfo().getAction() +" Thread internal Id "+ this.getTHInfo().getId() +" running "+ i );}catch(StressToolConfigurationException e){}
-			try {
-			    long startLatency = System.currentTimeMillis();
-			    /**
-			     * Db actions
-			     */
-			    Thread.sleep(Utility.getNumberFromRandomMinMax(100,500));
-			    
-			    long endLatency = System.currentTimeMillis();
-			    this.getTHInfo().setLatency(endLatency-startLatency);
-			    
-			    Thread.sleep(Utility.getNumberFromRandomMinMax(1000,5000));
-			} catch (InterruptedException e) {
-			    // TODO Auto-generated catch block
-			    e.printStackTrace();
-			}
-			long endRunTime = System.currentTimeMillis();
-			this.getTHInfo().setExecutionTime(endRunTime - startRunTime);
-			this.getTHInfo().setCurrentLoop(i);
-	    }
-	    long endTime = System.currentTimeMillis();
-	    this.getTHInfo().setTotalEcecutionTime(endTime - startTime);
-	    this.getTHInfo().setReady(ActionTHElement.SEMAPHORE_RED);
-	    try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).info(" ==== ACTION "+ this.getTHInfo().getAction() +" Thread internal Id "+ this.getTHInfo().getId() +" Sys Thread Id "+ this.getTHInfo().getThId()+" ended ===="  );}catch(StressToolConfigurationException e){}
-	    
-	
+        	/**
+        	 * Db actions
+        	 */
+        	try {
+		    Thread.sleep(Utility.getNumberFromRandomMinMax(1, 50));
+		} catch (InterruptedException e) {
+		    // TODO Auto-generated catch block
+		    e.printStackTrace();
+		}
 	}
 
 }

@@ -168,7 +168,10 @@ public class StressTool {
 	        
 	        StressTool.setStressToolRunning(true);
 	        
-	        ConsoleStatePrinter consolePrinter =new ConsoleStatePrinter(launcher);
+	        ConsoleStatePrinter consolePrinter =null;
+	        
+	        if(launcher.getInteractive() >0 )
+	            consolePrinter = new ConsoleStatePrinter(launcher);
 
 	        
 	        while(StressTool.isStressToolRunning()){
@@ -186,8 +189,18 @@ public class StressTool {
 	             
 	             
 	             StressTool.setStressToolRunning(launcher.LaunchActions());
-	             logProvider.getLogger(LogProvider.LOG_APPLICATION).debug("Running loop = " + i);
-	             consolePrinter.printLine(i);
+	             logProvider.getLogger(LogProvider.LOG_APPLICATION).info("Running loop = " + i);
+
+// TODO insert an interruption in the cycle	             
+	             if(launcher.getInteractive() >0  && consolePrinter != null){
+	        	 consolePrinter.printLine(i);
+//	             }
+	        	 if(launcher.getInteractive() ==2 ){
+	        	     if(consolePrinter.askQuestion("Press \"#\" to stop StressTool", "#",false).toLowerCase().equals("#")){
+	        		 StressTool.setStressToolRunning(false);
+	        	     };
+	        	 }
+	             }
 	             
 	             
 	             if(!StressTool.isStressToolRunning())
@@ -201,6 +214,7 @@ public class StressTool {
         	     }
 	           }
 	          StressTool.setStressToolRunning(false);
+	          launcher.terminateThreads();
 	         }
 	         
 	            
@@ -208,6 +222,10 @@ public class StressTool {
 	        
 	        
 	        printReport(stats);
+	        if(launcher.getInteractive() >1  && consolePrinter != null){
+	          while(!consolePrinter.askQuestion(ApplicationMessages.End_QUESTION,"y\n",true).toLowerCase().equals("y\n"));
+	           
+	        }
 	        System.out.println("Close");
             }
         	catch(StressToolException ex){
