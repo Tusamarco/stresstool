@@ -25,7 +25,7 @@ import java.io.FileWriter;
 import java.util.Vector;
 
 
-public abstract class baseObject extends dataObject
+public abstract class baseObject extends DataObject
 	implements Map
 {
 	//private Map internalValues = new HashMap();
@@ -261,74 +261,74 @@ public abstract class baseObject extends dataObject
 		return null;
 	}
 
-	public Object getAsBean()
-	{
-		dataObject beanSource = null;
-
-		try{beanSource = (dataObject)this.getClass().newInstance();}
-		catch( Exception ex ){ex.printStackTrace();	}
-
-		return getAsBean( beanSource, null );
-	}
-	public Object getAsBean(Map rowValues )
-	{
-		dataObject beanSource = null;
-		try{beanSource =(dataObject) this.getClass().newInstance();}
-		catch( Exception ex ){ex.printStackTrace();	}
-
-		return getAsBean( beanSource, rowValues );
-	}
-
-	public Object getAsBean( dataObject beanSource, Map rowValues )
-	{
-		String beanClassName = beanSource.getClass().getName() + "Bean";
-		Object bean = null;
-		try{bean = Class.forName( beanClassName ).newInstance();}catch(Exception ex )
-		{ex.printStackTrace();}
-
-		if( beanSource == null && rowValues == null )
-			return null;
-		else if( beanSource != null && rowValues == null )
-		{
-			bean = getAsBeanXml( bean, rowValues );
-			return bean;
-		}
-
-		try
-		{
-			Map RetrivableFields = beanSource.getRetrivableFieldsMap();
-			if(RetrivableFields == null || RetrivableFields.size() == 0)
-				return null;
-
-			Iterator it = rowValues.keySet().iterator();
-			while( it.hasNext() )
-			{
-				Object oKey = it.next();
-				if( RetrivableFields.containsValue( oKey ) )
-				{
-					Object value = ( Object ) rowValues.get( oKey );
-
-					if( value != null && !value.equals( "null" ) )
-					{
-						if( value instanceof String )
-							( ( String ) value ).trim();
-						BeanUtils.setProperty( bean, ( String ) oKey, value );
-					}
-					else
-					{
-						BeanUtils.setProperty( bean, ( String ) oKey, null );
-					}
-
-				}
-			}
-		}
-		catch( Exception ex )
-		{
-			ex.printStackTrace();
-		}
-
-		return bean;
-	}
+//	public Object getAsBean()
+//	{
+//		DataObject beanSource = null;
+//
+//		try{beanSource = (DataObject)this.getClass().newInstance();}
+//		catch( Exception ex ){ex.printStackTrace();	}
+//
+//		return getAsBean( beanSource, null );
+//	}
+//	public Object getAsBean(Map rowValues )
+//	{
+//		DataObject beanSource = null;
+//		try{beanSource =(DataObject) this.getClass().newInstance();}
+//		catch( Exception ex ){ex.printStackTrace();	}
+//
+//		return getAsBean( beanSource, rowValues );
+//	}
+//
+//	public Object getAsBean( DataObject beanSource, Map rowValues )
+//	{
+//		String beanClassName = beanSource.getClass().getName() + "Bean";
+//		Object bean = null;
+//		try{bean = Class.forName( beanClassName ).newInstance();}catch(Exception ex )
+//		{ex.printStackTrace();}
+//
+//		if( beanSource == null && rowValues == null )
+//			return null;
+//		else if( beanSource != null && rowValues == null )
+//		{
+//			bean = getAsBeanXml( bean, rowValues );
+//			return bean;
+//		}
+//
+//		try
+//		{
+//			Map RetrivableFields = beanSource.getRetrivableFieldsMap();
+//			if(RetrivableFields == null || RetrivableFields.size() == 0)
+//				return null;
+//
+//			Iterator it = rowValues.keySet().iterator();
+//			while( it.hasNext() )
+//			{
+//				Object oKey = it.next();
+//				if( RetrivableFields.containsValue( oKey ) )
+//				{
+//					Object value = ( Object ) rowValues.get( oKey );
+//
+//					if( value != null && !value.equals( "null" ) )
+//					{
+//						if( value instanceof String )
+//							( ( String ) value ).trim();
+//						BeanUtils.setProperty( bean, ( String ) oKey, value );
+//					}
+//					else
+//					{
+//						BeanUtils.setProperty( bean, ( String ) oKey, null );
+//					}
+//
+//				}
+//			}
+//		}
+//		catch( Exception ex )
+//		{
+//			ex.printStackTrace();
+//		}
+//
+//		return bean;
+//	}
 
 	public Object getAsBeanXml( Object bean, Map rowValues )
 	{

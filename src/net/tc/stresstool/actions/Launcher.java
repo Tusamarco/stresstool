@@ -1,5 +1,6 @@
 package net.tc.stresstool.actions;
 
+import java.lang.ref.SoftReference;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -9,6 +10,7 @@ import java.util.concurrent.CountDownLatch;
 import org.apache.commons.beanutils.BeanUtils;
 
 import net.tc.data.db.ConnectionProvider;
+import net.tc.data.db.Schema;
 import net.tc.stresstool.StressTool;
 import net.tc.stresstool.config.Configuration;
 import net.tc.stresstool.config.Configurator;
@@ -22,6 +24,7 @@ import net.tc.stresstool.statistics.providers.StatsProvider;
 import net.tc.stresstool.value.BasicFileValueProvider;
 import net.tc.stresstool.value.ValueProvider;
 import net.tc.utils.SynchronizedMap;
+import net.tc.utils.file.FileHandler;
 
 
 /**
@@ -62,6 +65,7 @@ public class Launcher {
     private CountDownLatch latch = null;
     private int interactive =1 ; //# Interactive mode [0 no|1 console output|2 console output + not exit until question is answered ] default 1
     private ConnectionProvider connProvider = null;
+    private Schema currentSchema = null;
     
     public Launcher(Configurator configIn) {
 	if(configIn != null){
@@ -77,6 +81,11 @@ public class Launcher {
 	}
     }
 
+    /**
+     * Main class initialization with basic parameters and 
+     * class references.
+     * @param configuration
+     */
     private void init(Configuration configuration){
 	this.poolNumber = Integer.parseInt((String) configuration.getParameter("poolNumber").getValue());
 	this.pctDelete = Integer.parseInt((String) configuration.getParameter("pctDelete").getValue());
@@ -91,6 +100,77 @@ public class Launcher {
 	this.setSemaphoreCountdownTime(Integer.parseInt((String) configuration.getParameter("SemaphoreCountdownTime").getValue()) );
 	this.setInteractive(Integer.parseInt((String) configuration.getParameter("interactive").getValue()));
 	
+	
+	/**
+	 * Initialize the Launcher configuration related to the actions classes 
+	 */
+	try {
+	    StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).info("LOADING Action Parameters");
+	    if(	
+		    config != null && 
+		    config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class) != null  
+		    ){
+			if(config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParameter("InsertClass") != null &&
+				config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParameter("InsertClass").getValue() != null){
+			    this.insertClass =(String) config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParameter("InsertClass").getValue();
+			    
+			}
+			else{
+			    ExceptionMessages.setCurrentError(ExceptionMessages.ERROR_FATAL);
+			    throw new StressToolConfigurationException(" Insert Class not define");
+			    
+			}
+
+			if(config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParameter("UpdateClass") != null &&
+				config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParameter("UpdateClass").getValue() != null){
+			    this.updateClass =(String) config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParameter("UpdateClass").getValue();
+			    
+			}
+			else{
+			    ExceptionMessages.setCurrentError(ExceptionMessages.ERROR_FATAL);
+			    throw new StressToolConfigurationException(" Insert Class not define");
+			    
+			}
+
+			
+			if(config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParameter("SelectClass") != null &&
+				config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParameter("SelectClass").getValue() != null){
+			    this.selectClass =(String) config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParameter("SelectClass").getValue();
+			    
+			}
+			else{
+			    ExceptionMessages.setCurrentError(ExceptionMessages.ERROR_FATAL);
+			    throw new StressToolConfigurationException(" Select Class not define");
+			    
+			}
+			
+			if(config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParameter("DeleteClass") != null &&
+				config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParameter("DeleteClass").getValue() != null){
+			    this.deleteClass =(String) config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParameter("DeleteClass").getValue();
+			    
+			}
+			else{
+			    ExceptionMessages.setCurrentError(ExceptionMessages.ERROR_FATAL);
+			    throw new StressToolConfigurationException(" Delete Class not define");
+			    
+			}
+			
+
+	   }
+	
+	} 
+	catch (StressToolConfigurationException e) {
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+	catch (StressToolException e) {
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+
+	
+	
+	
     }
     /**
     */
@@ -103,7 +183,7 @@ public class Launcher {
         Map providers = new SynchronizedMap();
         
         
-        this.connProvider = new ConnectionProvider(configuration);
+        this.setConnProvider(new ConnectionProvider(configuration));
 
 	Iterator it = config.getSectionsName();
 	
@@ -174,21 +254,52 @@ public class Launcher {
      * This is the invocation to create the basic structure
      */
     public boolean CreateStructure() {
-	if(writeImplementationMap != null 
-		&& writeImplementationMap.size() > 0 
-		&& writeImplementationMap.getValueByPosition(0) != null){
-	    	WriteAction writeImplementation = (WriteAction) writeImplementationMap.getValueByPosition(0);  
-	    	
-	    	if(writeImplementation != null && 
-        		writeImplementation instanceof CreateAction ){
-        	    
-        	    ((CreateAction)writeImplementation).CreateSchema();
-        	    /*
-        	     * Still here
-        	     */
-        	    return true;
-        	}
-	}
+	       
+        /**
+         * Initialize a special class for Schema creation
+         * this class will be then declared null after the action is complete
+         * 
+         */
+        try{
+
+            StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).debug("Assign  Special CLass for schema creation [start] ");
+            StressActionBase sa = null;
+            SoftReference sr = new SoftReference(sa = (StressActionBase)setParametersClassInsert());
+            ((StressActionBase)sr.get()).setConnProvider(this.connProvider);
+            ((StressActionBase)sr.get()).setActionType(StressAction.ACTION_TYPE_Insert);
+            ((StressActionBase)sr.get()).setActionCode(StressAction.INSERT_ID_CONST);
+
+            boolean createSchema = Boolean.parseBoolean((String) (config.getConfiguration(Configurator.MAIN_SECTION_NAME, StressTool.class).getParameter("createTable").getValue()));
+	    this.currentSchema = ((CreateAction) ((StressActionBase)sr.get())).CreateSchema(createSchema);
+	    sa = null;
+	    sr = null;
+	    StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).debug("Assign  Special CLass for schema creation [end] ");
+	    
+	    return true;
+    
+	    
+	    
+        }catch(Exception ex1){ex1.printStackTrace();}
+	
+//	if(writeImplementationMap != null 
+//		&& writeImplementationMap.size() > 0 
+//		&& writeImplementationMap.getValueByPosition(0) != null){
+//	    	WriteAction writeImplementation = (WriteAction) writeImplementationMap.getValueByPosition(0);  
+//	    	try{
+//        	    	if(writeImplementation != null && 
+//                		writeImplementation instanceof CreateAction 
+//                		&& config.getConfiguration(Configurator.MAIN_SECTION_NAME, StressTool.class).getParameter("createTable").getValue() != null ){
+//                	    boolean createSchema = Boolean.parseBoolean((String) (config.getConfiguration(Configurator.MAIN_SECTION_NAME, StressTool.class).getParameter("createTable").getValue()));
+//                	    this.currentSchema = ((CreateAction)writeImplementation).CreateSchema(createSchema);
+//                	    
+//                	    return true;
+//                	}
+//	    	}
+//	    	catch(Exception ex){
+//	    	    ex.printStackTrace();
+//	    	    return false;
+//	    	}
+//	}
 	
 	
 	
@@ -450,69 +561,6 @@ public class Launcher {
      */
     public boolean prepareLauncher() {
 	
-	try {
-	    StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).info("LOADING Action Parameters");
-	    if(	
-		    config != null && 
-		    config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class) != null  
-		    ){
-			if(config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParameter("InsertClass") != null &&
-				config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParameter("InsertClass").getValue() != null){
-			    this.insertClass =(String) config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParameter("InsertClass").getValue();
-			    
-			}
-			else{
-			    ExceptionMessages.setCurrentError(ExceptionMessages.ERROR_FATAL);
-			    throw new StressToolConfigurationException(" Insert Class not define");
-			    
-			}
-
-			if(config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParameter("UpdateClass") != null &&
-				config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParameter("UpdateClass").getValue() != null){
-			    this.updateClass =(String) config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParameter("UpdateClass").getValue();
-			    
-			}
-			else{
-			    ExceptionMessages.setCurrentError(ExceptionMessages.ERROR_FATAL);
-			    throw new StressToolConfigurationException(" Insert Class not define");
-			    
-			}
-
-			
-			if(config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParameter("SelectClass") != null &&
-				config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParameter("SelectClass").getValue() != null){
-			    this.selectClass =(String) config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParameter("SelectClass").getValue();
-			    
-			}
-			else{
-			    ExceptionMessages.setCurrentError(ExceptionMessages.ERROR_FATAL);
-			    throw new StressToolConfigurationException(" Select Class not define");
-			    
-			}
-			
-			if(config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParameter("DeleteClass") != null &&
-				config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParameter("DeleteClass").getValue() != null){
-			    this.deleteClass =(String) config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParameter("DeleteClass").getValue();
-			    
-			}
-			else{
-			    ExceptionMessages.setCurrentError(ExceptionMessages.ERROR_FATAL);
-			    throw new StressToolConfigurationException(" Delete Class not define");
-			    
-			}
-			
-
-	   }
-	
-	} 
-	catch (StressToolConfigurationException e) {
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
-	}
-	catch (StressToolException e) {
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
-	}
 	
 	/*
 	 * define the latch for parallel start 
@@ -564,6 +612,8 @@ public class Launcher {
         if (aDelete >= 1)
             deleteImplementationMap =new SynchronizedMap(poolNumber);
 
+ 
+        
         
 	/*
 	 * Here parameters are load for each type of class.
@@ -585,6 +635,7 @@ public class Launcher {
         			StressActionBase sa = (StressActionBase)setParametersClassInsert();
         			sa.setLatch(latch);
         			sa.setConnProvider(this.connProvider);
+        			sa.setSchema(this.getCurrentSchema());
         			sa.setActionType(StressAction.ACTION_TYPE_Insert);
         			sa.setActionCode(StressAction.INSERT_ID_CONST + iA);
         			sa.setTHInfo(new ActionTHElement(StressAction.INSERT_ID_CONST + iA,false,ActionTHElement.SEMAPHORE_NOT_INITIALIZED));
@@ -600,6 +651,7 @@ public class Launcher {
         			StressActionBase sa = (StressActionBase)setParametersClassUpdate();
         			sa.setLatch(latch);
         			sa.setConnProvider(this.connProvider);
+        			sa.setSchema(this.getCurrentSchema());
         			sa.setActionType(StressAction.ACTION_TYPE_Update);
         			sa.setActionCode(StressAction.UPDATE_ID_CONST + iA);
         			sa.setTHInfo(new ActionTHElement(StressAction.UPDATE_ID_CONST + iA,false,ActionTHElement.SEMAPHORE_NOT_INITIALIZED));
@@ -620,6 +672,7 @@ public class Launcher {
         			StressActionBase sa = (StressActionBase)setParametersClassSelect();
         			sa.setLatch(latch);
         			sa.setConnProvider(this.connProvider);
+        			sa.setSchema(this.getCurrentSchema());
         			sa.setActionType(StressAction.ACTION_TYPE_Select);
         			sa.setActionCode(StressAction.SELECT_ID_CONST + iA);
         			sa.setTHInfo(new ActionTHElement(StressAction.SELECT_ID_CONST + iA,false,ActionTHElement.SEMAPHORE_NOT_INITIALIZED));
@@ -640,6 +693,7 @@ public class Launcher {
         			StressActionBase sa = (StressActionBase)setParametersClassDelete();
         			sa.setLatch(latch);   
         			sa.setConnProvider(this.connProvider);
+        			sa.setSchema(this.getCurrentSchema());
         			sa.setActionType(StressAction.ACTION_TYPE_Delete);
         			sa.setActionCode(StressAction.DELETE_ID_CONST + iA);
         			sa.setTHInfo(new ActionTHElement(StressAction.DELETE_ID_CONST + iA,false,ActionTHElement.SEMAPHORE_NOT_INITIALIZED));
@@ -1113,6 +1167,20 @@ public class Launcher {
 	 */
 	public void setConnProvider(ConnectionProvider connProvider) {
 	    this.connProvider = connProvider;
+	}
+
+	/**
+	 * @return the currentSchema
+	 */
+	public Schema getCurrentSchema() {
+	    return currentSchema;
+	}
+
+	/**
+	 * @param currentSchema the currentSchema to set
+	 */
+	public void setCurrentSchema(Schema currentSchema) {
+	    this.currentSchema = currentSchema;
 	}
 
 		

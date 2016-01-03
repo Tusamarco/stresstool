@@ -4,11 +4,14 @@ import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
 import net.tc.data.db.ConnectionProvider;
+import net.tc.data.db.Schema;
 import net.tc.stresstool.DbType;
 import net.tc.stresstool.StressTool;
 import net.tc.stresstool.config.ConfigurationImplementation;
 import net.tc.stresstool.config.Configurator;
+import net.tc.stresstool.exceptions.StressToolActionException;
 import net.tc.stresstool.exceptions.StressToolConfigurationException;
+import net.tc.stresstool.exceptions.StressToolException;
 import net.tc.stresstool.logs.LogProvider;
 import net.tc.stresstool.statistics.ActionTHElement;
 import net.tc.utils.Utility;
@@ -55,6 +58,9 @@ public class StressActionBase implements StressAction, Runnable {
     private CountDownLatch latch = null;
     private ActionTHElement thInfo = null;
     private ConnectionProvider connProvider = null;
+    private Schema currentSchema = null;
+    private boolean usePrepareStatement=false ;
+    private int lazyLoopCounter = 50;
     
 //    public static String ACTION_TYPE_Select = "Select";
 //    public static String ACTION_TYPE_Insert = "Insert";
@@ -71,7 +77,7 @@ public class StressActionBase implements StressAction, Runnable {
 	 * @see net.tc.stresstool.actions.StressAction#ExecuteAction()
 	 */
     @Override
-	public void ExecuteAction() {
+	public void ExecuteAction() throws StressToolActionException {
     	
     }
 
@@ -542,11 +548,12 @@ public class StressActionBase implements StressAction, Runnable {
         	    	try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).debug(" ==== ACTION "+ this.getTHInfo().getAction() +" Thread internal Id "+ this.getTHInfo().getId() +" running "+ i );}catch(StressToolConfigurationException e){}
         			try {
         			    long startLatency = System.currentTimeMillis();
-        			    /**
-        			     * Db actions
-        			     * Here action specifics may be executed
-        			     */
-        			    ExecuteAction();
+        			    try {
+					ExecuteAction();
+				    } catch (StressToolActionException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				    }
       			    
         			    long endLatency = System.currentTimeMillis();
         			    this.getTHInfo().setLatency(endLatency-startLatency);
@@ -762,6 +769,46 @@ public class StressActionBase implements StressAction, Runnable {
 	 */
 	public void setConnProvider(ConnectionProvider connProvider) {
 	    this.connProvider = connProvider;
+	}
+
+	@Override
+	public Schema getSchema() {
+	    
+	    return this.currentSchema;
+	}
+
+	@Override
+	public void setSchema(Schema currentSchema) {
+	    this.currentSchema = currentSchema;
+	    
+	}
+
+	/**
+	 * @return the usePrepareStatement
+	 */
+	public boolean isUsePrepareStatement() {
+	    return usePrepareStatement;
+	}
+
+	/**
+	 * @param usePrepareStatement the usePrepareStatement to set
+	 */
+	public void setUsePrepareStatement(boolean usePrepareStatement) {
+	    this.usePrepareStatement = usePrepareStatement;
+	}
+
+	/**
+	 * @return the lazyLoopCounter
+	 */
+	public int getLazyLoopCounter() {
+	    return lazyLoopCounter;
+	}
+
+	/**
+	 * @param lazyLoopCounter the lazyLoopCounter to set
+	 */
+	public void setLazyLoopCounter(int lazyLoopCounter) {
+	    this.lazyLoopCounter = lazyLoopCounter;
 	}
 
 }

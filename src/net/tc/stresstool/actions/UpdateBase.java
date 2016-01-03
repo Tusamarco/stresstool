@@ -17,8 +17,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-public class UpdateBase extends StressActionBase implements UpdateAction,
-	CreateAction {
+public class UpdateBase extends StressActionBase implements UpdateAction {
 	
     private int numberOfprimaryTables=1;
     private int numberOfSecondaryTables=0;
@@ -36,52 +35,6 @@ public class UpdateBase extends StressActionBase implements UpdateAction,
 	}
 	public void setJsonFile(String jsonFile) {
 		this.jsonFile = jsonFile;
-	}
-	@Override
-	public void LoadData() {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void TruncateTables(String[] schema) {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void CreateActionTablePrimary() {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void getActionTablePrimary() {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void setActionTablePrimary() {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void getActionTableSecondary() {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void setActionTableSecondary() {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public boolean CreateSchema() {
-	    try {
-		StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION)
-		.error("Table structure Can be create ONLY when using INSERT classes");
-	    } catch (StressToolConfigurationException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	    }
-	    return false;
 	}
 	
 	public boolean  DropSchema(String[] schema) {

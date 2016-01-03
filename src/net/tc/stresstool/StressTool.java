@@ -136,6 +136,13 @@ public class StressTool {
 	         * From configuration and creating a base class that will be use by reflection for creating the pool
 	         * 
 	         */
+
+	        logProvider.getLogger(LogProvider.LOG_APPLICATION).info("Preparing Structure ");
+	        if(launcher.CreateStructure()){
+	            logProvider.getLogger(LogProvider.LOG_APPLICATION).info("Structure DONE ");
+	            
+	        }
+	        
 	        if(launcher.prepareLauncher()){
 	            logProvider.getLogger(LogProvider.LOG_APPLICATION).info("*********************************");
 	            logProvider.getLogger(LogProvider.LOG_APPLICATION).info("Classes sucessfully initialized");
@@ -143,11 +150,6 @@ public class StressTool {
 	            
 	        }
 	        
-	        logProvider.getLogger(LogProvider.LOG_APPLICATION).info("Preparing Structure ");
-	        if(launcher.CreateStructure()){
-	            logProvider.getLogger(LogProvider.LOG_APPLICATION).info("Structure DONE ");
-	            
-	        }
 	        
 	        if((String) config.getConfiguration(Configurator.MAIN_SECTION_NAME, StressTool.class).getParameter("datafilepath").getValue() !=null){
 	           

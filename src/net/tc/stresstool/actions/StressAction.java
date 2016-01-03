@@ -2,12 +2,14 @@ package net.tc.stresstool.actions;
 
 import java.util.Map;
 
+import net.tc.data.db.Schema;
 import net.tc.stresstool.DbType;
 import net.tc.stresstool.config.ConfigurationImplementation;
+import net.tc.stresstool.exceptions.StressToolActionException;
 import net.tc.stresstool.statistics.ActionTHElement;
 
 public interface StressAction {
-	 public static String ACTION_TYPE_Select = "Select";
+	    public static String ACTION_TYPE_Select = "Select";
 	    public static String ACTION_TYPE_Insert = "Insert";
 	    public static String ACTION_TYPE_Update = "Update";
 	    public static String ACTION_TYPE_Delete = "Delete";
@@ -16,13 +18,14 @@ public interface StressAction {
 	    public static String ACTION_TYPE_Truncate = "Truncate";
 	    public static final int INSERT_ID_CONST =1000;
 	    public static final int SELECT_ID_CONST =2000; 
-	    public static final int DELETE_ID_CONST =3000;
-	    public static final int UPDATE_ID_CONST =4000;
+	    public static final int UPDATE_ID_CONST =3000;
+	    public static final int DELETE_ID_CONST =4000;
+	    
 	    
 	/* (non-Javadoc)
 	 * @see net.tc.stresstool.actions.StressAction#ExecuteAction()
 	 */
-	public abstract void ExecuteAction();
+	public abstract void ExecuteAction() throws StressToolActionException;
 
 	/* (non-Javadoc)
 	 * @see net.tc.stresstool.actions.StressAction#getActionStatus()
@@ -342,5 +345,7 @@ public interface StressAction {
 	
 	public abstract void setTHInfo(ActionTHElement thInfo);
 	public abstract ActionTHElement getTHInfo();
+	public abstract Schema getSchema();
+	public abstract void setSchema (Schema currentScema);
 
 }

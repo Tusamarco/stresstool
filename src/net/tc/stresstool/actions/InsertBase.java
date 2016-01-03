@@ -5,26 +5,21 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Map;
-import java.util.ArrayList;
-import java.util.concurrent.CountDownLatch;
 
-import net.tc.data.db.ConnectionProvider;
+import net.tc.data.db.Attribute;
 import net.tc.data.db.Schema;
 import net.tc.data.db.Table;
-import net.tc.jsonparser.*;
+import net.tc.data.generic.DataObject;
+import net.tc.jsonparser.StructureDefinitionParser;
+import net.tc.jsonparser.StructureDefinitionParserMySQL;
 import net.tc.stresstool.StressTool;
-import net.tc.stresstool.config.Configurator;
 import net.tc.stresstool.exceptions.ExceptionMessages;
+import net.tc.stresstool.exceptions.StressToolActionException;
 import net.tc.stresstool.exceptions.StressToolConfigurationException;
-import net.tc.stresstool.exceptions.StressToolSQLException;
 import net.tc.stresstool.logs.LogProvider;
-import net.tc.stresstool.statistics.ActionTHElement;
-import net.tc.stresstool.statistics.providers.MySQLSuper;
 import net.tc.utils.SynchronizedMap;
-import net.tc.utils.Utility;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import org.ini4j.jdk14.edu.emory.mathcs.backport.java.util.Arrays;
 import org.json.simple.parser.JSONParser;
 /**
  * v 1.2
@@ -118,13 +113,14 @@ public class InsertBase extends StressActionBase implements WriteAction,
 	}
 	@SuppressWarnings("finally")
 	@Override
-	public boolean  CreateSchema() {
-		try{
+	public Schema  CreateSchema(boolean createSchema) {
+	    	Schema schema = null;
+	    	try{
 
 			if(this.getJsonFile() == null){
 				StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).warn("Table structure definition from Json file is null for Insert Class");
 				StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).warn("check parameter : jsonfile");
-				return false;
+				return null;
 			}
 
 			StringBuffer sbCreate = new StringBuffer();
@@ -134,7 +130,7 @@ public class InsertBase extends StressActionBase implements WriteAction,
 			JSONParser parser = new JSONParser();
 			StructureDefinitionParser strParser = new StructureDefinitionParserMySQL();
 			FileReader fr = new FileReader(this.getJsonFile());
-			Schema schema = strParser.parseSchema(parser, fr);
+			schema = strParser.parseSchema(parser, fr);
 
 			Map tableInstances = new SynchronizedMap(0);
 			tableInstances.put(Table.TABLE_PARENT, getNumberOfprimaryTables());
@@ -157,7 +153,8 @@ public class InsertBase extends StressActionBase implements WriteAction,
 			 * Once we got the schema from the Json file 
 			 * we will create it exploding the tables as indicate from the multiple attribute
 			 */
-			if(schema != null){
+			if(schema != null 
+				&& createSchema){
 			    sbCreate.append(schema.deploySchema((Map)tableInstances));
 			    try{StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).debug("Schema Definition SQL = [\n" + sbCreate.toString() + "\n ]"  );}catch(StressToolConfigurationException e){}
 			    try {
@@ -189,7 +186,7 @@ public class InsertBase extends StressActionBase implements WriteAction,
 		
 		}
 		finally{
-		    return true;
+		    return schema;
 		}
 
 		
@@ -330,18 +327,142 @@ public class InsertBase extends StressActionBase implements WriteAction,
 	
 	/**
 	 * this is actually executing what the action is suppose to do
+	 * @throws StressToolActionException 
 	 */
 	@Override
-	public void ExecuteAction() {
+	public void ExecuteAction() throws StressToolActionException {
         	/**
         	 * Db actions
         	 */
-        	try {
-		    Thread.sleep(Utility.getNumberFromRandomMinMax(1, 50));
-		} catch (InterruptedException e) {
-		    // TODO Auto-generated catch block
-		    e.printStackTrace();
-		}
+	    /**
+	     * Initialize the DataObject representing the SQL action
+	     */
+	    DataObject thisSQLObject = new DataObject();
+	     
+	    thisSQLObject =  inizializeDataObject(thisSQLObject);
+	    thisSQLObject.isInizialized();
+	     
 	}
+	public DataObject inizializeDataObject(DataObject thisSQLObject)
+		throws StressToolActionException {
+	     thisSQLObject.setSqlType(DataObject.SQL_CREATE);
+	     thisSQLObject.setBatchLoopLimit(this.getBatchSize());
+	     thisSQLObject.setLazy(this.lazyCreation);
+	     thisSQLObject.setLazyInterval(lazyInterval);
+	     
+	     String onDuplicateKey = null;
+	     String filter =null;
+	     String sqlTemplate = DataObject.SQL_INSERT_TEMPLATE;
+
+	     
+	     /**
+	      * navigate the schema object for tables
+	      * then use each table to retrieve the list of attributes
+	      * if a filter exists then it is apply and only the attributes matching it are evaluated
+	      * on the base of the list of attributes retrieved the value for each will be generated
+	      * 
+	      * If batch insert is active the list of values will be product on that base
+	      * Also lazy insert may be activated, as such the value creation for some fields will have repeated value.
+	      * 
+	      * From lazy insert PK UK TIMESTAMP are excluded, all of them always contains new values.
+	      */
+	     
+	     thisSQLObject.setTables((Table[])getTables());
+	     
+	     StringBuffer sbTables = new StringBuffer();
+	     StringBuffer sbAttribs = new StringBuffer();
+	     StringBuffer sbValues = new StringBuffer();
+	     
+	     
+	     sbValues.append("(");
+	     
+	     for(Object table:thisSQLObject.getTables()){
+		 if(sbTables.length()> 0 )
+		     sbTables.append(",");
+		
+		    sbTables.append(((Table)table).getName());
+        
+        	    thisSQLObject.setAttribs(getAttribs((Table) table, filter));
+        	    
+    		for (int iAttrib = 0; iAttrib < thisSQLObject.getAttribs().length; iAttrib++) {
+		    if (iAttrib > 0)
+			sbAttribs.append(",");
+			
+		    sbAttribs.append(((Attribute) thisSQLObject.getAttribs()[iAttrib]).getName());
+		}
+
+        	    
+//        	    sbAttribs.append("(");
+//        	    for (thisSQLObject.setCurrentBatchLoop(0); 
+//        		    thisSQLObject.getCurrentBatchLoop() <= thisSQLObject.getBatchLoopLimit(); 
+//        		    thisSQLObject.setBatchLoopLimit(thisSQLObject.getCurrentBatchLoop()+ 1)
+//        		    ) {
+//        		if (thisSQLObject.getCurrentBatchLoop() > 0)
+//        		    sbValues.append(",");
+//        
+//        		sbValues.append("(");
+//        
+//        		sbValues.append(")");
+//        	    }     
+//        	    sbAttribs.append(")");
+	     }
+//	     sbValues.append(")");
+//	     "INSERT INTO #TABLE# (#ATTRIBS#) VALUES (#VALUES#) #ON DUPLICATE KEY#" ;
+	     
+	     if(sbTables != null && sbTables.length() > 0){
+		 	sqlTemplate.replace("#TABLE#", sbTables.toString());
+	     }
+	     else{
+		 throw new StressToolActionException("INSERT SQL SYNTAX ISSUE table name null");
+	     }
+	     
+	     if(sbValues !=null && sbValues.length() > 0){
+		 	sqlTemplate.replace("#ATTRIBS#", sbValues.toString());
+	     }else{
+		 throw new StressToolActionException("INSERT SQL SYNTAX ISSUE attribs names not valid or Null");
+	     }
+	     
+//	     if(sbValues !=null && sbValues.length()> 0){
+//		 	sqlTemplate.replace("#VALUES#", sbValues.toString());
+//	     }else{
+//		 throw new StressToolActionException("INSERT SQL SYNTAX ISSUE values not valid or Null");
+//	     }
+	     
+	     if(onDuplicateKey == null){
+		 	sqlTemplate.replace("#ON DUPLICATE KEY#","");
+	     }else{
+		 sqlTemplate.replace("#ON DUPLICATE KEY#",onDuplicateKey);
+	     }
+	     
+	     
+//	     thisSQLObject.setSQL(sqlTemplate);
+	     thisSQLObject.setInizialized(true);
+	     return thisSQLObject;
+	}
+	private String getValues(Attribute attribute) {
+	    // TODO Auto-generated method stub
+	    return null;
+	}
+	private Attribute[] getAttribs(Table table,String filter) {
+	    // TODO Auto-generated method stub
+	   if(table != null 
+		   && table.getMetaAttributes()!=null
+		   && table.getMetaAttributes().size() >0 ){
+	       return (Attribute[]) table.getMetaAttributes().values().toArray(new Attribute[table.getMetaAttributes().size()]);
+	   }
+	    
+	    return null;
+	}
+	private Object[] getTables() {
+	    if(getSchema() !=null 
+		   && getSchema().getTables() != null){
+		
+		return (Table[]) getSchema().getTables().values().toArray(new Table[getSchema().getTables().size()]);
+	    }
+	    
+	    return null;
+	}
+	
+	
 
 }
