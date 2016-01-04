@@ -1,24 +1,35 @@
 package net.tc.data.generic;
 
-import net.tc.utils.SynchronizedMap;
+import java.util.ArrayList;
+
+import net.tc.data.db.Table;
+
 
 public class SQLObject {
-    SynchronizedMap SQLCommands = null;
+    ArrayList SQLCommands = new ArrayList();
     int SQLCOmmandType = 0;
     boolean isBatched = false;
     boolean isPreparedStatment = false;
+    ArrayList sourceTables = new ArrayList();
     /**
      * @return the sQLCommands
      */
-    public SynchronizedMap getSQLCommands() {
+    public ArrayList getSQLCommands() {
         return SQLCommands;
     }
     /**
      * @param sQLCommands the sQLCommands to set
      */
-    public void setSQLCommands(SynchronizedMap sQLCommands) {
+    public void setSQLCommands(ArrayList sQLCommands) {
         SQLCommands = sQLCommands;
     }
+    /**
+     * @param sQLCommands the sQLCommands to set
+     */
+    public void setSQLSingleCommand(String SQLCommand) {
+        SQLCommands.add(SQLCommand);
+    }
+    
     /**
      * @return the sQLCOmmandType
      */
@@ -54,6 +65,22 @@ public class SQLObject {
      */
     public void setPreparedStatment(boolean isPreparedStatment) {
         this.isPreparedStatment = isPreparedStatment;
+    }
+    /**
+     * @return the sourceTables
+     */
+    public ArrayList getSourceTables() {
+        return sourceTables;
+    }
+    /**
+     * @param sourceTables the sourceTables to set
+     */
+    public void setSourceTables(ArrayList sourceTables) {
+        this.sourceTables = sourceTables;
+    }
+    
+    public void addSourceTables(Table table) {
+        this.sourceTables.add(table);
     }
     
     

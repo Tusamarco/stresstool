@@ -10,6 +10,7 @@ import net.tc.data.db.Attribute;
 import net.tc.data.db.Schema;
 import net.tc.data.db.Table;
 import net.tc.data.generic.DataObject;
+import net.tc.data.generic.SQLObject;
 import net.tc.jsonparser.StructureDefinitionParser;
 import net.tc.jsonparser.StructureDefinitionParserMySQL;
 import net.tc.stresstool.StressTool;
@@ -341,104 +342,148 @@ public class InsertBase extends StressActionBase implements WriteAction,
 	     
 	    thisSQLObject =  inizializeDataObject(thisSQLObject);
 	    thisSQLObject.isInizialized();
+	  // TODO I am here need to do the value generation using the Sql object and the Data Object  
+	    
 	     
 	}
-	public DataObject inizializeDataObject(DataObject thisSQLObject)
-		throws StressToolActionException {
-	     thisSQLObject.setSqlType(DataObject.SQL_CREATE);
-	     thisSQLObject.setBatchLoopLimit(this.getBatchSize());
-	     thisSQLObject.setLazy(this.lazyCreation);
-	     thisSQLObject.setLazyInterval(lazyInterval);
-	     
-	     String onDuplicateKey = null;
-	     String filter =null;
-	     String sqlTemplate = DataObject.SQL_INSERT_TEMPLATE;
 
-	     
-	     /**
-	      * navigate the schema object for tables
-	      * then use each table to retrieve the list of attributes
-	      * if a filter exists then it is apply and only the attributes matching it are evaluated
-	      * on the base of the list of attributes retrieved the value for each will be generated
-	      * 
-	      * If batch insert is active the list of values will be product on that base
-	      * Also lazy insert may be activated, as such the value creation for some fields will have repeated value.
-	      * 
-	      * From lazy insert PK UK TIMESTAMP are excluded, all of them always contains new values.
-	      */
-	     
-	     thisSQLObject.setTables((Table[])getTables());
-	     
-	     StringBuffer sbTables = new StringBuffer();
-	     StringBuffer sbAttribs = new StringBuffer();
-	     StringBuffer sbValues = new StringBuffer();
-	     
-	     
-	     sbValues.append("(");
-	     
-	     for(Object table:thisSQLObject.getTables()){
-		 if(sbTables.length()> 0 )
-		     sbTables.append(",");
-		
-		    sbTables.append(((Table)table).getName());
+    public DataObject inizializeDataObject(DataObject thisSQLObject)
+	    throws StressToolActionException {
+	thisSQLObject.setSqlType(DataObject.SQL_CREATE);
+	thisSQLObject.setBatchLoopLimit(this.getBatchSize());
+	thisSQLObject.setLazy(this.lazyCreation);
+	thisSQLObject.setLazyInterval(lazyInterval);
+
+	String onDuplicateKey = null;
+	String filter = null;
+	String sqlTemplate = DataObject.SQL_INSERT_TEMPLATE;
+	SynchronizedMap SQLObjectContainer = new SynchronizedMap();
+
+	/**
+	 * navigate the schema object for tables then use each table to retrieve
+	 * the list of attributes if a filter exists then it is apply and only
+	 * the attributes matching it are evaluated on the base of the list of
+	 * attributes retrieved the value for each will be generated
+	 * 
+	 * If batch insert is active the list of values will be product on that
+	 * base Also lazy insert may be activated, as such the value creation
+	 * for some fields will have repeated value.
+	 * 
+	 * From lazy insert PK UK TIMESTAMP are excluded, all of them always
+	 * contains new values.
+	 */
+
+	thisSQLObject.setTables((Table[]) getTables());
+
+//	StringBuffer sbTables = new StringBuffer();
+	StringBuffer sbAttribs = new StringBuffer();
+	StringBuffer sbValues = new StringBuffer();
+
+	sbValues.append("(");
+
+	for (Object table : thisSQLObject.getTables()) {
+	    if(sbAttribs.length() > 0) sbAttribs.delete(0, sbAttribs.length() - 1);
+
+	    int iNumTables = 0;
+
+	    thisSQLObject.setAttribs(getAttribs((Table) table, filter));
+
+	    for (int iAttrib = 0; iAttrib < thisSQLObject.getAttribs().length; iAttrib++) {
+		if (iAttrib > 0)
+		    sbAttribs.append(",");
+
+		sbAttribs
+			.append(((Attribute) thisSQLObject.getAttribs()[iAttrib])
+				.getName());
+	    }
+
+	    if (((Table) table).getParentTable() == null) {
+		iNumTables = this.getNumberOfprimaryTables();
+	    } else {
+		iNumTables = this.getNumberOfSecondaryTables();
+	    }
+
+	    // sbValues.append(")");
+	    // "INSERT INTO #TABLE# (#ATTRIBS#) VALUES (#VALUES#) #ON DUPLICATE KEY#"
+	    // ;
+	    if(((Table)table).isMultiple()){
+        	    for (int iNtables = 1; iNtables <= iNumTables; iNtables++) {
+        		SQLObject lSQLObj = new SQLObject();
+        		lSQLObj.setBatched(this.getBatchSize() > 1 ? true : false);
+        		lSQLObj.setPreparedStatment(false);
+        		lSQLObj.setSQLCOmmandType(DataObject.SQL_CREATE);
+        		lSQLObj.addSourceTables((Table)table);
         
-        	    thisSQLObject.setAttribs(getAttribs((Table) table, filter));
-        	    
-    		for (int iAttrib = 0; iAttrib < thisSQLObject.getAttribs().length; iAttrib++) {
-		    if (iAttrib > 0)
-			sbAttribs.append(",");
-			
-		    sbAttribs.append(((Attribute) thisSQLObject.getAttribs()[iAttrib]).getName());
+        		String localSQLTemplate = sqlTemplate;
+        		if (((Table) table).getName() != null && ((Table) table).getName().length() > 0) {
+        		    localSQLTemplate = localSQLTemplate.replace("#TABLE#", ((Table) table).getName() + iNtables);
+        		} else {
+        		    throw new StressToolActionException(
+        			    "INSERT SQL SYNTAX ISSUE table name null");
+        		}
+        
+        		if (sbAttribs != null && sbAttribs.length() > 0) {
+        		    localSQLTemplate = localSQLTemplate.replace("#ATTRIBS#", sbAttribs.toString());
+        		} else {
+        		    throw new StressToolActionException(
+        			    "INSERT SQL SYNTAX ISSUE attribs names not valid or Null");
+        		}
+        		if (onDuplicateKey == null) {
+        		    localSQLTemplate = localSQLTemplate.replace("#ON DUPLICATE KEY#", "");
+        		} else {
+        		    localSQLTemplate = localSQLTemplate.replace("#ON DUPLICATE KEY#", onDuplicateKey);
+        		}
+        
+        		lSQLObj.setSQLSingleCommand(localSQLTemplate);
+        		SQLObjectContainer.put(((Table) table).getName()+ iNtables, lSQLObj);
+        
+        	    }
+	    }
+	    else{
+		SQLObject lSQLObj = new SQLObject();
+		lSQLObj.setBatched(this.getBatchSize() > 1 ? true : false);
+		lSQLObj.setPreparedStatment(false);
+		lSQLObj.setSQLCOmmandType(DataObject.SQL_CREATE);
+		lSQLObj.addSourceTables((Table)table);
+		
+		String localSQLTemplate = sqlTemplate;
+		if (((Table) table).getName() != null && ((Table) table).getName().length() > 0) {
+		    localSQLTemplate = localSQLTemplate.replace("#TABLE#", ((Table) table).getName());
+		} else {
+		    throw new StressToolActionException(
+			    "INSERT SQL SYNTAX ISSUE table name null");
 		}
 
-        	    
-//        	    sbAttribs.append("(");
-//        	    for (thisSQLObject.setCurrentBatchLoop(0); 
-//        		    thisSQLObject.getCurrentBatchLoop() <= thisSQLObject.getBatchLoopLimit(); 
-//        		    thisSQLObject.setBatchLoopLimit(thisSQLObject.getCurrentBatchLoop()+ 1)
-//        		    ) {
-//        		if (thisSQLObject.getCurrentBatchLoop() > 0)
-//        		    sbValues.append(",");
-//        
-//        		sbValues.append("(");
-//        
-//        		sbValues.append(")");
-//        	    }     
-//        	    sbAttribs.append(")");
-	     }
-//	     sbValues.append(")");
-//	     "INSERT INTO #TABLE# (#ATTRIBS#) VALUES (#VALUES#) #ON DUPLICATE KEY#" ;
-	     
-	     if(sbTables != null && sbTables.length() > 0){
-		 	sqlTemplate.replace("#TABLE#", sbTables.toString());
-	     }
-	     else{
-		 throw new StressToolActionException("INSERT SQL SYNTAX ISSUE table name null");
-	     }
-	     
-	     if(sbValues !=null && sbValues.length() > 0){
-		 	sqlTemplate.replace("#ATTRIBS#", sbValues.toString());
-	     }else{
-		 throw new StressToolActionException("INSERT SQL SYNTAX ISSUE attribs names not valid or Null");
-	     }
-	     
-//	     if(sbValues !=null && sbValues.length()> 0){
-//		 	sqlTemplate.replace("#VALUES#", sbValues.toString());
-//	     }else{
-//		 throw new StressToolActionException("INSERT SQL SYNTAX ISSUE values not valid or Null");
-//	     }
-	     
-	     if(onDuplicateKey == null){
-		 	sqlTemplate.replace("#ON DUPLICATE KEY#","");
-	     }else{
-		 sqlTemplate.replace("#ON DUPLICATE KEY#",onDuplicateKey);
-	     }
-	     
-	     
-//	     thisSQLObject.setSQL(sqlTemplate);
-	     thisSQLObject.setInizialized(true);
-	     return thisSQLObject;
+		if (sbAttribs != null && sbAttribs.length() > 0) {
+		    localSQLTemplate = localSQLTemplate.replace("#ATTRIBS#", sbAttribs.toString());
+		} else {
+		    throw new StressToolActionException(
+			    "INSERT SQL SYNTAX ISSUE attribs names not valid or Null");
+		}
+		if (onDuplicateKey == null) {
+		    localSQLTemplate = localSQLTemplate.replace("#ON DUPLICATE KEY#", "");
+		} else {
+		    localSQLTemplate = localSQLTemplate.replace("#ON DUPLICATE KEY#", onDuplicateKey);
+		}
+
+		lSQLObj.setSQLSingleCommand(localSQLTemplate);
+		SQLObjectContainer.put(((Table) table).getName(), lSQLObj);
+		
+	    }
+		
+	    
 	}
+	// if(sbValues !=null && sbValues.length()> 0){
+	// sqlTemplate.replace("#VALUES#", sbValues.toString());
+	// }else{
+	// throw new
+	// StressToolActionException("INSERT SQL SYNTAX ISSUE values not valid or Null");
+	// }
+
+	thisSQLObject.setSQL(SQLObjectContainer);
+	thisSQLObject.setInizialized(true);
+	return thisSQLObject;
+    }
 	private String getValues(Attribute attribute) {
 	    // TODO Auto-generated method stub
 	    return null;

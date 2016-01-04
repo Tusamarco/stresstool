@@ -96,8 +96,8 @@ SleepSelect=0
 
 [net.tc.stresstool.actions.InsertBase]
 usePrepareStatement=false
-numberOfprimaryTables=1
-numberOfSecondaryTables=1
+numberOfprimaryTables=5
+numberOfSecondaryTables=3
 useAutoIncrement=true
 joinField=a
 sleepWrite=1

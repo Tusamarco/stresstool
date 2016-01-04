@@ -29,7 +29,7 @@ public class DataObject extends MultiLanguage
     private boolean isLazy = false;
     private int lazyInterval = 0;
     private int sqlType = 0;
-    private SQLObject SQLContainer = null;
+    private SynchronizedMap SQLContainer = null;
     
 	public DataObject()
 	{
@@ -171,18 +171,15 @@ public class DataObject extends MultiLanguage
 	/**
 	 * @return the sQL
 	 */
-	public SQLObject getSQL() {
+	public SynchronizedMap getSQL() {
 	    return SQLContainer;
 	}
 
 	/**
 	 * Initialize and set the SQL Object
 	 */
-	public boolean setSQL(SQLObject SQLContainer) {
-	    SQLContainer = new SQLObject();
-	    
-	    return false;
-	    
+	public void setSQL(SynchronizedMap SQLContainer) {
+	    this.SQLContainer = SQLContainer;
 	}
 	public int[] executeSqlObject(Connection conn){
 	    
