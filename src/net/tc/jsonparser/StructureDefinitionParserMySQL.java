@@ -75,6 +75,8 @@ public class StructureDefinitionParserMySQL implements
 				 */
 				JSONArray arTable = (JSONArray)tables.get("table");
 				for(Object o: arTable){
+				    	ArrayList attribsWIthIndex = new ArrayList(); 
+				    	
 					JSONObject oTable = (JSONObject) o;
 					Table table = new Table();
 					table.setName((String)oTable.get("tablename"));
@@ -112,6 +114,7 @@ public class StructureDefinitionParserMySQL implements
 						    idx.setName((String)oPK);
 						    idx.setTableName(table.getName());
 						    indexMap.put(idx.getName(), idx);
+						    attribsWIthIndex.add(idx.getName());
 						}
 					    primaryKey.setIndexes(indexMap);
 					    table.setPrimaryKey(primaryKey);
@@ -119,45 +122,6 @@ public class StructureDefinitionParserMySQL implements
 					StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).debug("Parsing Json definition for table = " + dbName+"." + table.getName()
 					+ " Primary Key = " + Arrays.toString(table.getPrimaryKey().getIndexes().getKeyasOrderedStringArray()));
 
-					/***
-					 * Parse Attributes 
-					 */
-					table.setMetaAttributes(new SynchronizedMap(0));
-					JSONObject attributes = (JSONObject)oTable.get("attributes");
-					JSONArray arAttributes = (JSONArray)attributes.get("attribute");
-					/*
-					 * Loading attributes from Json file
-					 */
-					for(Object oa: arAttributes){
-						JSONObject oAttribute = (JSONObject) oa;
-						Attribute attribute = new Attribute();
-						attribute.setName((String)oAttribute.get("name"));
-
-						StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).debug("Parsing Json definition for attribute = " 
-						+ dbName +"." 
-						+ table.getName() + "." 
-						+ attribute.getName());
-						
-						attribute.setDataType((String)oAttribute.get("datatype"));
-						attribute.setDataDimension((String)oAttribute.get("datadimension")!= null?Integer.parseInt((String)oAttribute.get("datadimension")):0);
-						attribute.setAutoIncrement(oAttribute.get("autoincrement")!= null?true:false);
-						if(oAttribute.get("default") != null 
-								&& !((String)oAttribute.get("default")).equals("")){
-								attribute.setDefaultValue((String)oAttribute.get("default"));
-						}
-						else{
-							attribute.setDefaultValue(null);
-						}
-						attribute.setOnUpdate((String)oAttribute.get("onUpdate")!= null?(String)oAttribute.get("onUpdate"):null);
-						if(oAttribute.get("null") != null
-								&& (oAttribute.get("null")).equals("false")){
-							attribute.setNull(true);
-						}
-						else
-							attribute.setNull(false);
-						
-						table.setMetaAttribute(attribute);
-					}
 					
 					
 
@@ -184,6 +148,7 @@ public class StructureDefinitionParserMySQL implements
 							ArrayList arColKey = new ArrayList();
 							for(Object oColDef: arCollDef){
 							    arColKey.add(oColDef);
+							    attribsWIthIndex.add((String)oColDef);
 							}
 							StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).debug("Parsing Json definition for Key = " 
 								+ dbName +"." 
@@ -194,6 +159,52 @@ public class StructureDefinitionParserMySQL implements
 							table.setIndex(index);
 						}
 					}
+
+					/***
+					 * Parse Attributes 
+					 */
+					table.setMetaAttributes(new SynchronizedMap(0));
+					JSONObject attributes = (JSONObject)oTable.get("attributes");
+					JSONArray arAttributes = (JSONArray)attributes.get("attribute");
+					/*
+					 * Loading attributes from Json file
+					 */
+					for(Object oa: arAttributes){
+						JSONObject oAttribute = (JSONObject) oa;
+						Attribute attribute = new Attribute();
+						attribute.setName((String)oAttribute.get("name"));
+
+						StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).debug("Parsing Json definition for attribute = " 
+						+ dbName +"." 
+						+ table.getName() + "." 
+						+ attribute.getName());
+						if(attribsWIthIndex.contains(attribute.getName()))
+						    attribute.setHasIndex(true);
+						attribute.setDataType((String)oAttribute.get("datatype"));
+						attribute.setDataDimension((String)oAttribute.get("datadimension")!= null?Integer.parseInt((String)oAttribute.get("datadimension")):0);
+						attribute.setAutoIncrement(oAttribute.get("autoincrement")!= null?true:false);
+						if(oAttribute.get("default") != null 
+								&& !((String)oAttribute.get("default")).equals("")){
+								attribute.setDefaultValue((String)oAttribute.get("default"));
+						}
+						else{
+							attribute.setDefaultValue(null);
+						}
+						attribute.setOnUpdate((String)oAttribute.get("onUpdate")!= null?(String)oAttribute.get("onUpdate"):null);
+						if(oAttribute.get("null") != null
+								&& (oAttribute.get("null")).equals("false")){
+							attribute.setNull(true);
+						}
+						else
+							attribute.setNull(false);
+						
+						table.setMetaAttribute(attribute);
+					}
+
+					
+					
+					
+					
 					/**
 					 * Parse the Partitioning
 					 * 

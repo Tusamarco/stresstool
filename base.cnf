@@ -12,7 +12,7 @@ stikyconnection=false
 
 
 FKEnable=false
-createTable=true 
+createTable=false 
 dbType=MySQL 
 doDelete=false 
 doBatch=30
@@ -24,14 +24,14 @@ ignoreBinlog=false
 operationShort=true  
 poolNumber=1
 pctInsert=100
-pctUpdate=100 
-pctSelect=100 
-pctDelete=100 
+pctUpdate=0 
+pctSelect=0 
+pctDelete=0 
 repeatNumber=1000
 HardStopLimit=100
-UseHardStop=true
+UseHardStop=false
 StatIntervalMs=1000
-StatLoops = 20
+StatLoops = 20000
 SemaphoreCountdownTime = 1
 # table engine comma separated with % value; 
 TableEngine=InnoDB|60,MyISAM|40
@@ -77,11 +77,13 @@ processaverage=true
 
 [net.tc.stresstool.actions.DeleteBase] 
 sleepDelete=0 
+usePrepareStatement=false
 
 [net.tc.stresstool.actions.SelectBase]
 #for consistency the number of tables should never be higher than the ones declared in the Insert class
 #numberOfprimaryTables=10
 #numberOfSecondaryTables=8
+usePrepareStatement=false
 NumberOfJoinTables=2
 JoinField=a
 ForceIndex=true
@@ -93,8 +95,9 @@ SleepSelect=0
 
 
 [net.tc.stresstool.actions.InsertBase]
-numberOfprimaryTables=1
-numberOfSecondaryTables=1
+usePrepareStatement=false
+numberOfprimaryTables=5
+numberOfSecondaryTables=3
 useAutoIncrement=true
 joinField=a
 sleepWrite=1
@@ -105,6 +108,7 @@ jsonFile=/Users/marcotusa/programs/JBuilder/workspace/stresstool/json_definition
 
 
 [net.tc.stresstool.actions.UpdateBase]
+usePrepareStatement=false
 delayStartRecords = 1000
 #numberOfprimaryTables=1
 #numberOfSecondaryTables=

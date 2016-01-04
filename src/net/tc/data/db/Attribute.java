@@ -16,6 +16,8 @@ public class Attribute {
 	private int indexOrder = 0;
 	private Object value = null;
 	private int storageSize = 0 ; //size in bytes
+	private boolean isLazy = false ; 
+	
     private boolean isNull = true;
     
 	public boolean isNull() {
@@ -89,6 +91,18 @@ public class Attribute {
 	}
 	public void setStorageSize(int storageSize) {
 		this.storageSize = storageSize;
+	}
+	/**
+	 * @return the isLazy
+	 */
+	public boolean isLazy() {
+	    return isLazy;
+	}
+	/**
+	 * @param isLazy the isLazy to set
+	 */
+	public void setLazy(boolean isLazy) {
+	    this.isLazy = isLazy;
 	}
 	
 }
