@@ -536,6 +536,10 @@ public class StressActionBase implements StressAction, Runnable {
     @Override
 	public void run() {
         	try {
+        		
+        		if (!ExecutePreliminaryAction())
+        			 new StressToolException("Action failed to initialize");
+        		
         	    latch.await();
         	    /**
         	     * run action loop here
@@ -580,7 +584,10 @@ public class StressActionBase implements StressAction, Runnable {
         	} catch (InterruptedException e) {
         	    // TODO Auto-generated catch block
         	    e.printStackTrace();
-        	} 
+        	} catch (StressToolActionException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} 
         	
         	    
 	
@@ -809,6 +816,12 @@ public class StressActionBase implements StressAction, Runnable {
 	 */
 	public void setLazyLoopCounter(int lazyLoopCounter) {
 	    this.lazyLoopCounter = lazyLoopCounter;
+	}
+
+	@Override
+	public boolean ExecutePreliminaryAction() throws StressToolActionException {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

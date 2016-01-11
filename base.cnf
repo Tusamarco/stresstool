@@ -1,6 +1,7 @@
 [main]
 #connection oriented settings
-connUrl=jdbc:mysql://192.168.0.3:3306
+#connUrl=jdbc:mysql://192.168.0.3:3306
+connUrl=jdbc:mysql://127.0.0.1:3306
 database=test
 user=stress	
 password=tool
@@ -15,7 +16,6 @@ FKEnable=false
 createTable=false 
 dbType=MySQL 
 doDelete=false 
-doBatch=30
 doReport=true 
 doSimple=false 
 doSimplePk=false 

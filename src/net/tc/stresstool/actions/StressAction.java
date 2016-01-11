@@ -27,6 +27,14 @@ public interface StressAction {
 	 */
 	public abstract void ExecuteAction() throws StressToolActionException;
 
+	/**
+	 * Allow to execute an action ONCE and before the loop starts to prepare whatever set is require
+	 * during the loop
+	 * @return
+	 * @throws StressToolActionException
+	 */
+	public abstract boolean ExecutePreliminaryAction()  throws StressToolActionException;
+	
 	/* (non-Javadoc)
 	 * @see net.tc.stresstool.actions.StressAction#getActionStatus()
 	 */
