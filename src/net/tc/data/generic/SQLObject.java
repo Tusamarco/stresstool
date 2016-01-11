@@ -12,6 +12,7 @@ public class SQLObject {
     boolean isPreparedStatment = false;
     int lazyExecCount = 0;
     String sqlLocalTemplate = null;
+    boolean inizialized = false;
     
     ArrayList sourceTables = new ArrayList();
     /**
@@ -106,5 +107,11 @@ public class SQLObject {
     	
     	return true;
     }
+	public synchronized boolean isInizialized() {
+		return inizialized;
+	}
+	public synchronized void setInizialized(boolean inizialized) {
+		this.inizialized = inizialized;
+	}
     
 }
