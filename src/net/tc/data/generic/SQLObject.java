@@ -104,7 +104,7 @@ public class SQLObject {
 	 * @return
 	 */
     public boolean getValues(){
-    	
+    
     	return true;
     }
 	public synchronized boolean isInizialized() {
