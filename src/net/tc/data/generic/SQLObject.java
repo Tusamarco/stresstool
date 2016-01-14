@@ -2,7 +2,8 @@ package net.tc.data.generic;
 
 import java.util.ArrayList;
 
-import net.tc.data.db.Table;
+import net.tc.data.db.*;
+import net.tc.utils.SynchronizedMap;
 
 
 public class SQLObject {
@@ -104,7 +105,14 @@ public class SQLObject {
 	 * @return
 	 */
     public boolean getValues(){
-    
+	for (Object table:this.getSourceTables()){
+	     SynchronizedMap Attribs = ((Table) table).getMetaAttributes();
+	     for (Object attrib:Attribs.getValuesAsArrayOrderByKey()){
+		 System.out.println(((Attribute)attrib).getDataType());
+		 // TODO !!!HERE!!!
+		 
+	     }
+	}
     	return true;
     }
 	public synchronized boolean isInizialized() {
