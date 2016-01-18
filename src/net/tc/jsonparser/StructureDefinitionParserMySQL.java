@@ -23,7 +23,7 @@ public class StructureDefinitionParserMySQL implements
 	 * @see net.tc.jsonparser.StructureDefinitionParser#parseSchema(org.json.simple.parser.JSONParser, java.io.FileReader)
 	 */
 	@Override
-	public Schema parseSchema(JSONParser parser,FileReader fr) {
+	public Schema parseSchema(JSONParser parser,FileReader fr,Map tableInstances) {
 		// TODO Auto-generated method stub
 		
 		try{
@@ -180,7 +180,7 @@ public class StructureDefinitionParserMySQL implements
 						+ attribute.getName());
 						if(attribsWIthIndex.contains(attribute.getName()))
 						    attribute.setHasIndex(true);
-						attribute.setDataType((String)oAttribute.get("datatype"));
+						attribute.setDataType(new DataType(DataType.getDataTypeIdentifierByString((String)oAttribute.get("datatype"))));
 						attribute.setDataDimension((String)oAttribute.get("datadimension")!= null?Integer.parseInt((String)oAttribute.get("datadimension")):0);
 						attribute.setAutoIncrement(oAttribute.get("autoincrement")!= null?true:false);
 						if(oAttribute.get("default") != null 
@@ -287,7 +287,7 @@ public class StructureDefinitionParserMySQL implements
 					StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).debug("--------------------------------------");
 					schema.setTable(table);
 				}
-				return schema;
+				return schema.explodeTables(tableInstances);
 				
 			}
 //			else{

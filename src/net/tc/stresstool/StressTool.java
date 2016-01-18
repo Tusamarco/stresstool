@@ -91,7 +91,7 @@ public class StressTool {
 	 * @uml.property  name="connectionInformation"
 	 */
 	private Map connectionInformation;
-	private ValueProvider valueProvider = null;
+	private static ValueProvider valueProvider = null;
 	
 	public StressTool(String[] args) {
         try {
@@ -665,5 +665,27 @@ public class StressTool {
 	 */
 	public static void setStressToolRunning(boolean stressToolRunning) {
 	    StressToolRunning = stressToolRunning;
+	}
+
+
+
+
+
+	/**
+	 * @return the valueProvider
+	 */
+	public static ValueProvider getValueProvider() {
+	    return valueProvider;
+	}
+
+
+
+
+
+	/**
+	 * @param valueProvider the valueProvider to set
+	 */
+	public static void setValueProvider(ValueProvider valueProvider) {
+	    StressTool.valueProvider = valueProvider;
 	}
 }

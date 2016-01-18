@@ -5,7 +5,7 @@ package net.tc.stresstool.value;
 
 import java.lang.ref.SoftReference;
 import java.util.Arrays;
-
+import net.tc.data.db.DataType;
 import net.tc.utils.Utility;
 import net.tc.utils.file.FileHandler;
 
@@ -155,5 +155,10 @@ public class BasicFileValueProvider implements ValueProvider {
         this.txtFile = txtFile;
     }
     
+    public Object provideValue(DataType dataType, int length){
+	
+	return null;
+	
+    }
 
 }

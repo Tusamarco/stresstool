@@ -6,7 +6,7 @@ import net.tc.utils.SynchronizedMap;
 
 public class Attribute {
 	private String name = null;
-	private String dataType = null;
+	private DataType dataType = null;
 	private int dataDimension = 0;
 	private boolean autoIncrement = false;
 	private String defaultValue = null;
@@ -16,7 +16,7 @@ public class Attribute {
 	private int indexOrder = 0;
 	private Object value = null;
 	private int storageSize = 0 ; //size in bytes
-	private boolean isLazy = false ; 
+	private boolean isLazy = true ; 
 	
     private boolean isNull = true;
     
@@ -32,10 +32,10 @@ public class Attribute {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getDataType() {
+	public DataType getDataType() {
 		return dataType;
 	}
-	public void setDataType(String dataType) {
+	public void setDataType(DataType dataType) {
 		this.dataType = dataType;
 	}
 	public int getDataDimension() {

@@ -3,6 +3,9 @@ package net.tc.data.generic;
 import java.util.ArrayList;
 
 import net.tc.data.db.*;
+import net.tc.stresstool.StressTool;
+import net.tc.stresstool.exceptions.StressToolConfigurationException;
+import net.tc.stresstool.logs.LogProvider;
 import net.tc.utils.SynchronizedMap;
 
 
@@ -107,11 +110,22 @@ public class SQLObject {
     public boolean getValues(){
 	for (Object table:this.getSourceTables()){
 	     SynchronizedMap Attribs = ((Table) table).getMetaAttributes();
+  	     try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).debug("========================== Processing Table " + ((Table) table).getName() + " ================ [Start]");}catch(StressToolConfigurationException e){}
+		 
 	     for (Object attrib:Attribs.getValuesAsArrayOrderByKey()){
-		 System.out.println(((Attribute)attrib).getDataType());
+		 try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).debug("Filling Attribute " 
+			 	+ ((Attribute)attrib).getName() 
+			 	+ " DataType: " + DataType.getDataTypeStringByIdentifier(((Attribute)attrib).getDataType().getDataTypeId())
+			 	+ " Value : xx" 
+			 	+ " Lazy = " + ((Attribute)attrib).isLazy()
+			 	);}
+		 catch(StressToolConfigurationException e){}
 		 // TODO !!!HERE!!!
 		 
+		 StressTool.getValueProvider().getRandomLong(1, 2);
+		 
 	     }
+	     try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).debug("========================== Processing Table " + ((Table) table).getName() + " ================ [End]");}catch(StressToolConfigurationException e){}
 	}
     	return true;
     }
