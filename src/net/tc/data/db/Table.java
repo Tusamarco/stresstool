@@ -2,6 +2,7 @@ package net.tc.data.db;
 
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.Map;
 
 import net.tc.stresstool.StressTool;
 import net.tc.stresstool.exceptions.StressToolConfigurationException;
@@ -47,7 +48,7 @@ public class Table {
 	
 	
 	public SynchronizedMap getMetaAttributes() {
-		return metaAttributes;
+		return this.metaAttributes;
 	}
 
 	public Attribute getMetaAttributes(String name) {
@@ -60,8 +61,8 @@ public class Table {
 		return null;
 	}
 
-	public void setMetaAttributes(SynchronizedMap metaAttributes) {
-		metaAttributes = metaAttributes;
+	public void setMetaAttributes(Map metaAttributes) {
+		this.metaAttributes = (SynchronizedMap) metaAttributes;
 	}
 
 	public void setMetaAttribute(Attribute attribute) {
@@ -76,7 +77,7 @@ public class Table {
 	
 	
 	public long getAutoincrementValue() {
-		return autoincrementValue;
+		return this.autoincrementValue;
 	}
 
 	public void setAutoincrementValue(long autoincrementValue) {
@@ -84,7 +85,7 @@ public class Table {
 	}
 
 	public boolean isAutoincrement() {
-		return autoincrement;
+		return this.autoincrement;
 	}
 
 	public void setAutoincrement(boolean autoincrement) {
@@ -92,7 +93,7 @@ public class Table {
 	}
 
 	public String getSchemaName() {
-		return schemaName;
+		return this.schemaName;
 	}
 
 	public void setSchemaName(String schemaName) {
@@ -331,7 +332,7 @@ public class Table {
 		    	sbAtt.append(",\n");
 		Attribute attribute = (Attribute) this.getMetaAttributes((String)itAtt.next());
 		sbAtt.append("`"+ attribute.getName() +"` ");
-		sbAtt.append(attribute.getDataType() 
+		sbAtt.append(DataType.getDataTypeStringByIdentifier(attribute.getDataType().getDataTypeId()) 
 			+ (attribute.getDataDimension()>0?"("+attribute.getDataDimension()+") ":" "));
 		sbAtt.append(attribute.isNull()?"NULL ":"NOT NULL ");
 		sbAtt.append(attribute.getDefaultValue()!=null?"DEFAULT " + attribute.getDefaultValue() + " ":" ");

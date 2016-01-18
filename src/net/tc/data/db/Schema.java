@@ -1,9 +1,12 @@
 package net.tc.data.db;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.commons.beanutils.BeanUtils;
 
 import net.tc.stresstool.StressTool;
 import net.tc.stresstool.exceptions.StressToolConfigurationException;
@@ -53,10 +56,21 @@ public class Schema {
 	}
 	public void setTable(Table table) {
 		if(table != null && table.getName() != null){
+		    if(table.getInstanceNumber() > 0 ){
+			this.tables.put(table.getName()+ table.getInstanceNumber(), table);
+		    }
+		    else{
 			this.tables.put(table.getName(), table);
+		    }
 		}
 	}
 	
+	public void removeTable(Table table) {
+		if(table != null && table.getName() != null){
+			this.tables.remove(table.getName());
+		}
+	}
+
 	/**
 	 * 
 	 * @param tablesInstances
@@ -80,33 +94,14 @@ public class Schema {
 	 */
 	while (tablesIt.hasNext()) {
 	    Table table = this.getTable((String) tablesIt.next());
-	    if (table != null) {
-		int numberOfTables = 0;
-		if(table.getParentTable()==null 
-			&& table.isMultiple()
-			){
-		    numberOfTables=(Integer) tablesInstances.get(Table.TABLE_PARENT);  	
-		}
-		else if(table.getParentTable() != null 
-			&& table.isMultiple()){
-		    numberOfTables=(Integer) tablesInstances.get(Table.TABLE_CHILD);
-		}
-		else{
-		    numberOfTables = 1;
-		}
-		
-		for (int i = 1; i <= numberOfTables; i++) {
-		    table.setInstanceNumber(i);
-		    try {
-			sbTables.append(table.deploy().append(";\n\n"));
-		    } catch (StressToolConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		    }
-		    // sbTables.append()
-
-		}
+	    try {
+		sbTables.append(table.deploy().append(";\n\n"));
+	    } catch (StressToolConfigurationException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
 	    }
+
+	    
 	}
 	if(sbTables.length() > 1){
 	    sbSchema.append(sbTables + "\n");
@@ -118,6 +113,93 @@ public class Schema {
 
 	return null;
     }
+    
+    /**
+     * Explode the tables using the number defined in the configuration
+     * 
+     * @return
+     */
+    public Schema explodeTables(Map tableInstances){
+	/*
+	 * set first default lazy based on the presence of the index 
+	 * If an index exist then lazy is false
+	 */
+	this.setLazyFields();
+	SynchronizedMap newTables = new SynchronizedMap();
+	Iterator tablesIt = this.getTables().iterator();
+	while (tablesIt.hasNext()) {
+	    Table table = this.getTable((String) tablesIt.next());
+	    if (table != null) {
+		int numberOfTables = 0;
+		if(table.getParentTable()==null 
+			&& table.isMultiple()
+			){
+		    numberOfTables=(Integer) tableInstances.get(Table.TABLE_PARENT);  	
+		}
+		else if(table.getParentTable() != null 
+			&& table.isMultiple()){
+		    numberOfTables=(Integer) tableInstances.get(Table.TABLE_CHILD);
+		}
+		else{
+		    numberOfTables = 1;
+		}
+		
+		for (int i = 1; i <= numberOfTables; i++) {
+		    if(numberOfTables > 1)
+			table.setInstanceNumber(i);
+		    
+		    Table newTable = new Table();
+		    try {
+			BeanUtils.copyProperties(newTable, table);
+			newTable.setMetaAttributes(table.getMetaAttributes());
+			
+			if(numberOfTables > 1){
+			    newTable.setName(newTable.getName() + newTable.getInstanceNumber());
+			    newTables.put((newTable.getName() + newTable.getInstanceNumber()), newTable);
+			}
+			else{
+			    newTables.put(table.getName(), newTable);
+			}
+		    } catch (IllegalAccessException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		    } catch (InvocationTargetException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		    }
+
+		}
+
+	    }
+	}
+	this.setTables(null);
+	this.setTables(newTables);
+
+	
+	return this;
+    }
+    
+    private void setLazyFields(){
+	Iterator tablesIt = this.getTables().iterator();
+	while (tablesIt.hasNext()) {
+	    Table table = this.getTable((String) tablesIt.next());
+	    
+	    for(Object idx:table.getPrimaryKey().getIndexes().getValuesAsArrayOrderByKey()){
+		    ((Attribute)table.getMetaAttributes((String)((Index)idx).getName())).setLazy(false); 
+		
+	    }
+	    
+	    for(Object idx:table.getIndexes().getValuesAsArrayOrderByKey()){
+		for(Object idxColname:((Index)idx).getColumnsDefinition()){
+		    ((Attribute)table.getMetaAttributes((String)idxColname)).setLazy(false); 
+//		    System.out.println(((Attribute)table.getMetaAttributes((String)idxColname)).isLazy());
+		}
+		
+	    }
+	}
+	
+    }
+    
     public String[] deployDropTable(Map tablesInstances){
 	ArrayList<String> tables = new ArrayList();
 	
@@ -157,5 +239,6 @@ public class Schema {
 	
 	return null;
     }
+   
 
 }
