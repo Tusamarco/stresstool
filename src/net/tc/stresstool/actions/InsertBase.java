@@ -41,6 +41,8 @@ public class InsertBase extends StressActionBase implements WriteAction,
     private String jsonFile = "";
     private String tableEngine = "InnoDB";
     
+    private DataObject myDataObject =null;
+    
     public String getJsonFile() {
 		return jsonFile;
 	}
@@ -344,10 +346,8 @@ public class InsertBase extends StressActionBase implements WriteAction,
 	    /**
 	     * Initialize the DataObject representing the SQL action
 	     */
-	    DataObject thisSQLObject = new DataObject();
-	     
-	    thisSQLObject =  inizializeDataObject(thisSQLObject);
-	    thisSQLObject.isInizialized();
+	    this.myDataObject =  inizializeDataObject(new DataObject());
+	    this.myDataObject.isInizialized();
 	  // TODO I am here need to do the value generation using the Sql object and the Data Object  
 	  
 	    return true;  
@@ -360,6 +360,7 @@ public class InsertBase extends StressActionBase implements WriteAction,
 	thisSQLObject.setBatchLoopLimit(this.getBatchSize());
 	thisSQLObject.setLazy(this.lazyCreation);
 	thisSQLObject.setLazyInterval(lazyInterval);
+	thisSQLObject.setCurrentRunLoop(-1);
 
 	String onDuplicateKey = null;
 	String filter = null;
@@ -388,6 +389,7 @@ public class InsertBase extends StressActionBase implements WriteAction,
 	StringBuffer sbValues = new StringBuffer();
 
 	sbValues.append("(");
+	// TODO from here this must become a method for the Dataobject
 /*
  * the SQLObjectContainer will be used to store the SQLObject referencing to each table<>SQL statement 
  * SQLObject has the a counter with the number of execution done (lazyExecCount), that will be used to refresh the 
@@ -414,81 +416,41 @@ public class InsertBase extends StressActionBase implements WriteAction,
 		iNumTables = this.getNumberOfSecondaryTables();
 	    }
 
-//	    // sbValues.append(")");
-//	    // "INSERT INTO #TABLE# (#ATTRIBS#) VALUES (#VALUES#) #ON DUPLICATE KEY#"
-//	    // ;
-//	    if(((Table)table).isMultiple()){
-//        	    for (int iNtables = 1; iNtables <= iNumTables; iNtables++) {
-//	        		SQLObject lSQLObj = new SQLObject();
-//	        		lSQLObj.setBatched(this.getBatchSize() > 1 ? true : false);
-//	        		lSQLObj.setPreparedStatment(false);
-//	        		lSQLObj.setSQLCOmmandType(DataObject.SQL_CREATE);
-//	        		lSQLObj.addSourceTables((Table)table);
-//	        		
-//	        
-//	        		String localSQLTemplate = sqlTemplate;
-//	        		if (((Table) table).getName() != null && ((Table) table).getName().length() > 0) {
-//	        		    localSQLTemplate = localSQLTemplate.replace("#TABLE#", ((Table) table).getName() + iNtables);
-//	        		} else {
-//	        		    throw new StressToolActionException(
-//	        			    "INSERT SQL SYNTAX ISSUE table name null");
-//	        		}
-//	        
-//	        		if (sbAttribs != null && sbAttribs.length() > 0) {
-//	        		    localSQLTemplate = localSQLTemplate.replace("#ATTRIBS#", sbAttribs.toString());
-//	        		} else {
-//	        		    throw new StressToolActionException(
-//	        			    "INSERT SQL SYNTAX ISSUE attribs names not valid or Null");
-//	        		}
-//	        		if (onDuplicateKey == null) {
-//	        		    localSQLTemplate = localSQLTemplate.replace("#ON DUPLICATE KEY#", "");
-//	        		} else {
-//	        		    localSQLTemplate = localSQLTemplate.replace("#ON DUPLICATE KEY#", onDuplicateKey);
-//	        		}
-//	        
-//	        		lSQLObj.setSqlLocalTemplate(localSQLTemplate);
-//					if(lSQLObj.getValues())
-//						lSQLObj.setInizialized(true);
-//	        		
-//	        		SQLObjectContainer.put(((Table) table).getName()+ iNtables, lSQLObj);
-//        
-//        	    }
-//	    }
-//	    else{
-				SQLObject lSQLObj = new SQLObject();
-				lSQLObj.setBatched(this.getBatchSize() > 1 ? true : false);
-				lSQLObj.setPreparedStatment(false);
-				lSQLObj.setSQLCOmmandType(DataObject.SQL_CREATE);
-				lSQLObj.addSourceTables((Table)table);
-				
-				String localSQLTemplate = sqlTemplate;
-				if (((Table) table).getName() != null && ((Table) table).getName().length() > 0) {
-				    localSQLTemplate = localSQLTemplate.replace("#TABLE#", ((Table) table).getName());
-				} else {
-				    throw new StressToolActionException(
-					    "INSERT SQL SYNTAX ISSUE table name null");
-				}
+		SQLObject lSQLObj = new SQLObject();
+		lSQLObj.setBatched(this.getBatchSize() > 1 ? true : false);
+		lSQLObj.setPreparedStatment(false);
+		lSQLObj.setSQLCommandType(DataObject.SQL_CREATE);
+		lSQLObj.setBatchLoops(this.batchSize);
+		lSQLObj.addSourceTables((Table)table);
+		// TODO this must be changed to reflect the 
+		lSQLObj.setLazyExecCount(0);
 		
-				if (sbAttribs != null && sbAttribs.length() > 0) {
-				    localSQLTemplate = localSQLTemplate.replace("#ATTRIBS#", sbAttribs.toString());
-				} else {
-				    throw new StressToolActionException(
-					    "INSERT SQL SYNTAX ISSUE attribs names not valid or Null");
-				}
-				if (onDuplicateKey == null) {
-				    localSQLTemplate = localSQLTemplate.replace("#ON DUPLICATE KEY#", "");
-				} else {
-				    localSQLTemplate = localSQLTemplate.replace("#ON DUPLICATE KEY#", onDuplicateKey);
-				}
-				
-				lSQLObj.setSqlLocalTemplate(localSQLTemplate);
-				if(lSQLObj.getValues())
-					lSQLObj.setInizialized(true);
-				
-				SQLObjectContainer.put(((Table) table).getName(), lSQLObj);
+		String localSQLTemplate = sqlTemplate;
+		if (((Table) table).getName() != null && ((Table) table).getName().length() > 0) {
+		    localSQLTemplate = localSQLTemplate.replace("#TABLE#", ((Table) table).getName());
+		} else {
+		    throw new StressToolActionException(
+			    "INSERT SQL SYNTAX ISSUE table name null");
+		}
+
+		if (sbAttribs != null && sbAttribs.length() > 0) {
+		    localSQLTemplate = localSQLTemplate.replace("#ATTRIBS#", sbAttribs.toString());
+		} else {
+		    throw new StressToolActionException(
+			    "INSERT SQL SYNTAX ISSUE attribs names not valid or Null");
+		}
+		if (onDuplicateKey == null) {
+		    localSQLTemplate = localSQLTemplate.replace("#ON DUPLICATE KEY#", "");
+		} else {
+		    localSQLTemplate = localSQLTemplate.replace("#ON DUPLICATE KEY#", onDuplicateKey);
+		}
 		
-//	    }
+		lSQLObj.setSqlLocalTemplate(localSQLTemplate);
+		if(lSQLObj.getValues().(""))
+			lSQLObj.setResetLazy(true);
 		
+		SQLObjectContainer.put(((Table) table).getName(), lSQLObj);
+				
 	    
 	}
 	// if(sbValues !=null && sbValues.length()> 0){
@@ -511,7 +473,8 @@ public class InsertBase extends StressActionBase implements WriteAction,
 	   if(table != null 
 		   && table.getMetaAttributes()!=null
 		   && table.getMetaAttributes().size() >0 ){
-	       return (Attribute[]) table.getMetaAttributes().values().toArray(new Attribute[table.getMetaAttributes().size()]);
+	       return (Attribute[]) table.getMetaAttributes().getValuesAsArrayOrderByKey(new Attribute[table.getMetaAttributes().size()]);
+//	    		   .values().toArray(new Attribute[table.getMetaAttributes().size()]);
 	   }
 	    
 	    return null;

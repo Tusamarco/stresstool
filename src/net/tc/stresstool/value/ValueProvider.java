@@ -1,5 +1,7 @@
 package net.tc.stresstool.value;
 
+import net.tc.data.db.DataType;
+
 public interface ValueProvider {
     
     public static int SPLIT_METHOD_CSV = 1;
@@ -19,5 +21,6 @@ public interface ValueProvider {
     
     public boolean readText(String Path, int splitMethod); 
     public abstract ValueProvider copyProvider();
+    public Object provideValue(DataType dataType, int length);
     
 }

@@ -10,13 +10,14 @@ import net.tc.utils.SynchronizedMap;
 
 
 public class SQLObject {
-    ArrayList SQLCommands = new ArrayList();
-    int SQLCOmmandType = 0;
+    ArrayList<String> SQLCommands = new ArrayList();
+    int SQLCommandType = 0;
     boolean isBatched = false;
     boolean isPreparedStatment = false;
     int lazyExecCount = 0;
     String sqlLocalTemplate = null;
-    boolean inizialized = false;
+    boolean resetLazy = false;
+    int batchLoops = 1;
     
     ArrayList sourceTables = new ArrayList();
     /**
@@ -25,12 +26,7 @@ public class SQLObject {
     public ArrayList getSQLCommands() {
         return SQLCommands;
     }
-    /**
-     * @param sQLCommands the sQLCommands to set
-     */
-    public void setSQLCommands(ArrayList sQLCommands) {
-        SQLCommands = sQLCommands;
-    }
+
     /**
      * @param sQLCommands the sQLCommands to set
      */
@@ -41,14 +37,14 @@ public class SQLObject {
     /**
      * @return the sQLCOmmandType
      */
-    public int getSQLCOmmandType() {
-        return SQLCOmmandType;
+    public int getSQLCommandType() {
+        return SQLCommandType;
     }
     /**
      * @param sQLCOmmandType the sQLCOmmandType to set
      */
-    public void setSQLCOmmandType(int sQLCOmmandType) {
-        SQLCOmmandType = sQLCOmmandType;
+    public void setSQLCommandType(int sQLCOmmandType) {
+        SQLCommandType = sQLCOmmandType;
     }
     /**
      * @return the isBatched
@@ -105,35 +101,69 @@ public class SQLObject {
 	/**
 	 * this method is the one that will call the value provider to 
 	 * fill the values
+	 * looping if batch and passing the datatype 
+	 * 
+	 * If the attribute is lazy and the lazy counter is lower than the limit value the 
+	 * attribs with lazy will have the same values than before
+	 * 
 	 * @return
 	 */
-    public boolean getValues(){
-	for (Object table:this.getSourceTables()){
-	     SynchronizedMap Attribs = ((Table) table).getMetaAttributes();
-  	     try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).debug("========================== Processing Table " + ((Table) table).getName() + " ================ [Start]");}catch(StressToolConfigurationException e){}
-		 
-	     for (Object attrib:Attribs.getValuesAsArrayOrderByKey()){
-		 try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).debug("Filling Attribute " 
-			 	+ ((Attribute)attrib).getName() 
-			 	+ " DataType: " + DataType.getDataTypeStringByIdentifier(((Attribute)attrib).getDataType().getDataTypeId())
-			 	+ " Value : xx" 
-			 	+ " Lazy = " + ((Attribute)attrib).isLazy()
-			 	);}
-		 catch(StressToolConfigurationException e){}
-		 // TODO !!!HERE!!!
-		 
-		 StressTool.getValueProvider().getRandomLong(1, 2);
-		 
-	     }
-	     try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).debug("========================== Processing Table " + ((Table) table).getName() + " ================ [End]");}catch(StressToolConfigurationException e){}
-	}
-    	return true;
+    public String getValues(){
+    	
+    	
+		for (Object table:this.getSourceTables()){
+	
+		     SynchronizedMap Attribs = ((Table) table).getMetaAttributes();
+	  	     try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).debug("========================== Processing Table " + ((Table) table).getName() + " ================ [Start]");}catch(StressToolConfigurationException e){}
+	
+			/*
+			 * loops cross batch loops  
+			 */
+	  	     StringBuffer sqlValues = new StringBuffer();
+	  	     for(int iBatch = 0; iBatch <= this.batchLoops; iBatch++){
+	  	    	 StringBuffer singleSql = new StringBuffer();
+			     for (Object attrib:Attribs.getValuesAsArrayOrderByKey()){
+			    	 if(singleSql.length() > 1)
+			    		 singleSql.append(", ");
+				 // TODO !!!HERE!!!
+			    	 boolean filling =false;
+					 if(this.resetLazy 
+							 || !((Attribute)attrib).isLazy()){
+						 ((Attribute)attrib).setValue( StressTool.getValueProvider().provideValue(((Attribute)attrib).getDataType(), 0));
+						 filling =true;
+					 }
+
+					 try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).debug(filling?"":"NOT" + "Filling Attribute " 
+							 	+ ((Attribute)attrib).getName() 
+							 	+ " DataType: " + DataType.getDataTypeStringByIdentifier(((Attribute)attrib).getDataType().getDataTypeId())
+							 	+ " Value : xx" 
+							 	+ " Lazy = " + ((Attribute)attrib).isLazy()
+							 	);}
+						 catch(StressToolConfigurationException e){}
+					 
+				 
+				 StressTool.getValueProvider().getRandomLong(1, 2) HERE !!!;
+				 
+			     }
+	  	     }
+		     try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).debug("========================== Processing Table " + ((Table) table).getName() + " ================ [End]");}catch(StressToolConfigurationException e){}
+		}
+    	return null;
     }
-	public synchronized boolean isInizialized() {
-		return inizialized;
+	public  boolean isResetLazy() {
+		return this.resetLazy;
 	}
-	public synchronized void setInizialized(boolean inizialized) {
-		this.inizialized = inizialized;
+	public  void setResetLazy(boolean resetLazy) {
+		this.resetLazy = resetLazy;
+	}
+	public synchronized int getBatchLoops() {
+		return batchLoops;
+	}
+	public synchronized void setBatchLoops(int batchLoops) {
+		this.batchLoops = batchLoops;
+	}
+	public synchronized void setSQLCommands(ArrayList<String> sQLCommands) {
+		SQLCommands = sQLCommands;
 	}
     
 }
