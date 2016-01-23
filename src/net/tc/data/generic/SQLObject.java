@@ -108,48 +108,58 @@ public class SQLObject {
 	 * 
 	 * @return
 	 */
-    public String getValues(){
-    	
-    	
-		for (Object table:this.getSourceTables()){
-	
-		     SynchronizedMap Attribs = ((Table) table).getMetaAttributes();
-	  	     try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).debug("========================== Processing Table " + ((Table) table).getName() + " ================ [Start]");}catch(StressToolConfigurationException e){}
-	
-			/*
-			 * loops cross batch loops  
-			 */
-	  	     StringBuffer sqlValues = new StringBuffer();
-	  	     for(int iBatch = 0; iBatch <= this.batchLoops; iBatch++){
-	  	    	 StringBuffer singleSql = new StringBuffer();
-			     for (Object attrib:Attribs.getValuesAsArrayOrderByKey()){
-			    	 if(singleSql.length() > 1)
-			    		 singleSql.append(", ");
-				 // TODO !!!HERE!!!
-			    	 boolean filling =false;
-					 if(this.resetLazy 
-							 || !((Attribute)attrib).isLazy()){
-						 ((Attribute)attrib).setValue( StressTool.getValueProvider().provideValue(((Attribute)attrib).getDataType(), 0));
-						 filling =true;
-					 }
+  public String getValues() {
 
-					 try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).debug(filling?"":"NOT" + "Filling Attribute " 
-							 	+ ((Attribute)attrib).getName() 
-							 	+ " DataType: " + DataType.getDataTypeStringByIdentifier(((Attribute)attrib).getDataType().getDataTypeId())
-							 	+ " Value : xx" 
-							 	+ " Lazy = " + ((Attribute)attrib).isLazy()
-							 	);}
-						 catch(StressToolConfigurationException e){}
-					 
-				 
-				 StressTool.getValueProvider().getRandomLong(1, 2) HERE !!!;
-				 
-			     }
-	  	     }
-		     try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).debug("========================== Processing Table " + ((Table) table).getName() + " ================ [End]");}catch(StressToolConfigurationException e){}
+	for (Object table : this.getSourceTables()) {
+
+	  SynchronizedMap Attribs = ((Table) table).getMetaAttributes();
+	  try {
+		StressTool
+		    .getLogProvider()
+		    .getLogger(LogProvider.LOG_ACTIONS)
+		    .debug(
+		        "========================== Processing Table " + ((Table) table).getName() + " ================ [Start]");
+	  } catch (StressToolConfigurationException e) {}
+
+	  /*
+	   * loops cross batch loops
+	   */
+	  StringBuffer sqlValues = new StringBuffer();
+	  for (int iBatch = 0; iBatch <= this.batchLoops; iBatch++) {
+		StringBuffer singleSql = new StringBuffer();
+		for (Object attrib : Attribs.getValuesAsArrayOrderByKey()) {
+		  if (singleSql.length() > 1)
+			singleSql.append(", ");
+		  // TODO !!!HERE!!!
+		  boolean filling = false;
+		  if (this.resetLazy || !((Attribute) attrib).isLazy()) {
+			((Attribute) attrib).setValue(StressTool.getValueProvider().provideValue(((Attribute) attrib).getDataType(), 0));
+			filling = true;
+		  }
+
+		  try {StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).debug(filling ? "" : "NOT"
+			  			+ "Filling Attribute "
+			            + ((Attribute) attrib).getName()
+			            + " DataType: "
+			            + DataType.getDataTypeStringByIdentifier(((Attribute) attrib).getDataType().getDataTypeId()) 
+			            + " Value : xx"
+			            + " Lazy = " + ((Attribute) attrib).isLazy());
+		  } catch (StressToolConfigurationException e) {}
+
+		  StressTool.getValueProvider().getRandomLong(1, 2); // HERE !!!;
+
 		}
-    	return null;
-    }
+	  }
+	  try {
+		StressTool
+		    .getLogProvider()
+		    .getLogger(LogProvider.LOG_ACTIONS)
+		    .debug(
+		        "========================== Processing Table " + ((Table) table).getName() + " ================ [End]");
+	  } catch (StressToolConfigurationException e) { }
+	}
+	return null;
+  }
 	public  boolean isResetLazy() {
 		return this.resetLazy;
 	}

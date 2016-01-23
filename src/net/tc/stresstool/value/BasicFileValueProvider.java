@@ -13,7 +13,7 @@ import net.tc.utils.file.FileHandler;
  * @author tusa
  *
  */
-public class BasicFileValueProvider implements ValueProvider {
+public class BasicFileValueProvider extends BasicValueProvider implements ValueProvider {
 
     public BasicFileValueProvider() {
     }
@@ -79,14 +79,14 @@ public class BasicFileValueProvider implements ValueProvider {
     /* Return a single Long value  
      */
     @Override
-    public Long getRandomLong() {
+    public Long getRandomNumber() {
 	return Utility.getNumberFromRandom(new Long(System.currentTimeMillis()).intValue());
     }
 
     /* Return a long no bigger than upperLimit
      */
     @Override
-    public Long getRandomLong(long upperLimit) {
+    public Long getRandomNumber(long upperLimit) {
 	return Utility.getNumberFromRandomMinMax(0, new Long(upperLimit).intValue()); 
 	
     }
@@ -94,7 +94,7 @@ public class BasicFileValueProvider implements ValueProvider {
     /* Return a long value between limits
      */
     @Override
-    public Long getRandomLong(long lowerLimit, long upperLimit) {
+    public Long getRandomNumber(long lowerLimit, long upperLimit) {
 	return Utility.getNumberFromRandomMinMax(lowerLimit, upperLimit);
 	}
 
@@ -115,7 +115,12 @@ public class BasicFileValueProvider implements ValueProvider {
 	sr = null;
 	return true;
     }
-    
+
+    @Override
+    public String getText(int lenght){
+	  return path;
+      
+    }
     public ValueProvider copyProvider(){
 	if(this.txtFile != null && this.txtFile.length > 0){
 	    BasicFileValueProvider vp = new BasicFileValueProvider();
@@ -155,10 +160,5 @@ public class BasicFileValueProvider implements ValueProvider {
         this.txtFile = txtFile;
     }
     
-    public Object provideValue(DataType dataType, int length){
-	
-	return null;
-	
-    }
-
+  
 }

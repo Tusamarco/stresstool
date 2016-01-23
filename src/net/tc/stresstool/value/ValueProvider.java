@@ -1,5 +1,8 @@
 package net.tc.stresstool.value;
 
+import java.math.BigDecimal;
+import java.util.Date;
+
 import net.tc.data.db.DataType;
 
 public interface ValueProvider {
@@ -15,12 +18,29 @@ public interface ValueProvider {
     public String getValueTextFromText(int lowerLimit,int length);
     public String[] getValueTextFromText(int upperLimit,int lowerLimit,int length);
     
-    public Long getRandomLong();
-    public Long getRandomLong(long upperLimit);
-    public Long getRandomLong(long lowerLimit, long upperLimit);
-    
-    public boolean readText(String Path, int splitMethod); 
+    public Long getRandomNumber();
+    public Long getRandomNumber(long upperLimit);
+    public Long getRandomNumber(long lowerLimit, long upperLimit);
+    public Date getRandomDate();
+    public String getText(int lenght); 
     public abstract ValueProvider copyProvider();
     public Object provideValue(DataType dataType, int length);
+	boolean readText(String path, int splitMethod);
+	String getTimestamp(int length);
+	String getDateTime(int length);
+	String getTime(int length);
+	String getYear(int length);
+	String getDate(int length);
+	Byte getBit(int length);
+	BigDecimal getDecimal(int length);
+	Double getDouble(int length);
+	Float getFloat(int length);
+	Long geBigInt(int length);
+	Integer geInt(int length);
+	Integer getMedInt(int length);
+	Integer getSmallInt(int length);
+	Integer getTiny(int length);
+	String getString(int lowerbound, int upperbound, int length);
+	String getString(int lowerbound, long upperbound, int length);
     
 }

@@ -422,6 +422,7 @@ public class InsertBase extends StressActionBase implements WriteAction,
 		lSQLObj.setSQLCommandType(DataObject.SQL_CREATE);
 		lSQLObj.setBatchLoops(this.batchSize);
 		lSQLObj.addSourceTables((Table)table);
+		
 		// TODO this must be changed to reflect the 
 		lSQLObj.setLazyExecCount(0);
 		
@@ -446,8 +447,9 @@ public class InsertBase extends StressActionBase implements WriteAction,
 		}
 		
 		lSQLObj.setSqlLocalTemplate(localSQLTemplate);
-		if(lSQLObj.getValues().(""))
+		// TODO here
 			lSQLObj.setResetLazy(true);
+			if(lSQLObj.getValues().equals("")) 
 		
 		SQLObjectContainer.put(((Table) table).getName(), lSQLObj);
 				

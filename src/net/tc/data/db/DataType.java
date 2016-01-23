@@ -2,9 +2,9 @@ package net.tc.data.db;
 
 public class DataType {
 
-    public static int NUMERIC_CATEGORY = 1;
-    public static int STRING_CATEGORY = 2;
-    public static int DATE_CATEGORY = 3;
+    public static final int NUMERIC_CATEGORY = 1;
+    public static final int STRING_CATEGORY = 2;
+    public static final int DATE_CATEGORY = 3;
     
     public static final int TINYINT = 0;	
     public static final int SMALLINT	= 1;
