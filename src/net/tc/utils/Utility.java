@@ -204,7 +204,7 @@ import javax.imageio.ImageIO;
     	
     }
     public static String getTimeStamp(long systemTime){
-	      return getTimeStamp(systemTime, "yyyy_MM_dd_hh_mm_ss");
+	      return getTimeStamp(systemTime, "yyyy-MM-dd hh:mm:ss");
     }
     public static String getTimeStamp(long systemTime, String format){
 	 if(systemTime == 0)
@@ -515,11 +515,24 @@ import javax.imageio.ImageIO;
   	return Math.abs(maxL);
 
   }
+  
   public static boolean isNumeric(String str)  
   {  
   	 try  
   	 {  
-  	    int i = Integer.parseInt(str);  
+  	    long i = Long.parseLong(str);  
+  	}  
+  	catch(NumberFormatException nfe)  
+  	{  
+  		return false;  
+  	}  
+  	return true;  
+  }  
+   public static boolean isNumeric(Object obj)  
+  {  
+  	 try  
+  	 {  
+  	    long i = new Long((Long) obj);  
   	}  
   	catch(NumberFormatException nfe)  
   	{  
@@ -528,5 +541,18 @@ import javax.imageio.ImageIO;
   	return true;  
   }  
 
+   public static boolean isDouble(String str)  
+   {  
+   	 try  
+   	 {  
+   	    double i = Double.parseDouble(str);  
+   	}  
+   	catch(NumberFormatException nfe)  
+   	{  
+   		return false;  
+   	}  
+   	return true;  
+   }  
+   
 }
 

@@ -157,7 +157,7 @@ public class StressTool {
 	        	    + ((String) config.getConfiguration(Configurator.MAIN_SECTION_NAME, StressTool.class).getParameter("datafilepath").getValue())
 	        	    + " Starting now"
 	        	    );
-	            valueProvider = launcher.LoadData();
+	            setValueProvider(launcher.LoadData());
 	            logProvider.getLogger(LogProvider.LOG_APPLICATION).info("Data Load from file completed ");
 	        }
 	        

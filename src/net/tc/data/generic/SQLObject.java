@@ -146,7 +146,7 @@ public class SQLObject {
 			            + " Lazy = " + ((Attribute) attrib).isLazy());
 		  } catch (StressToolConfigurationException e) {}
 
-		  StressTool.getValueProvider().getRandomLong(1, 2); // HERE !!!;
+		  StressTool.getValueProvider().getRandomNumber(1, 2); // HERE !!!;
 
 		}
 	  }
