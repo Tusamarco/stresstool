@@ -2,6 +2,8 @@ package net.tc.stresstool.actions;
 
 import java.lang.ref.SoftReference;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -24,6 +26,7 @@ import net.tc.stresstool.statistics.providers.StatsProvider;
 import net.tc.stresstool.value.BasicFileValueProvider;
 import net.tc.stresstool.value.ValueProvider;
 import net.tc.utils.SynchronizedMap;
+import net.tc.utils.TimeTools;
 import net.tc.utils.file.FileHandler;
 
 
@@ -40,6 +43,7 @@ public class Launcher {
     private String insertClass = null;
     private String updateClass = null;
     private String selectClass = null;
+    private String valueProvider = null;
 //    private WriteAction writeImplementation = null;
 //    private WriteAction updateImplementation = null;
 //    private ReadAction readImplementation = null;
@@ -66,6 +70,11 @@ public class Launcher {
     private int interactive =1 ; //# Interactive mode [0 no|1 console output|2 console output + not exit until question is answered ] default 1
     private ConnectionProvider connProvider = null;
     private Schema currentSchema = null;
+    private Calendar testCalendar = null;
+    private Date startDate = null;
+    private Date endDate = null ;
+    private int daysdiffernce = 0; 
+    
     
     public Launcher(Configurator configIn) {
 	if(configIn != null){
@@ -87,76 +96,85 @@ public class Launcher {
      * @param configuration
      */
     private void init(Configuration configuration){
-	this.poolNumber = Integer.parseInt((String) configuration.getParameter("poolNumber").getValue());
-	this.pctDelete = Integer.parseInt((String) configuration.getParameter("pctDelete").getValue());
-	this.pctInsert = Integer.parseInt((String) configuration.getParameter("pctInsert").getValue());
-	this.pctSelect = Integer.parseInt((String) configuration.getParameter("pctSelect").getValue());
-	this.pctUpdate = Integer.parseInt((String) configuration.getParameter("pctUpdate").getValue());
-	this.setHardStopLimit( Integer.parseInt((String) configuration.getParameter("HardStopLimit").getValue()));
-	this.setStatIntervalMs( Integer.parseInt((String) configuration.getParameter("StatIntervalMs").getValue()) );
-	this.setStatLoops(  Integer.parseInt((String) configuration.getParameter("StatLoops").getValue()) );
-	this.setUseHardStop(Boolean.parseBoolean((String) configuration.getParameter("UseHardStop").getValue()));
-	this.setRepeatNumber(Integer.parseInt((String) configuration.getParameter("repeatNumber").getValue()) );
-	this.setSemaphoreCountdownTime(Integer.parseInt((String) configuration.getParameter("SemaphoreCountdownTime").getValue()) );
-	this.setInteractive(Integer.parseInt((String) configuration.getParameter("interactive").getValue()));
-	
-	
-	/**
-	 * Initialize the Launcher configuration related to the actions classes 
-	 */
-	try {
-	    StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).info("LOADING Action Parameters");
-	    if(	
-		    config != null && 
-		    config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class) != null  
-		    ){
-			if(config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParameter("InsertClass") != null &&
-				config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParameter("InsertClass").getValue() != null){
-			    this.insertClass =(String) config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParameter("InsertClass").getValue();
-			    
-			}
-			else{
-			    ExceptionMessages.setCurrentError(ExceptionMessages.ERROR_FATAL);
-			    throw new StressToolConfigurationException(" Insert Class not define");
-			    
-			}
+    	this.poolNumber = Integer.parseInt((String) configuration.getParameter("poolNumber").getValue());
+    	this.pctDelete = Integer.parseInt((String) configuration.getParameter("pctDelete").getValue());
+    	this.pctInsert = Integer.parseInt((String) configuration.getParameter("pctInsert").getValue());
+    	this.pctSelect = Integer.parseInt((String) configuration.getParameter("pctSelect").getValue());
+    	this.pctUpdate = Integer.parseInt((String) configuration.getParameter("pctUpdate").getValue());
+    	this.setHardStopLimit( Integer.parseInt((String) configuration.getParameter("HardStopLimit").getValue()));
+    	this.setStatIntervalMs( Integer.parseInt((String) configuration.getParameter("StatIntervalMs").getValue()) );
+    	this.setStatLoops(  Integer.parseInt((String) configuration.getParameter("StatLoops").getValue()) );
+    	this.setUseHardStop(Boolean.parseBoolean((String) configuration.getParameter("UseHardStop").getValue()));
+    	this.setRepeatNumber(Integer.parseInt((String) configuration.getParameter("repeatNumber").getValue()) );
+    	this.setSemaphoreCountdownTime(Integer.parseInt((String) configuration.getParameter("SemaphoreCountdownTime").getValue()) );
+    	this.setInteractive(Integer.parseInt((String) configuration.getParameter("interactive").getValue()));
+    	this.setTestCalendar(TimeTools.getCalendar((String)configuration.getParameter("calendardate").getValue()));
+    	this.setDaysdiffernce(Integer.parseInt((String) configuration.getParameter("daysdiffernce").getValue()));
+    	this.setStartDate(this.getTestCalendar().getTime());
+    	this.setEndDate(TimeTools.getCalendarFromCalendarDateAddDays(this.getTestCalendar(), this.getDaysdiffernce()));
+    	
+    	/**
+    	 * Initialize the Launcher configuration related to the actions classes 
+    	 */
+    	try {
+    	    StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).info("LOADING Action Parameters");
+    	    if(	
+    		    config != null && 
+    		    config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class) != null  
+    		    ){
+    			if(config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParameter("InsertClass") != null &&
+    				config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParameter("InsertClass").getValue() != null){
+    			    this.insertClass =(String) config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParameter("InsertClass").getValue();
+    			    
+    			}
+    			else{
+    			    ExceptionMessages.setCurrentError(ExceptionMessages.ERROR_FATAL);
+    			    throw new StressToolConfigurationException(" Insert Class not define");
+    			    
+    			}
+    
+    			if(config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParameter("UpdateClass") != null &&
+    				config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParameter("UpdateClass").getValue() != null){
+    			    this.updateClass =(String) config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParameter("UpdateClass").getValue();
+    			    
+    			}
+    			else{
+    			    ExceptionMessages.setCurrentError(ExceptionMessages.ERROR_FATAL);
+    			    throw new StressToolConfigurationException(" Insert Class not define");
+    			    
+    			}
+    
+    			
+    			if(config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParameter("SelectClass") != null &&
+    				config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParameter("SelectClass").getValue() != null){
+    			    this.selectClass =(String) config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParameter("SelectClass").getValue();
+    			    
+    			}
+    			else{
+    			    ExceptionMessages.setCurrentError(ExceptionMessages.ERROR_FATAL);
+    			    throw new StressToolConfigurationException(" Select Class not define");
+    			    
+    			}
+    			
+    			if(config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParameter("DeleteClass") != null &&
+    				config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParameter("DeleteClass").getValue() != null){
+    			    this.deleteClass =(String) config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParameter("DeleteClass").getValue();
+    			    
+    			}
+    			if(config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParameter("ValueProvider") != null &&
+    				config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParameter("ValueProvider").getValue() != null){
+    			    this.valueProvider =(String) config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParameter("ValueProvider").getValue();
+    			    
+    			}
 
-			if(config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParameter("UpdateClass") != null &&
-				config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParameter("UpdateClass").getValue() != null){
-			    this.updateClass =(String) config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParameter("UpdateClass").getValue();
-			    
-			}
-			else{
-			    ExceptionMessages.setCurrentError(ExceptionMessages.ERROR_FATAL);
-			    throw new StressToolConfigurationException(" Insert Class not define");
-			    
-			}
-
-			
-			if(config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParameter("SelectClass") != null &&
-				config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParameter("SelectClass").getValue() != null){
-			    this.selectClass =(String) config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParameter("SelectClass").getValue();
-			    
-			}
-			else{
-			    ExceptionMessages.setCurrentError(ExceptionMessages.ERROR_FATAL);
-			    throw new StressToolConfigurationException(" Select Class not define");
-			    
-			}
-			
-			if(config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParameter("DeleteClass") != null &&
-				config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParameter("DeleteClass").getValue() != null){
-			    this.deleteClass =(String) config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParameter("DeleteClass").getValue();
-			    
-			}
-			else{
-			    ExceptionMessages.setCurrentError(ExceptionMessages.ERROR_FATAL);
-			    throw new StressToolConfigurationException(" Delete Class not define");
-			    
-			}
-			
-
-	   }
+    			else{
+    			    ExceptionMessages.setCurrentError(ExceptionMessages.ERROR_FATAL);
+    			    throw new StressToolConfigurationException(" Delete Class not define");
+    			    
+    			}
+    			
+    
+    	   }
 	
 	} 
 	catch (StressToolConfigurationException e) {
@@ -310,14 +328,13 @@ public class Launcher {
      * @throws StressToolException 
      */
     public ValueProvider LoadData() throws StressToolException {
-	String path = (String) config.getConfiguration(Configurator.MAIN_SECTION_NAME, StressTool.class).getParameter("datafilepath").getValue();
-	if(path !=null){
-	    ValueProvider dataLoader = new BasicFileValueProvider();
-	    dataLoader.readText(path, ValueProvider.SPLIT_METHOD_UNIX_END_LINE);
+		String path = (String) config.getConfiguration(Configurator.MAIN_SECTION_NAME, StressTool.class).getParameter("datafilepath").getValue();
+		ValueProvider dataLoader = this.setValueProvider();
+		if(path !=null){
+		    dataLoader.readText(path, ValueProvider.SPLIT_METHOD_UNIX_END_LINE);
+		}
+		return dataLoader;
 
-	    return dataLoader;
-	}
-	return null;
     }
 
 //    /**
@@ -956,7 +973,32 @@ public class Launcher {
 		return null;
 	}
 	
-	
+	private ValueProvider setValueProvider() {
+	  if(valueProvider != null && !valueProvider.equals("")){
+		ValueProvider valueProviderInstance;
+		
+        try {
+    	      valueProviderInstance = (ValueProvider) Class.forName(valueProvider).newInstance();
+    	      valueProviderInstance.setTestCalendar(getTestCalendar());
+    	      
+    	      return valueProviderInstance;
+	      
+        } catch (InstantiationException e) {
+	      // TODO Auto-generated catch block
+	      e.printStackTrace();
+        } catch (IllegalAccessException e) {
+	      // TODO Auto-generated catch block
+	      e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+	      // TODO Auto-generated catch block
+	      e.printStackTrace();
+        }
+	  }
+	  return null;
+	}
+	    
+		
+    
 	
 	/**
 	 * Method to set class parameters
@@ -1183,5 +1225,77 @@ public class Launcher {
 	    this.currentSchema = currentSchema;
 	}
 
+	/**
+	 * @return the testCalendar
+	 */
+	public Calendar getTestCalendar() {
+	  return testCalendar;
+	}
+
+	/**
+	 * @param testCalendar the testCalendar to set
+	 */
+	public void setTestCalendar(Calendar testCalendar) {
+	  this.testCalendar = testCalendar;
+	}
+
+	/**
+	 * @return the startDate
+	 */
+	public Date getStartDate() {
+	  return startDate;
+	}
+
+	/**
+	 * @param startDate the startDate to set
+	 */
+	public void setStartDate(Date startDate) {
+	  this.startDate = startDate;
+	}
+
+	/**
+	 * @return the endDate
+	 */
+	public Date getEndDate() {
+	  return endDate;
+	}
+
+	/**
+	 * @param calendar.getTime() the endDate to set
+	 */
+	public void setEndDate(Calendar calendar) {
+	  this.endDate = calendar.getTime();
+	}
+
+	/**
+	 * @return the daysdiffernce
+	 */
+	public int getDaysdiffernce() {
+	  return daysdiffernce;
+	}
+
+	/**
+	 * @param daysdiffernce the daysdiffernce to set
+	 */
+	public void setDaysdiffernce(int daysdiffernce) {
+	  this.daysdiffernce = daysdiffernce;
+	}
+
+	/**
+	 * @return the valueProvider
+	 */
+	private String getValueProvider() {
+	  return valueProvider;
+	}
+
+	/**
+	 * @param valueProvider the valueProvider to set
+	 */
+	private void setValueProvider(String valueProvider) {
+	  this.valueProvider = valueProvider;
+	}
+	public void resetValueProviderCalendar(){
+		StressTool.getValueProvider().resetCalendar(daysdiffernce);
+	}
 		
 }

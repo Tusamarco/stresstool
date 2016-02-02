@@ -25,7 +25,7 @@ public class DataObject extends MultiLanguage
     private SynchronizedMap values = null;
     private boolean isInizialized = false;
     private int batchLoopLimit = 1;
-    private int currentBatchLoop = 0;
+    private int currentRunLoop = 0;
     private boolean isLazy = false;
     private int lazyInterval = 0;
     private int sqlType = 0;
@@ -115,15 +115,15 @@ public class DataObject extends MultiLanguage
 	/**
 	 * @return the currentBatchLoop
 	 */
-	public int getCurrentBatchLoop() {
-	    return currentBatchLoop;
+	public int getCurrentRunLoop() {
+	    return currentRunLoop;
 	}
 
 	/**
 	 * @param currentBatchLoop the currentBatchLoop to set
 	 */
-	public void setCurrentBatchLoop(int currentBatchLoop) {
-	    this.currentBatchLoop = currentBatchLoop;
+	public void setCurrentRunLoop(int currentRunLoop) {
+	    this.currentRunLoop = currentRunLoop;
 	}
 
 	/**

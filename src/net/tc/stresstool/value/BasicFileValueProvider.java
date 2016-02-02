@@ -5,6 +5,7 @@ package net.tc.stresstool.value;
 
 import java.lang.ref.SoftReference;
 import java.util.Arrays;
+
 import net.tc.data.db.DataType;
 import net.tc.utils.Utility;
 import net.tc.utils.file.FileHandler;
@@ -13,9 +14,11 @@ import net.tc.utils.file.FileHandler;
  * @author tusa
  *
  */
-public class BasicFileValueProvider implements ValueProvider {
+public class BasicFileValueProvider extends BasicValueProvider implements ValueProvider {
 
-    public BasicFileValueProvider() {
+    private static final long upperbound = 0;
+
+	public BasicFileValueProvider() {
     }
 
     public BasicFileValueProvider(String path) {
@@ -29,7 +32,7 @@ public class BasicFileValueProvider implements ValueProvider {
     
     /*Return a random entry from the array limited by the Length 
      */
-    @Override
+    
     public String getValueTextFromRandom(int length) {
 	if(length < 1 )
 	    return null;
@@ -41,7 +44,7 @@ public class BasicFileValueProvider implements ValueProvider {
     /* Return consecutive values from the array entry starting from 0 and incrementing 
      * the position at each call, when it reach the max length it starts from 0 again
      */
-    @Override
+    
     public String getValueTextFromText(int length) {
 	if(length < 1 )
 	    return null;
@@ -53,7 +56,7 @@ public class BasicFileValueProvider implements ValueProvider {
     /* Return values from the array entry starting from lowerLimit 
      * 
      */
-    @Override
+    
     public String getValueTextFromText(int lowerLimit, int length) {
 	if(length < 1 )
 	    return null;
@@ -64,29 +67,29 @@ public class BasicFileValueProvider implements ValueProvider {
     /* Return consecutive values from the array entry starting from lowerLimit 
      * up to the upperLimit
      */
-    @Override
-    public String[] getValueTextFromText(int upperLimit, int lowerLimit,
-	    int length) {
-	if(length < 1 || upperLimit == 0 || upperLimit < lowerLimit)
-	    return null;
-	String[] values = new String[(upperLimit - lowerLimit)];
-	for(int i = lowerLimit; i <= upperLimit; i++){
-	    values[i] = txtFile[i].substring(0, length);
-	}
-	return values;
+    
+    public String[] getValueTextFromText(int upperLimit, int lowerLimit, int length) {
+    	if(length < 1 || upperLimit == 0 || upperLimit < lowerLimit)
+    	    return null;
+
+    	String[] values = new String[(upperLimit - lowerLimit)];
+    	for(int i = lowerLimit; i <= upperLimit; i++){
+    	    values[i] = txtFile[i].substring(0, length);
+    	}
+    	return values;
     }
 
     /* Return a single Long value  
      */
     @Override
-    public Long getRandomLong() {
+    public Long getRandomNumber() {
 	return Utility.getNumberFromRandom(new Long(System.currentTimeMillis()).intValue());
     }
 
     /* Return a long no bigger than upperLimit
      */
     @Override
-    public Long getRandomLong(long upperLimit) {
+    public Long getRandomNumber(long upperLimit) {
 	return Utility.getNumberFromRandomMinMax(0, new Long(upperLimit).intValue()); 
 	
     }
@@ -94,7 +97,7 @@ public class BasicFileValueProvider implements ValueProvider {
     /* Return a long value between limits
      */
     @Override
-    public Long getRandomLong(long lowerLimit, long upperLimit) {
+    public Long getRandomNumber(long lowerLimit, long upperLimit) {
 	return Utility.getNumberFromRandomMinMax(lowerLimit, upperLimit);
 	}
 
@@ -115,7 +118,12 @@ public class BasicFileValueProvider implements ValueProvider {
 	sr = null;
 	return true;
     }
-    
+
+//    
+//    public String getText(int lenght){
+//	  return path;
+//      
+//    }
     public ValueProvider copyProvider(){
 	if(this.txtFile != null && this.txtFile.length > 0){
 	    BasicFileValueProvider vp = new BasicFileValueProvider();
@@ -155,10 +163,30 @@ public class BasicFileValueProvider implements ValueProvider {
         this.txtFile = txtFile;
     }
     
-    public Object provideValue(DataType dataType, int length){
-	
-	return null;
-	
-    }
+    @Override
+    public String getString(int upperbound, int length) {
+      StringBuffer sb = new StringBuffer();
+      
+      int textPos = new Long(Utility.getNumberFromRandomMinMax((int) (System.currentTimeMillis()/10000), (txtFile.length)/Utility.getNumberFromRandomMinMax(1, 100))).intValue();
+      int upto = length>upperbound?upperbound:length;
+     
+      
+      while (sb.length() < upto)
+      {
+    	  if(textPos == txtFile.length)
+    		  textPos =0;
+    	  sb.append(txtFile[textPos++]);
+      }
 
+      return sb.toString().substring(0,upto);
+  	
+    }
+    @Override
+    public String getString(long upperbound, int length) {
+    	return getString(new Long(upperbound).intValue(), length) ;
+    }
+    @Override
+    public String getString(int length) {
+      return this.getString(255, length);
+    }
 }

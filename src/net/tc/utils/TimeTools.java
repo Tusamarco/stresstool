@@ -1,4 +1,5 @@
 package net.tc.utils;
+import java.lang.ref.SoftReference;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
@@ -19,7 +20,7 @@ import java.util.GregorianCalendar;
  * @version 1.0
  */
 public class TimeTools {
-    private static String dayFormat = "dd-MM-yyyy";
+    private static String dayFormat = "yyyy-MM-dd";
     private static String timeFormat = "HH:mm:ss";
 
     public static String getDayFormat()
@@ -70,11 +71,26 @@ public class TimeTools {
          System.out.println(npEx);
          return "";
      }
- }
+    }
+
+	public static String GetCurrentTime(Calendar cal) {
+	    java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat( getTimeFormat() );
+	
+	    try
+	    {
+	        return sdf.format( cal.getTime() );
+	    }
+	    catch( java.lang.NullPointerException npEx )
+	    {
+	        System.out.println(npEx);
+	        return "";
+	    }
+	   }
+    
 
  public static String GetCurrent()
  {
-     java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat( "dd-MM-yyyy HH:mm:ss" );
+     java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat( dayFormat + " " + timeFormat );
 
      try
      {
@@ -88,6 +104,24 @@ public class TimeTools {
 
 
  }
+
+ public static String GetCurrent(Calendar calendar)
+ {
+     java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat( dayFormat + " " + timeFormat );
+
+     try
+     {
+         return sdf.format( calendar.getTime() );
+     }
+     catch( java.lang.NullPointerException npEx )
+     {
+         System.out.println(npEx);
+         return "";
+     }
+
+
+ }
+
  public static Date getDate(String date, String format)
  {
 
@@ -106,6 +140,7 @@ public class TimeTools {
      return null;
  }
 
+ 
  public static String getYear()
  {
      GregorianCalendar calendar = new GregorianCalendar();
@@ -113,6 +148,13 @@ public class TimeTools {
      return year;
  }
 
+ public static String getYear(Calendar calendar)
+ {
+     String year = new Integer(calendar.get(GregorianCalendar.YEAR)).toString();
+     return year;
+ }
+
+ 
  public static String getMonth()
  {
      Calendar calendar = new GregorianCalendar();
@@ -134,7 +176,29 @@ public class TimeTools {
      }
      return null;
     }
-    public static String getDayNumber()
+ public static String getMonth(Calendar calendar )
+ {
+     int m = calendar.get(GregorianCalendar.MONTH);
+     switch (m)
+     {
+         case 0:return "Jenuary";
+         case 1:return "February";
+         case 2:return "March";
+         case 3:return "April";
+         case 4:return "May";
+         case 5:return "June";
+         case 6:return "July";
+         case 7:return "August";
+         case 8:return "September";
+         case 9:return "October";
+         case 10:return "November";
+         case 11:return "December";
+     }
+     return null;
+    }
+
+ 
+ public static String getDayNumber()
     {
       Calendar calendar = new GregorianCalendar();
       int d = calendar.get(GregorianCalendar.DAY_OF_MONTH);
@@ -142,5 +206,41 @@ public class TimeTools {
       if(day.length()<2)
           day = "0"+day;
       return day;
+  }
+
+ public static String getDayNumber(Calendar calendar)
+ {
+   int d = calendar.get(GregorianCalendar.DAY_OF_MONTH);
+   String day = new Integer(d + 1).toString();
+   if(day.length()<2)
+       day = "0"+day;
+   return day;
+}
+
+ public static Calendar getCalendar(String dateTime){
+	if(dateTime == null || dateTime.equals(""))
+	  return null;
+	
+	Date byThisDate = TimeTools.getDate(dateTime, dayFormat + " " + timeFormat );
+	Calendar cal = Calendar.getInstance();
+	cal.setTime(byThisDate);
+	return cal;
+	
+  }
+  
+  
+  public static Calendar getCalendarFromCalendarDateAddDays(Calendar cal, int  numberOfdaysFromCalendarDate){
+	if(cal != null && numberOfdaysFromCalendarDate > 0){
+	  
+	  Calendar newCal = (Calendar)cal.clone();
+	  SoftReference sf = new SoftReference((Calendar)cal.clone());
+	  ((Calendar) sf.get()).add(Calendar.DATE, numberOfdaysFromCalendarDate);
+	  
+	  return ((Calendar) sf.get());
+	}
+	
+	return null;
+	
+	
   }
 }

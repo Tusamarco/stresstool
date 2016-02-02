@@ -1,7 +1,7 @@
 [main]
 #connection oriented settings
-connUrl=jdbc:mysql://192.168.0.3:3306
-#connUrl=jdbc:mysql://127.0.0.1:3306
+#connUrl=jdbc:mysql://192.168.0.3:3306
+connUrl=jdbc:mysql://127.0.0.1:3306
 database=test
 user=stress	
 password=tool
@@ -44,6 +44,7 @@ DeleteClass=net.tc.stresstool.actions.DeleteBase
 SelectClass=net.tc.stresstool.actions.SelectBase
 InsertClass=net.tc.stresstool.actions.InsertBase
 UpdateClass=net.tc.stresstool.actions.UpdateBase
+ValueProvider=net.tc.stresstool.value.BasicFileValueProvider
 
 logPathStats=/tmp/stats.csv
 logPathStatReport=/tmp/reportstat.txt
@@ -53,6 +54,13 @@ insertStatHeaders=true
 appendLogReport=true
 
 datafilepath=/opt/shakespere.txt
+
+
+#manage the calendar options
+# YYYY-MM-DD HH:MM:SS
+# daysdiffernce is the target/final date of the period 
+calendardate=2015-05-25 05:01:06 
+daysdiffernce=100
 
 
 [logs]
