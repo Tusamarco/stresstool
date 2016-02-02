@@ -479,9 +479,16 @@ import javax.imageio.ImageIO;
 
   }
 
+  public static Long getNumberFromRandom(long index)
+  {
+//  	System.out.println(index);
+      return new Long(rnd.nextInt(new Long(index).intValue()));
+
+  }
+ 
   public static Long getNumberFromRandomMinMax(long min,long max)
   {
-  	if(min == max) return new Long(max);
+  	if(min >= max) return new Long(max);
   	
       if(min == 0 && max == 0){
       	return new Long(0);

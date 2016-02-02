@@ -7,6 +7,7 @@ import net.tc.stresstool.StressTool;
 import net.tc.stresstool.exceptions.StressToolConfigurationException;
 import net.tc.stresstool.logs.LogProvider;
 import net.tc.utils.SynchronizedMap;
+import net.tc.utils.Utility;
 
 
 public class SQLObject {
@@ -133,18 +134,21 @@ public class SQLObject {
 		  // TODO !!!HERE!!!
 		  boolean filling = false;
 		  if (this.resetLazy || !((Attribute) attrib).isLazy()) {
-			((Attribute) attrib).setValue(StressTool.getValueProvider().provideValue(((Attribute) attrib).getDataType(), 0));
+			((Attribute) attrib).setValue(StressTool.getValueProvider().provideValue(
+					((Attribute) attrib).getDataType(), 
+					Utility.getNumberFromRandom((System.currentTimeMillis()/10000))));
 			filling = true;
 		  }
 
-		  try {StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).debug(filling ? "" : "NOT"
+		  try {StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).debug(
+				  (filling ? "" : "NOT")
 			  			+ "Filling Attribute "
 			            + ((Attribute) attrib).getName()
 			            + " DataType: "
 			            + DataType.getDataTypeStringByIdentifier(((Attribute) attrib).getDataType().getDataTypeId()) 
-			            + " Value : xx"
+			            + " Value : " + ((Attribute)attrib).getValue()
 			            + " Lazy = " + ((Attribute) attrib).isLazy());
-		  } catch (StressToolConfigurationException e) {}
+		  } catch (StressToolConfigurationException e) {e.printStackTrace();}
 
 		  StressTool.getValueProvider().getRandomNumber(1, 2); // HERE !!!;
 
@@ -156,7 +160,7 @@ public class SQLObject {
 		    .getLogger(LogProvider.LOG_ACTIONS)
 		    .debug(
 		        "========================== Processing Table " + ((Table) table).getName() + " ================ [End]");
-	  } catch (StressToolConfigurationException e) { }
+	  } catch (StressToolConfigurationException e) {e.printStackTrace(); }
 	}
 	return null;
   }

@@ -475,7 +475,14 @@ public class InsertBase extends StressActionBase implements WriteAction,
 	   if(table != null 
 		   && table.getMetaAttributes()!=null
 		   && table.getMetaAttributes().size() >0 ){
-	       return (Attribute[]) table.getMetaAttributes().getValuesAsArrayOrderByKey(new Attribute[table.getMetaAttributes().size()]);
+		   SynchronizedMap attr = table.getMetaAttributes();
+		   Attribute[] attrR = new Attribute[attr.size()];
+		   for(int i=0; i< attr.size();i++){
+			   attrR[i]= (Attribute) attr.getValueByPosition(i);
+		   }
+		   
+		   return attrR;
+//	       return (Attribute[]) table.getMetaAttributes().getValuesAsArrayOrderByKey(new Attribute[table.getMetaAttributes().size()]);
 //	    		   .values().toArray(new Attribute[table.getMetaAttributes().size()]);
 	   }
 	    

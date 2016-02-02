@@ -8,6 +8,7 @@ import java.util.Random;
 
 import net.tc.data.db.DataType;
 import net.tc.utils.TimeTools;
+import net.tc.utils.Utility;
 
 public class BasicValueProvider implements ValueProvider {
   		static final String[] alpha = new String[]{"a","b","c","d","e","f","g","h","i","l","m","n","o","p","q","r","s","t","u","v","z"," "};
@@ -70,45 +71,28 @@ public class BasicValueProvider implements ValueProvider {
    * A significant switch set will determine what and then will call the relevant implementation
    */
   
-  public Object provideValue(DataType dataType, int length){
+  public Object provideValue(DataType dataType, Long length){
     switch (dataType.getDataTypeCategory()){
       case DataType.NUMERIC_CATEGORY:
     	switch (dataType.getDataTypeId()){
 	  	case DataType.TINYINT:
-	  	  	this.getTiny(length);
-	  	    break; 
-	  	
+	  		return getTiny(length.intValue());
 	  	case DataType.SMALLINT:
-	  	  this.getSmallInt(length);
-	  	  break; 
-  	  	
+	  		return getSmallInt(length.intValue());
 	  	case DataType.MEDIUMINT:
-	  	  this.getMedInt(length);
-	  	  break; 
-
+	  		return getMedInt(length.intValue());
 	  	case DataType.INT:
-	  	  this.getInt(length);
-	  	  break; 
-
+	  		return getInt(length.intValue());
 	  	case DataType.BIGINT:
-	  	  this.geBigInt(new Long(length));
-	  	  break; 
-
+	  		return geBigInt(new Long(length));
 	  	case DataType.FLOAT: 	
-	  	  this.getFloat(length);
-	  	  break; 
-
+	  		return getFloat(length.intValue());
 	  	case DataType.DOUBLE:
-	  	  this.getDouble(length);	
-	  	  break; 
-
+	  		return getDouble(length.intValue());	
 	  	case DataType.DECIMAL:
-	  	  this.getDecimal(length);	  	  
-	  	  break;
-	  	
+	  		return getDecimal(length.intValue());	  	  
 	  	case DataType.BIT:
-	  	  this.getBit(length);	  	  
-	  	  break;
+	  		return getBit(length.intValue());	  	  
     	}
 
 	  	break;
@@ -119,144 +103,100 @@ public class BasicValueProvider implements ValueProvider {
      	  {
       	    int lowerbound = 0;
       	    long upperbound = 255;
-      	    this.getString(upperbound,length);
+      	    return  getString(upperbound,length.intValue());
      	  }
-   	  	  break;
 	  	case DataType.BINARY: 
      	  {
     	    int lowerbound = 0;
     	    long upperbound = 255;
-    	    this.getString(upperbound,length);
+    	    return getString(upperbound,length.intValue());
      	  }
-	  	  break;
-	  	    
 	  	case DataType.VARCHAR: 
      	  {
     	    int lowerbound = 0;
     	    long upperbound = 65535;
-    	    this.getString(upperbound,length);
+    	    return getString(upperbound,length.intValue());
      	  }
-	  	  break;
-
 	  	case DataType.VARBINARY: 
      	  {
     	    int lowerbound = 0;
     	    long upperbound = 65535;
-    	    this.getString(upperbound,length);
+    	    return getString(upperbound,length.intValue());
      	  }
-	  	  break;
-
 	  	case DataType.TINYBLOB: 
      	  {
     	    int lowerbound = 0;
     	    long upperbound = 256;
-    	    this.getString(upperbound,length);
+    	    return getString(upperbound,length.intValue());
      	  }
-	  	  break;
-	 
 	  	case DataType.TINYTEXT: 
        	  {
     	    int lowerbound = 0;
     	    long upperbound = 256;
-    	    this.getString(upperbound,length);
+    	    return getString(upperbound,length.intValue());
      	  }
-	  	  break;
-	 
 	  	case DataType.BLOB: 
        	  {
     	    int lowerbound = 0;
     	    long upperbound = 65535;
-    	    this.getString(upperbound,length);
+    	    return getString(upperbound,length.intValue());
      	  }
-	  	  break;
-
 	  	case DataType.TEXT: 
        	  {
     	    int lowerbound = 0;
     	    long upperbound = 65535;
-    	    this.getString(upperbound,length);
+    	    return getString(upperbound,length.intValue());
      	  }
-	  	  break;
-
 	  	case DataType.MEDIUMBLOB: 
        	  {
     	    int lowerbound = 0;
     	    long upperbound = 16777216;
-    	    this.getString(upperbound,length);
+    	    return getString(upperbound,length.intValue());
      	  }
-
-	  	  break;
-
 	  	case DataType.MEDIUMTEXT: 
        	  {
     	    int lowerbound = 0;
     	    long upperbound = 16777216;
-    	    this.getString(upperbound,length);
+    	    return getString(upperbound,length.intValue());
      	  }
-
-	  	  break;
-	  	
 	  	case DataType.LONGBLOB:
        	  {
     	    int lowerbound = 0;
     	    long upperbound = Long.parseLong("4294967296");
-    	    this.getString(upperbound,length);
+    	    return getString(upperbound,length.intValue());
      	  }
-
-	  	  break;
-	 
 	  	case DataType.LONGTEXT:
        	  {
     	    int lowerbound = 0;
     	    long upperbound = Long.parseLong("4294967296");
-    	    this.getString(upperbound,length);
-     	  }
-
-	  	  break;
-
-    	  
+    	    return getString(upperbound,length.intValue());
+     	  }    	  
     	}
     	break;
       case DataType.DATE_CATEGORY:
     	switch (dataType.getDataTypeId()){
-    	  	case DataType.YEAR: 	
-    	  	  this.getYear(length);
-    	  	  break;
-    
+    	 case DataType.YEAR: 	
+    		  return getYear(length.intValue());
       	case DataType.DATE:
-      	  this.getDate(length);
-      	  break;
-    
+      		return getDate(length.intValue());
       	case DataType.TIME:
-      	  this.getTime(length);
-      	  break;
-    
+      		return getTime(length.intValue());
       	case DataType.DATETIME:
-      	  this.getDateTime(length);
-      	  break;
-    
+      		return getDateTime(length.intValue());
       	case DataType.TIMESTAMP:
-      	  this.getTimestamp(length);
-      	  break;
+      		return getTimestamp(length.intValue());
       	}
-    	
-    	break;
-    	
-      default: throw new IllegalArgumentException("Invalid data type Category : " + dataType.getDataTypeCategory());
-    	
-    }
-	
+    	break;    	
     
+      default: throw new IllegalArgumentException("Invalid data type Category : " + dataType.getDataTypeCategory());
+    }
 	return null;
 	
   }
 
   @Override
   public String getTimestamp(int length) {
-	// do not return any value MySQL must generate it 
-	return "NULL";
-
-	
+	return TimeTools.GetFullDate(System.currentTimeMillis()); 
   }
   @Override
   public String getDateTime(int daysAdd) {
@@ -267,22 +207,16 @@ public class BasicValueProvider implements ValueProvider {
 	
   }
   @Override
-  public String getTime(int length) {
-	return null;
-	// TODO Auto-generated method stub
-	
+  public String getTime(int addTimeInSeconds) {
+	  return TimeTools.GetCurrentTime(testCalendar);
   }
   @Override
   public String getDate(int length) {
-	return null;
-	// TODO Auto-generated method stub
-	
+	  return TimeTools.GetCurrent(testCalendar);
   }
   @Override
   public String getYear(int length) {
-	return null;
-	// TODO Auto-generated method stub
-	
+	  return TimeTools.getYear(testCalendar);
   }
   @Override
   public Byte getBit(int length) {
@@ -412,7 +346,7 @@ public class BasicValueProvider implements ValueProvider {
     {
         sb.append(alpha[rnd.nextInt(alpha.length)]);
     }
-    return sb.subSequence(0, new Long(upperbound).intValue()).toString();
+    return sb.subSequence(0, sb.length()>upperbound?new Long(upperbound).intValue():sb.length()).toString();
   }
 
 
@@ -461,6 +395,14 @@ public class BasicValueProvider implements ValueProvider {
   public void setTestCalendar(Calendar testCalendar) {
     this.testCalendar = testCalendar;
   }
+
+@Override
+public Calendar resetCalendar(int timeDays) {
+	int days = Utility.getNumberFromRandomMinMax((timeDays * -1), timeDays).intValue();
+	testCalendar = TimeTools.getCalendarFromCalendarDateAddDays(testCalendar, days);
+	 
+	return testCalendar;
+}
 
 
  

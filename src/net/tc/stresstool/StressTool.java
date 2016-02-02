@@ -180,7 +180,7 @@ public class StressTool {
 	          int line =1;
 	          float curPct = (float) 0.0;
 	          float maxPct = loops;
-	          
+	          int calendarReset = 10;
 //	          int aInsert =  new Float( maxInsert).intValue();
 
 	          for(int i = 0 ; i < loops; i++ ){
@@ -189,6 +189,16 @@ public class StressTool {
 	        	     && launcher.isUseHardStop())
 	        	 break;
 	             
+	             
+	             /*
+	              * reset calendar date after X number of loops to have consistent date used by the value provider
+	              */
+	             if(calendarReset == 0){
+	            	 launcher.resetValueProviderCalendar();
+	            	 calendarReset = 10 ; 
+	             }
+	             else
+	            	 calendarReset--;
 	             
 	             StressTool.setStressToolRunning(launcher.LaunchActions());
 	             logProvider.getLogger(LogProvider.LOG_APPLICATION).info("Running loop = " + i);

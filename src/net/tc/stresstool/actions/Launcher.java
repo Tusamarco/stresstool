@@ -328,14 +328,13 @@ public class Launcher {
      * @throws StressToolException 
      */
     public ValueProvider LoadData() throws StressToolException {
-	String path = (String) config.getConfiguration(Configurator.MAIN_SECTION_NAME, StressTool.class).getParameter("datafilepath").getValue();
-	if(path !=null){
-	    ValueProvider dataLoader = this.setValueProvider();
-	    dataLoader.readText(path, ValueProvider.SPLIT_METHOD_UNIX_END_LINE);
+		String path = (String) config.getConfiguration(Configurator.MAIN_SECTION_NAME, StressTool.class).getParameter("datafilepath").getValue();
+		ValueProvider dataLoader = this.setValueProvider();
+		if(path !=null){
+		    dataLoader.readText(path, ValueProvider.SPLIT_METHOD_UNIX_END_LINE);
+		}
+		return dataLoader;
 
-	    return dataLoader;
-	}
-	return null;
     }
 
 //    /**
@@ -979,7 +978,7 @@ public class Launcher {
 		ValueProvider valueProviderInstance;
 		
         try {
-    	      valueProviderInstance = (ValueProvider) Class.forName(deleteClass).newInstance();
+    	      valueProviderInstance = (ValueProvider) Class.forName(valueProvider).newInstance();
     	      valueProviderInstance.setTestCalendar(getTestCalendar());
     	      
     	      return valueProviderInstance;
@@ -1295,6 +1294,8 @@ public class Launcher {
 	private void setValueProvider(String valueProvider) {
 	  this.valueProvider = valueProvider;
 	}
-
+	public void resetValueProviderCalendar(){
+		StressTool.getValueProvider().resetCalendar(daysdiffernce);
+	}
 		
 }

@@ -24,7 +24,7 @@ public interface ValueProvider {
     public Long getRandomNumber(long lowerLimit, long upperLimit);
     public Date getRandomDate();
     public abstract ValueProvider copyProvider();
-    public Object provideValue(DataType dataType, int length);
+    public Object provideValue(DataType dataType, Long length);
     public boolean readText(String path, int splitMethod);
     public String getTimestamp(int length);
     public String getDateTime(int length);
@@ -50,6 +50,6 @@ public interface ValueProvider {
 	public Integer getInt(int length);
 	public Calendar getTestCalendar();
 	public void setTestCalendar(Calendar testCalendar);
-	
+	public Calendar resetCalendar(int timeDays);
     
 }

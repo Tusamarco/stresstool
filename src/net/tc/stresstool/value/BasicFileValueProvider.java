@@ -167,17 +167,24 @@ public class BasicFileValueProvider extends BasicValueProvider implements ValueP
     public String getString(int upperbound, int length) {
       StringBuffer sb = new StringBuffer();
       
-      int textPos = new Long(Utility.getNumberFromRandomMinMax((int) (System.currentTimeMillis()/100), (txtFile.length)/2)).intValue();
+      int textPos = new Long(Utility.getNumberFromRandomMinMax((int) (System.currentTimeMillis()/10000), (txtFile.length)/Utility.getNumberFromRandomMinMax(1, 100))).intValue();
       int upto = length>upperbound?upperbound:length;
+     
+      
       while (sb.length() < upto)
       {
-          sb.append(txtFile[textPos++]);
+    	  if(textPos == txtFile.length)
+    		  textPos =0;
+    	  sb.append(txtFile[textPos++]);
       }
 
       return sb.toString().substring(0,upto);
   	
     }
-    
+    @Override
+    public String getString(long upperbound, int length) {
+    	return getString(new Long(upperbound).intValue(), length) ;
+    }
     @Override
     public String getString(int length) {
       return this.getString(255, length);

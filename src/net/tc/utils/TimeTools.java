@@ -20,7 +20,7 @@ import java.util.GregorianCalendar;
  * @version 1.0
  */
 public class TimeTools {
-    private static String dayFormat = "dd-MM-yyyy";
+    private static String dayFormat = "yyyy-MM-dd";
     private static String timeFormat = "HH:mm:ss";
 
     public static String getDayFormat()
@@ -71,7 +71,22 @@ public class TimeTools {
          System.out.println(npEx);
          return "";
      }
- }
+    }
+
+	public static String GetCurrentTime(Calendar cal) {
+	    java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat( getTimeFormat() );
+	
+	    try
+	    {
+	        return sdf.format( cal.getTime() );
+	    }
+	    catch( java.lang.NullPointerException npEx )
+	    {
+	        System.out.println(npEx);
+	        return "";
+	    }
+	   }
+    
 
  public static String GetCurrent()
  {
