@@ -2,9 +2,14 @@ package net.tc.data.generic;
 
 import net.tc.data.common.MultiLanguage;
 import net.tc.data.db.*;
+import net.tc.stresstool.StressTool;
+import net.tc.stresstool.exceptions.StressToolConfigurationException;
+import net.tc.stresstool.logs.LogProvider;
 import net.tc.utils.SynchronizedMap;
 
 import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Map;
 
 public class DataObject extends MultiLanguage
@@ -69,7 +74,7 @@ public class DataObject extends MultiLanguage
 	 * 
 	 */
 	public SynchronizedMap getSqlObjects() {
-	    return values;
+	    return SQLContainer;
 	}
 	
 	/**
@@ -81,7 +86,7 @@ public class DataObject extends MultiLanguage
 	 * @param values the values to set
 	 */
 	public void setValues(SynchronizedMap values) {
-	    this.values = values;
+	    this.SQLContainer = values;
 	}
 
 	/**
@@ -182,6 +187,30 @@ public class DataObject extends MultiLanguage
 	    this.SQLContainer = SQLContainer;
 	}
 	public int[] executeSqlObject(Connection conn){
+	    try {
+	      Statement stmt = conn.createStatement();
+	      stmt.addBatch("START TRANSACTION");
+		    if(SQLContainer != null ){
+		      for(int ir = 0 ; ir < getSqlObjects().size(); ir++){
+		    	SQLObject mySo = (SQLObject)getSqlObjects().getValueByPosition(ir);
+		    	for(int iCo = 0 ; iCo < mySo.getSQLCommands().size(); iCo++){
+		    	  String command = (String)(mySo.getSQLCommands().get(iCo)) ;
+		    	  stmt.addBatch(command);
+		    	  try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).debug("Add SQL to batch: " + command  );}catch(StressToolConfigurationException e){}
+		    	  
+		    	}
+		      }
+		    }
+		    stmt.addBatch("COMMIT");
+		    int[] rows = stmt.executeBatch();
+	      
+	      
+        } catch (SQLException e) {
+	      // TODO Auto-generated catch block
+	      e.printStackTrace();
+        }
+
+	    
 	    
 	    return null;
 	}

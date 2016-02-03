@@ -17,6 +17,7 @@ public class Attribute {
 	private Object value = null;
 	private int storageSize = 0 ; //size in bytes
 	private boolean isLazy = true ; 
+	private String specialFunction = null;
 	
     private boolean isNull = true;
     
@@ -103,6 +104,18 @@ public class Attribute {
 	 */
 	public void setLazy(boolean isLazy) {
 	    this.isLazy = isLazy;
+	}
+	/**
+	 * @return the specialFunction
+	 */
+	public String getSpecialFunction() {
+	  return specialFunction;
+	}
+	/**
+	 * @param specialFunction the specialFunction to set
+	 */
+	public void setSpecialFunction(String specialFunction) {
+	  this.specialFunction = specialFunction;
 	}
 	
 }

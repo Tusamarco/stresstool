@@ -155,7 +155,7 @@ public class Schema {
 			
 			if(numberOfTables > 1){
 			    newTable.setName(newTable.getName() + newTable.getInstanceNumber());
-			    newTables.put((newTable.getName() + newTable.getInstanceNumber()), newTable);
+			    newTables.put((newTable.getName()), newTable);
 			}
 			else{
 			    newTables.put(table.getName(), newTable);
@@ -210,28 +210,29 @@ public class Schema {
 	while (tablesIt.hasNext()) {
 	    Table table = this.getTable((String) tablesIt.next());
 	    if (table != null) {
-		int numberOfTables = 0;
-		if(table.getParentTable()==null 
-			&& table.isMultiple()
-			){
-		    numberOfTables=(Integer) tablesInstances.get(Table.TABLE_PARENT);  	
-		}
-		else if(table.getParentTable() != null 
-			&& table.isMultiple()){
-		    numberOfTables=(Integer) tablesInstances.get(Table.TABLE_CHILD);
-		}
-		else{
-		    numberOfTables = 0;
-		}
-		
-		if(numberOfTables > 0){
-        		for (int i = 1; i <= numberOfTables; i++) {
-        		    tables.add(table.getName() + i);
-        		}
-		}
-		else{
-		    	tables.add(table.getName());
-		}
+//    		int numberOfTables = 0;
+//    		if(table.getParentTable()==null 
+//    			&& table.isMultiple()
+//    			){
+//    		    numberOfTables=(Integer) tablesInstances.get(Table.TABLE_PARENT);  	
+//    		}
+//    		else if(table.getParentTable() != null 
+//    			&& table.isMultiple()){
+//    		    numberOfTables=(Integer) tablesInstances.get(Table.TABLE_CHILD);
+//    		}
+//    		else{
+//    		    numberOfTables = 0;
+//    		}
+//    		
+//    		if(numberOfTables > 0){
+//            		for (int i = 1; i <= numberOfTables; i++) {
+//            		    tables.add(table.getName()+ i);
+//            		}
+//    		}
+//    		else{
+//    		    	tables.add(table.getName());
+//    		}
+	      tables.add(table.getName());
 	    }
 	}
 	if(tables != null  & tables.size() > 0 )

@@ -183,6 +183,7 @@ public class StructureDefinitionParserMySQL implements
 						attribute.setDataType(new DataType(DataType.getDataTypeIdentifierByString((String)oAttribute.get("datatype"))));
 						attribute.setDataDimension((String)oAttribute.get("datadimension")!= null?Integer.parseInt((String)oAttribute.get("datadimension")):0);
 						attribute.setAutoIncrement(oAttribute.get("autoincrement")!= null?true:false);
+						attribute.setSpecialFunction(oAttribute.get("specialFunction")!= null?(String)oAttribute.get("specialFunction"):null);
 						if(oAttribute.get("default") != null 
 								&& !((String)oAttribute.get("default")).equals("")){
 								attribute.setDefaultValue((String)oAttribute.get("default"));

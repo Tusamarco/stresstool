@@ -5,6 +5,8 @@ package net.tc.stresstool.value;
 
 import java.lang.ref.SoftReference;
 import java.util.Arrays;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import net.tc.data.db.DataType;
 import net.tc.utils.Utility;
@@ -16,7 +18,7 @@ import net.tc.utils.file.FileHandler;
  */
 public class BasicFileValueProvider extends BasicValueProvider implements ValueProvider {
 
-    private static final long upperbound = 0;
+//    private static final long upperbound = 0;
 
 	public BasicFileValueProvider() {
     }
@@ -115,6 +117,17 @@ public class BasicFileValueProvider extends BasicValueProvider implements ValueP
 	((FileHandler)sr.get()).readInitialize(false);
 	
 	txtFile = ((FileHandler)sr.get()).getTextFileAsStringArray();
+	 Pattern p = Pattern.compile("\\s\\s");
+	 Pattern p2 = Pattern.compile("\"");
+	for(int i = 0 ; i < txtFile.length; i++){
+	  if(txtFile[i] != null){
+		Matcher m = p.matcher(txtFile[i]); 
+    	String toClean =  m.replaceAll("");
+    	m = p.matcher(toClean);
+    	toClean =  m.replaceAll("");
+    	txtFile[i] = toClean;
+	  }
+	}
 	sr = null;
 	return true;
     }
@@ -170,15 +183,17 @@ public class BasicFileValueProvider extends BasicValueProvider implements ValueP
       int textPos = new Long(Utility.getNumberFromRandomMinMax((int) (System.currentTimeMillis()/10000), (txtFile.length)/Utility.getNumberFromRandomMinMax(1, 100))).intValue();
       int upto = length>upperbound?upperbound:length;
      
-      
+//      sb.append("\"");
       while (sb.length() < upto)
       {
     	  if(textPos == txtFile.length)
     		  textPos =0;
     	  sb.append(txtFile[textPos++]);
       }
+      
 
       return sb.toString().substring(0,upto);
+//      + "\"";
   	
     }
     @Override

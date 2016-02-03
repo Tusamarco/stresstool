@@ -519,11 +519,11 @@ public class FileHandler implements FileDataReader, FileDataWriter
                 {
                     if(line != null)
                     {
-                        String[] headers =  new String(line.getBytes(), "UTF-8").split(",");
+                        String[] headers =  new String(line.getBytes(), "UTF-8").replaceAll("\"", "").replaceAll("'", "").split(",");
                         for(int i = 0 ; i <= headers.length; i++)
                         {
 	                        if(headers != null)
-	                            headersL.add(headers[i]);
+	                            headersL.add(headers[i].replaceAll(" ", "").replaceAll("^s+", ""));
                         }
                     }
 

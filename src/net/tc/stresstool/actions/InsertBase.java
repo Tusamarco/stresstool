@@ -334,6 +334,23 @@ public class InsertBase extends StressActionBase implements WriteAction,
     	/**
     	 * Db actions
     	 */
+	  Connection conn = null;
+	  if(this.getActiveConnection()==null){
+		try {
+	      conn = this.getConnProvider().getSimpleConnection();
+        } catch (SQLException e) {
+	      // TODO Auto-generated catch block
+	      e.printStackTrace();
+        }
+	  }
+	  else
+		conn = this.getActiveConnection();
+		
+	  /*
+	   * now run the show
+	   */
+	  	
+	  this.myDataObject.executeSqlObject(conn);
 		
 	}
 	
@@ -342,15 +359,20 @@ public class InsertBase extends StressActionBase implements WriteAction,
 	 * @throws StressToolActionException 
 	 */
 	@Override
-	public boolean ExecutePreliminaryAction() throws StressToolActionException {
+	public boolean ExecutePreliminaryAction() {
 	    /**
 	     * Initialize the DataObject representing the SQL action
 	     */
-	    this.myDataObject =  inizializeDataObject(new DataObject());
-	    this.myDataObject.isInizialized();
+	    try {
+	      this.myDataObject =  inizializeDataObject(new DataObject());
+        } catch (StressToolActionException e) {
+	      e.printStackTrace();
+        }
+     	if(this.myDataObject.isInizialized())
+     	  return true;
 	  // TODO I am here need to do the value generation using the Sql object and the Data Object  
 	  
-	    return true;  
+	    return false;  
 	     
 	}
 
@@ -396,7 +418,7 @@ public class InsertBase extends StressActionBase implements WriteAction,
  * values in accordance to the lazyInterval value 
  */
 	for (Object table : thisSQLObject.getTables()) {
-	    if(sbAttribs.length() > 0) sbAttribs.delete(0, sbAttribs.length() - 1);
+	    if(sbAttribs.length() > 0) sbAttribs.delete(0, sbAttribs.length());
 
 	    int iNumTables = 0;
 
@@ -406,8 +428,7 @@ public class InsertBase extends StressActionBase implements WriteAction,
 		if (iAttrib > 0)
 		    sbAttribs.append(",");
 		
-		sbAttribs.append(((Attribute) thisSQLObject.getAttribs()[iAttrib])
-				.getName());
+		sbAttribs.append(((Attribute) thisSQLObject.getAttribs()[iAttrib]).getName());
 	    }
 
 	    if (((Table) table).getParentTable() == null) {
@@ -423,7 +444,7 @@ public class InsertBase extends StressActionBase implements WriteAction,
 		lSQLObj.setBatchLoops(this.batchSize);
 		lSQLObj.addSourceTables((Table)table);
 		
-		// TODO this must be changed to reflect the 
+		// TODO this must be changed to reflect the real number of loop running during execution
 		lSQLObj.setLazyExecCount(0);
 		
 		String localSQLTemplate = sqlTemplate;
@@ -449,9 +470,8 @@ public class InsertBase extends StressActionBase implements WriteAction,
 		lSQLObj.setSqlLocalTemplate(localSQLTemplate);
 		// TODO here
 			lSQLObj.setResetLazy(true);
-			if(lSQLObj.getValues().equals("")) 
-		
-		SQLObjectContainer.put(((Table) table).getName(), lSQLObj);
+			if(!lSQLObj.getValues().equals("")) 
+				SQLObjectContainer.put(((Table) table).getName(), lSQLObj);
 				
 	    
 	}

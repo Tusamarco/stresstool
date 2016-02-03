@@ -19,46 +19,24 @@ public class BasicValueProvider implements ValueProvider {
   		private Calendar testCalendar = null;
   @Override
   public Long getRandomNumber() {
-	 return new Long(rnd.nextInt((int)System.currentTimeMillis()/1000 ));
+	return Utility.getNumberFromRandom(new Long(System.currentTimeMillis()).intValue());
   }
 
   @Override
+  /* Return a long no bigger than upperLimit
+   */
   public Long getRandomNumber(long upperLimit) {
-	int min = (int)System.currentTimeMillis()/1000 ;
-	int max = new Long(upperLimit).intValue();
+	return Utility.getNumberFromRandomMinMax(0, new Long(upperLimit).intValue()); 
 	
-	if(min == max) return new Long(max);
-  	
-    if(min == 0 && max == 0){
-    	return new Long(0);
-    }
-    
-	Long maxL = new Long(rnd.nextInt(max - min) + min);
-	if(maxL < new Long(min)){
-		maxL = new Long(min * 2);    		
-	}
-	return maxL;
   }
+  
 
+  /* Return a long value between limits
+   */
   @Override
   public Long getRandomNumber(long lowerLimit, long upperLimit) {
-	int min = new Long(lowerLimit).intValue();
-	int max = new Long(upperLimit).intValue();
- 
-	if(min == max) return new Long(max);
-  	
-    if(min == 0 && max == 0){
-    	return new Long(0);
-    }
-    
-	Long maxL = new Long(rnd.nextInt(max - min) + min);
-	if(maxL < new Long(min)){
-		maxL = new Long(min * 2);    		
+	return Utility.getNumberFromRandomMinMax(lowerLimit, upperLimit);
 	}
-	return maxL;
-	
-  }
-
  
   @Override
   public ValueProvider copyProvider() {
@@ -72,6 +50,7 @@ public class BasicValueProvider implements ValueProvider {
    */
   
   public Object provideValue(DataType dataType, Long length){
+	try{	
     switch (dataType.getDataTypeCategory()){
       case DataType.NUMERIC_CATEGORY:
     	switch (dataType.getDataTypeId()){
@@ -103,93 +82,96 @@ public class BasicValueProvider implements ValueProvider {
      	  {
       	    int lowerbound = 0;
       	    long upperbound = 255;
-      	    return  getString(upperbound,length.intValue());
+      	    return ("\"" + getString(Utility.getNumberFromRandomMinMax(0, upperbound),length.intValue()) +"\"");
      	  }
 	  	case DataType.BINARY: 
      	  {
     	    int lowerbound = 0;
     	    long upperbound = 255;
-    	    return getString(upperbound,length.intValue());
+    	    return ("\"" + getString(Utility.getNumberFromRandomMinMax(0, upperbound),length.intValue()) +"\"");
      	  }
 	  	case DataType.VARCHAR: 
      	  {
     	    int lowerbound = 0;
     	    long upperbound = 65535;
-    	    return getString(upperbound,length.intValue());
+    	    return ("\"" + getString(Utility.getNumberFromRandomMinMax(0, upperbound),length.intValue()) +"\"");
      	  }
 	  	case DataType.VARBINARY: 
      	  {
     	    int lowerbound = 0;
     	    long upperbound = 65535;
-    	    return getString(upperbound,length.intValue());
+    	    return ("\"" + getString(Utility.getNumberFromRandomMinMax(0, upperbound),length.intValue()) +"\"");
      	  }
 	  	case DataType.TINYBLOB: 
      	  {
     	    int lowerbound = 0;
     	    long upperbound = 256;
-    	    return getString(upperbound,length.intValue());
+    	    return ("\"" + getString(Utility.getNumberFromRandomMinMax(0, upperbound),length.intValue()) +"\"");
      	  }
 	  	case DataType.TINYTEXT: 
        	  {
     	    int lowerbound = 0;
     	    long upperbound = 256;
-    	    return getString(upperbound,length.intValue());
+    	    return ("\"" + getString(upperbound,length.intValue()) + "\"");
      	  }
 	  	case DataType.BLOB: 
        	  {
     	    int lowerbound = 0;
     	    long upperbound = 65535;
-    	    return getString(upperbound,length.intValue());
+    	    return ("\"" + getString(Utility.getNumberFromRandomMinMax(0, upperbound),length.intValue()) +"\"");
      	  }
 	  	case DataType.TEXT: 
        	  {
     	    int lowerbound = 0;
     	    long upperbound = 65535;
-    	    return getString(upperbound,length.intValue());
+    	    return ("\"" + getString(Utility.getNumberFromRandomMinMax(0, upperbound),length.intValue()) +"\"");
      	  }
 	  	case DataType.MEDIUMBLOB: 
        	  {
     	    int lowerbound = 0;
     	    long upperbound = 16777216;
-    	    return getString(upperbound,length.intValue());
+    	    return ("\"" + getString(Utility.getNumberFromRandomMinMax(0, upperbound),length.intValue()) +"\"");
      	  }
 	  	case DataType.MEDIUMTEXT: 
        	  {
     	    int lowerbound = 0;
     	    long upperbound = 16777216;
-    	    return getString(upperbound,length.intValue());
+    	    return ("\"" + getString(Utility.getNumberFromRandomMinMax(0, upperbound),length.intValue()) +"\"");
      	  }
 	  	case DataType.LONGBLOB:
        	  {
     	    int lowerbound = 0;
     	    long upperbound = Long.parseLong("4294967296");
-    	    return getString(upperbound,length.intValue());
+    	    return ("\"" + getString(Utility.getNumberFromRandomMinMax(0, upperbound),length.intValue()) +"\"");
      	  }
 	  	case DataType.LONGTEXT:
        	  {
     	    int lowerbound = 0;
     	    long upperbound = Long.parseLong("4294967296");
-    	    return getString(upperbound,length.intValue());
+    	    return ("\"" + getString(Utility.getNumberFromRandomMinMax(0, upperbound),length.intValue()) +"\"");
      	  }    	  
     	}
     	break;
+    	
       case DataType.DATE_CATEGORY:
     	switch (dataType.getDataTypeId()){
     	 case DataType.YEAR: 	
-    		  return getYear(length.intValue());
+    		  return ("\"" + getYear(length.intValue()) + "\"");
       	case DataType.DATE:
-      		return getDate(length.intValue());
+      		return ("\"" + getDate(length.intValue())+ "\"");
       	case DataType.TIME:
-      		return getTime(length.intValue());
+      		return ("\"" + getTime(length.intValue())+ "\"");
       	case DataType.DATETIME:
-      		return getDateTime(length.intValue());
+      		return ("\"" + getDateTime(length.intValue())+ "\"");
       	case DataType.TIMESTAMP:
-      		return getTimestamp(length.intValue());
+      		return ("\"" + getTimestamp(length.intValue())+ "\"");
       	}
     	break;    	
-    
+    	
       default: throw new IllegalArgumentException("Invalid data type Category : " + dataType.getDataTypeCategory());
+    	
     }
+	}catch(Throwable e){e.printStackTrace();}
 	return null;
 	
   }

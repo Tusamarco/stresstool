@@ -126,34 +126,62 @@ public class SQLObject {
 	   * loops cross batch loops
 	   */
 	  StringBuffer sqlValues = new StringBuffer();
+	  
+	  
 	  for (int iBatch = 0; iBatch <= this.batchLoops; iBatch++) {
-		StringBuffer singleSql = new StringBuffer();
-		for (Object attrib : Attribs.getValuesAsArrayOrderByKey()) {
-		  if (singleSql.length() > 1)
-			singleSql.append(", ");
-		  // TODO !!!HERE!!!
-		  boolean filling = false;
-		  if (this.resetLazy || !((Attribute) attrib).isLazy()) {
-			((Attribute) attrib).setValue(StressTool.getValueProvider().provideValue(
-					((Attribute) attrib).getDataType(), 
-					Utility.getNumberFromRandom((System.currentTimeMillis()/10000))));
-			filling = true;
-		  }
-
-		  try {StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).debug(
-				  (filling ? "" : "NOT")
-			  			+ "Filling Attribute "
-			            + ((Attribute) attrib).getName()
-			            + " DataType: "
-			            + DataType.getDataTypeStringByIdentifier(((Attribute) attrib).getDataType().getDataTypeId()) 
-			            + " Value : " + ((Attribute)attrib).getValue()
-			            + " Lazy = " + ((Attribute) attrib).isLazy());
-		  } catch (StressToolConfigurationException e) {e.printStackTrace();}
-
-		  StressTool.getValueProvider().getRandomNumber(1, 2); // HERE !!!;
-
+		try{
+    		StringBuffer singleSql = new StringBuffer();
+    		if (sqlValues.length() > 1)
+    		  sqlValues.append(",");
+    		
+    		singleSql.append("(");
+		
+    		for (Object attrib : Attribs.getValuesAsArrayOrderByKey()) {
+    		  if (singleSql.length() > 1)
+    			singleSql.append(", ");
+    		  // TODO !!!HERE!!!
+    		  boolean filling = false;
+    		  if (this.resetLazy || !((Attribute) attrib).isLazy()) {
+    			if(((Attribute) attrib).getSpecialFunction() == null
+    				&& !((Attribute) attrib).isAutoIncrement()
+    				){
+    				((Attribute) attrib).setValue(StressTool.getValueProvider().provideValue(
+    					((Attribute) attrib).getDataType(), new Long(((Attribute) attrib).getDataDimension())));
+    			}
+    			else{
+    			  
+    			  if(((Attribute)attrib).isAutoIncrement()){
+    				((Attribute) attrib).setValue("NULL");
+    			  }
+    			  else{
+    				((Attribute) attrib).setValue(((Attribute) attrib).getSpecialFunction());
+    			  }
+    			}
+    				
+    			filling = true;
+    		  }
+    		  singleSql.append(((Attribute) attrib).getValue());
+    
+    //		  try {StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).debug(
+    //				  (filling ? "" : "NOT")
+    //			  			+ "Filling Attribute "
+    //			            + ((Attribute) attrib).getName()
+    //			            + " DataType: "
+    //			            + DataType.getDataTypeStringByIdentifier(((Attribute) attrib).getDataType().getDataTypeId()) 
+    //			            + " Value : " + ((Attribute)attrib).getValue()
+    //			            + " Lazy = " + ((Attribute) attrib).isLazy());
+    //		  } catch (StressToolConfigurationException e) {e.printStackTrace();}
+    
+    
+    
+    		}
+    		singleSql.append(")");
+    		sqlValues.append(singleSql);
+    		singleSql.delete(0, singleSql.length());
 		}
+		catch(Throwable th){th.printStackTrace();}
 	  }
+	  
 	  try {
 		StressTool
 		    .getLogProvider()
@@ -161,6 +189,8 @@ public class SQLObject {
 		    .debug(
 		        "========================== Processing Table " + ((Table) table).getName() + " ================ [End]");
 	  } catch (StressToolConfigurationException e) {e.printStackTrace(); }
+	  getSQLCommands().add(this.getSqlLocalTemplate().replace("(#VALUES#)", sqlValues.toString()));	  
+	  return sqlValues.toString();
 	}
 	return null;
   }

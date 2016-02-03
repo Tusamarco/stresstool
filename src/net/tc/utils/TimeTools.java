@@ -230,7 +230,7 @@ public class TimeTools {
   
   
   public static Calendar getCalendarFromCalendarDateAddDays(Calendar cal, int  numberOfdaysFromCalendarDate){
-	if(cal != null && numberOfdaysFromCalendarDate > 0){
+	if(cal != null ){
 	  
 	  Calendar newCal = (Calendar)cal.clone();
 	  SoftReference sf = new SoftReference((Calendar)cal.clone());

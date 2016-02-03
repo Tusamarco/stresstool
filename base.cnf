@@ -9,17 +9,17 @@ connParameters=autoReconnect=true
 connectionPool=false
 connectionPoolClass= 
 selectForceAutocommitOff=false
-stikyconnection=false
+stickyconnection=false
 
 
 FKEnable=false
-createTable=false 
+createTable=true 
 dbType=MySQL 
 doDelete=false 
 doReport=true 
 doSimple=false 
 doSimplePk=false 
-droptable=false
+droptable=true
 ignoreBinlog=false
 operationShort=true  
 poolNumber=1
@@ -44,7 +44,7 @@ DeleteClass=net.tc.stresstool.actions.DeleteBase
 SelectClass=net.tc.stresstool.actions.SelectBase
 InsertClass=net.tc.stresstool.actions.InsertBase
 UpdateClass=net.tc.stresstool.actions.UpdateBase
-ValueProvider=net.tc.stresstool.value.BasicFileValueProvider
+ValueProvider=net.tc.stresstool.value.BasicValueProvider
 
 logPathStats=/tmp/stats.csv
 logPathStatReport=/tmp/reportstat.txt
@@ -111,7 +111,7 @@ joinField=a
 sleepWrite=1
 lazyCreation=true
 lazyInterval=5000
-batchSize=50
+batchSize=2
 jsonFile=/Users/marcotusa/programs/JBuilder/workspace/stresstool/json_definition.json
 
 

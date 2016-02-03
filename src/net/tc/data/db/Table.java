@@ -304,12 +304,11 @@ public class Table {
 	    sbHead.append("/* CREATE TABLE "
 		    + this.getSchemaName() +"."
 		    + this.getName() 
-		    + this.getInstanceNumber() +" */\n");
+		    + " */\n");
 	    
 	    sbHead.append("CREATE TABLE IF NOT EXISTS "
 		    + this.getSchemaName() +"."
 		    + this.getName() 
-		    + (this.isMultiple()?instanceNumber:"") 
 		    +"(\n");
 	    
 	    sbTail.append("\n )\n");
@@ -335,6 +334,7 @@ public class Table {
 		sbAtt.append(DataType.getDataTypeStringByIdentifier(attribute.getDataType().getDataTypeId()) 
 			+ (attribute.getDataDimension()>0?"("+attribute.getDataDimension()+") ":" "));
 		sbAtt.append(attribute.isNull()?"NULL ":"NOT NULL ");
+		sbAtt.append(attribute.isAutoIncrement()?" AUTO_INCREMENT ":"");
 		sbAtt.append(attribute.getDefaultValue()!=null?"DEFAULT " + attribute.getDefaultValue() + " ":" ");
 		sbAtt.append(attribute.getOnUpdate()!=null?"ON UPDATE " + attribute.getOnUpdate() + " ":" ");
 	    }
