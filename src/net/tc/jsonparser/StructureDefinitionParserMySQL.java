@@ -184,6 +184,12 @@ public class StructureDefinitionParserMySQL implements
 						attribute.setDataDimension((String)oAttribute.get("datadimension")!= null?Integer.parseInt((String)oAttribute.get("datadimension")):0);
 						attribute.setAutoIncrement(oAttribute.get("autoincrement")!= null?true:false);
 						attribute.setSpecialFunction(oAttribute.get("specialFunction")!= null?(String)oAttribute.get("specialFunction"):null);
+						attribute.setUpperLimit(oAttribute.get("upperlimit")!= null?Integer.parseInt((String)oAttribute.get("upperlimit")):0);
+						if(attribute.getDataType().getDataTypeCategory() == DataType.STRING_CATEGORY 
+							&& attribute.getUpperLimit() < 1){
+						  attribute.setUpperLimit(attribute.getDataDimension());
+						}
+						
 						if(oAttribute.get("default") != null 
 								&& !((String)oAttribute.get("default")).equals("")){
 								attribute.setDefaultValue((String)oAttribute.get("default"));

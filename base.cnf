@@ -22,7 +22,7 @@ doSimplePk=false
 droptable=true
 ignoreBinlog=false
 operationShort=true  
-poolNumber=1
+poolNumber=4
 pctInsert=100
 pctUpdate=0 
 pctSelect=0 
@@ -44,7 +44,7 @@ DeleteClass=net.tc.stresstool.actions.DeleteBase
 SelectClass=net.tc.stresstool.actions.SelectBase
 InsertClass=net.tc.stresstool.actions.InsertBase
 UpdateClass=net.tc.stresstool.actions.UpdateBase
-ValueProvider=net.tc.stresstool.value.BasicValueProvider
+ValueProvider=net.tc.stresstool.value.BasicFileValueProvider
 
 logPathStats=/tmp/stats.csv
 logPathStatReport=/tmp/reportstat.txt
@@ -104,14 +104,14 @@ SleepSelect=0
 
 [net.tc.stresstool.actions.InsertBase]
 usePrepareStatement=false
-numberOfprimaryTables=5
-numberOfSecondaryTables=3
+numberOfprimaryTables=3
+numberOfSecondaryTables=2
 useAutoIncrement=true
 joinField=a
 sleepWrite=1
 lazyCreation=true
-lazyInterval=5000
-batchSize=2
+lazyInterval=200
+batchSize=10
 jsonFile=/Users/marcotusa/programs/JBuilder/workspace/stresstool/json_definition.json
 
 

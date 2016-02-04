@@ -488,17 +488,25 @@ import javax.imageio.ImageIO;
  
   public static Long getNumberFromRandomMinMax(long min,long max)
   {
+	
   	if(min >= max) return new Long(max);
   	
-      if(min == 0 && max == 0){
-      	return new Long(0);
-      }
-      	Long maxL = new Long(rnd.nextInt(new Long(max - min).intValue()) + min);
-  	if(maxL < new Long(min)){
-  		maxL = new Long(min * 2);
-  		if(maxL > new Long(max))
-  		    return new Long(max);
+  	Long maxL = (new java.util.Random().nextLong() % (max - min)) + min;
+  	if(!Utility.isPositiveLong(maxL.longValue())){
+  	  maxL *= -1;
   	}
+  	maxL=maxL<min?min:maxL; 
+//  	if()
+//  	
+//      if(min == 0 && max == 0){
+//      	return new Long(0);
+//      }
+//      	Long maxL = new Long(rnd.nextInt(new Long(max - min).intValue()) + min);
+//  	if(maxL < new Long(min)){
+//  		maxL = new Long(min * 2);
+//  		if(maxL > new Long(max))
+//  		    return new Long(max);
+//  	}
   	return maxL;
 
   }
@@ -547,6 +555,19 @@ import javax.imageio.ImageIO;
   	}  
   	return true;  
   }  
+
+   public static boolean isPositiveLong(Long n){
+	 return n.signum(n)<0?false:true;
+//	 boolean isPositive = ((n % (n - 0.03125)) * n) / 0.03125 == n;
+//	 return isPositive;
+	 
+   }
+   public static boolean isPositiveInt(Integer n){
+	 return n.signum(n)<0?false:true;
+	 //	 boolean isPositive = ((n % (n - 0.03125)) * n) / 0.03125 == n;
+//	 return isPositive;
+	 
+   }
 
    public static boolean isDouble(String str)  
    {  

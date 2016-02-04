@@ -7,10 +7,15 @@ import net.tc.stresstool.exceptions.StressToolConfigurationException;
 import net.tc.stresstool.logs.LogProvider;
 import net.tc.utils.SynchronizedMap;
 
-import java.sql.Connection;
+
+
+
+
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.Map;
+
+import com.mysql.jdbc.Connection;
+import com.mysql.jdbc.Statement;
 
 public class DataObject extends MultiLanguage
 {
@@ -35,6 +40,7 @@ public class DataObject extends MultiLanguage
     private int lazyInterval = 0;
     private int sqlType = 0;
     private SynchronizedMap SQLContainer = null;
+	private int lockRetry;
     
 	public DataObject()
 	{
@@ -187,14 +193,30 @@ public class DataObject extends MultiLanguage
 	    this.SQLContainer = SQLContainer;
 	}
 	public int[] executeSqlObject(Connection conn){
+	  int[] rows = null;
 	    try {
-	      Statement stmt = conn.createStatement();
+	      Statement stmt = (Statement) conn.createStatement();
+//	      stmt.execute("BEGIN");
 	      stmt.addBatch("START TRANSACTION");
 		    if(SQLContainer != null ){
 		      for(int ir = 0 ; ir < getSqlObjects().size(); ir++){
 		    	SQLObject mySo = (SQLObject)getSqlObjects().getValueByPosition(ir);
+		    	
+		    	/*
+		    	 * Analyze and set lazy 
+		    	 */
+		    	mySo.setLazyExecCount((mySo.getLazyExecCount()+1));
+		    	
+		    	if(getLazyInterval() < mySo.getLazyExecCount()){
+		    	  mySo.setResetLazy(true);
+		    	  mySo.getValues();
+		    	}
+		    	
+		    	
 		    	for(int iCo = 0 ; iCo < mySo.getSQLCommands().size(); iCo++){
 		    	  String command = (String)(mySo.getSQLCommands().get(iCo)) ;
+
+//		    	  stmt.execute(command);
 		    	  stmt.addBatch(command);
 		    	  try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).debug("Add SQL to batch: " + command  );}catch(StressToolConfigurationException e){}
 		    	  
@@ -202,17 +224,121 @@ public class DataObject extends MultiLanguage
 		      }
 		    }
 		    stmt.addBatch("COMMIT");
-		    int[] rows = stmt.executeBatch();
+		    rows = executeSQL(stmt);
+//		    stmt.execute("COMMIT");
+		    stmt.clearBatch();
+	        
 	      
-	      
-        } catch (SQLException e) {
+        } catch (Exception e) {
 	      // TODO Auto-generated catch block
 	      e.printStackTrace();
         }
 
 	    
 	    
-	    return null;
+	    return rows;
 	}
 
+	public int[] executeSQL(Statement stmt) throws Exception {
+	    int[] iLine= new int[0];
+	    try{
+      	    iLine = stmt.executeBatch();
+      	    stmt.clearBatch();
+	    }
+	    catch(SQLException sqle){
+		if((sqle.getErrorCode() == 1205) && lockRetry < 4){
+		    lockRetry++;
+    		try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).warn("Lock Found for thread = " + Thread.currentThread().getId() + " repeat N: " + lockRetry + " OF 3");}catch(StressToolConfigurationException e){}
+		    
+		    iLine = executeSQL(stmt);
+		    try {
+		    	iLine = executeSQL(stmt);
+		    	Thread.sleep(1000);
+		    } catch (InterruptedException e) {
+		    		try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).warn("Error from JDBC for thread = " + Thread.currentThread().getId() +" | " + sqle.getErrorCode() + " : " +sqle.getMessage()+ "\n Reducing the FLOW and try to recover transaction");}catch(StressToolConfigurationException ee){}
+		    		Thread.sleep(2000);
+		    		executeSQL(stmt);
+
+		    		try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).warn("========= Reporting stack trace for debug =========");}catch(StressToolConfigurationException ew){}
+
+		    		e.printStackTrace();
+		    }
+		}
+		else if(sqle.getErrorCode() > 0 
+				&& sqle.getErrorCode() != 1452
+				&& sqle.getErrorCode() != 1205
+				&& lockRetry < 4) {
+		    	lockRetry++;
+
+	    		try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).warn("ERROR Found for thread = " + Thread.currentThread().getId() + " repeat N: " + lockRetry + " OF 3\n" + sqle.getLocalizedMessage());}catch(StressToolConfigurationException e){}
+//		    	sqle.printStackTrace();
+		    	
+		    	try {
+		    			iLine = executeSQL(stmt);
+		    			Thread.sleep(1000);
+		    } catch (InterruptedException e) {
+		    	try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).warn("Error from JDBC for thread = " + Thread.currentThread().getId() +" | " + sqle.getErrorCode() + " : " +sqle.getMessage()+ "\n Reducing the FLOW and try to recover transaction");}catch(StressToolConfigurationException ew){}
+		    	Thread.sleep(2000);
+		    	executeSQL(stmt);
+		    	// TODO Auto-generated catch block
+	    		try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).warn("========= Reporting stack trace for debug =========");}catch(StressToolConfigurationException ew){}
+		    	e.printStackTrace();
+		    }
+	    	
+	    }
+		else if(sqle.getErrorCode() == 1452){
+			return new int[0];
+			//System.out.print("x");
+		}
+		else if(lockRetry >=4){
+			stmt.clearBatch();
+			try{stmt.execute("ROLLBACK");}catch(Exception eex){}
+			lockRetry=0;
+    		try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).warn("Error from JDBC  for thread = " + Thread.currentThread().getId() +" | "  + sqle.getErrorCode() + " : " +sqle.getMessage() + " Aborting");}catch(StressToolConfigurationException ew){}
+		    //throw new Exception(sqle);
+			return iLine;
+		}
+
+		
+	    }
+	    catch (Exception ex){
+	    	throw new Exception(ex);
+	    	
+	    }
+	    
+	    return iLine;
+	}
+
+	public boolean executeSQL(String command,Connection conn) throws Exception {
+	    boolean done;
+	    try{
+
+	    		Statement stmt = (Statement) conn.createStatement();
+      	    done = stmt.execute(command);
+	    }
+	    catch(SQLException sqle){
+		if((sqle.getErrorCode() == 1205 ||sqle.getErrorCode() == 1213 ) && lockRetry < 4){
+		    lockRetry++;
+		    System.out.println("Lock Found for thread = " + Thread.currentThread().getId() + " repeat N: " + lockRetry + " OF 3");		    
+		    done = executeSQL(command,conn);
+		    try {
+			Thread.sleep(1000);
+		    } catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		    }
+		    
+		}
+		else{
+		    throw new Exception(sqle);
+		}
+
+		
+	    }
+	    catch (Exception ex){
+		throw new Exception(ex);
+	    }
+	    return done;
+	}
+	
 }

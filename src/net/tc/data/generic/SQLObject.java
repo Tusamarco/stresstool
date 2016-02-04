@@ -110,8 +110,8 @@ public class SQLObject {
 	 * @return
 	 */
   public String getValues() {
-
-	for (Object table : this.getSourceTables()) {
+	  boolean filling = false;
+	  for (Object table : this.getSourceTables()) {
 
 	  SynchronizedMap Attribs = ((Table) table).getMetaAttributes();
 	  try {
@@ -139,17 +139,16 @@ public class SQLObject {
     		for (Object attrib : Attribs.getValuesAsArrayOrderByKey()) {
     		  if (singleSql.length() > 1)
     			singleSql.append(", ");
-    		  // TODO !!!HERE!!!
-    		  boolean filling = false;
+
     		  if (this.resetLazy || !((Attribute) attrib).isLazy()) {
     			if(((Attribute) attrib).getSpecialFunction() == null
     				&& !((Attribute) attrib).isAutoIncrement()
     				){
-    				((Attribute) attrib).setValue(StressTool.getValueProvider().provideValue(
-    					((Attribute) attrib).getDataType(), new Long(((Attribute) attrib).getDataDimension())));
+    			  ((Attribute) attrib).setValue(StressTool.getValueProvider().provideValue(
+    				  ((Attribute) attrib).getDataType(), new Long(((Attribute) attrib).getUpperLimit())));
     			}
     			else{
-    			  
+
     			  if(((Attribute)attrib).isAutoIncrement()){
     				((Attribute) attrib).setValue("NULL");
     			  }
@@ -157,8 +156,9 @@ public class SQLObject {
     				((Attribute) attrib).setValue(((Attribute) attrib).getSpecialFunction());
     			  }
     			}
-    				
-    			filling = true;
+
+    			filling = this.isResetLazy()?true:false;
+    			
     		  }
     		  singleSql.append(((Attribute) attrib).getValue());
     
@@ -189,7 +189,10 @@ public class SQLObject {
 		    .debug(
 		        "========================== Processing Table " + ((Table) table).getName() + " ================ [End]");
 	  } catch (StressToolConfigurationException e) {e.printStackTrace(); }
-	  getSQLCommands().add(this.getSqlLocalTemplate().replace("(#VALUES#)", sqlValues.toString()));	  
+	  getSQLCommands().add(this.getSqlLocalTemplate().replace("(#VALUES#)", sqlValues.toString()));
+	  
+	  this.setResetLazy(filling?false:isResetLazy());
+	  
 	  return sqlValues.toString();
 	}
 	return null;
@@ -199,6 +202,8 @@ public class SQLObject {
 	}
 	public  void setResetLazy(boolean resetLazy) {
 		this.resetLazy = resetLazy;
+//		this.getValues();
+		this.setLazyExecCount(0);
 	}
 	public synchronized int getBatchLoops() {
 		return batchLoops;

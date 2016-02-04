@@ -26,7 +26,7 @@ public class BasicValueProvider implements ValueProvider {
   /* Return a long no bigger than upperLimit
    */
   public Long getRandomNumber(long upperLimit) {
-	return Utility.getNumberFromRandomMinMax(0, new Long(upperLimit).intValue()); 
+	return Utility.getNumberFromRandomMinMax(0, upperLimit); 
 	
   }
   
@@ -81,13 +81,13 @@ public class BasicValueProvider implements ValueProvider {
   	  	case DataType.CHAR:
      	  {
       	    int lowerbound = 0;
-      	    long upperbound = 255;
+      	    long upperbound = 254;
       	    return ("\"" + getString(Utility.getNumberFromRandomMinMax(0, upperbound),length.intValue()) +"\"");
      	  }
 	  	case DataType.BINARY: 
      	  {
     	    int lowerbound = 0;
-    	    long upperbound = 255;
+    	    long upperbound = 254;
     	    return ("\"" + getString(Utility.getNumberFromRandomMinMax(0, upperbound),length.intValue()) +"\"");
      	  }
 	  	case DataType.VARCHAR: 
@@ -105,13 +105,13 @@ public class BasicValueProvider implements ValueProvider {
 	  	case DataType.TINYBLOB: 
      	  {
     	    int lowerbound = 0;
-    	    long upperbound = 256;
+    	    long upperbound = 254;
     	    return ("\"" + getString(Utility.getNumberFromRandomMinMax(0, upperbound),length.intValue()) +"\"");
      	  }
 	  	case DataType.TINYTEXT: 
        	  {
     	    int lowerbound = 0;
-    	    long upperbound = 256;
+    	    long upperbound = 254;
     	    return ("\"" + getString(upperbound,length.intValue()) + "\"");
      	  }
 	  	case DataType.BLOB: 
@@ -207,50 +207,47 @@ public class BasicValueProvider implements ValueProvider {
   @Override
   public BigDecimal getDecimal(int length) {
 	
-	int number1 = getInt(length);
-	int number2 = getInt(length);
+	int number1 = getInt(200000);
+	int number2 = getInt(1000);
 	DecimalFormat numberFormat = new DecimalFormat("#.00000");
 	return new BigDecimal(numberFormat.format(number1/number2));	
   }
   @Override
   public Double getDouble(int length) {
-	double myDouble = length;
+	double myDouble = 66666666;
 	return new Double(myDouble * (getInt(length)/100));
 	
   }
   @Override
   public Float getFloat(int length) {
-	float myfloat = length;
+	float myfloat = 500;
 	return new Float(myfloat * (getInt(length)/100));
 	 	
   }
   @Override
   public Long geBigInt(Long length) {
-	return this.getRandomNumber(length>Long.MAX_VALUE?Long.MAX_VALUE:length);
+	Long lv = this.getRandomNumber(length>0?(length>Long.MAX_VALUE?Long.MAX_VALUE:length):Long.MAX_VALUE);
+	return lv;
+	
 	
   }
   @Override
   public Integer getInt(int length) {
-	return this.getRandomNumber(length>2147483647?2147483647:length).intValue();
-	// TODO Auto-generated method stub
+	return this.getRandomNumber(length>0?(length>2147483647?2147483647:length):2147483647).intValue();
 	
   }
   @Override
   public Integer getMedInt(int length) {
-	return this.getRandomNumber(length>8388607?8388607:length).intValue();
-	// TODO Auto-generated method stub
-	
+	return this.getRandomNumber(length>0?(length>8388607?8388607:length):8388607).intValue();
   }
   @Override
   public Integer getSmallInt(int length) {
-	return this.getRandomNumber(length>32767?32767:length).intValue();
-	// TODO Auto-generated method stub
-	
+	return this.getRandomNumber(length>0?(length>32767?32767:length):32767).intValue();
   }
   @Override
   public Integer getTiny(int length) {
-	return this.getRandomNumber(length>127?127:length).intValue();
-	// TODO Auto-generated method stub
+	return this.getRandomNumber(length>0?(length>127?127:length):127).intValue();
+
 	
   }
 
@@ -312,23 +309,28 @@ public class BasicValueProvider implements ValueProvider {
   @Override
   public String getString(int upperbound, int length) {
     StringBuffer sb = new StringBuffer();
+    int upTo = length>upperbound?upperbound:length;
+//    if(upTo > 1)
+//      --upTo ;	
 
     for (int i = 0 ; i <= length ; i++ )
     {
         sb.append(alpha[rnd.nextInt(alpha.length)]);
     }
-    return sb.subSequence(0, upperbound).toString();
+    return sb.subSequence(0, upTo).toString();
   }
 
   @Override
   public String getString(long upperbound, int length) {
     StringBuffer sb = new StringBuffer();
-
-    for (int i = 0 ; i <= length ; i++ )
+    int upTo = length>new Long(upperbound).intValue()?new Long(upperbound).intValue():length;
+//    if(upTo > 1)
+//      --upTo ;	
+    for (int i = 0 ; i <= upTo ; i++ )
     {
         sb.append(alpha[rnd.nextInt(alpha.length)]);
     }
-    return sb.subSequence(0, sb.length()>upperbound?new Long(upperbound).intValue():sb.length()).toString();
+    return sb.subSequence(0, upTo).toString();
   }
 
 

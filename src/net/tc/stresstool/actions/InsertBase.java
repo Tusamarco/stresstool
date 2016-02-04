@@ -350,7 +350,7 @@ public class InsertBase extends StressActionBase implements WriteAction,
 	   * now run the show
 	   */
 	  	
-	  this.myDataObject.executeSqlObject(conn);
+	  this.myDataObject.executeSqlObject((com.mysql.jdbc.Connection) conn);
 		
 	}
 	

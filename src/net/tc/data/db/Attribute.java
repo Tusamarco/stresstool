@@ -18,6 +18,8 @@ public class Attribute {
 	private int storageSize = 0 ; //size in bytes
 	private boolean isLazy = true ; 
 	private String specialFunction = null;
+	private int upperLimit = 0 ;
+	
 	
     private boolean isNull = true;
     
@@ -116,6 +118,18 @@ public class Attribute {
 	 */
 	public void setSpecialFunction(String specialFunction) {
 	  this.specialFunction = specialFunction;
+	}
+	/**
+	 * @return the upperLimit
+	 */
+	public int getUpperLimit() {
+	  return upperLimit;
+	}
+	/**
+	 * @param upperLimit the upperLimit to set
+	 */
+	public void setUpperLimit(int upperLimit) {
+	  this.upperLimit = upperLimit;
 	}
 	
 }
