@@ -209,9 +209,8 @@ public class DataObject extends MultiLanguage
 		    	
 		    	if(getLazyInterval() < mySo.getLazyExecCount()){
 		    	  mySo.setResetLazy(true);
-		    	  mySo.getValues();
 		    	}
-		    	
+		    	mySo.getValues();		    	
 		    	
 		    	for(int iCo = 0 ; iCo < mySo.getSQLCommands().size(); iCo++){
 		    	  String command = (String)(mySo.getSQLCommands().get(iCo)) ;

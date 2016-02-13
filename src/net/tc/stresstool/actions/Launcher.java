@@ -24,6 +24,7 @@ import net.tc.stresstool.statistics.ActionTHElement;
 import net.tc.stresstool.statistics.StatCollector;
 import net.tc.stresstool.statistics.providers.StatsProvider;
 import net.tc.stresstool.value.BasicFileValueProvider;
+import net.tc.stresstool.value.BasicValueProvider;
 import net.tc.stresstool.value.ValueProvider;
 import net.tc.utils.SynchronizedMap;
 import net.tc.utils.TimeTools;
@@ -979,7 +980,7 @@ public class Launcher {
 		
         try {
     	      valueProviderInstance = (ValueProvider) Class.forName(valueProvider).newInstance();
-    	      valueProviderInstance.setTestCalendar(getTestCalendar());
+    	      ((BasicValueProvider) valueProviderInstance).setTestCalendar(getTestCalendar());
     	      
     	      return valueProviderInstance;
 	      
@@ -1294,8 +1295,9 @@ public class Launcher {
 	private void setValueProvider(String valueProvider) {
 	  this.valueProvider = valueProvider;
 	}
+	
 	public void resetValueProviderCalendar(){
-		StressTool.getValueProvider().resetCalendar(daysdiffernce);
+		((BasicValueProvider) StressTool.getValueProvider()).resetCalendar(daysdiffernce);
 	}
 		
 }

@@ -36,9 +36,9 @@
 								{"name":"b","datatype":"varchar","datadimension":"100","default":"","null":false},
 								{"name":"c","datatype":"char","datadimension":"200","default":"","null":false},
 								{"name":"counter","datatype":"bigint","datadimension":"20","default":"","null":true},								
-								{"name":"time","datatype":"timestamp","default":"CURRENT_TIMESTAMP","onUpdate":"CURRENT_TIMESTAMP","null":false},
+								{"name":"time","datatype":"timestamp","default":"CURRENT_TIMESTAMP","onUpdate":"CURRENT_TIMESTAMP","null":false,"specialFunction":"NULL"},
 								{"name":"partitionid","datatype":"int","datadimension":"11","upperlimit":"10","default":"0","null":true},								
-								{"name":"date","datatype":"date","default":"","null":false},
+								{"name":"date","datatype":"date","default":"","null":false,"lazy":"0"},
 								{"name":"strrecordtype","datatype":"char","datadimension":"3","default":"","null":true}				
 							]
 					},

@@ -16,7 +16,7 @@ public class BasicValueProvider implements ValueProvider {
   		static final String[] alphaUTFHindy = new String[]{"ऄ","अ ","आ", "इ","ई","उ","ऊ","ऋ","ऌ","ऍ","ऎ","ए","ऐ","ऑ","ऒ","ओ","औ","क","ख","ग","घ","ङ","च","छ","ज","झ","ञ","ट"};
   		static final String[] alphaUTFChinese = new String[]{"表","情","。","另","外","极","少","数","中","文","在","存","储","的","时","候","也","遇","到"};
   		static Random rnd = new Random();  		
-  		private Calendar testCalendar = null;
+  		private static Calendar testCalendar = null;
   @Override
   public Long getRandomNumber() {
 	return Utility.getNumberFromRandom(new Long(System.currentTimeMillis()).intValue());
@@ -183,22 +183,22 @@ public class BasicValueProvider implements ValueProvider {
   @Override
   public String getDateTime(int daysAdd) {
 	if(daysAdd > 0)
-	  return TimeTools.GetCurrent(TimeTools.getCalendarFromCalendarDateAddDays(this.testCalendar,daysAdd ));
+	  return TimeTools.GetCurrent(TimeTools.getCalendarFromCalendarDateAddDays(BasicValueProvider.getTestCalendar(),daysAdd ));
 	
 	return null;
 	
   }
   @Override
   public String getTime(int addTimeInSeconds) {
-	  return TimeTools.GetCurrentTime(testCalendar);
+	  return TimeTools.GetCurrentTime(BasicValueProvider.getTestCalendar());
   }
   @Override
   public String getDate(int length) {
-	  return TimeTools.GetCurrent(testCalendar);
+	  return TimeTools.GetCurrent(BasicValueProvider.getTestCalendar());
   }
   @Override
   public String getYear(int length) {
-	  return TimeTools.getYear(testCalendar);
+	  return TimeTools.getYear(BasicValueProvider.getTestCalendar());
   }
   @Override
   public Byte getBit(int length) {
@@ -367,25 +367,28 @@ public class BasicValueProvider implements ValueProvider {
   /**
    * @return the testCalendar
    */
-  @Override
-  public Calendar getTestCalendar() {
+//  @Override
+  public static Calendar getTestCalendar() {
     return testCalendar;
   }
 
   /**
    * @param testCalendar the testCalendar to set
    */
-  @Override
-  public void setTestCalendar(Calendar testCalendar) {
-    this.testCalendar = testCalendar;
+//  @Override
+  public static void  setTestCalendar(Calendar testCalendarIn) {
+    testCalendar = testCalendarIn;
   }
 
 @Override
 public Calendar resetCalendar(int timeDays) {
-	int days = Utility.getNumberFromRandomMinMax((timeDays * -1), timeDays).intValue();
+	int days = Utility.getUnsignNumberFromRandomMinMax((timeDays * -1), timeDays).intValue();
+	
+	String now = TimeTools.getTimeStamp(BasicValueProvider.getTestCalendar(), "yyyy-MM-dd HH:mm:ss");
 	testCalendar = TimeTools.getCalendarFromCalendarDateAddDays(testCalendar, days);
-	 
-	return testCalendar;
+	String after = TimeTools.getTimeStamp(BasicValueProvider.getTestCalendar(), "yyyy-MM-dd HH:mm:ss"); 
+	BasicValueProvider.setTestCalendar(testCalendar);
+	return BasicValueProvider.getTestCalendar();
 }
 
 

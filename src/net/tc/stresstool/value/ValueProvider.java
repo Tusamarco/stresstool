@@ -48,8 +48,8 @@ public interface ValueProvider {
     public String getStringUTFHindi(int length);
     public String getStringUTFChinese(int length);
 	public Integer getInt(int length);
-	public Calendar getTestCalendar();
-	public void setTestCalendar(Calendar testCalendar);
+//	public Calendar getTestCalendar();
+//	public void setTestCalendar(Calendar testCalendar);
 	public Calendar resetCalendar(int timeDays);
     
 }

@@ -22,16 +22,16 @@ doSimplePk=false
 droptable=true
 ignoreBinlog=false
 operationShort=true  
-poolNumber=4
+poolNumber=1
 pctInsert=100
 pctUpdate=0 
 pctSelect=0 
 pctDelete=0 
-repeatNumber=1000
+repeatNumber=100000
 HardStopLimit=100
 UseHardStop=false
 StatIntervalMs=1000
-StatLoops = 20000
+StatLoops = 1000
 SemaphoreCountdownTime = 1
 # table engine comma separated with % value; 
 TableEngine=InnoDB|60,MyISAM|40
@@ -96,7 +96,7 @@ NumberOfJoinTables=2
 JoinField=a
 ForceIndex=true
 IndexName=IDX_a
-NumberOfIntervalKeys=10000
+NumberOfIntervalKeys=100
 SelectFilterMethod=in
 #range|in|match
 SleepSelect=0 
@@ -108,10 +108,10 @@ numberOfprimaryTables=3
 numberOfSecondaryTables=2
 useAutoIncrement=true
 joinField=a
-sleepWrite=1
+sleepWrite=100
 lazyCreation=true
-lazyInterval=200
-batchSize=10
+lazyInterval=50
+batchSize=0
 jsonFile=/Users/marcotusa/programs/JBuilder/workspace/stresstool/json_definition.json
 
 

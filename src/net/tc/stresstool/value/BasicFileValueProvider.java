@@ -81,27 +81,7 @@ public class BasicFileValueProvider extends BasicValueProvider implements ValueP
     	return values;
     }
 
-    /* Return a single Long value  
-     */
-    @Override
-    public Long getRandomNumber() {
-	return Utility.getNumberFromRandom(new Long(System.currentTimeMillis()).intValue());
-    }
 
-    /* Return a long no bigger than upperLimit
-     */
-    @Override
-    public Long getRandomNumber(long upperLimit) {
-	return Utility.getNumberFromRandomMinMax(0, new Long(upperLimit).intValue()); 
-	
-    }
-
-    /* Return a long value between limits
-     */
-    @Override
-    public Long getRandomNumber(long lowerLimit, long upperLimit) {
-	return Utility.getNumberFromRandomMinMax(lowerLimit, upperLimit);
-	}
 
     /* 
      * Read the text in the file and load an object of String[] type to be used for data generation.

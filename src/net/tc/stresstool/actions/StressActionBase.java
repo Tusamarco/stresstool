@@ -598,7 +598,11 @@ public class StressActionBase implements StressAction, Runnable {
         	    this.getTHInfo().setReady(ActionTHElement.SEMAPHORE_RED);
         	    
         	    try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).debug(" ==== ACTION "+ this.getTHInfo().getAction() +" Thread internal Id "+ this.getTHInfo().getId() +" Sys Thread Id "+ this.getTHInfo().getThId()+" ended ===="  );}catch(StressToolConfigurationException e){}
-        	    
+
+        	    if(!isStickyconnection()){
+        	    	getConnProvider().returnConnection(getActiveConnection());
+        	    }
+
         	} catch (InterruptedException e) {
         	    // TODO Auto-generated catch block
         	    e.printStackTrace();

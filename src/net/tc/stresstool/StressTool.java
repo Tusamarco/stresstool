@@ -695,7 +695,7 @@ public class StressTool {
 	/**
 	 * @param valueProvider the valueProvider to set
 	 */
-	public static void setValueProvider(ValueProvider valueProvider) {
-	    StressTool.valueProvider = valueProvider;
+	public static void setValueProvider(ValueProvider valueProviderIn) {
+	    valueProvider = valueProviderIn;
 	}
 }
