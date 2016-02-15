@@ -66,6 +66,7 @@ public class StressActionBase implements StressAction, Runnable {
     private int lazyLoopCounter = 50;
     private Connection ActiveConnection = null;
     private boolean stickyconnection = true;
+    private boolean FKEnable = false;
     
 //    public static String ACTION_TYPE_Select = "Select";
 //    public static String ACTION_TYPE_Insert = "Insert";
@@ -580,8 +581,8 @@ public class StressActionBase implements StressAction, Runnable {
         			    long endLatency = System.currentTimeMillis();
         			    this.getTHInfo().setLatency(endLatency-startLatency);
         			    
-        			    Thread.sleep(Utility.getNumberFromRandomMinMax(10,500));
-        			} catch (InterruptedException e) {
+        			    // for debug only Thread.sleep(Utility.getNumberFromRandomMinMax(10,500));
+        			} catch (Exception e) {
         			    // TODO Auto-generated catch block
         			    e.printStackTrace();
         			}
@@ -872,6 +873,20 @@ public class StressActionBase implements StressAction, Runnable {
 	 */
 	public void setStickyconnection(boolean stickyConnection) {
 	  this.stickyconnection = stickyConnection;
+	}
+
+	/**
+	 * @return the fKEnable
+	 */
+	public boolean isFKEnable() {
+	  return FKEnable;
+	}
+
+	/**
+	 * @param fKEnable the fKEnable to set
+	 */
+	public void setFKEnable(boolean fKEnable) {
+	  FKEnable = fKEnable;
 	}
 
 }

@@ -73,7 +73,7 @@ public class InsertBase extends StressActionBase implements WriteAction,
 
         		try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).info(" ==== TRUNCATE Tables, Please wait it may takes time ===="  );}catch(StressToolConfigurationException e){}
         		for(String tb : tables){
-        		    String drop = "TRUNCATE TABLE IF EXISTS " + tb + " ;" ;
+        		    String drop = "TRUNCATE TABLE  " + tb + " ;" ;
         		    try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).info(drop);}catch(StressToolConfigurationException e){}
         		    stmt.execute(drop);
         		}
@@ -352,6 +352,11 @@ public class InsertBase extends StressActionBase implements WriteAction,
 	  	
 	  this.myDataObject.executeSqlObject((com.mysql.jdbc.Connection) conn);
 		
+	  if(!this.isStickyconnection()){
+		
+		getConnProvider().returnConnection((com.mysql.jdbc.Connection)conn);
+	  }
+	  
 	}
 	
 	/**
@@ -444,8 +449,6 @@ public class InsertBase extends StressActionBase implements WriteAction,
 		lSQLObj.setBatchLoops(this.batchSize);
 		lSQLObj.addSourceTables((Table)table);
 		
-		// TODO this must be changed to reflect the real number of loop running during execution
-		lSQLObj.setLazyExecCount(0);
 		
 		String localSQLTemplate = sqlTemplate;
 		if (((Table) table).getName() != null && ((Table) table).getName().length() > 0) {

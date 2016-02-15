@@ -11,6 +11,7 @@ import net.tc.utils.SynchronizedMap;
 
 
 
+
 import java.sql.SQLException;
 import java.util.Map;
 
@@ -41,6 +42,7 @@ public class DataObject extends MultiLanguage
     private int sqlType = 0;
     private SynchronizedMap SQLContainer = null;
 	private int lockRetry;
+	private int lazyExecCount = 0;
     
 	public DataObject()
 	{
@@ -195,6 +197,9 @@ public class DataObject extends MultiLanguage
 	public int[] executeSqlObject(Connection conn){
 	  int[] rows = null;
 	    try {
+	      
+//	      System.out.println("******************* RESET? "+ this.getLazyExecCount() + " ***********************");
+	      
 	      Statement stmt = (Statement) conn.createStatement();
 //	      stmt.execute("BEGIN");
 	      stmt.addBatch("START TRANSACTION");
@@ -205,12 +210,19 @@ public class DataObject extends MultiLanguage
 		    	/*
 		    	 * Analyze and set lazy 
 		    	 */
-		    	mySo.setLazyExecCount((mySo.getLazyExecCount()+1));
+		    	setLazyExecCount((getLazyExecCount()+1));
 		    	
-		    	if(getLazyInterval() < mySo.getLazyExecCount()){
+		    	if(getLazyInterval() < getLazyExecCount()){
 		    	  mySo.setResetLazy(true);
+//		    	  System.out.println("******************* RESET LAZY ***********************");
 		    	}
 		    	mySo.getValues();		    	
+		    	
+		    	if(mySo.isResetLazy()){
+		    	  mySo.setResetLazy(false);
+		    	}
+		    	
+		    	
 		    	
 		    	for(int iCo = 0 ; iCo < mySo.getSQLCommands().size(); iCo++){
 		    	  String command = (String)(mySo.getSQLCommands().get(iCo)) ;
@@ -234,7 +246,9 @@ public class DataObject extends MultiLanguage
         }
 
 	    
-	    
+	    if(getLazyInterval() < getLazyExecCount()){
+	      setLazyExecCount(0);
+	    }
 	    return rows;
 	}
 
@@ -338,6 +352,20 @@ public class DataObject extends MultiLanguage
 		throw new Exception(ex);
 	    }
 	    return done;
+	}
+
+	/**
+	 * @return the lazyExecCount
+	 */
+	private int getLazyExecCount() {
+	  return lazyExecCount;
+	}
+
+	/**
+	 * @param lazyExecCount the lazyExecCount to set
+	 */
+	private void setLazyExecCount(int lazyExecCount) {
+	  this.lazyExecCount = lazyExecCount;
 	}
 	
 }

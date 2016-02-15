@@ -4,9 +4,9 @@ stresstool.log.dir=/tmp/statlogs
 stresstool.log.file=stresstool.log
 
 #log4j.logger.APPLICATION=INFO,console,APPLICATION
-log4j.logger.APPLICATION=DEBUG,console,APPLICATION
-log4j.logger.ACTIONS=DEBUG,console,ACTIONS
-log4j.logger.MONITORS=DEBUG,MONITORS
+log4j.logger.APPLICATION=ERROR,console,APPLICATION
+log4j.logger.ACTIONS=ERROR,console,ACTIONS
+log4j.logger.MONITORS=INFO,MONITORS
 log4j.logger.STATS=INFO,STATS
 log4j.logger.PERFORMANCE=ERROR,console,PERFORMANCE
 

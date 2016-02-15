@@ -233,23 +233,23 @@ if (StressTool.getLogProvider().getLogger(LogProvider.LOG_PERFORMANCE)
 	    if(!statColl.processCollectedEvents(sp.getProviderName(),values)){
 		int errorRepeat = 0;
 		
-        	        for(int ic =0 ; ic <= 3 ;ic++){
-        	            try {
-				StressTool.getLogProvider().getLogger(LogProvider.LOG_STATS).warn(ExceptionMessages.ERROR_PORCESSING_STATS 
+		for(int ic =0 ; ic <= 3 ;ic++){
+		  try {
+			StressTool.getLogProvider().getLogger(LogProvider.LOG_STATS).warn(ExceptionMessages.ERROR_PORCESSING_STATS 
 				+ " Provider " + sp.getProviderName() + " sent event to StatCollection but the process dicard the information \n" 
 				+ " this is the " + ic + " attempt, try again \n");
-			    } catch (StressToolException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			    }
-        
-        	            if(statColl.processCollectedEvents(sp.getProviderName(),values)){
-                		    ic=5;
-                		}
-        	            
-        		throw new StressToolGenericException(ExceptionMessages.ERROR_PORCESSING_STATS 
-        			+ " Provider " + sp.getProviderName() + " sent event to StatCollection but the process dicard the information ");
-		
+		  } catch (StressToolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		  }
+
+		  if(statColl.processCollectedEvents(sp.getProviderName(),values)){
+			ic=5;
+		  }
+
+		  throw new StressToolGenericException(ExceptionMessages.ERROR_PORCESSING_STATS 
+			  + " Provider " + sp.getProviderName() + " sent event to StatCollection but the process dicard the information ");
+
 		}
         	
 	        
