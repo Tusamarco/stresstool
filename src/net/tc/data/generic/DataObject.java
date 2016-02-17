@@ -3,9 +3,11 @@ package net.tc.data.generic;
 import net.tc.data.common.MultiLanguage;
 import net.tc.data.db.*;
 import net.tc.stresstool.StressTool;
+import net.tc.stresstool.actions.StressAction;
 import net.tc.stresstool.exceptions.StressToolConfigurationException;
 import net.tc.stresstool.logs.LogProvider;
 import net.tc.utils.SynchronizedMap;
+
 
 
 
@@ -194,7 +196,36 @@ public class DataObject extends MultiLanguage
 	public void setSQL(SynchronizedMap SQLContainer) {
 	    this.SQLContainer = SQLContainer;
 	}
-	public int[] executeSqlObject(Connection conn){
+	public int[] executeSqlObject(int actionType,Connection conn){
+	  
+	  switch (actionType){
+		case StressAction.INSERT_ID_CONST:return executeInsert(conn); 
+		case StressAction.SELECT_ID_CONST:return executeSelect(conn);
+		case StressAction.UPDATE_ID_CONST:return executeUpdate(conn);
+		case StressAction.DELETE_ID_CONST:return executeDelete(conn);
+		
+		
+	  }
+	  return null;
+	  
+	}
+
+	private int[] executeDelete(Connection conn) {
+	  // TODO Auto-generated method stub
+	  return null;
+    }
+
+	private int[] executeUpdate(Connection conn) {
+	  // TODO Auto-generated method stub
+	  return null;
+    }
+
+	private int[] executeSelect(Connection conn) {
+	  // TODO Auto-generated method stub
+	  return null;
+    }
+
+	public int[] executeInsert(Connection conn) {
 	  int[] rows = null;
 	    try {
 	      
@@ -229,6 +260,7 @@ public class DataObject extends MultiLanguage
 
 //		    	  stmt.execute(command);
 		    	  stmt.addBatch(command);
+//		    	  System.out.println("Add SQL to batch: " + command  );
 		    	  try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).debug("Add SQL to batch: " + command  );}catch(StressToolConfigurationException e){}
 		    	  
 		    	}
@@ -250,7 +282,7 @@ public class DataObject extends MultiLanguage
 	      setLazyExecCount(0);
 	    }
 	    return rows;
-	}
+    }
 
 	public int[] executeSQL(Statement stmt) throws Exception {
 	    int[] iLine= new int[0];

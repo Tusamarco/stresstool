@@ -9,7 +9,7 @@ connParameters=autoReconnect=true
 connectionPool=false
 connectionPoolClass= 
 selectForceAutocommitOff=false
-stickyconnection=false
+stickyconnection=true
 
 
 FKEnable=false
@@ -19,10 +19,10 @@ doDelete=false
 doReport=true 
 doSimple=false 
 doSimplePk=false 
-droptable=true
+droptable=false
 ignoreBinlog=false
 operationShort=true  
-poolNumber=4
+poolNumber=2
 pctInsert=100
 pctUpdate=0 
 pctSelect=0 
@@ -35,15 +35,15 @@ StatLoops = 100
 SemaphoreCountdownTime = 1
 # table engine comma separated with % value; 
 TableEngine=InnoDB|60,MyISAM|40
-truncate=true
-# Interactive mode [0 no|1 console output|2 console output + not exit until question is answered ] default 1 
+truncate=false
+# Interactive mode [0 no|1 console output|2 console output + not exit until question is answered ] default 2 
 interactive = 2
 
 
 DeleteClass=net.tc.stresstool.actions.DeleteBase 
 SelectClass=net.tc.stresstool.actions.SelectBase
-#InsertClass=net.tc.stresstool.actions.InsertBase
-InsertClass=net.tc.stresstool.actions.InsertEmployeesTest
+InsertClass=net.tc.stresstool.actions.InsertBase
+#InsertClass=net.tc.stresstool.actions.InsertEmployeesTest
 UpdateClass=net.tc.stresstool.actions.UpdateBase
 ValueProvider=net.tc.stresstool.value.BasicFileValueProvider
 
@@ -92,36 +92,41 @@ usePrepareStatement=false
 
 [net.tc.stresstool.actions.SelectBase]
 #for consistency the number of tables should never be higher than the ones declared in the Insert class
-#numberOfprimaryTables=10
-#numberOfSecondaryTables=8
 usePrepareStatement=false
-NumberOfJoinTables=2
-JoinField=a
-ForceIndex=true
-IndexName=IDX_a
-NumberOfIntervalKeys=100
 SelectFilterMethod=in
 #range|in|match
 SleepSelect=0 
 
+numberOfprimaryTables=1;
+numberOfSecondaryTables=1;
+NumberOfIntervalKeys=100
+NumberOfJoinTables=2
+JoinField=a
+ForceIndex=false
+IndexName=IDX_a
+lazySelect=true;
+lazyInterval=5000;
+#joinCondition=Left - experimental
+
+
 
 [net.tc.stresstool.actions.InsertBase]
 usePrepareStatement=false
-numberOfprimaryTables=3
+numberOfprimaryTables=2
 numberOfSecondaryTables=2
 useAutoIncrement=true
 joinField=a
 sleepWrite=100
 lazyCreation=true
-lazyInterval=200
+lazyInterval=20
 batchSize=50
 jsonFile=/Users/marcotusa/programs/JBuilder/workspace/stresstool/json_definition.json
 
 
 [net.tc.stresstool.actions.InsertEmployeesTest]
 usePrepareStatement=false
-numberOfprimaryTables=3
-numberOfSecondaryTables=3
+numberOfprimaryTables=5
+numberOfSecondaryTables=5
 useAutoIncrement=true
 joinField=a
 sleepWrite=100

@@ -9,13 +9,13 @@ import net.tc.stresstool.exceptions.StressToolActionException;
 import net.tc.stresstool.statistics.ActionTHElement;
 
 public interface StressAction {
-	    public static String ACTION_TYPE_Select = "Select";
-	    public static String ACTION_TYPE_Insert = "Insert";
-	    public static String ACTION_TYPE_Update = "Update";
-	    public static String ACTION_TYPE_Delete = "Delete";
-	    public static String ACTION_TYPE_Create = "Create";
-	    public static String ACTION_TYPE_Drop = "Drop";
-	    public static String ACTION_TYPE_Truncate = "Truncate";
+	    public static final String ACTION_TYPE_Select = "Select";
+	    public static final String ACTION_TYPE_Insert = "Insert";
+	    public static final String ACTION_TYPE_Update = "Update";
+	    public static final String ACTION_TYPE_Delete = "Delete";
+	    public static final String ACTION_TYPE_Create = "Create";
+	    public static final String ACTION_TYPE_Drop = "Drop";
+	    public static final String ACTION_TYPE_Truncate = "Truncate";
 	    public static final int INSERT_ID_CONST =1000;
 	    public static final int SELECT_ID_CONST =2000; 
 	    public static final int UPDATE_ID_CONST =3000;
