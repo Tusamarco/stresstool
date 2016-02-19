@@ -19,6 +19,7 @@ public class SQLObject {
     String sqlLocalTemplate = null;
     boolean resetLazy = false;
     int batchLoops = 1;
+    ArrayList whereAttrib = null; 
     
     ArrayList sourceTables = new ArrayList();
     /**
@@ -235,4 +236,14 @@ public class SQLObject {
 		SQLCommands = sQLCommands;
 	}
     
+	public ArrayList getWhereValues(){
+	  
+	  
+	  
+	  return null;
+	}
+	public Attribute getWhereValueForAttribute(Attribute attribute, Table table){
+	  
+	  return null;
+	}
 }

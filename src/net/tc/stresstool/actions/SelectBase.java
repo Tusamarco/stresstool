@@ -1,5 +1,6 @@
 package net.tc.stresstool.actions;
 
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
@@ -31,7 +32,8 @@ public class SelectBase extends StressActionBase implements ReadAction{
 	private boolean lazySelect=true;
 	private int lazyInterval=5000;
 	private String tableEngine = "InnODB";
-	private DataObject myDataObject =null;
+//	private DataObject myDataObject =null;
+	SQLObject lSQLObj = new SQLObject();
 	
 	/*
 	 * not sure the following will saty here or on another object
@@ -160,134 +162,134 @@ public class SelectBase extends StressActionBase implements ReadAction{
 	
 	@Override
 	public boolean ExecutePreliminaryAction() {
-	    /**
-	     * Initialize the DataObject representing the SQL action
-	     */
-	    try {
-	      this.myDataObject =  inizializeDataObject(new DataObject());
-        } catch (StressToolActionException e) {
-	      e.printStackTrace();
-        }
-     	if(this.myDataObject.isInizialized())
-     	  return true;
-	  // TODO I am here need to do the value generation using the Sql object and the Data Object  
+	
+	  ArrayList tables = new ArrayList();
+	  tables.add(getMainTable());
+	  lSQLObj.setSourceTables(tables);
 	  
-	    return false;  
+	  
+	  
+	  
+	  return false;  
 	     
 	}
-	public DataObject inizializeDataObject(DataObject myDataObject)
-		throws StressToolActionException {
-	  myDataObject.setSqlType(DataObject.SQL_READ);
-	  myDataObject.setCurrentRunLoop(-1);
-
-	  String onDuplicateKey = null;
-	  String filter = null;
-	  String sqlTemplate = DataObject.SQL_SELECT_TEMPLATE;
-	  SynchronizedMap SQLObjectContainer = new SynchronizedMap();
-
-	  /**
-	   * navigate the schema object for tables then use each table to retrieve
-	   * the list of attributes if a INDEX exists then it is apply and only
-	   * the attributes matching it are evaluated on the base of the list of
-	   * attributes retrieved the value for each will be generated
-	   * 
-	   * 
-	   * 
-	   * 
-	   */
-
-
-	  myDataObject.setTables((Table[])getSchema().getTables().getValuesAsArrayOrderByKey());
-
-	  //	StringBuffer sbTables = new StringBuffer();
-	  StringBuffer sbAttribs = new StringBuffer();
-	  StringBuffer sbValues = new StringBuffer();
-
-	  sbValues.append("(");
-	  /*
-	   * the SQLObjectContainer will be used to store the SQLObject referencing to each table<>SQL statement 
-	   * SQLObject has the a counter with the number of execution done (lazyExecCount), that will be used to refresh the 
-	   * values in accordance to the lazyInterval value 
-	   */
-	  for (Object table : myDataObject.getTables()) {
-		if(sbAttribs.length() > 0) sbAttribs.delete(0, sbAttribs.length());
-
-		int iNumTables = 0;
-
-		myDataObject.setAttribs(getAttribs((Table) table, filter));
-
-		for (int iAttrib = 0; iAttrib < myDataObject.getAttribs().length; iAttrib++) {
-		  if (iAttrib > 0)
-			sbAttribs.append(",");
-
-		  sbAttribs.append(((Attribute) myDataObject.getAttribs()[iAttrib]).getName());
-		}
-
-		if (((Table) table).getParentTable() == null) {
-		  iNumTables = this.getNumberOfprimaryTables();
-		} else {
-		  iNumTables = this.getNumberOfSecondaryTables();
-		}
-
-		SQLObject lSQLObj = new SQLObject();
-//		lSQLObj.setBatched(this.getBatchSize() > 1 ? true : false);
-		lSQLObj.setPreparedStatment(false);
-		lSQLObj.setSQLCommandType(DataObject.SQL_CREATE);
-		lSQLObj.addSourceTables((Table)table);
-
-      /*
-       * Set the specific settings for the selects
-       */
-		
-/*		usePrepareStatement=false
-			SelectFilterMethod=in
-			#range|in|match
-			SleepSelect=0 
-
-			numberOfprimaryTables=1;
-			numberOfSecondaryTables=1;
-			NumberOfIntervalKeys=100
-			NumberOfJoinTables=2
-			JoinField=a
-			ForceIndex=false
-			IndexName=IDX_a
-			lazySelect=true;
-			lazyInterval=5000;
-*/
-		String localSQLTemplate = sqlTemplate;
-		if (((Table) table).getName() != null && ((Table) table).getName().length() > 0) {
-		  localSQLTemplate = localSQLTemplate.replace("#TABLE#", ((Table) table).getName());
-		} else {
-		  throw new StressToolActionException(
-			  "SELECT SQL SYNTAX ISSUE table name null");
-		}
-
-		if (sbAttribs != null && sbAttribs.length() > 0) {
-		  localSQLTemplate = localSQLTemplate.replace("#ATTRIBS#", sbAttribs.toString());
-		} else {
-		  throw new StressToolActionException(
-			  "SELECT SQL SYNTAX ISSUE attribs names not valid or Null");
-		}
-
-		lSQLObj.setSqlLocalTemplate(localSQLTemplate);
-
-		lSQLObj.setResetLazy(true);
-		if(!lSQLObj.getValues().equals("")) 
-		  SQLObjectContainer.put(((Table) table).getName(), lSQLObj);
-
-
-	  }
-	  // if(sbValues !=null && sbValues.length()> 0){
-	  // sqlTemplate.replace("#VALUES#", sbValues.toString());
-	  // }else{
-	  // throw new
-	  // StressToolActionException("INSERT SQL SYNTAX ISSUE values not valid or Null");
-	  // }
-
-	  myDataObject.setSQL(SQLObjectContainer);
-	  myDataObject.setInizialized(true);
-	  return myDataObject;
-	}
+	
+//	public DataObject inizializeDataObject(DataObject myDataObject)
+//		throws StressToolActionException {
+//	  myDataObject.setSqlType(DataObject.SQL_READ);
+//	  myDataObject.setCurrentRunLoop(-1);
+//
+//	  String onDuplicateKey = null;
+//	  String filter = null;
+//	  String sqlTemplate = DataObject.SQL_SELECT_TEMPLATE;
+//	  SynchronizedMap SQLObjectContainer = new SynchronizedMap();
+//
+//	  /**
+//	   * navigate the schema object for tables then use each table to retrieve
+//	   * the list of attributes if a INDEX exists then it is apply and only
+//	   * the attributes matching it are evaluated on the base of the list of
+//	   * attributes retrieved the value for each will be generated
+//	   * 
+//	   * 
+//	   * 
+//	   * 
+//	   */
+//
+//
+//	  
+//	  myDataObject.setTables((Table[])getSchema().getTables().getValuesAsArrayOrderByKey());
+//
+//	  //	StringBuffer sbTables = new StringBuffer();
+//	  StringBuffer sbAttribs = new StringBuffer();
+//	  StringBuffer sbValues = new StringBuffer();
+//
+//	  sbValues.append("(");
+//	  /*
+//	   * the SQLObjectContainer will be used to store the SQLObject referencing to each table<>SQL statement 
+//	   * SQLObject has the a counter with the number of execution done (lazyExecCount), that will be used to refresh the 
+//	   * values in accordance to the lazyInterval value 
+//	   */
+//	  for (Object table : myDataObject.getTables()) {
+//		if(sbAttribs.length() > 0) sbAttribs.delete(0, sbAttribs.length());
+//
+//		int iNumTables = 0;
+//
+//		myDataObject.setAttribs(getAttribs((Table) table, filter));
+//
+//		for (int iAttrib = 0; iAttrib < myDataObject.getAttribs().length; iAttrib++) {
+//		  if (iAttrib > 0)
+//			sbAttribs.append(",");
+//
+//		  sbAttribs.append(((Attribute) myDataObject.getAttribs()[iAttrib]).getName());
+//		}
+//
+//		if (((Table) table).getParentTable() == null) {
+//		  iNumTables = this.getNumberOfprimaryTables();
+//		} else {
+//		  iNumTables = this.getNumberOfSecondaryTables();
+//		}
+//
+//		SQLObject lSQLObj = new SQLObject();
+////		lSQLObj.setBatched(this.getBatchSize() > 1 ? true : false);
+//		lSQLObj.setPreparedStatment(false);
+//		lSQLObj.setSQLCommandType(DataObject.SQL_CREATE);
+//		lSQLObj.addSourceTables((Table)table);
+//
+//      /*
+//       * Set the specific settings for the selects
+//       */
+//		
+///*		usePrepareStatement=false
+//			SelectFilterMethod=in
+//			#range|in|match
+//			SleepSelect=0 
+//
+//			numberOfprimaryTables=1;
+//			numberOfSecondaryTables=1;
+//			NumberOfIntervalKeys=100
+//			NumberOfJoinTables=2
+//			JoinField=a
+//			ForceIndex=false
+//			IndexName=IDX_a
+//			lazySelect=true;
+//			lazyInterval=5000;
+//*/
+//		String localSQLTemplate = sqlTemplate;
+//		if (((Table) table).getName() != null && ((Table) table).getName().length() > 0) {
+//		  localSQLTemplate = localSQLTemplate.replace("#TABLE#", ((Table) table).getName());
+//		} else {
+//		  throw new StressToolActionException(
+//			  "SELECT SQL SYNTAX ISSUE table name null");
+//		}
+//
+//		if (sbAttribs != null && sbAttribs.length() > 0) {
+//		  localSQLTemplate = localSQLTemplate.replace("#ATTRIBS#", sbAttribs.toString());
+//		} else {
+//		  throw new StressToolActionException(
+//			  "SELECT SQL SYNTAX ISSUE attribs names not valid or Null");
+//		}
+//
+//		lSQLObj.setSqlLocalTemplate(localSQLTemplate);
+//
+//		lSQLObj.setResetLazy(true);
+//		// TODO lsqlobject may support the where condition as such return a set values against a set of attributes.
+//		
+//		if(!lSQLObj.getValues().equals("")) 
+//		  SQLObjectContainer.put(((Table) table).getName(), lSQLObj);
+//
+//
+//	  }
+//	  // if(sbValues !=null && sbValues.length()> 0){
+//	  // sqlTemplate.replace("#VALUES#", sbValues.toString());
+//	  // }else{
+//	  // throw new
+//	  // StressToolActionException("INSERT SQL SYNTAX ISSUE values not valid or Null");
+//	  // }
+//
+//	  myDataObject.setSQL(SQLObjectContainer);
+//	  myDataObject.setInizialized(true);
+//	  return myDataObject;
+//	}
     
 	private Attribute[] getAttribs(Table table,String filter) {
 	    // TODO Auto-generated method stub
@@ -307,7 +309,7 @@ public class SelectBase extends StressActionBase implements ReadAction{
 	    
 	    return null;
 	}
-	private Object[] getTables() {
+	private Table[] getTables() {
 	    if(getSchema() !=null 
 		   && getSchema().getTables() != null){
 		
@@ -344,7 +346,8 @@ public class SelectBase extends StressActionBase implements ReadAction{
 	  String joinField = this.getJoinField();
 //	  String joinCondition = this.getJoinCondition();
 	  
-	  Table mainTable =this.getMainTable();
+	  Table mainTable = (Table) lSQLObj.getSourceTables().get(0);
+	  
 	  Table[] secondaryTable = new Table[tablesToJoin];
 	  
 	  condition = mainTable.getName();
@@ -386,5 +389,44 @@ public class SelectBase extends StressActionBase implements ReadAction{
 	  this.selectJoinTables = selectJoinTables;
 	}
 	
-		
+	private String createSelect(){
+	  StringBuffer sb = new StringBuffer();
+	  String select = DataObject.SQL_SELECT_TEMPLATE;
+	  
+//	  select.replaceAll("", replacement);
+	  sb.append( this.getMainTable() );
+	  if(this.getNumberOfJoinTables() > 0 )
+		sb.append(" " + this.getJoinCondition());
+	  
+	  select.replaceAll("#TABLE_CONDITION#", sb.toString());
+	  
+	  return select;
+	  
+	}
+	
+	private String createWhere(){
+	  Attribute[] attribsMain = (Attribute[])getMainTable().getMetaAttributes().getValuesAsArrayOrderByKey();
+//	  Attribute[] attribsSecondary = (Attribute[])getMainTable().getMetaAttributes().getValuesAsArrayOrderByKey();
+	  ArrayList whereAttribs = new ArrayList();
+	  Attribute primareyKey = null;
+	  
+	  
+	  for(Attribute attribute :attribsMain){
+		if(attribute.isWhere_attribute()){
+		  whereAttribs.add(attribute);
+		  attribute.setValue(lSQLObj.getWhereValueForAttribute(attribute, getSelectLeadingTable()));
+		 }
+	  }
+	  
+//	  for(Attribute attribute :attribsMain){
+//		if(attribute.isWhere_attribute()){
+//		  whereAttribs.add(attribute);
+//		  attribute.setValue(lSQLObj.getWhereValueForAttribute(attribute, getSelectLeadingTable()));
+//		 }
+//	  }
+	  
+	  
+	  
+	  return null;
+	}	
 }

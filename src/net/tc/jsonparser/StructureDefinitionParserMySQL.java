@@ -97,6 +97,7 @@ public class StructureDefinitionParserMySQL implements
 					table.setRowFormat(oTable.get("rowformat")!=null?(String)oTable.get("rowformat"):"");
 					table.setDataDirectory(oTable.get("datadir")!=null?(String)oTable.get("datadir"):"");
 					table.setTableSpace(oTable.get("tablespace")!=null?(String)oTable.get("tablespace"):"");
+					table.setWhereCondition(oTable.get("where_condition")!=null?(String)oTable.get("where_condition"):"");
 					
 					/*
 					 * browsing for PK
@@ -183,6 +184,7 @@ public class StructureDefinitionParserMySQL implements
 						attribute.setDataType(new DataType(DataType.getDataTypeIdentifierByString((String)oAttribute.get("datatype"))));
 						attribute.setDataDimension((String)oAttribute.get("datadimension")!= null?Integer.parseInt((String)oAttribute.get("datadimension")):0);
 						attribute.setAutoIncrement(oAttribute.get("autoincrement")!= null?true:false);
+						attribute.setWhere_attribute((oAttribute.get("where_attribute")!= null?true:false);
 						attribute.setSpecialFunction(oAttribute.get("specialFunction")!= null?(String)oAttribute.get("specialFunction"):null);
 						attribute.setUpperLimit(oAttribute.get("upperlimit")!= null?Integer.parseInt((String)oAttribute.get("upperlimit")):0);
 						

@@ -37,7 +37,7 @@ public class Table {
 	private String tableSpace = null;
 	private int  rowFormatInt = 0;
 	private String dataDirectory = null;
-	
+	private String whereCondition = null;
 	
 	
 	public Table() {
@@ -474,6 +474,22 @@ public class Table {
 	    }
 	    	
 	    this.dataDirectory = dataDirectory;
+	}
+
+
+	/**
+	 * @return the whereCondition
+	 */
+	public String getWhereCondition() {
+	  return whereCondition;
+	}
+
+
+	/**
+	 * @param whereCondition the whereCondition to set
+	 */
+	public void setWhereCondition(String whereCondition) {
+	  this.whereCondition = whereCondition;
 	}
 
 }

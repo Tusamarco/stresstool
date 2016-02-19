@@ -5,10 +5,12 @@ package net.tc.stresstool.value;
 
 import java.lang.ref.SoftReference;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import net.tc.data.db.DataType;
+import net.tc.utils.SynchronizedMap;
 import net.tc.utils.Utility;
 import net.tc.utils.file.FileHandler;
 
@@ -31,7 +33,7 @@ public class BasicFileValueProvider extends BasicValueProvider implements ValueP
     String path = null;
     String[] txtFile = null;
     int position = 0;
-    
+    Map <String,Integer> wordsMap =null; 
     /*Return a random entry from the array limited by the Length 
      */
     
@@ -99,12 +101,14 @@ public class BasicFileValueProvider extends BasicValueProvider implements ValueP
 	txtFile = ((FileHandler)sr.get()).getTextFileAsStringArray();
 	 Pattern p = Pattern.compile("\\s\\s");
 	 Pattern p2 = Pattern.compile("\"");
+	wordsMap = new SynchronizedMap(0); 
 	for(int i = 0 ; i < txtFile.length; i++){
 	  if(txtFile[i] != null){
 		Matcher m = p.matcher(txtFile[i]); 
     	String toClean =  m.replaceAll("");
     	m = p.matcher(toClean);
     	toClean =  m.replaceAll("");
+    	addWords(toClean);    	
     	txtFile[i] = toClean;
 	  }
 	}
@@ -112,7 +116,18 @@ public class BasicFileValueProvider extends BasicValueProvider implements ValueP
 	return true;
     }
 
-//    
+    private void addWords(String toClean) {
+  		String[] words = toClean.split(" ");
+  		for(String word:words){
+  		  if(wordsMap.containsKey(word.trim())){
+  			wordsMap.put(word.trim(),wordsMap.get(word.trim()).intValue()+1);
+  		  }
+  		  else
+  			wordsMap.put(word.trim(),1);
+  		}
+    }
+
+	//    
 //    public String getText(int lenght){
 //	  return path;
 //      

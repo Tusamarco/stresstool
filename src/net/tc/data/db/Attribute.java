@@ -19,6 +19,7 @@ public class Attribute {
 	private boolean isLazy = true ; 
 	private String specialFunction = null;
 	private int upperLimit = 0 ;
+	private boolean where_attribute = false;
 	
 	
     private boolean isNull = true;
@@ -131,5 +132,16 @@ public class Attribute {
 	public void setUpperLimit(int upperLimit) {
 	  this.upperLimit = upperLimit;
 	}
-	
+	/**
+	 * @return the where_attribute
+	 */
+	public boolean isWhere_attribute() {
+	  return where_attribute;
+	}
+	/**
+	 * @param where_attribute the where_attribute to set
+	 */
+	public void setWhere_attribute(boolean where_attribute) {
+	  this.where_attribute = where_attribute;
+	}
 }
