@@ -19,7 +19,7 @@
 					"keys":
 							{
 							"key":
-								[
+								[ 
 									{"name":"IDX_a","unique":false,"attributes":["a"]},
 									{"name":"IDX_uuid","unique":false,"attributes":["uuid"]},			
 									{"name":"IDX_date","unique":false,"attributes":["date"]}			
