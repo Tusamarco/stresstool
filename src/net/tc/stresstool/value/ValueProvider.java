@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 
+import net.tc.data.db.Attribute;
 import net.tc.data.db.DataType;
 
 public interface ValueProvider {
@@ -51,5 +52,5 @@ public interface ValueProvider {
 //	public Calendar getTestCalendar();
 //	public void setTestCalendar(Calendar testCalendar);
 	public Calendar resetCalendar(int timeDays);
-    
+	public Object getValueForRangeOption(Attribute attrib, String rangeCondition);
 }

@@ -1,5 +1,6 @@
 package net.tc.data.db;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Map;
@@ -38,7 +39,8 @@ public class Table {
 	private int  rowFormatInt = 0;
 	private String dataDirectory = null;
 	private String whereCondition = null;
-	
+	private String selectCondition = null;
+	private ArrayList<Attribute> attribsWhere = new ArrayList();
 	
 	public Table() {
 	    rows = new SynchronizedMap(0);
@@ -490,6 +492,47 @@ public class Table {
 	 */
 	public void setWhereCondition(String whereCondition) {
 	  this.whereCondition = whereCondition;
+	}
+	
+	public String parseWhere(){
+		if(this.getWhereCondition() == null || this.getWhereCondition().equals(""))
+			return null;
+		/*
+		 * get first the list of attribs used in the where
+		 */
+		for(Object attrib: (Object[])this.getMetaAttributes().getValuesAsArrayOrderByKey()){
+			if(this.getWhereCondition().indexOf("#" + ((Attribute)attrib).getName() + "#") > 0){
+				attribsWhere.add((Attribute)attrib) ;
+				
+			}
+		}
+		if(attribsWhere.size() >0){
+			for(Attribute attrib : (Attribute[]) (attribsWhere.toArray())){
+				if(this.getWhereCondition().indexOf("#?" + attrib.getName() + "_RANGE_OPTION_") >0){
+					String catchMe = getWhereCondition().substring(getWhereCondition().indexOf("#?" + attrib.getName() + "_RANGE_OPTION_"), getWhereCondition().length());
+					attrib.setValue(StressTool.getValueProvider().getValueForRangeOption(attrib,catchMe.substring(0,catchMe.indexOf("?#"))));	
+				}
+				else{
+					attrib.setValue(StressTool.getValueProvider().provideValue(attrib.getDataType(), new Long(attrib.getUpperLimit()).longValue()));
+					this.getWhereCondition().replaceFirst("#"+ attrib.getName() +"#", attrib.getName());
+					this.getWhereCondition().replaceFirst("?"+ attrib.getName() +"?", (String)attrib.getValue());
+				}
+			}
+
+			
+		}
+		
+		return null;
+	}
+
+
+	public synchronized String getSelectCondition() {
+		return selectCondition;
+	}
+
+
+	public synchronized void setSelectCondition(String selectCondition) {
+		this.selectCondition = selectCondition;
 	}
 
 }

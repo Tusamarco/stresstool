@@ -1,6 +1,6 @@
 [main]
 #connection oriented settings
-#connUrl=jdbc:mysql://192.168.0.3:3306
+#connUrl=jdbc:mysql://192.168.0.11:3306
 connUrl=jdbc:mysql://127.0.0.1:3306
 database=test
 user=stress	
@@ -19,19 +19,19 @@ doDelete=false
 doReport=true 
 doSimple=false 
 doSimplePk=false 
-droptable=false
+droptable=true
 ignoreBinlog=false
 operationShort=true  
-poolNumber=2
+poolNumber=1
 pctInsert=100
 pctUpdate=0 
-pctSelect=0 
+pctSelect=100 
 pctDelete=0 
-repeatNumber=100
-HardStopLimit=100
+repeatNumber=10000
+HardStopLimit=100000
 UseHardStop=false
 StatIntervalMs=1000
-StatLoops = 100
+StatLoops = 1000000
 SemaphoreCountdownTime = 1
 # table engine comma separated with % value; 
 TableEngine=InnoDB|60,MyISAM|40
@@ -112,13 +112,13 @@ lazyInterval=5000;
 
 [net.tc.stresstool.actions.InsertBase]
 usePrepareStatement=false
-numberOfprimaryTables=2
-numberOfSecondaryTables=2
+numberOfprimaryTables=5
+numberOfSecondaryTables=5
 useAutoIncrement=true
 joinField=a
 sleepWrite=100
 lazyCreation=true
-lazyInterval=20
+lazyInterval=200
 batchSize=50
 jsonFile=/Users/marcotusa/programs/JBuilder/workspace/stresstool/json_definition.json
 

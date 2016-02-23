@@ -166,9 +166,15 @@ public class SelectBase extends StressActionBase implements ReadAction{
 	  ArrayList tables = new ArrayList();
 	  tables.add(getMainTable());
 	  lSQLObj.setSourceTables(tables);
+	  String sqlSelectCommand = DataObject.SQL_SELECT_TEMPLATE;
 	  
 	  
+	  sqlSelectCommand = createSelect(sqlSelectCommand);
+	  sqlSelectCommand = createWhere(sqlSelectCommand);
 	  
+	  sqlSelectCommand = createGroupBy(sqlSelectCommand);
+	  sqlSelectCommand = createOrderBy(sqlSelectCommand);
+	  sqlSelectCommand = createLimit(sqlSelectCommand);
 	  
 	  return false;  
 	     
@@ -291,6 +297,20 @@ public class SelectBase extends StressActionBase implements ReadAction{
 //	  return myDataObject;
 //	}
     
+//	SELECT #TABLE_CONDITION# #WHERE# #GROUP_BY# #ORDER_BY# #LIMIT#
+	
+	private String createLimit(String sqlSelectCommand) {
+		
+		return sqlSelectCommand.replaceAll("#LIMIT#", "");
+	}
+	private String createOrderBy(String sqlSelectCommand) {
+		
+		return sqlSelectCommand.replaceAll("#ORDER_BY#", "");
+	}
+	private String createGroupBy(String sqlSelectCommand) {
+		// TODO Auto-generated method stub
+		return sqlSelectCommand.replaceAll("#GROUP_BY#", "");
+	}
 	private Attribute[] getAttribs(Table table,String filter) {
 	    // TODO Auto-generated method stub
 	   if(table != null 
@@ -389,44 +409,34 @@ public class SelectBase extends StressActionBase implements ReadAction{
 	  this.selectJoinTables = selectJoinTables;
 	}
 	
-	private String createSelect(){
+	private String createSelect(String sqlSelectCommand){
 	  StringBuffer sb = new StringBuffer();
-	  String select = DataObject.SQL_SELECT_TEMPLATE;
+	  
 	  
 //	  select.replaceAll("", replacement);
-	  sb.append( this.getMainTable() );
-	  if(this.getNumberOfJoinTables() > 0 )
+	  getMainTable();
+	  sb.append( getSelectLeadingTable().getSelectCondition());
+	  sb.append( " FROM " + getSelectLeadingTable().getName() );
+	  if(this.getNumberOfJoinTables() > 0 ){
 		sb.append(" " + this.getJoinCondition());
+	  }
+
+	  sqlSelectCommand = sqlSelectCommand.replaceAll("#TABLE_CONDITION#", sb.toString());
 	  
-	  select.replaceAll("#TABLE_CONDITION#", sb.toString());
-	  
-	  return select;
+	  return sqlSelectCommand;
 	  
 	}
 	
-	private String createWhere(){
-	  Attribute[] attribsMain = (Attribute[])getMainTable().getMetaAttributes().getValuesAsArrayOrderByKey();
-//	  Attribute[] attribsSecondary = (Attribute[])getMainTable().getMetaAttributes().getValuesAsArrayOrderByKey();
-	  ArrayList whereAttribs = new ArrayList();
-	  Attribute primareyKey = null;
-	  
-	  
-	  for(Attribute attribute :attribsMain){
-		if(attribute.isWhere_attribute()){
-		  whereAttribs.add(attribute);
-		  attribute.setValue(lSQLObj.getWhereValueForAttribute(attribute, getSelectLeadingTable()));
-		 }
-	  }
-	  
-//	  for(Attribute attribute :attribsMain){
-//		if(attribute.isWhere_attribute()){
-//		  whereAttribs.add(attribute);
-//		  attribute.setValue(lSQLObj.getWhereValueForAttribute(attribute, getSelectLeadingTable()));
-//		 }
-//	  }
-	  
-	  
-	  
+	private String createWhere(String sqlSelectCommand){
+		if(getSelectLeadingTable()!= null){
+			StringBuffer  whereConditionString = new StringBuffer();
+			
+			whereConditionString.append(" WHERE ");
+			whereConditionString.append(getSelectLeadingTable().parseWhere());
+			sqlSelectCommand = sqlSelectCommand.replaceAll("#WHERE#", whereConditionString.toString());
+			  
+			return sqlSelectCommand;
+		}
 	  return null;
 	}	
 }

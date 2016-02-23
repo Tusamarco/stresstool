@@ -6,6 +6,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
 
+import net.tc.data.db.Attribute;
 import net.tc.data.db.DataType;
 import net.tc.utils.TimeTools;
 import net.tc.utils.Utility;
@@ -389,6 +390,124 @@ public Calendar resetCalendar(int timeDays) {
 	String after = TimeTools.getTimeStamp(BasicValueProvider.getTestCalendar(), "yyyy-MM-dd HH:mm:ss"); 
 	BasicValueProvider.setTestCalendar(testCalendar);
 	return BasicValueProvider.getTestCalendar();
+}
+
+@Override
+public  Object getValueForRangeOption(Attribute attrib, String rangeCondition) {
+	switch(rangeCondition){
+		case "BTWEEN":return valueForBetween(attrib);
+		case "IN":return valueForIn(attrib);
+		case ">":return valueLessMoreThen(attrib, rangeCondition);
+		case "<":return valueLessMoreThen(attrib, rangeCondition);
+		
+		default :break;
+	}		
+	return null;
+}
+
+private String valueLessMoreThen(Attribute attrib, String operator) {
+	if(attrib.getDataType().getDataTypeCategory() == DataType.NUMERIC_CATEGORY){
+		Long val1 = this.getRandomNumber(attrib.getUpperLimit());
+		Long val2 = this.getRandomNumber(attrib.getUpperLimit());
+		String value = "";
+
+		if(val1 < val2){
+			value = " (" + attrib.getName() + " " + val1 + " " + operator + " " + val2 + ") "; 
+		}
+		else if(val1 > val2){
+			value = " (" + attrib.getName() + " " + val2 + " " + operator + " " + val1 + ") ";
+		}
+		else{
+			return valueLessMoreThen(attrib,operator);
+		}
+		
+	}
+	else if(attrib.getDataType().getDataTypeCategory() == DataType.DATE_CATEGORY){
+		Date date1 = this.getRandomDate();
+		Date date2 = this.getRandomDate();
+		String value = "";
+		if(date1.getTime() < date2.getTime()){
+			value = " (" + attrib.getName() + " " + TimeTools.getTimeStampFromDate(date1, null) + " " + operator + " " + TimeTools.getTimeStampFromDate(date2, null) + ") ";
+		}
+		else if(date1.getTime() > date2.getTime()){
+			value = " (" + attrib.getName() + " " + TimeTools.getTimeStampFromDate(date2, null) + " " + operator + " " + TimeTools.getTimeStampFromDate(date1, null) + ") ";
+		}
+		else{
+			return valueLessMoreThen(attrib,operator);
+		}
+	}
+	else
+		return null;
+	
+	return null;
+}
+
+
+private Object valueForIn(Attribute attrib) {
+	int loop = Utility.getNumberFromRandomMinMax(3, 200).intValue();
+	StringBuffer sb = new StringBuffer();
+	sb.append(" " + attrib.getName() + " IN (");
+	
+	
+	if(attrib.getDataType().getDataTypeCategory() == DataType.NUMERIC_CATEGORY){
+		for(int ic = 0 ; ic < loop; ic++){
+			if(ic > 0)
+				sb.append(",");
+			sb.append(Utility.getNumberFromRandomMinMax(0, attrib.getUpperLimit()).toString());
+		}
+		
+	}else if(attrib.getDataType().getDataTypeCategory() == DataType.DATE_CATEGORY){
+		for(int ic = 0 ; ic < loop; ic++){
+			if(ic > 0)
+				sb.append(",");
+			sb.append("'" + TimeTools.getTimeStampFromDate(getRandomDate(), null) + "'");
+		}
+	}
+	else{
+		return null;
+	}
+	
+	
+	
+	// TODO Auto-generated method stub
+	return null;
+}
+
+private String valueForBetween(Attribute attrib) {
+	if(attrib.getDataType().getDataTypeCategory() == DataType.NUMERIC_CATEGORY){
+		Long val1 = this.getRandomNumber(attrib.getUpperLimit());
+		Long val2 = this.getRandomNumber(attrib.getUpperLimit());
+		String value = "";
+
+		if(val1 < val2){
+			value = " (" + attrib.getName() + " BETWEEN " + val1 + " AND " + val2 + ") "; 
+		}
+		else if(val1 > val2){
+			value = " (" + attrib.getName() + " BETWEEN " + val2 + " AND " + val1 + ") ";
+		}
+		else{
+			return valueForBetween(attrib);
+		}
+		
+	}
+	else if(attrib.getDataType().getDataTypeCategory() == DataType.DATE_CATEGORY){
+		Date date1 = this.getRandomDate();
+		Date date2 = this.getRandomDate();
+		String value = "";
+		if(date1.getTime() < date2.getTime()){
+			value = " (" + attrib.getName() + " BETWEEN " + TimeTools.getTimeStampFromDate(date1, null) + " AND " + TimeTools.getTimeStampFromDate(date2, null) + ") "; 
+		}
+		else if(date1.getTime() > date2.getTime()){
+			value = " (" + attrib.getName() + " BETWEEN '" + TimeTools.getTimeStampFromDate(date2, null) + "' AND '" + TimeTools.getTimeStampFromDate(date1, null) + "') ";
+		}
+		else{
+			return valueForBetween(attrib);
+		}
+	}
+	else
+		return null;
+	
+	return null;
 }
 
 

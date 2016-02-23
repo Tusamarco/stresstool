@@ -108,7 +108,7 @@ public class BasicFileValueProvider extends BasicValueProvider implements ValueP
     	String toClean =  m.replaceAll("");
     	m = p.matcher(toClean);
     	toClean =  m.replaceAll("");
-    	addWords(toClean);    	
+//    	addWords(toClean);    	
     	txtFile[i] = toClean;
 	  }
 	}

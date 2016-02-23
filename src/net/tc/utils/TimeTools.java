@@ -272,4 +272,20 @@ public class TimeTools {
 	
 	}
 
+  public static String getTimeStampFromDate(Date date, String format){
+	 if(date == null)
+	     return  null;
+	 
+	 if(format == null)
+		 format =  getDayFormat() + " " + getTimeFormat();
+	 
+	    Date dNow = date;
+	      SimpleDateFormat ft = 
+	      new SimpleDateFormat (format);
+	
+	     return ft.format(dNow);
+	
+	
+	}
+
 }
