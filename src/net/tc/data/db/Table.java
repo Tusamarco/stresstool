@@ -9,6 +9,7 @@ import net.tc.stresstool.StressTool;
 import net.tc.stresstool.exceptions.StressToolConfigurationException;
 import net.tc.stresstool.logs.LogProvider;
 import net.tc.utils.SynchronizedMap;
+import net.tc.utils.Utility;
 
 public class Table {
     	public static final Integer TABLE_PARENT=0;
@@ -495,6 +496,8 @@ public class Table {
 	}
 	
 	public String parseWhere(){
+	  	String whereCondition = this.getWhereCondition();
+	  
 		if(this.getWhereCondition() == null || this.getWhereCondition().equals(""))
 			return null;
 		/*
@@ -507,22 +510,37 @@ public class Table {
 			}
 		}
 		if(attribsWhere.size() >0){
-			for(Attribute attrib : (Attribute[]) (attribsWhere.toArray())){
-				if(this.getWhereCondition().indexOf("#?" + attrib.getName() + "_RANGE_OPTION_") >0){
-					String catchMe = getWhereCondition().substring(getWhereCondition().indexOf("#?" + attrib.getName() + "_RANGE_OPTION_"), getWhereCondition().length());
-					attrib.setValue(StressTool.getValueProvider().getValueForRangeOption(attrib,catchMe.substring(0,catchMe.indexOf("?#"))));	
+			for(Object attrib : (Object[]) (attribsWhere.toArray())){
+			  int stingLength =0 ;
+			  
+				if(whereCondition.indexOf("#?" + ((Attribute)attrib).getName() + "_RANGE_OPTION_") >0){
+				  	String catchme = whereCondition.substring(whereCondition.indexOf("#?" + ((Attribute)attrib).getName() + "_RANGE_OPTION_") + 20, whereCondition.length());
+				  	catchme = (String) (StressTool.getValueProvider().getValueForRangeOption(((Attribute)attrib),catchme.substring(0,catchme.indexOf("?#"))));	
+				  	whereCondition = whereCondition.replaceFirst("#"+ ((Attribute)attrib).getName() +"#", "");
+				  	String pre = whereCondition.substring(0, whereCondition.indexOf("#?" + ((Attribute)attrib).getName() + "_RANGE_OPTION_"));
+				  	String post = whereCondition.substring(whereCondition.indexOf("#?" + ((Attribute)attrib).getName() + "_RANGE_OPTION_") + 20,whereCondition.length());
+				  	post = post.substring((post.indexOf("?#") + 2),post.length());
+				  	whereCondition = pre + " " + catchme + " " + post;
+				  	
 				}
 				else{
-					attrib.setValue(StressTool.getValueProvider().provideValue(attrib.getDataType(), new Long(attrib.getUpperLimit()).longValue()));
-					this.getWhereCondition().replaceFirst("#"+ attrib.getName() +"#", attrib.getName());
-					this.getWhereCondition().replaceFirst("?"+ attrib.getName() +"?", (String)attrib.getValue());
+				  ((Attribute)attrib).setValue(StressTool.getValueProvider().provideValue(((Attribute)attrib).getDataType(), new Long(((Attribute)attrib).getUpperLimit()).longValue()));
+				  whereCondition = whereCondition.replaceFirst("#"+ ((Attribute)attrib).getName() +"#", ((Attribute)attrib).getName());
+				  String length = whereCondition.substring((whereCondition.indexOf("#?"+ ((Attribute)attrib).getName() +"?") + ("#?"+ ((Attribute)attrib).getName() +"?").length()), whereCondition.length());
+				  if(length.charAt(0) == '|'){
+					length = length.substring(1,length.indexOf("#"));
+					stingLength = Integer.parseInt(length);
+				  }
+					
+				  
+				  whereCondition = whereCondition.replaceFirst("#\\?"+ ((Attribute)attrib).getName() +"\\?",((Attribute)attrib).getValueAsString(stingLength));
 				}
 			}
 
 			
 		}
 		
-		return null;
+		return whereCondition;
 	}
 
 

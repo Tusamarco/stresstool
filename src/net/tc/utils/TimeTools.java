@@ -86,7 +86,6 @@ public class TimeTools {
 	        return "";
 	    }
 	   }
-    
 
  public static String GetCurrent()
  {

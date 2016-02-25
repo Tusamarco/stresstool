@@ -236,6 +236,10 @@ public class SQLObject {
 		SQLCommands = sQLCommands;
 	}
     
+	public synchronized void setSingleSQLCommands(String sQLCommand) {
+		SQLCommands.add(sQLCommand);
+	}
+	
 	public ArrayList getWhereValues(){
 	  
 	  

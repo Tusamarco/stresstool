@@ -350,6 +350,42 @@ public class DataType {
         this.dataTypeCategory = dataTypeCategory;
     }
  
-
+    public static String getClassFromDataType(int dataTypeIdentifier){
+      
+      	switch (dataTypeIdentifier){
+      	case DataType.TINYINT: return "java.lang.Integer";
+    	case DataType.SMALLINT:return "java.lang.Integer";
+    	case DataType.MEDIUMINT:return "java.lang.Integer";
+    	case DataType.INT: return "java.lang.Integer";
+    	case DataType.BIGINT:return "java.lang.Long";
+    	case DataType.FLOAT: return "java.lang.String";
+    	case DataType.DOUBLE: return "java.lang.Double";
+    	case DataType.DECIMAL: return "java.math.BigDecimal";
+    	case DataType.BIT: return "java.lang.Integer";
+    	case DataType.YEAR: return "java.lang.Integer";
+    	case DataType.DATE: return "java.lang.String";
+    	case DataType.TIME: return "java.lang.String";
+    	case DataType.DATETIME: return "java.sql.Date";
+    	case DataType.TIMESTAMP: return "java.sql.Timestamp";
+    	case DataType.CHAR: return "java.lang.String";
+    	case DataType.BINARY: return "byte[]";	    
+    	case DataType.VARCHAR: return "java.lang.String";
+    	case DataType.VARBINARY: return "byte[]";
+    	case DataType.TINYBLOB: return "byte[]";
+    	case DataType.TINYTEXT: return "TINYTEXT";
+    	case DataType.BLOB: return "byte[]"; 
+    	case DataType.TEXT: return "java.lang.String"; 
+    	case DataType.MEDIUMBLOB: return "byte[]"; 
+    	case DataType.MEDIUMTEXT: return "java.lang.String";
+    	case DataType.LONGBLOB: return "byte[]";
+    	case DataType.LONGTEXT: return "java.lang.String";
+    	case DataType.ENUM: return "java.lang.String";
+    	case DataType.SET: return "java.lang.String";
+    	default: throw new IllegalArgumentException("Invalid data type index: " + dataTypeIdentifier);
+      	
+      }
+      
+      
+    }
     
 }

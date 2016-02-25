@@ -17,7 +17,7 @@
 					"rowformat":"dynamic",
 					"multiple":true,
 					"selectcondition":"autoinc,uuid,serverid,a,b,c,counter,time,partitionid,date,strrecordtype",
-					"wherecondition":" #a# = ?a? and #date# #?date_RANGE_OPTION_BETWEEN?# and #b# like ?b? ",
+					"wherecondition":" #a# = ?a? and #date# #?date_RANGE_OPTION_BETWEEN?# and #b# like #?b?|20# ",
 					"keys":
 							{
 							"key":

@@ -1,6 +1,7 @@
 package net.tc.data.db;
 
 import net.tc.utils.SynchronizedMap;
+import net.tc.utils.Utility;
 
 
 
@@ -87,6 +88,49 @@ public class Attribute {
 	public Object getValue() {
 		return value;
 	}
+	public Object getValue(int stingLength) {
+		return ((String)value).subSequence(0, Utility.getNumberFromRandomMinMax(1, stingLength).intValue());
+	}
+
+	public String getValueAsString( int stingLength) {
+  	
+    	switch (getDataType().getDataTypeId()){
+         	case DataType.TINYINT: return ((Integer)getValue()).toString();
+        	case DataType.SMALLINT:return ((Integer)getValue()).toString();
+        	case DataType.MEDIUMINT:return ((Integer)getValue()).toString();
+        	case DataType.INT: return ((Integer)getValue()).toString();
+        	case DataType.BIGINT:return ((Long)getValue()).toString();
+        	case DataType.FLOAT: return ((String)getValue());
+        	case DataType.DOUBLE: return ((Double)getValue()).toString();
+        	case DataType.DECIMAL: return ((java.math.BigDecimal)getValue()).toString(); 
+        	case DataType.BIT: return ((Integer)getValue()).toString();
+        	case DataType.YEAR: return ((Integer)getValue()).toString();
+        	case DataType.DATE: return ((String)getValue());
+        	case DataType.TIME: return ((String)getValue());
+        	case DataType.DATETIME: return ((java.sql.Date)getValue()).toString();
+        	case DataType.TIMESTAMP: return ((java.sql.Timestamp)getValue()).toString(); 
+        	case DataType.CHAR: return ((String)getValue(stingLength));
+        	case DataType.BINARY: return "byte[]";	    
+        	case DataType.VARCHAR: return ((String)getValue(stingLength));
+        	case DataType.VARBINARY: return "byte[]";
+        	case DataType.TINYBLOB: return "byte[]";
+        	case DataType.TINYTEXT: return ((String)getValue(stingLength));
+        	case DataType.BLOB: return "byte[]"; 
+        	case DataType.TEXT: return ((String)getValue(stingLength)); 
+        	case DataType.MEDIUMBLOB: return "byte[]"; 
+        	case DataType.MEDIUMTEXT: return ((String)getValue(stingLength));
+        	case DataType.LONGBLOB: return "byte[]";
+        	case DataType.LONGTEXT: return ((String)getValue(stingLength));
+        	case DataType.ENUM: return ((String)getValue(stingLength));
+        	case DataType.SET: return ((String)getValue(stingLength));
+        	default: throw new IllegalArgumentException("Invalid data type index: " + getDataType().getDataTypeId());
+    	
+    	}
+	  
+	  
+	}
+
+	
 	public void setValue(Object value) {
 		this.value = value;
 	}

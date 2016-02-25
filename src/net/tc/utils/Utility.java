@@ -568,6 +568,10 @@ import javax.imageio.ImageIO;
   }  
    public static boolean isNumeric(Object obj)  
   {  
+	 if(obj instanceof java.lang.Integer
+		 || obj instanceof java.lang.Long)
+	   return true;
+	 
   	 try  
   	 {  
   	    long i = new Long((Long) obj);  

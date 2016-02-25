@@ -254,8 +254,8 @@ public class BasicValueProvider implements ValueProvider {
 
   @Override
   public Date getRandomDate() {
-	// TODO Auto-generated method stub
-	return null;
+	 return TimeTools.getCalendarFromCalendarDateAddDays(BasicValueProvider.getTestCalendar(),Utility.getNumberFromRandomMinMax(-100, 100).intValue()).getTime();
+	
   }
 
   @Override
@@ -395,7 +395,7 @@ public Calendar resetCalendar(int timeDays) {
 @Override
 public  Object getValueForRangeOption(Attribute attrib, String rangeCondition) {
 	switch(rangeCondition){
-		case "BTWEEN":return valueForBetween(attrib);
+		case "BETWEEN":return valueForBetween(attrib);
 		case "IN":return valueForIn(attrib);
 		case ">":return valueLessMoreThen(attrib, rangeCondition);
 		case "<":return valueLessMoreThen(attrib, rangeCondition);
@@ -474,10 +474,11 @@ private Object valueForIn(Attribute attrib) {
 }
 
 private String valueForBetween(Attribute attrib) {
+  	String value = "";
 	if(attrib.getDataType().getDataTypeCategory() == DataType.NUMERIC_CATEGORY){
 		Long val1 = this.getRandomNumber(attrib.getUpperLimit());
 		Long val2 = this.getRandomNumber(attrib.getUpperLimit());
-		String value = "";
+		
 
 		if(val1 < val2){
 			value = " (" + attrib.getName() + " BETWEEN " + val1 + " AND " + val2 + ") "; 
@@ -493,9 +494,9 @@ private String valueForBetween(Attribute attrib) {
 	else if(attrib.getDataType().getDataTypeCategory() == DataType.DATE_CATEGORY){
 		Date date1 = this.getRandomDate();
 		Date date2 = this.getRandomDate();
-		String value = "";
+		
 		if(date1.getTime() < date2.getTime()){
-			value = " (" + attrib.getName() + " BETWEEN " + TimeTools.getTimeStampFromDate(date1, null) + " AND " + TimeTools.getTimeStampFromDate(date2, null) + ") "; 
+			value = " (" + attrib.getName() + " BETWEEN '" + TimeTools.getTimeStampFromDate(date1, null) + "' AND '" + TimeTools.getTimeStampFromDate(date2, null) + "') "; 
 		}
 		else if(date1.getTime() > date2.getTime()){
 			value = " (" + attrib.getName() + " BETWEEN '" + TimeTools.getTimeStampFromDate(date2, null) + "' AND '" + TimeTools.getTimeStampFromDate(date1, null) + "') ";
@@ -507,7 +508,7 @@ private String valueForBetween(Attribute attrib) {
 	else
 		return null;
 	
-	return null;
+	return value;
 }
 
 

@@ -19,7 +19,7 @@ doDelete=false
 doReport=true 
 doSimple=false 
 doSimplePk=false 
-droptable=true
+droptable=false
 ignoreBinlog=false
 operationShort=true  
 poolNumber=1
@@ -103,11 +103,11 @@ NumberOfIntervalKeys=100
 NumberOfJoinTables=2
 JoinField=a
 ForceIndex=false
-IndexName=IDX_a
+IndexName=IDX_as
 lazySelect=true;
 lazyInterval=5000;
 #joinCondition=Left - experimental
-
+batchSize = 10
 
 
 [net.tc.stresstool.actions.InsertBase]

@@ -14,7 +14,12 @@ import net.tc.utils.SynchronizedMap;
 
 
 
+
+
+
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Map;
 
 import com.mysql.jdbc.Connection;
@@ -221,9 +226,33 @@ public class DataObject extends MultiLanguage
     }
 
 	private int[] executeSelect(Connection conn) {
-	  // TODO Auto-generated method stub
+	  if(this.getSqlObjects() != null  
+		  && this.getSqlObjects().getValueByPosition(0) != null){
+			
+			SQLObject sqlo = (SQLObject) this.getSqlObjects().getValueByPosition(0);
+			ArrayList<String> commands = sqlo.getSQLCommands();
+			int[] lines = new int[commands.size()];
+			
+			try{
+			 Statement stmt = (Statement) conn.createStatement();
+			for(int ac = 0 ; ac < commands.size(); ac++){
+			  	
+			  ResultSet rs = stmt.executeQuery(commands.get(ac));
+			  lines[ac] = rs.getRow();
+			  rs.close();
+			  rs = null;
+			}
+			
+
+            return lines;
+			
+			}catch(Exception ex)
+			{ex.printStackTrace();}
+
+	  }
+	  
 	  return null;
-    }
+	}
 
 	public int[] executeInsert(Connection conn) {
 	  int[] rows = null;
@@ -359,7 +388,7 @@ public class DataObject extends MultiLanguage
 	    try{
 
 	    		Statement stmt = (Statement) conn.createStatement();
-      	    done = stmt.execute(command);
+	    		done = stmt.execute(command);
 	    }
 	    catch(SQLException sqle){
 		if((sqle.getErrorCode() == 1205 ||sqle.getErrorCode() == 1213 ) && lockRetry < 4){
