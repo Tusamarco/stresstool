@@ -94,10 +94,10 @@ public class SQLObject {
 //	public synchronized void setLazyExecCount(int lazyExecCount) {
 //		this.lazyExecCount = lazyExecCount;
 //	}
-	public synchronized String getSqlLocalTemplate() {
+	public  String getSqlLocalTemplate() {
 		return sqlLocalTemplate;
 	}
-	public synchronized void setSqlLocalTemplate(String sqlLocalTemplate) {
+	public void setSqlLocalTemplate(String sqlLocalTemplate) {
 		this.sqlLocalTemplate = sqlLocalTemplate;
 	}
 	/**
@@ -226,17 +226,17 @@ public class SQLObject {
 //		this.getValues();
 //		this.setLazyExecCount(0);
 	}
-	public synchronized int getBatchLoops() {
+	public  int getBatchLoops() {
 		return batchLoops;
 	}
-	public synchronized void setBatchLoops(int batchLoops) {
+	public void setBatchLoops(int batchLoops) {
 		this.batchLoops = batchLoops;
 	}
-	public synchronized void setSQLCommands(ArrayList<String> sQLCommands) {
+	public void setSQLCommands(ArrayList<String> sQLCommands) {
 		SQLCommands = sQLCommands;
 	}
     
-	public synchronized void setSingleSQLCommands(String sQLCommand) {
+	public void setSingleSQLCommands(String sQLCommand) {
 		SQLCommands.add(sQLCommand);
 	}
 	

@@ -532,8 +532,16 @@ public class Table {
 					stingLength = Integer.parseInt(length);
 				  }
 					
-				  
-				  whereCondition = whereCondition.replaceFirst("#\\?"+ ((Attribute)attrib).getName() +"\\?",((Attribute)attrib).getValueAsString(stingLength));
+				  //|" + stingLength + "#
+				  String value = ((Attribute)attrib).getValueAsString(stingLength).replace("\"", "");
+				  if(stingLength < 1){
+				  	whereCondition = whereCondition.replaceFirst("#\\?"+ ((Attribute)attrib).getName() +"\\?#",value);
+				  }
+				  else{
+					whereCondition =  whereCondition.replaceFirst("#\\?"+ ((Attribute)attrib).getName() +"\\?", "\"" + value + "\"");
+//					System.out.println("AAA " + whereCondition);
+					whereCondition =  whereCondition.replaceFirst("\\|" + stingLength + "#", "");
+				  }
 				}
 			}
 
@@ -544,12 +552,12 @@ public class Table {
 	}
 
 
-	public synchronized String getSelectCondition() {
+	public String getSelectCondition() {
 		return selectCondition;
 	}
 
 
-	public synchronized void setSelectCondition(String selectCondition) {
+	public void setSelectCondition(String selectCondition) {
 		this.selectCondition = selectCondition;
 	}
 

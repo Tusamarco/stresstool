@@ -201,7 +201,7 @@ public class StressTool {
 	            	 calendarReset--;
 	             
 	             StressTool.setStressToolRunning(launcher.LaunchActions());
-	             logProvider.getLogger(LogProvider.LOG_APPLICATION).info("Running loop = " + i);
+	             logProvider.getLogger(LogProvider.LOG_APPLICATION).debug("Running loop = " + i);
 
 	             
 	             if(launcher.getInteractive() >0  && consolePrinter != null){

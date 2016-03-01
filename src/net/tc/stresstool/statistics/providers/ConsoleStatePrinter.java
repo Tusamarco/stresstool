@@ -160,30 +160,35 @@ public class ConsoleStatePrinter implements StatsProvider,Reporter,Runnable {
 		
 		
 		for(Object i:threads.getKeyasOrderedArray()){
-//		    	try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).debug(" ==== Thread id " +  ((StressAction)threads.get(i)).getTHInfo().getId() );}catch(StressToolConfigurationException e){}
-//			try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).debug(" ==== Latency Max " +  ((StressAction)threads.get(i)).getTHInfo().getMaxLatency() );}catch(StressToolConfigurationException e){}
+		    	try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).debug(" ==== Thread id " +  ((StressAction)threads.get(i)).getTHInfo().getId() );}catch(StressToolConfigurationException e){}
+			try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).debug(" ==== Latency Max " +  ((StressAction)threads.get(i)).getTHInfo().getMaxLatency() );}catch(StressToolConfigurationException e){}
 			if(((StressAction)threads.get(i)).getTHInfo().getMaxLatency() > MaxLatency )
 				MaxLatency = ((StressAction)threads.get(i)).getTHInfo().getMaxLatency();
 			
-//			try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).debug(" ==== Latency Min " +  ((StressAction)threads.get(i)).getTHInfo().getMinLatency() );}catch(StressToolConfigurationException e){}
+			try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).debug(" ==== Latency Min " +  ((StressAction)threads.get(i)).getTHInfo().getMinLatency() );}catch(StressToolConfigurationException e){}
 			if(((StressAction)threads.get(i)).getTHInfo().getMinLatency() < MinLatency || MinLatency == 0){
 				MinLatency = ((StressAction)threads.get(i)).getTHInfo().getMinLatency();
 			}
 			
-//			try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).debug(" ==== Exec Max " +  ((StressAction)threads.get(i)).getTHInfo().getMaxExectime() );}catch(StressToolConfigurationException e){}
+			try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).debug(" ==== Exec Max " +  ((StressAction)threads.get(i)).getTHInfo().getMaxExectime() );}catch(StressToolConfigurationException e){}
 			if(((StressAction)threads.get(i)).getTHInfo().getMaxExectime() > MaxTime)
 				MaxTime = ((StressAction)threads.get(i)).getTHInfo().getMaxExectime();
 			
-//			try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).debug(" ==== Exec Min " +  ((StressAction)threads.get(i)).getTHInfo().getMinExectime() );}catch(StressToolConfigurationException e){}
+			try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).debug(" ==== Exec Min " +  ((StressAction)threads.get(i)).getTHInfo().getMinExectime() );}catch(StressToolConfigurationException e){}
 			if(((StressAction)threads.get(i)).getTHInfo().getMinExectime() < MinTime || MinTime == 0 )
 				MinTime = ((StressAction)threads.get(i)).getTHInfo().getMinExectime();
 			
-//			try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).debug(" ==== Loop Max " +  ((StressAction)threads.get(i)).getTHInfo().getCurrentLoop());}catch(StressToolConfigurationException e){}
-			if(((StressAction)threads.get(i)).getTHInfo().getCurrentLoop() > MaxLoop)
-				MaxLoop = ((StressAction)threads.get(i)).getTHInfo().getCurrentLoop();
-//			try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).debug(" ==== Loop Min " +  ((StressAction)threads.get(i)).getTHInfo().getCurrentLoop());}catch(StressToolConfigurationException e){}
+			
+			try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).debug(" ==== Loop Min " +  ((StressAction)threads.get(i)).getTHInfo().getCurrentLoop());}catch(StressToolConfigurationException e){}
 			if(((StressAction)threads.get(i)).getTHInfo().getCurrentLoop() < MinLoop || MinLoop == 0)
 				MinLoop = ((StressAction)threads.get(i)).getTHInfo().getCurrentLoop();
+
+			try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).debug(" ==== Loop Max " +  ((StressAction)threads.get(i)).getTHInfo().getCurrentLoop());}catch(StressToolConfigurationException e){}
+			if(((StressAction)threads.get(i)).getTHInfo().getCurrentLoop() > MaxLoop ){
+				MaxLoop = ((StressAction)threads.get(i)).getTHInfo().getCurrentLoop();
+			}
+
+		
 		}
 		Map<String,Long> values  = new HashMap<String, Long>();
 		values.put("MinLatency", MinLatency);

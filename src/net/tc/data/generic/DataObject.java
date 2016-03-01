@@ -259,14 +259,16 @@ public class DataObject extends MultiLanguage
 	    try {
 	      
 //	      System.out.println("******************* RESET? "+ this.getLazyExecCount() + " ***********************");
-	      
+	  
+	    	
+	    	
 	      Statement stmt = (Statement) conn.createStatement();
 //	      stmt.execute("BEGIN");
 	      stmt.addBatch("START TRANSACTION");
 		    if(SQLContainer != null ){
 		      for(int ir = 0 ; ir < getSqlObjects().size(); ir++){
 		    	SQLObject mySo = (SQLObject)getSqlObjects().getValueByPosition(ir);
-		    	
+
 		    	/*
 		    	 * Analyze and set lazy 
 		    	 */

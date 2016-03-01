@@ -4,6 +4,7 @@ import java.io.FileReader;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Iterator;
 import java.util.Map;
 
 import net.tc.data.db.Attribute;
@@ -350,6 +351,7 @@ public class InsertBase extends StressActionBase implements WriteAction,
 	   * now run the show
 	   */
 	  	
+//	  System.out.println("EXECUTINg ACTION A FOR ID " + this.getTHInfo().getId() + " Action code " + this.getActionCode());
 	  this.myDataObject.executeSqlObject(this.getActionCode(),(com.mysql.jdbc.Connection) conn);
 		
 	  if(!this.isStickyconnection()){
@@ -368,13 +370,23 @@ public class InsertBase extends StressActionBase implements WriteAction,
 	    /**
 	     * Initialize the DataObject representing the SQL action
 	     */
+//	  System.out.println("EXECUTINg PRELIMINARY A FOR ID " + this.getTHInfo().getId());
 	    try {
 	      this.myDataObject =  inizializeDataObject(new DataObject());
         } catch (StressToolActionException e) {
 	      e.printStackTrace();
         }
-     	if(this.myDataObject.isInizialized())
+     	if(this.myDataObject.isInizialized()){
+//     	 System.out.println(myDataObject.getSqlObjects().keySet().toString());
+//     	 Iterator it = myDataObject.getSqlObjects().keySet().iterator();
+//     	 while(it.hasNext()){
+//     	  SQLObject obj  = (SQLObject)myDataObject.getSqlObjects().get(it.next());
+//     	 System.out.println( "SQL Commands " + obj.getSQLCommands().toString());
+//     	 }
+     	 
+     	 
      	  return true;
+     	}
 	  // TODO I am here need to do the value generation using the Sql object and the Data Object  
 	  
 	    return false;  

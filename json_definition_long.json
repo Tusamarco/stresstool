@@ -16,7 +16,7 @@
 					"datadir":"",
 					"rowformat":"dynamic",
 					"multiple":true,
-					"wherecondition":" #a# = ?a? and #date# #?date_RANGE_OPTION_BETWEEN?# and #b# like ?b? ", 
+					"wherecondition":" #a# = #?a?# and #date# #?date_RANGE_OPTION_BETWEEN?# and #b# like #?b?# ", 
 					"keys":
 							{
 							"key":

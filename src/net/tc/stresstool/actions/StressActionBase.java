@@ -591,7 +591,6 @@ public class StressActionBase implements StressAction, Runnable {
         			this.getTHInfo().setCurrentLoop(i);
         			if(!StressTool.isStressToolRunning())
         			    break;
-        			
         			    
         	    }
         	    long endTime = System.currentTimeMillis();

@@ -89,7 +89,7 @@ public class Attribute {
 		return value;
 	}
 	public Object getValue(int stingLength) {
-		return ((String)value).subSequence(0, Utility.getNumberFromRandomMinMax(1, stingLength).intValue());
+		return ((String)value).subSequence(0, Utility.getNumberFromRandomMinMax(1, stingLength<((String)value).length()?((String)value).length():stingLength).intValue());
 	}
 
 	public String getValueAsString( int stingLength) {

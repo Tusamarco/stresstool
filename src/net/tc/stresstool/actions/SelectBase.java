@@ -44,7 +44,7 @@ public class SelectBase extends StressActionBase implements ReadAction{
   private Table[] selectJoinTables =  null;
   private int batchSize = 0;
   private int currentLazyLoop = 0 ;
-  
+  private int textAttributeMaxSearchlength = 50;
 
   private Map<String, ActionTable> dataProviders = null;
 
@@ -384,5 +384,17 @@ public class SelectBase extends StressActionBase implements ReadAction{
    */
   public void setBatchSize(int batchSize) {
 	this.batchSize = batchSize;
+  }
+  /**
+   * @return the textAttributeMaxSearchlength
+   */
+  public int getTextAttributeMaxSearchlength() {
+    return textAttributeMaxSearchlength;
+  }
+  /**
+   * @param textAttributeMaxSearchlength the textAttributeMaxSearchlength to set
+   */
+  public void setTextAttributeMaxSearchlength(int textAttributeMaxSearchlength) {
+    this.textAttributeMaxSearchlength = textAttributeMaxSearchlength;
   }	
 }

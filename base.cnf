@@ -19,19 +19,19 @@ doDelete=false
 doReport=true 
 doSimple=false 
 doSimplePk=false 
-droptable=false
+droptable=true
 ignoreBinlog=false
 operationShort=true  
-poolNumber=1
+poolNumber=8
 pctInsert=100
 pctUpdate=0 
-pctSelect=100 
+pctSelect=0 
 pctDelete=0 
-repeatNumber=10000
-HardStopLimit=100000
+repeatNumber=110
+HardStopLimit=100
 UseHardStop=false
 StatIntervalMs=1000
-StatLoops = 1000000
+StatLoops = 100
 SemaphoreCountdownTime = 1
 # table engine comma separated with % value; 
 TableEngine=InnoDB|60,MyISAM|40
@@ -108,7 +108,7 @@ lazySelect=true;
 lazyInterval=5000;
 #joinCondition=Left - experimental
 batchSize = 10
-
+textAttributeMaxSearchlength=50
 
 [net.tc.stresstool.actions.InsertBase]
 usePrepareStatement=false
