@@ -1,6 +1,7 @@
 package net.tc.data.db;
 
 import net.tc.utils.SynchronizedMap;
+import net.tc.utils.Utility;
 
 
 
@@ -17,6 +18,10 @@ public class Attribute {
 	private Object value = null;
 	private int storageSize = 0 ; //size in bytes
 	private boolean isLazy = true ; 
+	private String specialFunction = null;
+	private int upperLimit = 0 ;
+
+	
 	
     private boolean isNull = true;
     
@@ -83,6 +88,49 @@ public class Attribute {
 	public Object getValue() {
 		return value;
 	}
+	public Object getValue(int stingLength) {
+		return ((String)value).subSequence(0, Utility.getNumberFromRandomMinMax(1, stingLength<((String)value).length()?((String)value).length():stingLength).intValue());
+	}
+
+	public String getValueAsString( int stingLength) {
+  	
+    	switch (getDataType().getDataTypeId()){
+         	case DataType.TINYINT: return ((Integer)getValue()).toString();
+        	case DataType.SMALLINT:return ((Integer)getValue()).toString();
+        	case DataType.MEDIUMINT:return ((Integer)getValue()).toString();
+        	case DataType.INT: return ((Integer)getValue()).toString();
+        	case DataType.BIGINT:return ((Long)getValue()).toString();
+        	case DataType.FLOAT: return ((String)getValue());
+        	case DataType.DOUBLE: return ((Double)getValue()).toString();
+        	case DataType.DECIMAL: return ((java.math.BigDecimal)getValue()).toString(); 
+        	case DataType.BIT: return ((Integer)getValue()).toString();
+        	case DataType.YEAR: return ((Integer)getValue()).toString();
+        	case DataType.DATE: return ((String)getValue());
+        	case DataType.TIME: return ((String)getValue());
+        	case DataType.DATETIME: return ((java.sql.Date)getValue()).toString();
+        	case DataType.TIMESTAMP: return ((java.sql.Timestamp)getValue()).toString(); 
+        	case DataType.CHAR: return ((String)getValue(stingLength));
+        	case DataType.BINARY: return "byte[]";	    
+        	case DataType.VARCHAR: return ((String)getValue(stingLength));
+        	case DataType.VARBINARY: return "byte[]";
+        	case DataType.TINYBLOB: return "byte[]";
+        	case DataType.TINYTEXT: return ((String)getValue(stingLength));
+        	case DataType.BLOB: return "byte[]"; 
+        	case DataType.TEXT: return ((String)getValue(stingLength)); 
+        	case DataType.MEDIUMBLOB: return "byte[]"; 
+        	case DataType.MEDIUMTEXT: return ((String)getValue(stingLength));
+        	case DataType.LONGBLOB: return "byte[]";
+        	case DataType.LONGTEXT: return ((String)getValue(stingLength));
+        	case DataType.ENUM: return ((String)getValue(stingLength));
+        	case DataType.SET: return ((String)getValue(stingLength));
+        	default: throw new IllegalArgumentException("Invalid data type index: " + getDataType().getDataTypeId());
+    	
+    	}
+	  
+	  
+	}
+
+	
 	public void setValue(Object value) {
 		this.value = value;
 	}
@@ -104,5 +152,28 @@ public class Attribute {
 	public void setLazy(boolean isLazy) {
 	    this.isLazy = isLazy;
 	}
-	
+	/**
+	 * @return the specialFunction
+	 */
+	public String getSpecialFunction() {
+	  return specialFunction;
+	}
+	/**
+	 * @param specialFunction the specialFunction to set
+	 */
+	public void setSpecialFunction(String specialFunction) {
+	  this.specialFunction = specialFunction;
+	}
+	/**
+	 * @return the upperLimit
+	 */
+	public int getUpperLimit() {
+	  return upperLimit;
+	}
+	/**
+	 * @param upperLimit the upperLimit to set
+	 */
+	public void setUpperLimit(int upperLimit) {
+	  this.upperLimit = upperLimit;
+	}
 }

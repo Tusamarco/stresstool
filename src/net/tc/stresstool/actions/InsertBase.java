@@ -4,6 +4,7 @@ import java.io.FileReader;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Iterator;
 import java.util.Map;
 
 import net.tc.data.db.Attribute;
@@ -73,7 +74,7 @@ public class InsertBase extends StressActionBase implements WriteAction,
 
         		try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).info(" ==== TRUNCATE Tables, Please wait it may takes time ===="  );}catch(StressToolConfigurationException e){}
         		for(String tb : tables){
-        		    String drop = "TRUNCATE TABLE IF EXISTS " + tb + " ;" ;
+        		    String drop = "TRUNCATE TABLE  " + tb + " ;" ;
         		    try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).info(drop);}catch(StressToolConfigurationException e){}
         		    stmt.execute(drop);
         		}
@@ -334,7 +335,30 @@ public class InsertBase extends StressActionBase implements WriteAction,
     	/**
     	 * Db actions
     	 */
+	  Connection conn = null;
+	  if(this.getActiveConnection()==null){
+		try {
+	      conn = this.getConnProvider().getSimpleConnection();
+        } catch (SQLException e) {
+	      // TODO Auto-generated catch block
+	      e.printStackTrace();
+        }
+	  }
+	  else
+		conn = this.getActiveConnection();
 		
+	  /*
+	   * now run the show
+	   */
+	  	
+//	  System.out.println("EXECUTINg ACTION A FOR ID " + this.getTHInfo().getId() + " Action code " + this.getActionCode());
+	  this.myDataObject.executeSqlObject(this.getActionCode(),(com.mysql.jdbc.Connection) conn);
+		
+	  if(!this.isStickyconnection()){
+		
+		getConnProvider().returnConnection((com.mysql.jdbc.Connection)conn);
+	  }
+	  
 	}
 	
 	/**
@@ -342,15 +366,30 @@ public class InsertBase extends StressActionBase implements WriteAction,
 	 * @throws StressToolActionException 
 	 */
 	@Override
-	public boolean ExecutePreliminaryAction() throws StressToolActionException {
+	public boolean ExecutePreliminaryAction() {
 	    /**
 	     * Initialize the DataObject representing the SQL action
 	     */
-	    this.myDataObject =  inizializeDataObject(new DataObject());
-	    this.myDataObject.isInizialized();
+//	  System.out.println("EXECUTINg PRELIMINARY A FOR ID " + this.getTHInfo().getId());
+	    try {
+	      this.myDataObject =  inizializeDataObject(new DataObject());
+        } catch (StressToolActionException e) {
+	      e.printStackTrace();
+        }
+     	if(this.myDataObject.isInizialized()){
+//     	 System.out.println(myDataObject.getSqlObjects().keySet().toString());
+//     	 Iterator it = myDataObject.getSqlObjects().keySet().iterator();
+//     	 while(it.hasNext()){
+//     	  SQLObject obj  = (SQLObject)myDataObject.getSqlObjects().get(it.next());
+//     	 System.out.println( "SQL Commands " + obj.getSQLCommands().toString());
+//     	 }
+     	 
+     	 
+     	  return true;
+     	}
 	  // TODO I am here need to do the value generation using the Sql object and the Data Object  
 	  
-	    return true;  
+	    return false;  
 	     
 	}
 
@@ -396,7 +435,7 @@ public class InsertBase extends StressActionBase implements WriteAction,
  * values in accordance to the lazyInterval value 
  */
 	for (Object table : thisSQLObject.getTables()) {
-	    if(sbAttribs.length() > 0) sbAttribs.delete(0, sbAttribs.length() - 1);
+	    if(sbAttribs.length() > 0) sbAttribs.delete(0, sbAttribs.length());
 
 	    int iNumTables = 0;
 
@@ -406,8 +445,7 @@ public class InsertBase extends StressActionBase implements WriteAction,
 		if (iAttrib > 0)
 		    sbAttribs.append(",");
 		
-		sbAttribs.append(((Attribute) thisSQLObject.getAttribs()[iAttrib])
-				.getName());
+		sbAttribs.append(((Attribute) thisSQLObject.getAttribs()[iAttrib]).getName());
 	    }
 
 	    if (((Table) table).getParentTable() == null) {
@@ -423,8 +461,6 @@ public class InsertBase extends StressActionBase implements WriteAction,
 		lSQLObj.setBatchLoops(this.batchSize);
 		lSQLObj.addSourceTables((Table)table);
 		
-		// TODO this must be changed to reflect the 
-		lSQLObj.setLazyExecCount(0);
 		
 		String localSQLTemplate = sqlTemplate;
 		if (((Table) table).getName() != null && ((Table) table).getName().length() > 0) {
@@ -449,9 +485,8 @@ public class InsertBase extends StressActionBase implements WriteAction,
 		lSQLObj.setSqlLocalTemplate(localSQLTemplate);
 		// TODO here
 			lSQLObj.setResetLazy(true);
-			if(lSQLObj.getValues().equals("")) 
-		
-		SQLObjectContainer.put(((Table) table).getName(), lSQLObj);
+			if(!lSQLObj.getValues().equals("")) 
+				SQLObjectContainer.put(((Table) table).getName(), lSQLObj);
 				
 	    
 	}

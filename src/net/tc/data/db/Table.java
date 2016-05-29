@@ -1,5 +1,6 @@
 package net.tc.data.db;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Map;
@@ -8,6 +9,7 @@ import net.tc.stresstool.StressTool;
 import net.tc.stresstool.exceptions.StressToolConfigurationException;
 import net.tc.stresstool.logs.LogProvider;
 import net.tc.utils.SynchronizedMap;
+import net.tc.utils.Utility;
 
 public class Table {
     	public static final Integer TABLE_PARENT=0;
@@ -37,8 +39,9 @@ public class Table {
 	private String tableSpace = null;
 	private int  rowFormatInt = 0;
 	private String dataDirectory = null;
-	
-	
+	private String whereCondition = null;
+	private String selectCondition = null;
+	private ArrayList<Attribute> attribsWhere = new ArrayList();
 	
 	public Table() {
 	    rows = new SynchronizedMap(0);
@@ -304,12 +307,11 @@ public class Table {
 	    sbHead.append("/* CREATE TABLE "
 		    + this.getSchemaName() +"."
 		    + this.getName() 
-		    + this.getInstanceNumber() +" */\n");
+		    + " */\n");
 	    
 	    sbHead.append("CREATE TABLE IF NOT EXISTS "
 		    + this.getSchemaName() +"."
 		    + this.getName() 
-		    + (this.isMultiple()?instanceNumber:"") 
 		    +"(\n");
 	    
 	    sbTail.append("\n )\n");
@@ -335,6 +337,7 @@ public class Table {
 		sbAtt.append(DataType.getDataTypeStringByIdentifier(attribute.getDataType().getDataTypeId()) 
 			+ (attribute.getDataDimension()>0?"("+attribute.getDataDimension()+") ":" "));
 		sbAtt.append(attribute.isNull()?"NULL ":"NOT NULL ");
+		sbAtt.append(attribute.isAutoIncrement()?" AUTO_INCREMENT ":"");
 		sbAtt.append(attribute.getDefaultValue()!=null?"DEFAULT " + attribute.getDefaultValue() + " ":" ");
 		sbAtt.append(attribute.getOnUpdate()!=null?"ON UPDATE " + attribute.getOnUpdate() + " ":" ");
 	    }
@@ -474,6 +477,88 @@ public class Table {
 	    }
 	    	
 	    this.dataDirectory = dataDirectory;
+	}
+
+
+	/**
+	 * @return the whereCondition
+	 */
+	public String getWhereCondition() {
+	  return whereCondition;
+	}
+
+
+	/**
+	 * @param whereCondition the whereCondition to set
+	 */
+	public void setWhereCondition(String whereCondition) {
+	  this.whereCondition = whereCondition;
+	}
+	
+	public String parseWhere(){
+	  	String whereCondition = this.getWhereCondition();
+	  
+		if(this.getWhereCondition() == null || this.getWhereCondition().equals(""))
+			return null;
+		/*
+		 * get first the list of attribs used in the where
+		 */
+		for(Object attrib: (Object[])this.getMetaAttributes().getValuesAsArrayOrderByKey()){
+			if(this.getWhereCondition().indexOf("#" + ((Attribute)attrib).getName() + "#") > 0){
+				attribsWhere.add((Attribute)attrib) ;
+				
+			}
+		}
+		if(attribsWhere.size() >0){
+			for(Object attrib : (Object[]) (attribsWhere.toArray())){
+			  int stingLength =0 ;
+			  
+				if(whereCondition.indexOf("#?" + ((Attribute)attrib).getName() + "_RANGE_OPTION_") >0){
+				  	String catchme = whereCondition.substring(whereCondition.indexOf("#?" + ((Attribute)attrib).getName() + "_RANGE_OPTION_") + 20, whereCondition.length());
+				  	catchme = (String) (StressTool.getValueProvider().getValueForRangeOption(((Attribute)attrib),catchme.substring(0,catchme.indexOf("?#"))));	
+				  	whereCondition = whereCondition.replaceFirst("#"+ ((Attribute)attrib).getName() +"#", "");
+				  	String pre = whereCondition.substring(0, whereCondition.indexOf("#?" + ((Attribute)attrib).getName() + "_RANGE_OPTION_"));
+				  	String post = whereCondition.substring(whereCondition.indexOf("#?" + ((Attribute)attrib).getName() + "_RANGE_OPTION_") + 20,whereCondition.length());
+				  	post = post.substring((post.indexOf("?#") + 2),post.length());
+				  	whereCondition = pre + " " + catchme + " " + post;
+				  	
+				}
+				else{
+				  ((Attribute)attrib).setValue(StressTool.getValueProvider().provideValue(((Attribute)attrib).getDataType(), new Long(((Attribute)attrib).getUpperLimit()).longValue()));
+				  whereCondition = whereCondition.replaceFirst("#"+ ((Attribute)attrib).getName() +"#", ((Attribute)attrib).getName());
+				  String length = whereCondition.substring((whereCondition.indexOf("#?"+ ((Attribute)attrib).getName() +"?") + ("#?"+ ((Attribute)attrib).getName() +"?").length()), whereCondition.length());
+				  if(length.charAt(0) == '|'){
+					length = length.substring(1,length.indexOf("#"));
+					stingLength = Integer.parseInt(length);
+				  }
+					
+				  //|" + stingLength + "#
+				  String value = ((Attribute)attrib).getValueAsString(stingLength).replace("\"", "");
+				  if(stingLength < 1){
+				  	whereCondition = whereCondition.replaceFirst("#\\?"+ ((Attribute)attrib).getName() +"\\?#",value);
+				  }
+				  else{
+					whereCondition =  whereCondition.replaceFirst("#\\?"+ ((Attribute)attrib).getName() +"\\?", "\"" + value + "\"");
+//					System.out.println("AAA " + whereCondition);
+					whereCondition =  whereCondition.replaceFirst("\\|" + stingLength + "#", "");
+				  }
+				}
+			}
+
+			
+		}
+		
+		return whereCondition;
+	}
+
+
+	public String getSelectCondition() {
+		return selectCondition;
+	}
+
+
+	public void setSelectCondition(String selectCondition) {
+		this.selectCondition = selectCondition;
 	}
 
 }

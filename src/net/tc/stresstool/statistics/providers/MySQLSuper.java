@@ -291,8 +291,10 @@ public class MySQLSuper implements StatsProvider, Reporter {
             	
             	if (eventColl != null && eventColl.getCollection().size() > 0) {
                 	try{
-                     endValue = Long.parseLong((String)eventColl.getCollection().get(new Long(2)));
-                     startValue = Long.parseLong((String)eventColl.getCollection().get(new Long(eventColl.getCollection().size())));
+                	 StatEvent eventMin =  (StatEvent)eventColl.getCollection().get(new Long(1));
+                	 StatEvent eventMax =  (StatEvent)eventColl.getCollection().get(new Long(eventColl.getCollection().size()));
+                	 startValue = Long.parseLong((String)eventMin.getValue());
+                     endValue = Long.parseLong((String) eventMax.getValue() );
                 	}
                 	catch(NullPointerException e){
                 		return "WARNING - NULL VALUE";
@@ -302,7 +304,7 @@ public class MySQLSuper implements StatsProvider, Reporter {
         			    return (Long)(endValue - startValue);
         			}
         			catch(final NullPointerException en){
-    //            				System.out.println("WARNING -- RETURNING NULL VALUE FOR STATUS KEY NAME =" + varName);
+                				System.out.println("WARNING -- RETURNING NULL VALUE FOR STATUS KEY NAME =" + varName);
         				return new Long(0);
         			}
                 	}

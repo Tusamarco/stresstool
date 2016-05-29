@@ -5,8 +5,12 @@ package net.tc.stresstool.value;
 
 import java.lang.ref.SoftReference;
 import java.util.Arrays;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import net.tc.data.db.DataType;
+import net.tc.utils.SynchronizedMap;
 import net.tc.utils.Utility;
 import net.tc.utils.file.FileHandler;
 
@@ -16,7 +20,7 @@ import net.tc.utils.file.FileHandler;
  */
 public class BasicFileValueProvider extends BasicValueProvider implements ValueProvider {
 
-    private static final long upperbound = 0;
+//    private static final long upperbound = 0;
 
 	public BasicFileValueProvider() {
     }
@@ -29,7 +33,7 @@ public class BasicFileValueProvider extends BasicValueProvider implements ValueP
     String path = null;
     String[] txtFile = null;
     int position = 0;
-    
+    Map <String,Integer> wordsMap =null; 
     /*Return a random entry from the array limited by the Length 
      */
     
@@ -79,27 +83,7 @@ public class BasicFileValueProvider extends BasicValueProvider implements ValueP
     	return values;
     }
 
-    /* Return a single Long value  
-     */
-    @Override
-    public Long getRandomNumber() {
-	return Utility.getNumberFromRandom(new Long(System.currentTimeMillis()).intValue());
-    }
 
-    /* Return a long no bigger than upperLimit
-     */
-    @Override
-    public Long getRandomNumber(long upperLimit) {
-	return Utility.getNumberFromRandomMinMax(0, new Long(upperLimit).intValue()); 
-	
-    }
-
-    /* Return a long value between limits
-     */
-    @Override
-    public Long getRandomNumber(long lowerLimit, long upperLimit) {
-	return Utility.getNumberFromRandomMinMax(lowerLimit, upperLimit);
-	}
 
     /* 
      * Read the text in the file and load an object of String[] type to be used for data generation.
@@ -115,11 +99,35 @@ public class BasicFileValueProvider extends BasicValueProvider implements ValueP
 	((FileHandler)sr.get()).readInitialize(false);
 	
 	txtFile = ((FileHandler)sr.get()).getTextFileAsStringArray();
+	 Pattern p = Pattern.compile("\\s\\s");
+	 Pattern p2 = Pattern.compile("\"");
+	wordsMap = new SynchronizedMap(0); 
+	for(int i = 0 ; i < txtFile.length; i++){
+	  if(txtFile[i] != null){
+		Matcher m = p.matcher(txtFile[i]); 
+    	String toClean =  m.replaceAll("");
+    	m = p.matcher(toClean);
+    	toClean =  m.replaceAll("");
+//    	addWords(toClean);    	
+    	txtFile[i] = toClean;
+	  }
+	}
 	sr = null;
 	return true;
     }
 
-//    
+    private void addWords(String toClean) {
+  		String[] words = toClean.split(" ");
+  		for(String word:words){
+  		  if(wordsMap.containsKey(word.trim())){
+  			wordsMap.put(word.trim(),wordsMap.get(word.trim()).intValue()+1);
+  		  }
+  		  else
+  			wordsMap.put(word.trim(),1);
+  		}
+    }
+
+	//    
 //    public String getText(int lenght){
 //	  return path;
 //      
@@ -166,19 +174,29 @@ public class BasicFileValueProvider extends BasicValueProvider implements ValueP
     @Override
     public String getString(int upperbound, int length) {
       StringBuffer sb = new StringBuffer();
-      
-      int textPos = new Long(Utility.getNumberFromRandomMinMax((int) (System.currentTimeMillis()/10000), (txtFile.length)/Utility.getNumberFromRandomMinMax(1, 100))).intValue();
+      int textPos =0;
+      long seed = Utility.getNumberFromRandomMinMax(1, 100);
+      try {
+    		textPos = new Long(Utility.getNumberFromRandomMinMax(1, (txtFile.length)/seed)).intValue();
+      }
+      catch(java.lang.ArithmeticException ax){
+    	ax.printStackTrace();
+    	
+      }
       int upto = length>upperbound?upperbound:length;
      
-      
+//      sb.append("\"");
       while (sb.length() < upto)
       {
-    	  if(textPos == txtFile.length)
+    	  if(textPos >= txtFile.length)
     		  textPos =0;
     	  sb.append(txtFile[textPos++]);
+    	  if(sb.length() > upto)
+    		break;
       }
 
-      return sb.toString().substring(0,upto);
+      return sb.subSequence(0, upto).toString();
+//      + "\"";
   	
     }
     @Override

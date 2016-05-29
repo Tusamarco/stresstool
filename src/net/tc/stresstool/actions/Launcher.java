@@ -24,6 +24,7 @@ import net.tc.stresstool.statistics.ActionTHElement;
 import net.tc.stresstool.statistics.StatCollector;
 import net.tc.stresstool.statistics.providers.StatsProvider;
 import net.tc.stresstool.value.BasicFileValueProvider;
+import net.tc.stresstool.value.BasicValueProvider;
 import net.tc.stresstool.value.ValueProvider;
 import net.tc.utils.SynchronizedMap;
 import net.tc.utils.TimeTools;
@@ -654,7 +655,7 @@ public class Launcher {
         			sa.setConnProvider(this.connProvider);
         			sa.setSchema(this.getCurrentSchema());
         			sa.setActionType(StressAction.ACTION_TYPE_Insert);
-        			sa.setActionCode(StressAction.INSERT_ID_CONST + iA);
+        			sa.setActionCode(StressAction.INSERT_ID_CONST );
         			sa.setTHInfo(new ActionTHElement(StressAction.INSERT_ID_CONST + iA,false,ActionTHElement.SEMAPHORE_NOT_INITIALIZED));
         			sa.getTHInfo().setAction(sa.getActionType());
         			writeImplementationMap.put(new Integer(StressAction.INSERT_ID_CONST + iA), sa);
@@ -670,7 +671,7 @@ public class Launcher {
         			sa.setConnProvider(this.connProvider);
         			sa.setSchema(this.getCurrentSchema());
         			sa.setActionType(StressAction.ACTION_TYPE_Update);
-        			sa.setActionCode(StressAction.UPDATE_ID_CONST + iA);
+        			sa.setActionCode(StressAction.UPDATE_ID_CONST );
         			sa.setTHInfo(new ActionTHElement(StressAction.UPDATE_ID_CONST + iA,false,ActionTHElement.SEMAPHORE_NOT_INITIALIZED));
         			sa.getTHInfo().setAction(sa.getActionType());
         			updateImplementationMap.put(new Integer(StressAction.UPDATE_ID_CONST + iA), sa);
@@ -691,7 +692,7 @@ public class Launcher {
         			sa.setConnProvider(this.connProvider);
         			sa.setSchema(this.getCurrentSchema());
         			sa.setActionType(StressAction.ACTION_TYPE_Select);
-        			sa.setActionCode(StressAction.SELECT_ID_CONST + iA);
+        			sa.setActionCode(StressAction.SELECT_ID_CONST );
         			sa.setTHInfo(new ActionTHElement(StressAction.SELECT_ID_CONST + iA,false,ActionTHElement.SEMAPHORE_NOT_INITIALIZED));
         			sa.getTHInfo().setAction(sa.getActionType());
         			readImplementationMap.put(new Integer(StressAction.SELECT_ID_CONST + iA), sa);
@@ -712,7 +713,7 @@ public class Launcher {
         			sa.setConnProvider(this.connProvider);
         			sa.setSchema(this.getCurrentSchema());
         			sa.setActionType(StressAction.ACTION_TYPE_Delete);
-        			sa.setActionCode(StressAction.DELETE_ID_CONST + iA);
+        			sa.setActionCode(StressAction.DELETE_ID_CONST );
         			sa.setTHInfo(new ActionTHElement(StressAction.DELETE_ID_CONST + iA,false,ActionTHElement.SEMAPHORE_NOT_INITIALIZED));
         			sa.getTHInfo().setAction(sa.getActionType());
         			deleteImplementationMap.put(new Integer(StressAction.DELETE_ID_CONST + iA), sa);
@@ -979,7 +980,7 @@ public class Launcher {
 		
         try {
     	      valueProviderInstance = (ValueProvider) Class.forName(valueProvider).newInstance();
-    	      valueProviderInstance.setTestCalendar(getTestCalendar());
+    	      ((BasicValueProvider) valueProviderInstance).setTestCalendar(getTestCalendar());
     	      
     	      return valueProviderInstance;
 	      
@@ -1294,8 +1295,9 @@ public class Launcher {
 	private void setValueProvider(String valueProvider) {
 	  this.valueProvider = valueProvider;
 	}
+	
 	public void resetValueProviderCalendar(){
-		StressTool.getValueProvider().resetCalendar(daysdiffernce);
+		((BasicValueProvider) StressTool.getValueProvider()).resetCalendar(daysdiffernce);
 	}
 		
 }

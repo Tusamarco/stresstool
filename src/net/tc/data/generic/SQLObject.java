@@ -15,10 +15,11 @@ public class SQLObject {
     int SQLCommandType = 0;
     boolean isBatched = false;
     boolean isPreparedStatment = false;
-    int lazyExecCount = 0;
+//    int lazyExecCount = 0;
     String sqlLocalTemplate = null;
     boolean resetLazy = false;
     int batchLoops = 1;
+    ArrayList whereAttrib = null; 
     
     ArrayList sourceTables = new ArrayList();
     /**
@@ -87,16 +88,16 @@ public class SQLObject {
     public void addSourceTables(Table table) {
         this.sourceTables.add(table);
     }
-	public synchronized int getLazyExecCount() {
-		return lazyExecCount;
-	}
-	public synchronized void setLazyExecCount(int lazyExecCount) {
-		this.lazyExecCount = lazyExecCount;
-	}
-	public synchronized String getSqlLocalTemplate() {
+//	public synchronized int getLazyExecCount() {
+//		return lazyExecCount;
+//	}
+//	public synchronized void setLazyExecCount(int lazyExecCount) {
+//		this.lazyExecCount = lazyExecCount;
+//	}
+	public  String getSqlLocalTemplate() {
 		return sqlLocalTemplate;
 	}
-	public synchronized void setSqlLocalTemplate(String sqlLocalTemplate) {
+	public void setSqlLocalTemplate(String sqlLocalTemplate) {
 		this.sqlLocalTemplate = sqlLocalTemplate;
 	}
 	/**
@@ -110,8 +111,9 @@ public class SQLObject {
 	 * @return
 	 */
   public String getValues() {
-
-	for (Object table : this.getSourceTables()) {
+	  SQLCommands = new ArrayList();
+	  boolean filling = false;
+	  for (Object table : this.getSourceTables()) {
 
 	  SynchronizedMap Attribs = ((Table) table).getMetaAttributes();
 	  try {
@@ -126,34 +128,80 @@ public class SQLObject {
 	   * loops cross batch loops
 	   */
 	  StringBuffer sqlValues = new StringBuffer();
+	  
+	  
 	  for (int iBatch = 0; iBatch <= this.batchLoops; iBatch++) {
-		StringBuffer singleSql = new StringBuffer();
-		for (Object attrib : Attribs.getValuesAsArrayOrderByKey()) {
-		  if (singleSql.length() > 1)
-			singleSql.append(", ");
-		  // TODO !!!HERE!!!
-		  boolean filling = false;
-		  if (this.resetLazy || !((Attribute) attrib).isLazy()) {
-			((Attribute) attrib).setValue(StressTool.getValueProvider().provideValue(
-					((Attribute) attrib).getDataType(), 
-					Utility.getNumberFromRandom((System.currentTimeMillis()/10000))));
-			filling = true;
-		  }
+		try{
+    		StringBuffer singleSql = new StringBuffer();
+    		if (sqlValues.length() > 1)
+    		  sqlValues.append(",");
+    		
+    		singleSql.append("(");
+    		
+		
+    		for (Object attrib : Attribs.getValuesAsArrayOrderByKey()) {
+    		  if (singleSql.length() > 1)
+    			singleSql.append(", ");
 
-		  try {StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).debug(
-				  (filling ? "" : "NOT")
-			  			+ "Filling Attribute "
-			            + ((Attribute) attrib).getName()
-			            + " DataType: "
-			            + DataType.getDataTypeStringByIdentifier(((Attribute) attrib).getDataType().getDataTypeId()) 
-			            + " Value : " + ((Attribute)attrib).getValue()
-			            + " Lazy = " + ((Attribute) attrib).isLazy());
-		  } catch (StressToolConfigurationException e) {e.printStackTrace();}
+//			  System.out.println("=========== reset "+ this.isResetLazy()  +" Attrib Lazy: " +((Attribute) attrib).isLazy()  );
+    		  
+			  if (this.resetLazy || !((Attribute) attrib).isLazy()) {
+    			  
+//    			  if(!this.resetLazy && !((Attribute) attrib).isLazy())
+//    				  System.out.println("===========1 Attrib " + ((Attribute) attrib).getName() +" V:  " + ((Attribute) attrib).getValue() );
+    			  
+    			  if(((Attribute) attrib).getSpecialFunction() == null
+    					  && !((Attribute) attrib).isAutoIncrement()
+    					  ){
+    				if(((Attribute) attrib).isLazy()){
+    				  ((Attribute) attrib).setValue(StressTool.getValueProvider().provideValue(
+    						  ((Attribute) attrib).getDataType(), new Long(((Attribute) attrib).getUpperLimit())));
+    				}
+    				else{
+    				  ((Attribute) attrib).setValue(StressTool.getValueProvider().provideValue(
+						  ((Attribute) attrib).getDataType(), new Long(((Attribute) attrib).getUpperLimit())));
+    				  
+    				}
+    			  }
+    			  else{
 
-		  StressTool.getValueProvider().getRandomNumber(1, 2); // HERE !!!;
+    				  if(((Attribute)attrib).isAutoIncrement()){
+    					  ((Attribute) attrib).setValue("NULL");
+    				  }
+    				  else{
+    					  ((Attribute) attrib).setValue(((Attribute) attrib).getSpecialFunction());
+    				  }
+    			  }
 
+//    			  filling = this.isResetLazy()?true:false;
+
+    		  }
+//			  if(!this.resetLazy && !((Attribute) attrib).isLazy())
+//				  System.out.println("===========2 Attrib " + ((Attribute) attrib).getName() +" V:  " + ((Attribute) attrib).getValue() );
+
+    		  
+    		  singleSql.append(((Attribute) attrib).getValue());
+
+//    		  		  try {StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).debug(
+//    		  				  (filling ? "" : "NOT")
+//    		  			  			+ "Filling Attribute "
+//    		  			            + ((Attribute) attrib).getName()
+//    		  			            + " DataType: "
+//    		  			            + DataType.getDataTypeStringByIdentifier(((Attribute) attrib).getDataType().getDataTypeId()) 
+//    		  			            + " Value : " + ((Attribute)attrib).getValue()
+//    		  			            + " Lazy = " + ((Attribute) attrib).isLazy());
+//    		  		  } catch (StressToolConfigurationException e) {e.printStackTrace();}
+
+
+
+    		}
+    		singleSql.append(")");
+    		sqlValues.append(singleSql);
+    		singleSql.delete(0, singleSql.length());
 		}
+		catch(Throwable th){th.printStackTrace();}
 	  }
+	  
 	  try {
 		StressTool
 		    .getLogProvider()
@@ -161,6 +209,12 @@ public class SQLObject {
 		    .debug(
 		        "========================== Processing Table " + ((Table) table).getName() + " ================ [End]");
 	  } catch (StressToolConfigurationException e) {e.printStackTrace(); }
+	  
+	  getSQLCommands().add(this.getSqlLocalTemplate().replace("(#VALUES#)", sqlValues.toString()));
+	  
+	  this.setResetLazy(this.resetLazy?false:isResetLazy());
+	  
+	  return sqlValues.toString();
 	}
 	return null;
   }
@@ -169,15 +223,31 @@ public class SQLObject {
 	}
 	public  void setResetLazy(boolean resetLazy) {
 		this.resetLazy = resetLazy;
+//		this.getValues();
+//		this.setLazyExecCount(0);
 	}
-	public synchronized int getBatchLoops() {
+	public  int getBatchLoops() {
 		return batchLoops;
 	}
-	public synchronized void setBatchLoops(int batchLoops) {
+	public void setBatchLoops(int batchLoops) {
 		this.batchLoops = batchLoops;
 	}
-	public synchronized void setSQLCommands(ArrayList<String> sQLCommands) {
+	public void setSQLCommands(ArrayList<String> sQLCommands) {
 		SQLCommands = sQLCommands;
 	}
     
+	public void setSingleSQLCommands(String sQLCommand) {
+		SQLCommands.add(sQLCommand);
+	}
+	
+	public ArrayList getWhereValues(){
+	  
+	  
+	  
+	  return null;
+	}
+	public Attribute getWhereValueForAttribute(Attribute attribute, Table table){
+	  
+	  return null;
+	}
 }

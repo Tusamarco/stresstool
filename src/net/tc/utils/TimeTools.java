@@ -86,7 +86,6 @@ public class TimeTools {
 	        return "";
 	    }
 	   }
-    
 
  public static String GetCurrent()
  {
@@ -230,7 +229,7 @@ public class TimeTools {
   
   
   public static Calendar getCalendarFromCalendarDateAddDays(Calendar cal, int  numberOfdaysFromCalendarDate){
-	if(cal != null && numberOfdaysFromCalendarDate > 0){
+	if(cal != null ){
 	  
 	  Calendar newCal = (Calendar)cal.clone();
 	  SoftReference sf = new SoftReference((Calendar)cal.clone());
@@ -243,4 +242,49 @@ public class TimeTools {
 	
 	
   }
+  public static String getTimeStamp(long systemTime){
+      return getTimeStamp(systemTime, "yyyy-MM-dd hh:mm:ss");
+ }
+
+  public static String getTimeStamp(long systemTime, String format){
+	 if(systemTime == 0)
+	     return  null;
+	 
+	    Date dNow = new Date(systemTime);
+	      SimpleDateFormat ft = 
+	      new SimpleDateFormat (format);
+	
+	     return ft.format(dNow);
+	
+	
+	}
+  public static String getTimeStamp(Calendar cal, String format){
+	 if(cal == null)
+	     return  null;
+	 
+	    Date dNow = cal.getTime();
+	      SimpleDateFormat ft = 
+	      new SimpleDateFormat (format);
+	
+	     return ft.format(dNow);
+	
+	
+	}
+
+  public static String getTimeStampFromDate(Date date, String format){
+	 if(date == null)
+	     return  null;
+	 
+	 if(format == null)
+		 format =  getDayFormat() + " " + getTimeFormat();
+	 
+	    Date dNow = date;
+	      SimpleDateFormat ft = 
+	      new SimpleDateFormat (format);
+	
+	     return ft.format(dNow);
+	
+	
+	}
+
 }

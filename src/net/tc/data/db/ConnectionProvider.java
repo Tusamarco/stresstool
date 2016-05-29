@@ -1,5 +1,6 @@
 package net.tc.data.db;
 
+import java.lang.ref.SoftReference;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
@@ -46,8 +47,10 @@ public class ConnectionProvider {
     public Connection getSimpleConnection()throws SQLException {
 	if(this.connInfo != null){
 		    Connection conn;
+		    SoftReference sf = null;
 		    if(connInfo.getDbType()!= null &&  !connInfo.getDbType().toLowerCase().equals("MySQL".toLowerCase()))
 		    {
+		    	
 		    	conn=(Connection) DriverManager.getConnection((String)connInfo.getDbType(),"test", "test");
 		    }
 		    else{
@@ -57,13 +60,26 @@ public class ConnectionProvider {
 		        	    +"&password="+ connInfo.getPassword()
 		        	    +"&"+ connInfo.getConnParameters();
 		    
-		    
-		    conn= (Connection) DriverManager.getConnection(connectionString);
+		    sf = new SoftReference<Connection>(conn= (Connection) DriverManager.getConnection(connectionString));
+//		    conn= (Connection) DriverManager.getConnection(connectionString);
 		    }
-		    return conn;
+		    return (Connection) sf.get();
 	 }
 	
 	
 	return null;
+    }
+    
+    public boolean returnConnection(Connection conn){
+    	try{
+    		if(conn!=null && !conn.isClosed()){
+    			conn.close();
+    			conn = null;
+    		}
+    	}catch(SQLException ex){
+    		ex.printStackTrace();
+    	}
+    	
+    	return false;
     }
 }

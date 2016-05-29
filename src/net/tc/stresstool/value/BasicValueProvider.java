@@ -6,6 +6,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
 
+import net.tc.data.db.Attribute;
 import net.tc.data.db.DataType;
 import net.tc.utils.TimeTools;
 import net.tc.utils.Utility;
@@ -16,49 +17,27 @@ public class BasicValueProvider implements ValueProvider {
   		static final String[] alphaUTFHindy = new String[]{"ऄ","अ ","आ", "इ","ई","उ","ऊ","ऋ","ऌ","ऍ","ऎ","ए","ऐ","ऑ","ऒ","ओ","औ","क","ख","ग","घ","ङ","च","छ","ज","झ","ञ","ट"};
   		static final String[] alphaUTFChinese = new String[]{"表","情","。","另","外","极","少","数","中","文","在","存","储","的","时","候","也","遇","到"};
   		static Random rnd = new Random();  		
-  		private Calendar testCalendar = null;
+  		private static Calendar testCalendar = null;
   @Override
   public Long getRandomNumber() {
-	 return new Long(rnd.nextInt((int)System.currentTimeMillis()/1000 ));
+	return Utility.getNumberFromRandom(new Long(System.currentTimeMillis()).intValue());
   }
 
   @Override
+  /* Return a long no bigger than upperLimit
+   */
   public Long getRandomNumber(long upperLimit) {
-	int min = (int)System.currentTimeMillis()/1000 ;
-	int max = new Long(upperLimit).intValue();
+	return Utility.getNumberFromRandomMinMax(0, upperLimit); 
 	
-	if(min == max) return new Long(max);
-  	
-    if(min == 0 && max == 0){
-    	return new Long(0);
-    }
-    
-	Long maxL = new Long(rnd.nextInt(max - min) + min);
-	if(maxL < new Long(min)){
-		maxL = new Long(min * 2);    		
-	}
-	return maxL;
   }
+  
 
+  /* Return a long value between limits
+   */
   @Override
   public Long getRandomNumber(long lowerLimit, long upperLimit) {
-	int min = new Long(lowerLimit).intValue();
-	int max = new Long(upperLimit).intValue();
- 
-	if(min == max) return new Long(max);
-  	
-    if(min == 0 && max == 0){
-    	return new Long(0);
-    }
-    
-	Long maxL = new Long(rnd.nextInt(max - min) + min);
-	if(maxL < new Long(min)){
-		maxL = new Long(min * 2);    		
+	return Utility.getNumberFromRandomMinMax(lowerLimit, upperLimit);
 	}
-	return maxL;
-	
-  }
-
  
   @Override
   public ValueProvider copyProvider() {
@@ -72,6 +51,7 @@ public class BasicValueProvider implements ValueProvider {
    */
   
   public Object provideValue(DataType dataType, Long length){
+	try{	
     switch (dataType.getDataTypeCategory()){
       case DataType.NUMERIC_CATEGORY:
     	switch (dataType.getDataTypeId()){
@@ -102,94 +82,97 @@ public class BasicValueProvider implements ValueProvider {
   	  	case DataType.CHAR:
      	  {
       	    int lowerbound = 0;
-      	    long upperbound = 255;
-      	    return  getString(upperbound,length.intValue());
+      	    long upperbound = 254;
+      	    return ("\"" + getString(Utility.getNumberFromRandomMinMax(0, upperbound),length.intValue()) +"\"");
      	  }
 	  	case DataType.BINARY: 
      	  {
     	    int lowerbound = 0;
-    	    long upperbound = 255;
-    	    return getString(upperbound,length.intValue());
+    	    long upperbound = 254;
+    	    return ("\"" + getString(Utility.getNumberFromRandomMinMax(0, upperbound),length.intValue()) +"\"");
      	  }
 	  	case DataType.VARCHAR: 
      	  {
     	    int lowerbound = 0;
     	    long upperbound = 65535;
-    	    return getString(upperbound,length.intValue());
+    	    return ("\"" + getString(Utility.getNumberFromRandomMinMax(0, upperbound),length.intValue()) +"\"");
      	  }
 	  	case DataType.VARBINARY: 
      	  {
     	    int lowerbound = 0;
     	    long upperbound = 65535;
-    	    return getString(upperbound,length.intValue());
+    	    return ("\"" + getString(Utility.getNumberFromRandomMinMax(0, upperbound),length.intValue()) +"\"");
      	  }
 	  	case DataType.TINYBLOB: 
      	  {
     	    int lowerbound = 0;
-    	    long upperbound = 256;
-    	    return getString(upperbound,length.intValue());
+    	    long upperbound = 254;
+    	    return ("\"" + getString(Utility.getNumberFromRandomMinMax(0, upperbound),length.intValue()) +"\"");
      	  }
 	  	case DataType.TINYTEXT: 
        	  {
     	    int lowerbound = 0;
-    	    long upperbound = 256;
-    	    return getString(upperbound,length.intValue());
+    	    long upperbound = 254;
+    	    return ("\"" + getString(upperbound,length.intValue()) + "\"");
      	  }
 	  	case DataType.BLOB: 
        	  {
     	    int lowerbound = 0;
     	    long upperbound = 65535;
-    	    return getString(upperbound,length.intValue());
+    	    return ("\"" + getString(Utility.getNumberFromRandomMinMax(0, upperbound),length.intValue()) +"\"");
      	  }
 	  	case DataType.TEXT: 
        	  {
     	    int lowerbound = 0;
     	    long upperbound = 65535;
-    	    return getString(upperbound,length.intValue());
+    	    return ("\"" + getString(Utility.getNumberFromRandomMinMax(0, upperbound),length.intValue()) +"\"");
      	  }
 	  	case DataType.MEDIUMBLOB: 
        	  {
     	    int lowerbound = 0;
     	    long upperbound = 16777216;
-    	    return getString(upperbound,length.intValue());
+    	    return ("\"" + getString(Utility.getNumberFromRandomMinMax(0, upperbound),length.intValue()) +"\"");
      	  }
 	  	case DataType.MEDIUMTEXT: 
        	  {
     	    int lowerbound = 0;
     	    long upperbound = 16777216;
-    	    return getString(upperbound,length.intValue());
+    	    return ("\"" + getString(Utility.getNumberFromRandomMinMax(0, upperbound),length.intValue()) +"\"");
      	  }
 	  	case DataType.LONGBLOB:
        	  {
     	    int lowerbound = 0;
     	    long upperbound = Long.parseLong("4294967296");
-    	    return getString(upperbound,length.intValue());
+    	    return ("\"" + getString(Utility.getNumberFromRandomMinMax(0, upperbound),length.intValue()) +"\"");
      	  }
 	  	case DataType.LONGTEXT:
        	  {
     	    int lowerbound = 0;
     	    long upperbound = Long.parseLong("4294967296");
-    	    return getString(upperbound,length.intValue());
+    	    return ("\"" + getString(Utility.getNumberFromRandomMinMax(0, upperbound),length.intValue()) +"\"");
      	  }    	  
     	}
     	break;
+    	
       case DataType.DATE_CATEGORY:
     	switch (dataType.getDataTypeId()){
     	 case DataType.YEAR: 	
-    		  return getYear(length.intValue());
+    		  return ("\"" + getYear(length.intValue()) + "\"");
       	case DataType.DATE:
-      		return getDate(length.intValue());
+      		return ("\"" + getDate(length.intValue())+ "\"");
       	case DataType.TIME:
-      		return getTime(length.intValue());
+      		return ("\"" + getTime(length.intValue())+ "\"");
       	case DataType.DATETIME:
-      		return getDateTime(length.intValue());
+      		return ("\"" + getDateTime(length.intValue())+ "\"");
       	case DataType.TIMESTAMP:
-      		return getTimestamp(length.intValue());
+      		return ("\"" + getTimestamp(length.intValue())+ "\"");
       	}
     	break;    	
-    
+    	
       default: throw new IllegalArgumentException("Invalid data type Category : " + dataType.getDataTypeCategory());
+    	
     }
+	}catch(Throwable e){e.printStackTrace();}
 	return null;
 	
   }
@@ -201,22 +184,22 @@ public class BasicValueProvider implements ValueProvider {
   @Override
   public String getDateTime(int daysAdd) {
 	if(daysAdd > 0)
-	  return TimeTools.GetCurrent(TimeTools.getCalendarFromCalendarDateAddDays(this.testCalendar,daysAdd ));
+	  return TimeTools.GetCurrent(TimeTools.getCalendarFromCalendarDateAddDays(BasicValueProvider.getTestCalendar(),daysAdd ));
 	
 	return null;
 	
   }
   @Override
   public String getTime(int addTimeInSeconds) {
-	  return TimeTools.GetCurrentTime(testCalendar);
+	  return TimeTools.GetCurrentTime(BasicValueProvider.getTestCalendar());
   }
   @Override
   public String getDate(int length) {
-	  return TimeTools.GetCurrent(testCalendar);
+	  return TimeTools.GetCurrent(BasicValueProvider.getTestCalendar());
   }
   @Override
   public String getYear(int length) {
-	  return TimeTools.getYear(testCalendar);
+	  return TimeTools.getYear(BasicValueProvider.getTestCalendar());
   }
   @Override
   public Byte getBit(int length) {
@@ -225,57 +208,54 @@ public class BasicValueProvider implements ValueProvider {
   @Override
   public BigDecimal getDecimal(int length) {
 	
-	int number1 = getInt(length);
-	int number2 = getInt(length);
+	int number1 = getInt(200000);
+	int number2 = getInt(1000);
 	DecimalFormat numberFormat = new DecimalFormat("#.00000");
 	return new BigDecimal(numberFormat.format(number1/number2));	
   }
   @Override
   public Double getDouble(int length) {
-	double myDouble = length;
+	double myDouble = 66666666;
 	return new Double(myDouble * (getInt(length)/100));
 	
   }
   @Override
   public Float getFloat(int length) {
-	float myfloat = length;
+	float myfloat = 500;
 	return new Float(myfloat * (getInt(length)/100));
 	 	
   }
   @Override
   public Long geBigInt(Long length) {
-	return this.getRandomNumber(length>Long.MAX_VALUE?Long.MAX_VALUE:length);
+	Long lv = this.getRandomNumber(length>0?(length>Long.MAX_VALUE?Long.MAX_VALUE:length):Long.MAX_VALUE);
+	return lv;
+	
 	
   }
   @Override
   public Integer getInt(int length) {
-	return this.getRandomNumber(length>2147483647?2147483647:length).intValue();
-	// TODO Auto-generated method stub
+	return this.getRandomNumber(length>0?(length>2147483647?2147483647:length):2147483647).intValue();
 	
   }
   @Override
   public Integer getMedInt(int length) {
-	return this.getRandomNumber(length>8388607?8388607:length).intValue();
-	// TODO Auto-generated method stub
-	
+	return this.getRandomNumber(length>0?(length>8388607?8388607:length):8388607).intValue();
   }
   @Override
   public Integer getSmallInt(int length) {
-	return this.getRandomNumber(length>32767?32767:length).intValue();
-	// TODO Auto-generated method stub
-	
+	return this.getRandomNumber(length>0?(length>32767?32767:length):32767).intValue();
   }
   @Override
   public Integer getTiny(int length) {
-	return this.getRandomNumber(length>127?127:length).intValue();
-	// TODO Auto-generated method stub
+	return this.getRandomNumber(length>0?(length>127?127:length):127).intValue();
+
 	
   }
 
   @Override
   public Date getRandomDate() {
-	// TODO Auto-generated method stub
-	return null;
+	 return TimeTools.getCalendarFromCalendarDateAddDays(BasicValueProvider.getTestCalendar(),Utility.getNumberFromRandomMinMax(-100, 100).intValue()).getTime();
+	
   }
 
   @Override
@@ -330,23 +310,28 @@ public class BasicValueProvider implements ValueProvider {
   @Override
   public String getString(int upperbound, int length) {
     StringBuffer sb = new StringBuffer();
+    int upTo = length>upperbound?upperbound:length;
+//    if(upTo > 1)
+//      --upTo ;	
 
     for (int i = 0 ; i <= length ; i++ )
     {
         sb.append(alpha[rnd.nextInt(alpha.length)]);
     }
-    return sb.subSequence(0, upperbound).toString();
+    return sb.subSequence(0, upTo).toString();
   }
 
   @Override
   public String getString(long upperbound, int length) {
     StringBuffer sb = new StringBuffer();
-
-    for (int i = 0 ; i <= length ; i++ )
+    int upTo = length>new Long(upperbound).intValue()?new Long(upperbound).intValue():length;
+//    if(upTo > 1)
+//      --upTo ;	
+    for (int i = 0 ; i <= upTo ; i++ )
     {
         sb.append(alpha[rnd.nextInt(alpha.length)]);
     }
-    return sb.subSequence(0, sb.length()>upperbound?new Long(upperbound).intValue():sb.length()).toString();
+    return sb.subSequence(0, upTo).toString();
   }
 
 
@@ -383,25 +368,147 @@ public class BasicValueProvider implements ValueProvider {
   /**
    * @return the testCalendar
    */
-  @Override
-  public Calendar getTestCalendar() {
+//  @Override
+  public static Calendar getTestCalendar() {
     return testCalendar;
   }
 
   /**
    * @param testCalendar the testCalendar to set
    */
-  @Override
-  public void setTestCalendar(Calendar testCalendar) {
-    this.testCalendar = testCalendar;
+//  @Override
+  public static void  setTestCalendar(Calendar testCalendarIn) {
+    testCalendar = testCalendarIn;
   }
 
 @Override
 public Calendar resetCalendar(int timeDays) {
-	int days = Utility.getNumberFromRandomMinMax((timeDays * -1), timeDays).intValue();
+	int days = Utility.getUnsignNumberFromRandomMinMax((timeDays * -1), timeDays).intValue();
+	
+	String now = TimeTools.getTimeStamp(BasicValueProvider.getTestCalendar(), "yyyy-MM-dd HH:mm:ss");
 	testCalendar = TimeTools.getCalendarFromCalendarDateAddDays(testCalendar, days);
-	 
-	return testCalendar;
+	String after = TimeTools.getTimeStamp(BasicValueProvider.getTestCalendar(), "yyyy-MM-dd HH:mm:ss"); 
+	BasicValueProvider.setTestCalendar(testCalendar);
+	return BasicValueProvider.getTestCalendar();
+}
+
+@Override
+public  Object getValueForRangeOption(Attribute attrib, String rangeCondition) {
+	switch(rangeCondition){
+		case "BETWEEN":return valueForBetween(attrib);
+		case "IN":return valueForIn(attrib);
+		case ">":return valueLessMoreThen(attrib, rangeCondition);
+		case "<":return valueLessMoreThen(attrib, rangeCondition);
+		
+		default :break;
+	}		
+	return null;
+}
+
+private String valueLessMoreThen(Attribute attrib, String operator) {
+	if(attrib.getDataType().getDataTypeCategory() == DataType.NUMERIC_CATEGORY){
+		Long val1 = this.getRandomNumber(attrib.getUpperLimit());
+		Long val2 = this.getRandomNumber(attrib.getUpperLimit());
+		String value = "";
+
+		if(val1 < val2){
+			value = " (" + attrib.getName() + " " + val1 + " " + operator + " " + val2 + ") "; 
+		}
+		else if(val1 > val2){
+			value = " (" + attrib.getName() + " " + val2 + " " + operator + " " + val1 + ") ";
+		}
+		else{
+			return valueLessMoreThen(attrib,operator);
+		}
+		
+	}
+	else if(attrib.getDataType().getDataTypeCategory() == DataType.DATE_CATEGORY){
+		Date date1 = this.getRandomDate();
+		Date date2 = this.getRandomDate();
+		String value = "";
+		if(date1.getTime() < date2.getTime()){
+			value = " (" + attrib.getName() + " " + TimeTools.getTimeStampFromDate(date1, null) + " " + operator + " " + TimeTools.getTimeStampFromDate(date2, null) + ") ";
+		}
+		else if(date1.getTime() > date2.getTime()){
+			value = " (" + attrib.getName() + " " + TimeTools.getTimeStampFromDate(date2, null) + " " + operator + " " + TimeTools.getTimeStampFromDate(date1, null) + ") ";
+		}
+		else{
+			return valueLessMoreThen(attrib,operator);
+		}
+	}
+	else
+		return null;
+	
+	return null;
+}
+
+
+private Object valueForIn(Attribute attrib) {
+	int loop = Utility.getNumberFromRandomMinMax(3, 200).intValue();
+	StringBuffer sb = new StringBuffer();
+	sb.append(" " + attrib.getName() + " IN (");
+	
+	
+	if(attrib.getDataType().getDataTypeCategory() == DataType.NUMERIC_CATEGORY){
+		for(int ic = 0 ; ic < loop; ic++){
+			if(ic > 0)
+				sb.append(",");
+			sb.append(Utility.getNumberFromRandomMinMax(0, attrib.getUpperLimit()).toString());
+		}
+		
+	}else if(attrib.getDataType().getDataTypeCategory() == DataType.DATE_CATEGORY){
+		for(int ic = 0 ; ic < loop; ic++){
+			if(ic > 0)
+				sb.append(",");
+			sb.append("'" + TimeTools.getTimeStampFromDate(getRandomDate(), null) + "'");
+		}
+	}
+	else{
+		return null;
+	}
+	
+	
+	
+	// TODO Auto-generated method stub
+	return null;
+}
+
+private String valueForBetween(Attribute attrib) {
+  	String value = "";
+	if(attrib.getDataType().getDataTypeCategory() == DataType.NUMERIC_CATEGORY){
+		Long val1 = this.getRandomNumber(attrib.getUpperLimit());
+		Long val2 = this.getRandomNumber(attrib.getUpperLimit());
+		
+
+		if(val1 < val2){
+			value = " (" + attrib.getName() + " BETWEEN " + val1 + " AND " + val2 + ") "; 
+		}
+		else if(val1 > val2){
+			value = " (" + attrib.getName() + " BETWEEN " + val2 + " AND " + val1 + ") ";
+		}
+		else{
+			return valueForBetween(attrib);
+		}
+		
+	}
+	else if(attrib.getDataType().getDataTypeCategory() == DataType.DATE_CATEGORY){
+		Date date1 = this.getRandomDate();
+		Date date2 = this.getRandomDate();
+		
+		if(date1.getTime() < date2.getTime()){
+			value = " (" + attrib.getName() + " BETWEEN '" + TimeTools.getTimeStampFromDate(date1, null) + "' AND '" + TimeTools.getTimeStampFromDate(date2, null) + "') "; 
+		}
+		else if(date1.getTime() > date2.getTime()){
+			value = " (" + attrib.getName() + " BETWEEN '" + TimeTools.getTimeStampFromDate(date2, null) + "' AND '" + TimeTools.getTimeStampFromDate(date1, null) + "') ";
+		}
+		else{
+			return valueForBetween(attrib);
+		}
+	}
+	else
+		return null;
+	
+	return value;
 }
 
 
