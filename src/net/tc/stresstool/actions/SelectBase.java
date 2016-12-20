@@ -176,7 +176,6 @@ public class SelectBase extends StressActionBase implements ReadAction{
 	}
 	this.myDataObject.executeSqlObject(this.getActionCode(),(com.mysql.jdbc.Connection) conn);
 	if(!this.isStickyconnection()){
-
 	  getConnProvider().returnConnection((com.mysql.jdbc.Connection)conn);
 	}
 
@@ -197,6 +196,7 @@ public class SelectBase extends StressActionBase implements ReadAction{
   
   public void getSelectObject() {
 	SQLObject lSQLObj = new SQLObject() ;
+	lSQLObj.setSQLCommandType(DataObject.SQL_READ);
 	SynchronizedMap SQLObjectContainer = new SynchronizedMap();
 
 	if(getBatchSize() < 1){
@@ -209,7 +209,7 @@ public class SelectBase extends StressActionBase implements ReadAction{
 	  lSQLObj.setSourceTables(tables);
 	  String sqlSelectCommand = DataObject.SQL_SELECT_TEMPLATE;
 	  sqlSelectCommand = createSelect(sqlSelectCommand,lSQLObj);
-	  sqlSelectCommand = createWhere(sqlSelectCommand);
+	  sqlSelectCommand = createWhere(sqlSelectCommand,lSQLObj);
 	  sqlSelectCommand = createGroupBy(sqlSelectCommand);
 	  sqlSelectCommand = createOrderBy(sqlSelectCommand);
 	  sqlSelectCommand = createLimit(sqlSelectCommand);
@@ -234,7 +234,6 @@ public class SelectBase extends StressActionBase implements ReadAction{
 	return sqlSelectCommand.replaceAll("#GROUP_BY#", "");
   }
   private Attribute[] getAttribs(Table table,String filter) {
-	// TODO Auto-generated method stub
 	if(table != null 
 		&& table.getMetaAttributes()!=null
 		&& table.getMetaAttributes().size() >0 ){
@@ -349,12 +348,12 @@ public class SelectBase extends StressActionBase implements ReadAction{
 
   }
 
-  private String createWhere(String sqlSelectCommand){
+  private String createWhere(String sqlSelectCommand,SQLObject lSQLObj){
 	if(getSelectLeadingTable()!= null){
 	  StringBuffer  whereConditionString = new StringBuffer();
 
 	  whereConditionString.append(" WHERE ");
-	  whereConditionString.append(getSelectLeadingTable().parseWhere());
+	  whereConditionString.append(getSelectLeadingTable().parseWhere(lSQLObj.getSQLCommandType()));
 	  sqlSelectCommand = sqlSelectCommand.replaceAll("#WHERE#", whereConditionString.toString());
 
 	  return sqlSelectCommand;

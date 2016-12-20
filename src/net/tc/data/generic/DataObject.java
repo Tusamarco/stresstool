@@ -32,7 +32,7 @@ public class DataObject extends MultiLanguage
     public static final String SQL_DELETE_TEMPLATE = "DELETE FROM #TABLE_CONDITION# #WHERE# #ORDER_BY# #LIMIT#" ;
     public static final String SQL_SELECT_TEMPLATE = "SELECT #TABLE_CONDITION# #WHERE# #GROUP_BY# #ORDER_BY# #LIMIT#" ;
  
-    public static final int SQL_CREATE = 1000;
+    public static final int SQL_INSERT = 1000;
     public static final int SQL_READ   = 2000;
     public static final int SQL_UPDATE = 3000;
     public static final int SQL_DELETE = 4000;
@@ -216,13 +216,41 @@ public class DataObject extends MultiLanguage
 	}
 
 	private int[] executeDelete(Connection conn) {
-	  // TODO Auto-generated method stub
-	  return null;
+		int[] lines = new int[1];
+		  if(this.getSqlObjects() != null  
+				  && this.getSqlObjects().getValueByPosition(0) != null){
+					SQLObject sqlu = (SQLObject) this.getSqlObjects().getValueByPosition(0);
+					sqlu.setSQLCommandType(SQL_DELETE);
+					sqlu.getValuesForDML();
+					try{
+						 Statement stmt = (Statement) conn.createStatement();
+						 lines[0] = stmt.executeUpdate((String)sqlu.getSQLCommands().get(0));
+						 try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).info("Execute SQL command(s) N lines modified= "+ lines[0]  +"  : " + (String)sqlu.getSQLCommands().get(0)  );}catch(StressToolConfigurationException e){}
+						  return lines;	
+						}catch(Exception ex)
+						{ex.printStackTrace();}
+		  
+		  }
+	  return lines;
     }
 
 	private int[] executeUpdate(Connection conn) {
-	  // TODO Auto-generated method stub
-	  return null;
+		int[] lines = new int[1];
+		  if(this.getSqlObjects() != null  
+				  && this.getSqlObjects().getValueByPosition(0) != null){
+					SQLObject sqlu = (SQLObject) this.getSqlObjects().getValueByPosition(0);
+					sqlu.setSQLCommandType(SQL_UPDATE);
+					sqlu.getValuesForDML();
+					try{
+						 Statement stmt = (Statement) conn.createStatement();
+						 lines[0] = stmt.executeUpdate((String)sqlu.getSQLCommands().get(0));
+						 try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).info("Execute SQL command(s) N lines modified= "+ lines[0]  +"  : " + (String)sqlu.getSQLCommands().get(0)  );}catch(StressToolConfigurationException e){}
+						  return lines;	
+						}catch(Exception ex)
+						{ex.printStackTrace();}
+		  
+		  }
+	  return lines;
     }
 
 	private int[] executeSelect(Connection conn) {
@@ -230,13 +258,14 @@ public class DataObject extends MultiLanguage
 		  && this.getSqlObjects().getValueByPosition(0) != null){
 			
 			SQLObject sqlo = (SQLObject) this.getSqlObjects().getValueByPosition(0);
+			sqlo.setSQLCommandType(SQL_READ);
 			ArrayList<String> commands = sqlo.getSQLCommands();
 			int[] lines = new int[commands.size()];
 			
 			try{
 			 Statement stmt = (Statement) conn.createStatement();
 			for(int ac = 0 ; ac < commands.size(); ac++){
-			  	
+				try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).info("Execute SQL command(s): " + commands  );}catch(StressToolConfigurationException e){}	
 			  ResultSet rs = stmt.executeQuery(commands.get(ac));
 			  lines[ac] = rs.getRow();
 			  rs.close();
@@ -258,8 +287,7 @@ public class DataObject extends MultiLanguage
 	  int[] rows = null;
 	    try {
 	      
-//	      System.out.println("******************* RESET? "+ this.getLazyExecCount() + " ***********************");
-	  
+	      try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).debug("******************* RESET? "+ this.getLazyExecCount() + " ***********************" );}catch(StressToolConfigurationException e){}
 	    	
 	    	
 	      Statement stmt = (Statement) conn.createStatement();
@@ -268,6 +296,7 @@ public class DataObject extends MultiLanguage
 		    if(SQLContainer != null ){
 		      for(int ir = 0 ; ir < getSqlObjects().size(); ir++){
 		    	SQLObject mySo = (SQLObject)getSqlObjects().getValueByPosition(ir);
+		    	mySo.setSQLCommandType(SQL_INSERT);
 
 		    	/*
 		    	 * Analyze and set lazy 
@@ -276,7 +305,7 @@ public class DataObject extends MultiLanguage
 		    	
 		    	if(getLazyInterval() < getLazyExecCount()){
 		    	  mySo.setResetLazy(true);
-//		    	  System.out.println("******************* RESET LAZY ***********************");
+			      try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).debug("******************* RESET LAZY ***********************" );}catch(StressToolConfigurationException e){}
 		    	}
 		    	mySo.getValues();		    	
 		    	
@@ -292,7 +321,7 @@ public class DataObject extends MultiLanguage
 //		    	  stmt.execute(command);
 		    	  stmt.addBatch(command);
 //		    	  System.out.println("Add SQL to batch: " + command  );
-		    	  try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).debug("Add SQL to batch: " + command  );}catch(StressToolConfigurationException e){}
+		    	  try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).info("Add SQL to batch: " + command  );}catch(StressToolConfigurationException e){}
 		    	  
 		    	}
 		      }

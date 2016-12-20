@@ -12,6 +12,7 @@ import net.tc.utils.Utility;
 
 public class SQLObject {
     ArrayList<String> SQLCommands = new ArrayList();
+    
     int SQLCommandType = 0;
     boolean isBatched = false;
     boolean isPreparedStatment = false;
@@ -218,6 +219,97 @@ public class SQLObject {
 	}
 	return null;
   }
+  
+  public String getValuesForDML() {
+	 
+	  boolean filling = false;
+	  for (Object table : this.getSourceTables()) {
+		  String SQLCommand = ((String) getSQLCommands().get(0));  
+			try {
+				StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS)
+						.debug("========================== Processing Table " + ((Table) table).getName()
+							+ " ================ [Start]");	} catch (StressToolConfigurationException e) {}
+
+			/*
+			 * loops cross batch loops
+			 */
+			StringBuffer sqlValues = new StringBuffer();
+
+			try {
+				ArrayList<Attribute> attributes = new ArrayList();
+				((Table) table).parseAttributeWhere(((Table) table).getWhereCondition(this.getSQLCommandType()),
+						attributes);
+				for (Object attrib : (Object[]) (attributes.toArray())) {
+					if (sqlValues.length() > 1)
+						sqlValues.append(", ");
+
+					if (((Attribute) attrib).getSpecialFunction() == null && !((Attribute) attrib).isAutoIncrement()) {
+						// if(((Attribute) attrib).isLazy()){
+						((Attribute) attrib).setValue(StressTool.getValueProvider().provideValue(
+								((Attribute) attrib).getDataType(), new Long(((Attribute) attrib).getUpperLimit())));
+						// }
+						// else{
+						// ((Attribute)
+						// attrib).setValue(StressTool.getValueProvider().provideValue(
+						// ((Attribute) attrib).getDataType(), new
+						// Long(((Attribute) attrib).getUpperLimit())));
+						//
+						// }
+					} else {
+
+						if (((Attribute) attrib).isAutoIncrement()) {
+							((Attribute) attrib).setValue("NULL");
+						} else {
+							((Attribute) attrib).setValue(((Attribute) attrib).getSpecialFunction());
+						}
+					}
+
+					// filling = this.isResetLazy()?true:false;
+
+					// }
+
+					sqlValues.append(((Attribute) attrib).getName() + "=" + ((Attribute) attrib).getValue());
+
+					// try
+					// {StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).INFO(
+					// (filling ? "" : "NOT")
+					// + "Filling Attribute "
+					// + ((Attribute) attrib).getName()
+					// + " DataType: "
+					// + DataType.getDataTypeStringByIdentifier(((Attribute)
+					// attrib).getDataType().getDataTypeId())
+					// + " Value : " + ((Attribute)attrib).getValue()
+					// + " Lazy = " + ((Attribute) attrib).isLazy());
+					// } catch (StressToolConfigurationException e)
+					// {e.printStackTrace();}
+
+				}
+
+			} catch (Throwable th) {
+				th.printStackTrace();
+			}
+			// }
+
+			try {
+				StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS)
+						.debug("========================== Processing Table " + ((Table) table).getName()
+								+ " ================ [End]");
+			} catch (StressToolConfigurationException e) {
+				e.printStackTrace();
+			}
+
+			SQLCommand = SQLCommand.replace("#ATTRIB_VALUE#", sqlValues.toString());
+			SQLCommands.clear();
+			SQLCommands.add(0, SQLCommand);
+
+			this.setResetLazy(this.resetLazy ? false : isResetLazy());
+
+			// return sqlValues.toString();
+		}
+		return null;
+  }
+  
+  
 	public  boolean isResetLazy() {
 		return this.resetLazy;
 	}

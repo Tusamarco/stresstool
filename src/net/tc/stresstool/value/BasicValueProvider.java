@@ -257,7 +257,11 @@ public class BasicValueProvider implements ValueProvider {
 	 return TimeTools.getCalendarFromCalendarDateAddDays(BasicValueProvider.getTestCalendar(),Utility.getNumberFromRandomMinMax(-100, 100).intValue()).getTime();
 	
   }
-
+  @Override
+  public Date getRandomDate(int rangeLength) {
+	 return TimeTools.getCalendarFromCalendarDateAddDays(BasicValueProvider.getTestCalendar(),Utility.getNumberFromRandomMinMax(-rangeLength, rangeLength).intValue()).getTime();
+	
+  }
   @Override
   public boolean readText(String path, int splitMethod) {
 	// TODO Auto-generated method stub
@@ -393,22 +397,22 @@ public Calendar resetCalendar(int timeDays) {
 }
 
 @Override
-public  Object getValueForRangeOption(Attribute attrib, String rangeCondition) {
+public  Object getValueForRangeOption(Attribute attrib, String rangeCondition,int rangeLength) {
 	switch(rangeCondition){
-		case "BETWEEN":return valueForBetween(attrib);
-		case "IN":return valueForIn(attrib);
-		case ">":return valueLessMoreThen(attrib, rangeCondition);
-		case "<":return valueLessMoreThen(attrib, rangeCondition);
+		case "BETWEEN":return valueForBetween(attrib,rangeLength);
+		case "IN":return valueForIn(attrib,rangeLength);
+		case ">":return valueLessMoreThen(attrib, rangeCondition,rangeLength);
+		case "<":return valueLessMoreThen(attrib, rangeCondition,rangeLength);
 		
 		default :break;
 	}		
 	return null;
 }
 
-private String valueLessMoreThen(Attribute attrib, String operator) {
+private String valueLessMoreThen(Attribute attrib, String operator,int rangeLength) {
 	if(attrib.getDataType().getDataTypeCategory() == DataType.NUMERIC_CATEGORY){
 		Long val1 = this.getRandomNumber(attrib.getUpperLimit());
-		Long val2 = this.getRandomNumber(attrib.getUpperLimit());
+		Long val2 = this.getRandomNumber(val1 + rangeLength );
 		String value = "";
 
 		if(val1 < val2){
@@ -418,7 +422,7 @@ private String valueLessMoreThen(Attribute attrib, String operator) {
 			value = " (" + attrib.getName() + " " + val2 + " " + operator + " " + val1 + ") ";
 		}
 		else{
-			return valueLessMoreThen(attrib,operator);
+			return valueLessMoreThen(attrib,operator,rangeLength);
 		}
 		
 	}
@@ -433,7 +437,7 @@ private String valueLessMoreThen(Attribute attrib, String operator) {
 			value = " (" + attrib.getName() + " " + TimeTools.getTimeStampFromDate(date2, null) + " " + operator + " " + TimeTools.getTimeStampFromDate(date1, null) + ") ";
 		}
 		else{
-			return valueLessMoreThen(attrib,operator);
+			return valueLessMoreThen(attrib,operator,rangeLength);
 		}
 	}
 	else
@@ -443,8 +447,8 @@ private String valueLessMoreThen(Attribute attrib, String operator) {
 }
 
 
-private Object valueForIn(Attribute attrib) {
-	int loop = Utility.getNumberFromRandomMinMax(3, 200).intValue();
+private Object valueForIn(Attribute attrib,int rangeLength) {
+	int loop = Utility.getNumberFromRandomMinMax(3, rangeLength).intValue();
 	StringBuffer sb = new StringBuffer();
 	sb.append(" " + attrib.getName() + " IN (");
 	
@@ -455,6 +459,7 @@ private Object valueForIn(Attribute attrib) {
 				sb.append(",");
 			sb.append(Utility.getNumberFromRandomMinMax(0, attrib.getUpperLimit()).toString());
 		}
+		sb.append(")");
 		
 	}else if(attrib.getDataType().getDataTypeCategory() == DataType.DATE_CATEGORY){
 		for(int ic = 0 ; ic < loop; ic++){
@@ -462,22 +467,21 @@ private Object valueForIn(Attribute attrib) {
 				sb.append(",");
 			sb.append("'" + TimeTools.getTimeStampFromDate(getRandomDate(), null) + "'");
 		}
+		sb.append(")");
 	}
 	else{
 		return null;
 	}
 	
-	
-	
-	// TODO Auto-generated method stub
-	return null;
+
+	return sb.toString();
 }
 
-private String valueForBetween(Attribute attrib) {
+private String valueForBetween(Attribute attrib,int rangeLength) {
   	String value = "";
 	if(attrib.getDataType().getDataTypeCategory() == DataType.NUMERIC_CATEGORY){
 		Long val1 = this.getRandomNumber(attrib.getUpperLimit());
-		Long val2 = this.getRandomNumber(attrib.getUpperLimit());
+		Long val2 = Utility.getNumberFromRandomMinMax(val1.longValue(), val1.longValue()+rangeLength);
 		
 
 		if(val1 < val2){
@@ -487,7 +491,7 @@ private String valueForBetween(Attribute attrib) {
 			value = " (" + attrib.getName() + " BETWEEN " + val2 + " AND " + val1 + ") ";
 		}
 		else{
-			return valueForBetween(attrib);
+			return valueForBetween(attrib,rangeLength);
 		}
 		
 	}
@@ -502,7 +506,7 @@ private String valueForBetween(Attribute attrib) {
 			value = " (" + attrib.getName() + " BETWEEN '" + TimeTools.getTimeStampFromDate(date2, null) + "' AND '" + TimeTools.getTimeStampFromDate(date1, null) + "') ";
 		}
 		else{
-			return valueForBetween(attrib);
+			return valueForBetween(attrib,rangeLength);
 		}
 	}
 	else

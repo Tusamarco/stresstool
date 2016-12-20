@@ -1,10 +1,10 @@
 [main]
 #connection oriented settings
-#connUrl=jdbc:mysql://192.168.0.11:3306
-connUrl=jdbc:mysql://127.0.0.1:3306
+connUrl=jdbc:mysql://192.168.0.5:3306
+#connUrl=jdbc:mysql://127.0.0.1:6033
 database=test
 user=stress	
-password=tool
+password=test
 connParameters=autoReconnect=true  
 connectionPool=false
 connectionPoolClass= 
@@ -19,22 +19,22 @@ doDelete=false
 doReport=true 
 doSimple=false 
 doSimplePk=false 
-droptable=true
+droptable=false
 ignoreBinlog=false
 operationShort=true  
 poolNumber=8
 pctInsert=100
-pctUpdate=0 
-pctSelect=0 
-pctDelete=0 
-repeatNumber=110
+pctUpdate=100 
+pctSelect=100 
+pctDelete=100 
+repeatNumber=1000
 HardStopLimit=100
 UseHardStop=false
 StatIntervalMs=1000
-StatLoops = 100
+StatLoops = 1000
 SemaphoreCountdownTime = 1
 # table engine comma separated with % value; 
-TableEngine=InnoDB|60,MyISAM|40
+TableEngine=InnoDB|90,MyISAM|10
 truncate=false
 # Interactive mode [0 no|1 console output|2 console output + not exit until question is answered ] default 2 
 interactive = 2
@@ -62,7 +62,7 @@ datafilepath=/opt/shakespere.txt
 #manage the calendar options
 # YYYY-MM-DD HH:MM:SS
 # daysdiffernce is the target/final date of the period 
-calendardate=2015-05-25 05:01:06 
+calendardate=2016-09-25 05:01:06 
 daysdiffernce=100
 
 
@@ -87,8 +87,10 @@ processaverage=true
 
 
 [net.tc.stresstool.actions.DeleteBase] 
-sleepDelete=0 
+sleepDelete=500 
 usePrepareStatement=false
+deleteRange = 100
+
 
 [net.tc.stresstool.actions.SelectBase]
 #for consistency the number of tables should never be higher than the ones declared in the Insert class
@@ -105,10 +107,10 @@ JoinField=a
 ForceIndex=false
 IndexName=IDX_as
 lazySelect=true;
-lazyInterval=5000;
+lazyInterval=500;
 #joinCondition=Left - experimental
-batchSize = 10
-textAttributeMaxSearchlength=50
+batchSize = 2
+textAttributeMaxSearchlength=5
 
 [net.tc.stresstool.actions.InsertBase]
 usePrepareStatement=false
@@ -119,14 +121,15 @@ joinField=a
 sleepWrite=100
 lazyCreation=true
 lazyInterval=200
-batchSize=50
+batchSize=20
+#jsonFile=/Users/marcotusa/programs/JBuilder/workspace/stresstool/json_definition_long.json
 jsonFile=/Users/marcotusa/programs/JBuilder/workspace/stresstool/json_definition.json
 
 
 [net.tc.stresstool.actions.InsertEmployeesTest]
 usePrepareStatement=false
-numberOfprimaryTables=5
-numberOfSecondaryTables=5
+numberOfprimaryTables=1
+numberOfSecondaryTables=1
 useAutoIncrement=true
 joinField=a
 sleepWrite=100
@@ -136,14 +139,16 @@ batchSize=50
 
 
 
+
+
 [net.tc.stresstool.actions.UpdateBase]
 usePrepareStatement=false
 delayStartRecords = 1000
-#numberOfprimaryTables=1
-#numberOfSecondaryTables=
+numberOfprimaryTables=1
+numberOfSecondaryTables=0
 useAutoIncrement=true
 joinField=a
-sleepWrite=1
-lazyCreation=true
-lazyInterval=5000
-batchSize=50
+sleepUpdate=400
+lazyUpdate=true
+lazyInterval=10
+batchSize=10

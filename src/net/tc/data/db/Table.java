@@ -5,7 +5,9 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Map;
 
+import net.tc.data.generic.DataObject;
 import net.tc.stresstool.StressTool;
+import net.tc.stresstool.actions.StressAction;
 import net.tc.stresstool.exceptions.StressToolConfigurationException;
 import net.tc.stresstool.logs.LogProvider;
 import net.tc.utils.SynchronizedMap;
@@ -39,9 +41,14 @@ public class Table {
 	private String tableSpace = null;
 	private int  rowFormatInt = 0;
 	private String dataDirectory = null;
-	private String whereCondition = null;
+	private String whereCondition_s = null;
+	private String whereCondition_u = null;
+	private String whereCondition_d = null;
 	private String selectCondition = null;
-	private ArrayList<Attribute> attribsWhere = new ArrayList();
+	private ArrayList<Attribute> attribsWhereS = new ArrayList();
+	private ArrayList<Attribute> attribsWhereU = new ArrayList();
+	private ArrayList<Attribute> attribsWhereD = new ArrayList();
+	private int rangeLength = 50;
 	
 	public Table() {
 	    rows = new SynchronizedMap(0);
@@ -483,42 +490,48 @@ public class Table {
 	/**
 	 * @return the whereCondition
 	 */
-	public String getWhereCondition() {
-	  return whereCondition;
+	public String getWhereConditionS() {
+	  return whereCondition_s;
 	}
 
 
 	/**
 	 * @param whereCondition the whereCondition to set
 	 */
-	public void setWhereCondition(String whereCondition) {
-	  this.whereCondition = whereCondition;
+	public void setWhereConditionS(String whereCondition) {
+	  this.whereCondition_s = whereCondition;
 	}
 	
-	public String parseWhere(){
-	  	String whereCondition = this.getWhereCondition();
-	  
-		if(this.getWhereCondition() == null || this.getWhereCondition().equals(""))
+	public String parseWhere(int sqlType){
+	  	String whereCondition = this.getWhereCondition(sqlType);
+	  	ArrayList<Attribute> attribsWhere = new ArrayList();
+	  	
+		if(whereCondition == null || whereCondition.equals(""))
 			return null;
-		/*
-		 * get first the list of attribs used in the where
-		 */
-		for(Object attrib: (Object[])this.getMetaAttributes().getValuesAsArrayOrderByKey()){
-			if(this.getWhereCondition().indexOf("#" + ((Attribute)attrib).getName() + "#") > 0){
-				attribsWhere.add((Attribute)attrib) ;
-				
-			}
-		}
+		
+		parseAttributeWhere(whereCondition, attribsWhere);
+		
+		
+		
 		if(attribsWhere.size() >0){
 			for(Object attrib : (Object[]) (attribsWhere.toArray())){
-			  int stingLength =0 ;
+			  int stingLength = 0 ;
+			  int attribRangeLenght = this.getRangeLength();
 			  
 				if(whereCondition.indexOf("#?" + ((Attribute)attrib).getName() + "_RANGE_OPTION_") >0){
-				  	String catchme = whereCondition.substring(whereCondition.indexOf("#?" + ((Attribute)attrib).getName() + "_RANGE_OPTION_") + 20, whereCondition.length());
-				  	catchme = (String) (StressTool.getValueProvider().getValueForRangeOption(((Attribute)attrib),catchme.substring(0,catchme.indexOf("?#"))));	
+				  	String catchme = whereCondition.substring(whereCondition.indexOf("#?" + ((Attribute)attrib).getName() + "_RANGE_OPTION_") +("#?" + ((Attribute)attrib).getName() + "_RANGE_OPTION_").length() , whereCondition.indexOf("?#")+2); //, whereCondition.length());
+				  	String condition= catchme.substring(0,catchme.indexOf("?#"));
+				  	
+				  	if(condition.indexOf("|")>0 ){
+				  		attribRangeLenght = Integer.parseInt(condition.substring(condition.indexOf("|")+1));
+				  		condition = condition.substring(0,condition.indexOf("|"));
+				  	}
+				  	
+				  	catchme = (String) (StressTool.getValueProvider().getValueForRangeOption(((Attribute)attrib),condition,attribRangeLenght));
+//				  	catchme = (String) (StressTool.getValueProvider().getValueForRangeOption(((Attribute)attrib),catchme.substring(0,catchme.indexOf("?#"))));	
 				  	whereCondition = whereCondition.replaceFirst("#"+ ((Attribute)attrib).getName() +"#", "");
 				  	String pre = whereCondition.substring(0, whereCondition.indexOf("#?" + ((Attribute)attrib).getName() + "_RANGE_OPTION_"));
-				  	String post = whereCondition.substring(whereCondition.indexOf("#?" + ((Attribute)attrib).getName() + "_RANGE_OPTION_") + 20,whereCondition.length());
+				  	String post = whereCondition.substring(whereCondition.indexOf("?#"),whereCondition.length());
 				  	post = post.substring((post.indexOf("?#") + 2),post.length());
 				  	whereCondition = pre + " " + catchme + " " + post;
 				  	
@@ -532,14 +545,12 @@ public class Table {
 					stingLength = Integer.parseInt(length);
 				  }
 					
-				  //|" + stingLength + "#
 				  String value = ((Attribute)attrib).getValueAsString(stingLength).replace("\"", "");
 				  if(stingLength < 1){
 				  	whereCondition = whereCondition.replaceFirst("#\\?"+ ((Attribute)attrib).getName() +"\\?#",value);
 				  }
 				  else{
 					whereCondition =  whereCondition.replaceFirst("#\\?"+ ((Attribute)attrib).getName() +"\\?", "\"" + value + "\"");
-//					System.out.println("AAA " + whereCondition);
 					whereCondition =  whereCondition.replaceFirst("\\|" + stingLength + "#", "");
 				  }
 				}
@@ -552,6 +563,19 @@ public class Table {
 	}
 
 
+	public void parseAttributeWhere(String whereCondition, ArrayList<Attribute> attribsWhere) {
+		/*
+		 * get first the list of attribs used in the where
+		 */
+		for(Object attrib: (Object[])this.getMetaAttributes().getValuesAsArrayOrderByKey()){
+			if(whereCondition.indexOf("#" + ((Attribute)attrib).getName() + "#") > 0){
+				attribsWhere.add((Attribute)attrib) ;
+				
+			}
+		}
+	}
+
+
 	public String getSelectCondition() {
 		return selectCondition;
 	}
@@ -561,4 +585,44 @@ public class Table {
 		this.selectCondition = selectCondition;
 	}
 
+
+	public String getWhereConditionU() {
+		return whereCondition_u;
+	}
+
+
+	public void setWhereConditionU(String whereCondition) {
+		this.whereCondition_u = whereCondition;
+	}
+
+
+	public String getWhereConditionD() {
+		return whereCondition_d;
+	}
+
+
+	public void setWhereConditionD(String whereCondition) {
+		this.whereCondition_d = whereCondition;
+	}
+	public String getWhereCondition(int slqType) {
+		  switch (slqType){
+			case DataObject.SQL_INSERT:return null; 
+			case DataObject.SQL_READ:return this.getWhereConditionS();
+			case DataObject.SQL_UPDATE: return this.getWhereConditionU();
+			case DataObject.SQL_DELETE: return this.getWhereConditionD();
+		
+		  }
+		
+		return null;
+	}
+
+
+	public int getRangeLength() {
+		return rangeLength;
+	}
+
+
+	public void setRangeLength(int rangeLength) {
+		this.rangeLength = rangeLength;
+	}
 }
