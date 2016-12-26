@@ -101,6 +101,7 @@ public class StructureDefinitionParserMySQL implements
 					table.setWhereConditionU(oTable.get("wherecondition_u")!=null?(String)oTable.get("wherecondition_u"):"");
 					table.setWhereConditionD(oTable.get("wherecondition_d")!=null?(String)oTable.get("wherecondition_d"):"");
 					table.setSelectCondition(oTable.get("selectcondition")!=null?(String)oTable.get("selectcondition"):"");
+					table.setUpdateSetAttributes(oTable.get("updatesetattributes")!=null?(String)oTable.get("updatesetattributes"):""); 
 					
 					
 					/*

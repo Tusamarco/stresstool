@@ -1,5 +1,6 @@
 package net.tc.stresstool.actions;
 
+import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -35,11 +36,11 @@ public class DeleteBase extends StressActionBase implements DeleteAction{
     private int currentLazyLoop = 0 ;    
 
     
-   private void setBatchSize(int i) {
+   public void setBatchSize(int i) {
 		  batchSize=i;
 		
 	}
-	private int getBatchSize() {
+	public int getBatchSize() {
 		
 		return batchSize;
 	}
@@ -78,23 +79,29 @@ public class DeleteBase extends StressActionBase implements DeleteAction{
 		  try {
 			conn = this.getConnProvider().getSimpleConnection();
 		  } catch (SQLException e) {
-			e.printStackTrace();
+			try{String s =new String();PrintWriter pw = new PrintWriter(s);e.printStackTrace(pw);
+				StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error("");
+			}catch(Exception xxxxx){}
+			
 		  }
 		}
 		else{
 		  conn = this.getActiveConnection();
 		}
-
-//		if(!myDataObject.isLazy()){
-//		  this.getUpdateObject();
-//		  
-//		}else{
-//		  if(currentLazyLoop > myDataObject.getLazyInterval()){
-			  getUpdateObject();
-//			  currentLazyLoop = 0;
-//		  }
-//		  currentLazyLoop +=1;
-//		}
+/*
+ * There is no sense in using lazy property on delete. Once action is done ones it should left no records immediately after.
+ * SO WHY keep it. 
+ */
+		if(!myDataObject.isLazy()){
+		  this.getDeleteObject();
+		  
+		}else{
+		  if(currentLazyLoop > myDataObject.getLazyInterval()){
+			getDeleteObject();
+			  currentLazyLoop = 0;
+		  }
+		  currentLazyLoop +=1;
+		}
 		this.myDataObject.executeSqlObject(this.getActionCode(),(com.mysql.jdbc.Connection) conn);
 		if(!this.isStickyconnection()){
 		  getConnProvider().returnConnection((com.mysql.jdbc.Connection)conn);
@@ -109,17 +116,22 @@ public class DeleteBase extends StressActionBase implements DeleteAction{
 		this.myDataObject.setLazy(this.isLazyDelete());
 		this.myDataObject.setLazyInterval(this.getLazyInterval());
 		this.myDataObject.setInizialized(true);
-		getUpdateObject();
+		getDeleteObject();
 	    
 		return this.myDataObject.isInizialized();  
 
 	  }
-	  
-	  private int getLazyInterval() {
+
+	  public void setLazyInterval(int lazyInterval) {
+			
+		this.lazyInterval=lazyInterval;
+	}
+
+	  public int getLazyInterval() {
 	
 		return lazyInterval;
 	}
-	public void getUpdateObject() {
+	public void getDeleteObject() {
 		SQLObject lSQLObj = new SQLObject() ;
 		lSQLObj.setSQLCommandType(DataObject.SQL_DELETE);
 		SynchronizedMap SQLObjectContainer = new SynchronizedMap();
@@ -130,17 +142,19 @@ public class DeleteBase extends StressActionBase implements DeleteAction{
 
 		for(int batchRun = 0 ; batchRun <= getBatchSize(); batchRun++){
 		  ArrayList<Table> tables = new ArrayList<Table>();
-		  tables.add(getMainTable());
+		  Table newTable = getMainTable(lSQLObj);
+		  tables.add(newTable);
 		  lSQLObj.setSourceTables(tables);
 		  
 		  String sqlDeleteCommand = DataObject.SQL_DELETE_TEMPLATE;
+		  loadMaxWhereValues(newTable);
 		  sqlDeleteCommand = createDelete(sqlDeleteCommand,lSQLObj);
 		  sqlDeleteCommand = createWhere(sqlDeleteCommand,lSQLObj);
 //		  sqlUpdateCommand = createGroupBy(sqlUpdateCommand);
 		  sqlDeleteCommand = createOrderBy(sqlDeleteCommand);
 		  sqlDeleteCommand = createLimit(sqlDeleteCommand);
-		  lSQLObj.setSingleSQLCommands(sqlDeleteCommand);
-
+//		  lSQLObj.setSingleSQLCommands(sqlDeleteCommand);
+		  lSQLObj.getSQLCommands().add(sqlDeleteCommand);
 		}
 		SQLObjectContainer.put(this.getId(), lSQLObj);
 		this.myDataObject.setSQL(SQLObjectContainer);
@@ -155,10 +169,9 @@ public class DeleteBase extends StressActionBase implements DeleteAction{
 
 	  }	
 	private String createWhere(String sqlUpdateCommand,SQLObject lSQLObj){
-			if(getMainTable()!= null){
+			if(this.getLeadingTable()!= null){
 			  StringBuffer  whereConditionString = new StringBuffer();
 
-			  loadMaxWhereValues(this.getLeadingTable());
 			  whereConditionString.append(" WHERE ");
 			  whereConditionString.append(getLeadingTable().parseWhere(lSQLObj.getSQLCommandType()));
 			  sqlUpdateCommand = sqlUpdateCommand.replaceAll("#WHERE#", whereConditionString.toString());
@@ -175,17 +188,36 @@ public class DeleteBase extends StressActionBase implements DeleteAction{
 	
 		return sqlSelectCommand.replaceAll("#ORDER_BY#", "");
 	  }	
-	  private Table getMainTable(){
+	  private Table getMainTable(SQLObject lSQl){
 			Table table = (Table) getTables()[Utility.getNumberFromRandomMinMax(new Long(0), new Long(getTables().length) ).intValue()];
 
-			if(table != null){
-				this.setLeadingTable(table);
-				return getLeadingTable();
-			}
+			if(checkIfTableExists(table,lSQl))
+				return getMainTable(lSQl);
+					
+					if(table.getParentTable() != null)
+					  return getMainTable(lSQl);
 
-			return table;
-
+					
+			this.setLeadingTable(table);
+				return table;
 	  }
+	  
+	  private boolean checkIfTableExists(Table tableIn,SQLObject lSQL){
+		  if(lSQL != null
+				  && lSQL.getSourceTables() != null){
+		  
+		  ArrayList<Table>	tables = (ArrayList)lSQL.getSourceTables();
+		  if(tables == null)
+			  	return false;
+		  
+		  for(Table table:tables){
+			  if(table.getName().equals(tableIn.getName()))
+				  return true;
+		  	}
+		  }
+		  return false;
+		  
+	}	  
 	public Table getLeadingTable() {
 		return leadingTable;
 	}
@@ -196,7 +228,7 @@ public class DeleteBase extends StressActionBase implements DeleteAction{
 	private void loadMaxWhereValues(Table table){
 		// TODO Add method to load values from max value in tables.
 		ArrayList<Attribute> maxAttribute =  new ArrayList();
-		table.parseAttributeWhere(table.getWhereCondition(this.getMyDataObject().SQL_UPDATE), maxAttribute);
+		table.parseAttributeWhere(table.getWhereCondition(this.getMyDataObject().SQL_DELETE), maxAttribute);
 		StringBuffer sb = new StringBuffer();
 		
 		for(Object attrib : (Object[]) (maxAttribute.toArray())){
@@ -225,7 +257,10 @@ public class DeleteBase extends StressActionBase implements DeleteAction{
 					
 					
 				  } catch (SQLException e) {
-					e.printStackTrace();
+						try{String s =new String();PrintWriter pw = new PrintWriter(s);e.printStackTrace(pw);
+						StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error("");
+					}catch(Exception xxxxx){}
+
 				  }
 				  finally{
 					  

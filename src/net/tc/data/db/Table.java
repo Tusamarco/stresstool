@@ -49,6 +49,8 @@ public class Table {
 	private ArrayList<Attribute> attribsWhereU = new ArrayList();
 	private ArrayList<Attribute> attribsWhereD = new ArrayList();
 	private int rangeLength = 50;
+	private ArrayList<Table> joinTables = new ArrayList(); 
+	private String updateSetAttributes = null;
 	
 	public Table() {
 	    rows = new SynchronizedMap(0);
@@ -515,43 +517,69 @@ public class Table {
 		
 		if(attribsWhere.size() >0){
 			for(Object attrib : (Object[]) (attribsWhere.toArray())){
-			  int stingLength = 0 ;
+			  int stringLength = 0 ;
 			  int attribRangeLenght = this.getRangeLength();
-			  
-				if(whereCondition.indexOf("#?" + ((Attribute)attrib).getName() + "_RANGE_OPTION_") >0){
-				  	String catchme = whereCondition.substring(whereCondition.indexOf("#?" + ((Attribute)attrib).getName() + "_RANGE_OPTION_") +("#?" + ((Attribute)attrib).getName() + "_RANGE_OPTION_").length() , whereCondition.indexOf("?#")+2); //, whereCondition.length());
-				  	String condition= catchme.substring(0,catchme.indexOf("?#"));
+			  String attName = ((Attribute)attrib).getName();
+
+			  if(whereCondition.indexOf("#?" + attName + "_RANGE_OPTION_") >0){
+				  	String catchme = ""; 
+				  	try{		
+				  	catchme = whereCondition.substring(
+				  			whereCondition.indexOf("#?" + attName + "_RANGE_OPTION_") 
+				  			+ ("#?" + attName+ "_RANGE_OPTION_").length() 
+				  			, whereCondition.indexOf("?" +attName +"#")+(2 + attName.length()) ); //, whereCondition.length());
+				  	
+				  	
+				  	
+				  	}catch(StringIndexOutOfBoundsException d){
+						  System.out.println("X " + whereCondition + "  " +whereCondition.length());
+						  System.out.println("A #?" + attName + "_RANGE_OPTION_" +"  "+ whereCondition.indexOf("#?" + attName + "_RANGE_OPTION_") );
+						  System.out.println("B " + ("#?" + attName + "_RANGE_OPTION_").length());
+						  System.out.println("C " + (whereCondition.indexOf("?" +attName +"#")+(2 + attName.length())));
+						  d.printStackTrace();
+				  		
+				  	}
+				  	
+				  	String condition= catchme.substring(0,catchme.indexOf("?"+attName+"#"));
 				  	
 				  	if(condition.indexOf("|")>0 ){
-				  		attribRangeLenght = Integer.parseInt(condition.substring(condition.indexOf("|")+1));
+				  		attribRangeLenght = Integer.parseInt(condition.substring((condition.indexOf("|")+1),condition.length()));
 				  		condition = condition.substring(0,condition.indexOf("|"));
 				  	}
 				  	
-				  	catchme = (String) (StressTool.getValueProvider().getValueForRangeOption(((Attribute)attrib),condition,attribRangeLenght));
-//				  	catchme = (String) (StressTool.getValueProvider().getValueForRangeOption(((Attribute)attrib),catchme.substring(0,catchme.indexOf("?#"))));	
-				  	whereCondition = whereCondition.replaceFirst("#"+ ((Attribute)attrib).getName() +"#", "");
-				  	String pre = whereCondition.substring(0, whereCondition.indexOf("#?" + ((Attribute)attrib).getName() + "_RANGE_OPTION_"));
-				  	String post = whereCondition.substring(whereCondition.indexOf("?#"),whereCondition.length());
-				  	post = post.substring((post.indexOf("?#") + 2),post.length());
+				  	catchme = (String) ((StressTool.getValueProvider().getValueForRangeOption(this,((Attribute)attrib),condition,attribRangeLenght)).toString());	
+				  	whereCondition = whereCondition.replaceFirst("#"+ attName +"#", "");
+				  	String pre = whereCondition.substring(0, whereCondition.indexOf("#?" + attName + "_RANGE_OPTION_"));
+				  	String post = whereCondition.substring((whereCondition.indexOf("?" + attName + "#")+(2 + attName.length())),whereCondition.length());
+//				  	post = post.substring((post.indexOf("?#") + 2),post.length());
 				  	whereCondition = pre + " " + catchme + " " + post;
 				  	
 				}
 				else{
-				  ((Attribute)attrib).setValue(StressTool.getValueProvider().provideValue(((Attribute)attrib).getDataType(), new Long(((Attribute)attrib).getUpperLimit()).longValue()));
-				  whereCondition = whereCondition.replaceFirst("#"+ ((Attribute)attrib).getName() +"#", ((Attribute)attrib).getName());
-				  String length = whereCondition.substring((whereCondition.indexOf("#?"+ ((Attribute)attrib).getName() +"?") + ("#?"+ ((Attribute)attrib).getName() +"?").length()), whereCondition.length());
-				  if(length.charAt(0) == '|'){
-					length = length.substring(1,length.indexOf("#"));
-					stingLength = Integer.parseInt(length);
+				  whereCondition = whereCondition.replaceFirst("#"+ attName+"#", this.getName() + "." + attName);
+				  String condition = whereCondition.substring(whereCondition.indexOf("#?"+ attName),(whereCondition.indexOf("?"+attName+"#") +(2 + attName.length())));
+				  
+//				  String length = whereCondition.substring((whereCondition.indexOf("#?"+ ((Attribute)attrib).getName() +"?"+attName+"#")), whereCondition.length());
+				  if(condition.indexOf("|") > 0 ){
+					  String nLength = condition.substring(condition.indexOf("|") + 1,condition.indexOf("?"+attName+"#")) ;
+					  stringLength = Integer.parseInt(nLength);
+					  ((Attribute)attrib).setValue(StressTool.getValueProvider().provideValue(((Attribute)attrib).getDataType(), new Long(stringLength).longValue()));
 				  }
+				  else
+					  ((Attribute)attrib).setValue(StressTool.getValueProvider().provideValue(((Attribute)attrib).getDataType(), new Long(((Attribute)attrib).getUpperLimit()).longValue()));
+				  
+//				  if(length.charAt(0) == '|'){
+//					length = length.substring(1,length.indexOf("?"+attName+"#"));
+//					stringLength = Integer.parseInt(length);
+//				  }
 					
-				  String value = ((Attribute)attrib).getValueAsString(stingLength).replace("\"", "");
-				  if(stingLength < 1){
-				  	whereCondition = whereCondition.replaceFirst("#\\?"+ ((Attribute)attrib).getName() +"\\?#",value);
+				  String value = ((Attribute)attrib).getValueAsString(stringLength).replace("\"", "");
+				  if(stringLength < 1){
+				  	whereCondition = whereCondition.replaceFirst("#\\?"+ attName +"\\?"+ attName+"#",value);
 				  }
 				  else{
-					whereCondition =  whereCondition.replaceFirst("#\\?"+ ((Attribute)attrib).getName() +"\\?", "\"" + value + "\"");
-					whereCondition =  whereCondition.replaceFirst("\\|" + stingLength + "#", "");
+					whereCondition =  whereCondition.replaceFirst("#\\?"+ attName +"\\|", "\"" + value + "%\"|");
+					whereCondition =  whereCondition.replaceFirst("\\|" + stringLength + "\\?"+attName+"#", "");
 				  }
 				}
 			}
@@ -568,7 +596,9 @@ public class Table {
 		 * get first the list of attribs used in the where
 		 */
 		for(Object attrib: (Object[])this.getMetaAttributes().getValuesAsArrayOrderByKey()){
+//			System.out.println("---------- " + ((Attribute)attrib).getName());
 			if(whereCondition.indexOf("#" + ((Attribute)attrib).getName() + "#") > 0){
+//				System.out.println("---------- 2 " + ((Attribute)attrib).getName());
 				attribsWhere.add((Attribute)attrib) ;
 				
 			}
@@ -625,4 +655,39 @@ public class Table {
 	public void setRangeLength(int rangeLength) {
 		this.rangeLength = rangeLength;
 	}
+	
+	public String parseSelectCondition(){
+		if(selectCondition == null || selectCondition.equals(""))
+			return null;
+		String[] selects=selectCondition.split(",");
+		StringBuffer sb = new StringBuffer();
+		for(String select:selects ){
+			if(sb.length() > 0)
+				sb.append(",");
+			sb.append(this.getName() + "."+ select);
+			
+		}
+		return sb.toString();
+	}
+
+
+	public ArrayList<Table> getJoinTables() {
+		return joinTables;
+	}
+
+
+	public void setJoinTables(ArrayList<Table> joinTables) {
+		this.joinTables = joinTables;
+	}
+
+
+	public String getUpdateSetAttributes() {
+		return updateSetAttributes;
+	}
+
+
+	public void setUpdateSetAttributes(String updateSetAttributes) {
+		this.updateSetAttributes = updateSetAttributes;
+	}
+
 }

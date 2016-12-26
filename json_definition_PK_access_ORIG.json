@@ -18,11 +18,10 @@
 					"multiple":true,
 					"rangeLength":"100",
 					"selectcondition":"autoinc,uuid,serverid,a,b,c,counter,time,partitionid,date,strrecordtype",
-					"updatesetattributes":"#a#,#b#",
-					"wherecondition_s":" #date# #?date_RANGE_OPTION_BETWEEN|30?date#",
-					"wherecondition_u":" #autoInc#=#?autoInc?autoInc#",
-					"wherecondition_d":" #a# #?a_RANGE_OPTION_BETWEEN|2?a#  ",
-				    "example_where":" #autoinc# = #?autoinc?autoinc#  and #date# #?date_RANGE_OPTION_BETWEEN?date#  and #b# like #?b|20?b# " ,
+					"wherecondition_s":" #a# #?a_RANGE_OPTION_BETWEEN?# and #date# #?date_RANGE_OPTION_BETWEEN?# and #b# like #?b?|20# ",
+					"wherecondition_u":" #a# #?a_RANGE_OPTION_BETWEEN|500?# ",
+					"wherecondition_d":" #a# #?a_RANGE_OPTION_BETWEEN|100?#  ",
+				    "example_where":" #autoinc# = #?autoinc?#  and #date# #?date_RANGE_OPTION_BETWEEN?# " ,
 					"keys":
 							{
 							"key":
@@ -52,12 +51,12 @@
 					"partitionDefinition":{
 	
 					}
-				},		
+				},
 				{
 					"database":"test",
 					"tablename":"tbtestPart",
 					"engine":"innodb",
-					"multiple":false,
+					"multiple":true,
 					"primarykey":["date","autoInc"],
 					"autoincrementvalue":0,
 					"defaultcharset":"utf8",
@@ -66,11 +65,10 @@
 					"datadir":"",
 					"rowformat":"dynamic",
 					"selectcondition":"autoinc,uuid,serverid,a,b,c,counter,time,partitionid,date,strrecordtype",
-					"wherecondition_s":" #a# #?a_RANGE_OPTION_BETWEEN|300?a# and #date# #?date_RANGE_OPTION_BETWEEN|200?date# ",
-					"updatesetattributes":"#a#,#b#",
-					"wherecondition_u": " #autoInc#=#?autoInc?autoInc#",
-					"wherecondition_d":" #autoInc# #?autoInc_RANGE_OPTION_IN|2?autoInc#  ",
-				    "example_where":" #autoInc# = #?autoInc?autoinc#  and #date# #?date_RANGE_OPTION_BETWEEN?date# #date# #?date_RANGE_OPTION_BETWEEN?date#  and #b# like #?b|20?b#" ,
+					"wherecondition_s":" #date# #?date_RANGE_OPTION_BETWEEN?#",
+					"wherecondition_u":" #date# #?date_RANGE_OPTION_BETWEEN?#",
+					"wherecondition_d":" #autoInc# #?autoInc_RANGE_OPTION_IN|100?#  ",
+				    "example_where":" #autoInc# = #?autoInc?#  and #date# #?date_RANGE_OPTION_BETWEEN?# " ,
 					
 					
 					"keys":
@@ -112,50 +110,7 @@
 						"ranges":{"range":[]}
 	
 					}
-				},
-				{
-					"database":"test",
-					"tablename":"tbtest_child",
-					"parent":"tbtest",
-					"engine":"innodb",
-					"multiple":true,
-					"primarykey":["a","bb"],
-					"autoincrementvalue":5340,
-					"defaultcharset":"utf8",
-					"defaultcollation":"utf8_bin",
-					"tablespace":"",
-					"datadir":"",
-					"rowformat":"dynamic",
-					"selectcondition":"a,serverid,time,partitionid,stroperation",
-					"wherecondition_s":" #a# #?a_RANGE_OPTION_IN|1000?a#  ",
-					"wherecondition_u":" #date# #?date_RANGE_OPTION_BETWEEN|5?date#",
-					"wherecondition_d":" #a# #?a_RANGE_OPTION_IN|5?a#  ",
-				    "example_where":" #autoInc# = #?autoInc?autoinc#  and #date# #?date_RANGE_OPTION_BETWEEN?date# #date# #?date_RANGE_OPTION_BETWEEN?date#   and #date# #?date_RANGE_OPTION_BETWEEN?date# and #b# like #?b|20?b#  " ,
-
-					"keys":
-							{
-							"key":
-								[
-									{"name":"serverid","unique":false,"attributes":["serverid"]},			
-									{"name":"bb","unique":true,"attributes":["bb"]}			
-								]
-							},
-					"haspartition":false,	
-					"attributes":{
-						"attribute":
-							[
-								{"name":"a","datatype":"int","datadimension":"11","default":"","null":false},
-								{"name":"serverid","datatype":"smallint","datadimension":"6","default":"","null":false},				
-								{"name":"bb","datatype":"int","datadimension":"11","default":"","null":false,"autoincrement":true},
-								{"name":"partitionid","datatype":"int","datadimension":"11","upperlimit":"10","default":"0","null":true},								
-								{"name":"stroperation","datatype":"varchar","datadimension":"256","default":"","null":true},				
-								{"name":"time","datatype":"timestamp","default":"CURRENT_TIMESTAMP","onUpdate":"CURRENT_TIMESTAMP","null":false,"specialFunction":"NOW()"}
-							]
-					},
-					"partitionDefinition":{
-	
-					}
-				}			
+				},			
 			]
 		}
 }

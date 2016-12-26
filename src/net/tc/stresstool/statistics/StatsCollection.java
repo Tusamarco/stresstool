@@ -1,5 +1,6 @@
 package net.tc.stresstool.statistics;
 
+import java.io.PrintWriter;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -65,7 +66,10 @@ public class StatsCollection {
 		return false;
 	    } catch (StressToolException e) {
 		// TODO Auto-generated catch block
-		e.printStackTrace();
+			try{String s =new String();PrintWriter pw = new PrintWriter(s);e.printStackTrace(pw);
+			StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).error("");
+		}catch(Exception xxxxx){}
+
 		return false;
 		
 	    }
@@ -125,7 +129,10 @@ public class StatsCollection {
         	    	}
 	    	}
 	    	catch(Throwable th){
-	    	    th.printStackTrace();
+				try{String s =new String();PrintWriter pw = new PrintWriter(s);th.printStackTrace(pw);
+				StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).error("");
+			}catch(Exception xxxxx){}
+
 	    	}
 	    	return group;
     	}

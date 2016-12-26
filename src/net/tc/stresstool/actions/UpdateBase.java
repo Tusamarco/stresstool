@@ -1,5 +1,6 @@
 package net.tc.stresstool.actions;
 
+import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,6 +12,8 @@ import net.tc.data.db.Attribute;
 import net.tc.data.db.Table;
 import net.tc.data.generic.DataObject;
 import net.tc.data.generic.SQLObject;
+import net.tc.stresstool.StressTool;
+import net.tc.stresstool.logs.LogProvider;
 import net.tc.utils.SynchronizedMap;
 import net.tc.utils.Utility;
 
@@ -122,23 +125,26 @@ public class UpdateBase extends StressActionBase implements UpdateAction {
 		  try {
 			conn = this.getConnProvider().getSimpleConnection();
 		  } catch (SQLException e) {
-			e.printStackTrace();
+				try{String s =new String();PrintWriter pw = new PrintWriter(s);e.printStackTrace(pw);
+				StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error(s);
+			}catch(Exception xxxxx){xxxxx.printStackTrace();}
+
 		  }
 		}
 		else{
 		  conn = this.getActiveConnection();
 		}
 
-//		if(!myDataObject.isLazy()){
-//		  this.getUpdateObject();
-//		  
-//		}else{
-//		  if(currentLazyLoop > myDataObject.getLazyInterval()){
+		if(!myDataObject.isLazy()){
+		  this.getUpdateObject();
+		  
+		}else{
+		  if(currentLazyLoop > myDataObject.getLazyInterval()){
 			  getUpdateObject();
-//			  currentLazyLoop = 0;
-//		  }
-//		  currentLazyLoop +=1;
-//		}
+			  currentLazyLoop = 0;
+		  }
+		  currentLazyLoop +=1;
+		}
 		this.myDataObject.executeSqlObject(this.getActionCode(),(com.mysql.jdbc.Connection) conn);
 		if(!this.isStickyconnection()){
 		  getConnProvider().returnConnection((com.mysql.jdbc.Connection)conn);
@@ -168,25 +174,38 @@ public class UpdateBase extends StressActionBase implements UpdateAction {
 		  setBatchSize(1);
 		}
 
-		for(int batchRun = 0 ; batchRun <= getBatchSize(); batchRun++){
-		  ArrayList<Table> tables = new ArrayList<Table>();
-		  tables.add(getMainTable());
+		for(int batchRun = 0 ; batchRun < getBatchSize(); batchRun++){
+		  ArrayList tables = new ArrayList();
+		  Table newTable = getMainTable(lSQLObj);
+//		  newTable.setJoinTables(this.filterSubTables(newTable, this.getTables()));
+		  tables.add(newTable);
 		  lSQLObj.setSourceTables(tables);
+			
+//		  ArrayList<Table> tables = new ArrayList<Table>();
+//		  tables.add(getMainTable());
+//		  lSQLObj.setSourceTables(tables);
 		  
 		  String sqlUpdateCommand = DataObject.SQL_UPDATE_TEMPLATE;
-		  sqlUpdateCommand = createUpdate(sqlUpdateCommand,lSQLObj);
-		  sqlUpdateCommand = createWhere(sqlUpdateCommand,lSQLObj);
-//		  sqlUpdateCommand = createGroupBy(sqlUpdateCommand);
-		  sqlUpdateCommand = createOrderBy(sqlUpdateCommand);
-		  sqlUpdateCommand = createLimit(sqlUpdateCommand);
-		  lSQLObj.setSingleSQLCommands(sqlUpdateCommand);
+		  loadMaxWhereValues(newTable);
+		  sqlUpdateCommand = createUpdate(sqlUpdateCommand,newTable);
+		  sqlUpdateCommand = getUpdateSetValues(newTable,sqlUpdateCommand); //lSQLObj.getValuesForDML(newTable,sqlUpdateCommand);
+		  sqlUpdateCommand = createWhere(sqlUpdateCommand,newTable);
+		  sqlUpdateCommand = createGroupBy(sqlUpdateCommand,newTable);
+		  sqlUpdateCommand = createOrderBy(sqlUpdateCommand,newTable);
+		  sqlUpdateCommand = createLimit(sqlUpdateCommand,newTable);
+//		  lSQLObj.setSingleSQLCommands(sqlUpdateCommand);
+		  lSQLObj.getSQLCommands().add(sqlUpdateCommand);
 
 		}
 		SQLObjectContainer.put(this.getId(), lSQLObj);
 		this.myDataObject.setSQL(SQLObjectContainer);
 	  }
 	  
-	  private String createUpdate(String sqlUpdateCommand, SQLObject lSQLObj){
+	  private String createGroupBy(String sqlUpdateCommand, Table newTable) {
+		// TODO Auto-generated method stub #GROUP_BY#
+		  return sqlUpdateCommand.replaceAll("#GROUP_BY#", "");
+	}
+	private String createUpdate(String sqlUpdateCommand, Table table){
 			StringBuffer sb = new StringBuffer();
 			sb.append(getLeadingTable().getName() );
 			sqlUpdateCommand = sqlUpdateCommand.replaceAll("#TABLE_CONDITION#", sb.toString());
@@ -194,38 +213,69 @@ public class UpdateBase extends StressActionBase implements UpdateAction {
 			return sqlUpdateCommand;
 
 	  }	
-	private String createWhere(String sqlUpdateCommand,SQLObject lSQLObj){
-			if(getMainTable()!= null){
+	private String createWhere(String sqlUpdateCommand,Table table){
+			if(getLeadingTable()!= null){
 			  StringBuffer  whereConditionString = new StringBuffer();
 
-			  loadMaxWhereValues(this.getLeadingTable());
+			  
 			  whereConditionString.append(" WHERE ");
-			  whereConditionString.append(getLeadingTable().parseWhere(lSQLObj.getSQLCommandType()));
+			  whereConditionString.append(getLeadingTable().parseWhere(this.getMyDataObject().SQL_UPDATE));
 			  sqlUpdateCommand = sqlUpdateCommand.replaceAll("#WHERE#", whereConditionString.toString());
 
 			  return sqlUpdateCommand;
 			}
 			return null;
 	}
-	private String createLimit(String sqlSelectCommand) {
+	private String createLimit(String sqlUpdateCommand, Table newTable) {
 	
-			return sqlSelectCommand.replaceAll("#LIMIT#", "");
+			return sqlUpdateCommand.replaceAll("#LIMIT#", "");
 	}
-	  private String createOrderBy(String sqlSelectCommand) {
+	  private String createOrderBy(String sqlUpdateCommand, Table newTable) {
 	
-		return sqlSelectCommand.replaceAll("#ORDER_BY#", "");
+		return sqlUpdateCommand.replaceAll("#ORDER_BY#", "");
 	  }	
-	  private Table getMainTable(){
-			Table table = (Table) getTables()[Utility.getNumberFromRandomMinMax(new Long(0), new Long(getTables().length) ).intValue()];
+//	  private Table getMainTable(){
+//			Table table = (Table) getTables()[Utility.getNumberFromRandomMinMax(new Long(0), new Long(getTables().length) ).intValue()];
+//
+//			if(table != null){
+//				this.setLeadingTable(table);
+//				return getLeadingTable();
+//			}
+//
+//			return table;
+//
+//	  }
+private Table getMainTable(SQLObject lSQl){
+	Table table = (Table) getTables()[Utility.getNumberFromRandomMinMax(new Long(0), new Long(getTables().length) ).intValue()];
 
-			if(table != null){
-				this.setLeadingTable(table);
-				return getLeadingTable();
-			}
+	if(checkIfTableExists(table,lSQl))
+		return getMainTable(lSQl);
+			
+			if(table.getParentTable() != null)
+			  return getMainTable(lSQl);
 
-			return table;
+			
+	this.setLeadingTable(table);
+		return table;
 
+
+	}
+private boolean checkIfTableExists(Table tableIn,SQLObject lSQL){
+	  if(lSQL != null
+			  && lSQL.getSourceTables() != null){
+	  
+	  ArrayList<Table>	tables = (ArrayList)lSQL.getSourceTables();
+	  if(tables == null)
+		  	return false;
+	  
+	  for(Table table:tables){
+		  if(table.getName().equals(tableIn.getName()))
+			  return true;
+	  	}
 	  }
+	  return false;
+	  
+}
 	public Table getLeadingTable() {
 		return leadingTable;
 	}
@@ -265,7 +315,10 @@ public class UpdateBase extends StressActionBase implements UpdateAction {
 					
 					
 				  } catch (SQLException e) {
-					e.printStackTrace();
+						try{String s =new String();PrintWriter pw = new PrintWriter(s);e.printStackTrace(pw);
+						StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error("");
+					}catch(Exception xxxxx){}
+
 				  }
 				  finally{
 					  
@@ -280,7 +333,38 @@ public class UpdateBase extends StressActionBase implements UpdateAction {
 		
 	}
 	
-	
+	private String getUpdateSetValues(Table table,String sqlUpdateCommand){
+		if(table.getUpdateSetAttributes() == null || table.getUpdateSetAttributes().equals(""))
+			return sqlUpdateCommand;
+		StringBuffer sqlValues = new StringBuffer();
+		
+		Attribute[] attribs = this.getAttribs(table, null);
+		for(Attribute attrib:attribs){			
+			if(table.getUpdateSetAttributes().indexOf("#"+attrib.getName()+"#") > -1){
+				if (sqlValues.length() > 1)
+					sqlValues.append(", ");
+
+				if (attrib.getSpecialFunction() == null && !attrib.isAutoIncrement()) {
+
+					attrib.setValue(StressTool
+							.getValueProvider()
+							.provideValue(attrib.getDataType(), new Long(attrib.getUpperLimit())));
+				} else {
+
+					if (attrib.isAutoIncrement()) {
+						attrib.setValue("NULL");
+					} else {
+						attrib.setValue( attrib.getSpecialFunction());
+					}
+				}
+				sqlValues.append(attrib.getName() + "=" + attrib.getValue());
+			}
+			
+		}
+//		sqlValues.insert(0, "SET ");
+		return sqlUpdateCommand.replace("#ATTRIB_VALUE#", sqlValues.toString());
+		
+	}
 	private Attribute[] getAttribs(Table table,String filter) {
 		// TODO Auto-generated method stub
 		if(table != null 

@@ -38,6 +38,7 @@ public class LogProvider {
     private Map loggerMaps = new SynchronizedMap(0);
     public static String LOG_APPLICATION = "APPLICATION";
     public static String LOG_STATS = "STATS";
+    public static String LOG_SQL = "SQL";
     public static String LOG_ACTIONS = "ACTIONS";
     public static String LOG_MONITORS = "MONITORS";
     public static String LOG_PERFORMANCE = "PERFORMANCE";

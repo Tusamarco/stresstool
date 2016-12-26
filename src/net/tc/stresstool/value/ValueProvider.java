@@ -6,6 +6,7 @@ import java.util.Date;
 
 import net.tc.data.db.Attribute;
 import net.tc.data.db.DataType;
+import net.tc.data.db.Table;
 
 public interface ValueProvider {
     
@@ -52,6 +53,6 @@ public interface ValueProvider {
 //	public Calendar getTestCalendar();
 //	public void setTestCalendar(Calendar testCalendar);
 	public Calendar resetCalendar(int timeDays);
-	public Object getValueForRangeOption(Attribute attrib, String rangeCondition, int rangeLength);
+	public Object getValueForRangeOption(Table table,Attribute attrib, String rangeCondition,int rangeLength);
 	public Date getRandomDate(int rangeLength) ;
 }

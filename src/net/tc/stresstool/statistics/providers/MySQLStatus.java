@@ -12,7 +12,9 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Vector;
 
+import net.tc.stresstool.StressTool;
 import net.tc.stresstool.exceptions.StressToolGenericException;
+import net.tc.stresstool.logs.LogProvider;
 import net.tc.stresstool.statistics.StatEvent;
 import net.tc.utils.SynchronizedMap;
 import net.tc.utils.Utility;
@@ -96,7 +98,10 @@ public class MySQLStatus extends MySQLSuper implements StatsProvider, Reporter {
 	    throw new StressToolGenericException(eex);
 	} catch (StressToolGenericException e) {
 	    
-	    e.printStackTrace();
+		try{String s =new String();PrintWriter pw = new PrintWriter(s);e.printStackTrace(pw);
+		StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).error("");
+	}catch(Exception xxxxx){}
+
 	}
       }
       finally
@@ -109,7 +114,10 @@ public class MySQLStatus extends MySQLSuper implements StatsProvider, Reporter {
               return statusReport;
               
           } catch (SQLException ex) {
-              ex.printStackTrace();
+  			try{String s =new String();PrintWriter pw = new PrintWriter(s);ex.printStackTrace(pw);
+  			StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).error("");
+  		}catch(Exception xxxxx){}
+
           }
 
       }
@@ -289,7 +297,10 @@ public class MySQLStatus extends MySQLSuper implements StatsProvider, Reporter {
             pw.println("Number of Threads_running = " + this.getMaxResultByName("Threads_running",false) );
        }
        catch(Throwable th){
-	   th.printStackTrace();
+			try{String s =new String();PrintWriter pw2= new PrintWriter(s);th.printStackTrace(pw2);
+			StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).error("");
+		}catch(Exception xxxxx){}
+
        }
     
             if(flushrowonfile){

@@ -1,6 +1,7 @@
 package net.tc.stresstool.actions;
 
 import java.io.FileReader;
+import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -83,7 +84,10 @@ public class InsertBase extends StressActionBase implements WriteAction,
 		    conn = null;
 		} catch (SQLException e1) {
 		    // TODO Auto-generated catch block
-		    e1.printStackTrace();
+			try{String s =new String();PrintWriter pw = new PrintWriter(s);e1.printStackTrace(pw);
+			StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error("");
+		}catch(Exception xxxxx){}
+
 		}
 
 		
@@ -179,16 +183,18 @@ public class InsertBase extends StressActionBase implements WriteAction,
 				conn = null;
 			    } catch (SQLException e1) {
 				// TODO Auto-generated catch block
-				e1.printStackTrace();
+					try{String s =new String();PrintWriter pw = new PrintWriter(s);e1.printStackTrace(pw);
+					StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error("");
+				}catch(Exception xxxxx){}
+
 			    }
 			}			
 				
 		}
 		catch(Exception e){
-			e.printStackTrace();
-		    ExceptionMessages.setCurrentError(ExceptionMessages.ERROR_FATAL);
-		    try{throw new StressToolConfigurationException(e);}catch(Throwable th){th.printStackTrace();}
-		
+				try{String s =new String();PrintWriter pw = new PrintWriter(s);e.printStackTrace(pw);
+				StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error("");
+			}catch(Exception xxxxx){}
 		}
 		finally{
 		    return schema;
@@ -225,7 +231,10 @@ public class InsertBase extends StressActionBase implements WriteAction,
 		    conn = null;
 		} catch (SQLException e1) {
 		    // TODO Auto-generated catch block
-		    e1.printStackTrace();
+			try{String s =new String();PrintWriter pw = new PrintWriter(s);e1.printStackTrace(pw);
+			StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error("");
+		}catch(Exception xxxxx){}
+
 		}
 
 		
@@ -341,7 +350,10 @@ public class InsertBase extends StressActionBase implements WriteAction,
 	      conn = this.getConnProvider().getSimpleConnection();
         } catch (SQLException e) {
 	      // TODO Auto-generated catch block
-	      e.printStackTrace();
+			try{String s =new String();PrintWriter pw = new PrintWriter(s);e.printStackTrace(pw);
+			StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error("");
+		}catch(Exception xxxxx){}
+
         }
 	  }
 	  else
@@ -374,7 +386,10 @@ public class InsertBase extends StressActionBase implements WriteAction,
 	    try {
 	      this.myDataObject =  inizializeDataObject(new DataObject());
         } catch (StressToolActionException e) {
-	      e.printStackTrace();
+			try{String s =new String();PrintWriter pw = new PrintWriter(s);e.printStackTrace(pw);
+			StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error("");
+		}catch(Exception xxxxx){}
+
         }
      	if(this.myDataObject.isInizialized()){
 //     	 System.out.println(myDataObject.getSqlObjects().keySet().toString());

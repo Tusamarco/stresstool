@@ -1,6 +1,7 @@
 package net.tc.stresstool.statistics.providers;
 
 import java.io.File;
+import java.nio.charset.Charset;
 import java.sql.Connection;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,7 +24,8 @@ import net.tc.stresstool.exceptions.StressToolConfigurationException;
 import net.tc.utils.SynchronizedMap;
 
 public class ConsoleStatePrinter implements StatsProvider,Reporter,Runnable {
-    Terminal terminal = TerminalFacade.createTerminal(System.in, System.out);
+    Terminal terminal = TerminalFacade.createTextTerminal(System.in, System.out, Charset.forName("US-ASCII"));
+//    Terminal terminal = TerminalFacade.createTextTerminal(System.in, System.out, Charset.forName("US-ASCII"));
 //    TerminalSize tSize =new TerminalSize(100,200);
 //    Screen screen = new Screen(terminal, 180,180);
     Screen screen = TerminalFacade.createScreen();
@@ -33,11 +35,20 @@ public class ConsoleStatePrinter implements StatsProvider,Reporter,Runnable {
 	float curPct = (float) 0.0;
     float maxPct = (float) 0.0;
     Launcher launcher = null;
-  
+    int timeForLoop = 1000;
     
     public ConsoleStatePrinter(Launcher launcher){
     	this.launcher = launcher;
+    	
+    	timeForLoop =launcher.getStatIntervalMs();
     	int loops = launcher.getStatLoops()> launcher.getRepeatNumber()?launcher.getStatLoops():launcher.getRepeatNumber();
+    	if(timeForLoop < 1000){
+    		loops = loops * (1000/timeForLoop);
+    	}
+    	else{
+    		loops = loops / (timeForLoop/1000);
+    	}
+    	
     	maxPct = loops;
     	
     	screen.startScreen();
@@ -95,6 +106,13 @@ public class ConsoleStatePrinter implements StatsProvider,Reporter,Runnable {
 
     	
     }
+    public void close(){
+    	
+    	terminal.clearScreen();
+    	screen.stopScreen();
+    	
+    	
+    }
 	public int printLine(int loop){
         curPct=(rows * (loop/maxPct));
         
@@ -110,9 +128,23 @@ public class ConsoleStatePrinter implements StatsProvider,Reporter,Runnable {
             cBarCol = cBarCol+2;
             Map toPrint = null;
             toPrint = getMinMax((String)strAction);
+            
             if(toPrint != null){
-            	float minXl = (rows * ((Long)toPrint.get("MinLoop")/maxPct));
-            	float maxXl = (rows * ((Long)toPrint.get("MaxLoop")/maxPct));
+                Long minLoop = (Long) toPrint.get("MinLoop");
+                Long maxLoop = (Long) toPrint.get("MaxLoop");
+            	
+            	if(this.timeForLoop < 1000){
+            		minLoop = minLoop * (1000/timeForLoop);
+            		maxLoop = maxLoop * (1000/timeForLoop);
+            	}
+            	else{
+            		minLoop = minLoop / (timeForLoop/1000);
+            		maxLoop = maxLoop / (timeForLoop/1000);
+            	}
+
+            	
+            	float minXl = (rows * (minLoop/maxPct));
+            	float maxXl = (rows * (maxLoop/maxPct));
             	int min = new Float((rows - minXl)+2).intValue();
             	int max = new Float((rows - maxXl)+2).intValue();
                 
@@ -131,6 +163,28 @@ public class ConsoleStatePrinter implements StatsProvider,Reporter,Runnable {
                  else 
                      screen.putString(cCol,cRow++,"-", Terminal.Color.WHITE, Terminal.Color.BLACK);
           }
+        }
+        else{
+        	int min = 0;
+        	int max = 0;
+            
+        	screen.putString(cBarCol++, min, "*", Terminal.Color.RED, Terminal.Color.BLACK);
+        	screen.putString(cBarCol++, max, "*", Terminal.Color.GREEN, Terminal.Color.BLACK);
+            
+            
+            String[] valAr = new String[]{"MinLatency","MaxLatency","MinTime","MaxTime","MinLoop","MaxLoop","-"};
+            
+            int cCol = 45;
+
+            for(Object str:valAr){
+             if(!str.equals("-")){
+                 screen.putString(cCol,cRow++, "0", Terminal.Color.GREEN, Terminal.Color.BLACK);
+            }
+             else 
+                 screen.putString(cCol,cRow++,"-", Terminal.Color.WHITE, Terminal.Color.BLACK);
+      }
+        	
+        	
         }
         
         
@@ -201,7 +255,7 @@ public class ConsoleStatePrinter implements StatsProvider,Reporter,Runnable {
 		return values;
 		
 	}
-	public String askQuestion(String question,String exitString, boolean block){
+	public boolean askQuestion(String question,String exitString, boolean block){
 	    screen.putString(28,screen.getTerminalSize().getRows()-1, question, Terminal.Color.WHITE, Terminal.Color.BLACK);
 //	    screen.putString(28,screen.getTerminalSize().getRows()-1, question, Terminal.Color.WHITE, Terminal.Color.BLACK);
 	    screen.setCursorPosition(new TerminalPosition((28 + (question.length())),screen.getTerminalSize().getRows() -1));
@@ -214,13 +268,17 @@ public class ConsoleStatePrinter implements StatsProvider,Reporter,Runnable {
 	    StringBuffer sb = new StringBuffer();
 	    if(block){
         	    while(key == null || key.getKind() != Key.Kind.Enter){
-        		key = screen.readInput();
-        		try {Thread.sleep(100);} catch (InterruptedException e) {}
-        		if(key != null){
-                		sb.append(key.getCharacter());
-                		screen.putString((28 + (question.length())),screen.getTerminalSize().getRows() -1 , sb.toString(), Terminal.Color.WHITE, Terminal.Color.BLACK);
-                		screen.refresh();
-        		}
+        	    	screen.refresh();
+        	    	key = screen.readInput();
+//	        		System.out.println(key!=null?key.getCharacter():"");
+	        		try {Thread.sleep(500);} catch (InterruptedException e) {}
+	        		if(key != null){
+	                		sb.append(key.getCharacter());
+	                		screen.putString((28 + (question.length())),screen.getTerminalSize().getRows() -1 , sb.toString(), Terminal.Color.WHITE, Terminal.Color.BLACK);
+	                		screen.refresh();
+	        		}
+	        		if(sb.toString().equals("y"))
+	        			return false;
         	    }
 	    }
 	    else{
@@ -232,11 +290,11 @@ public class ConsoleStatePrinter implements StatsProvider,Reporter,Runnable {
             		screen.refresh();
     		}
     		if(sb.toString().equals(exitString))
-    		    	return sb.toString();
+    		    	return false;
 	    }
 	    
 	    
-	    return sb.toString();
+	    return true;
 	}
 	@Override
 	public void run() {
