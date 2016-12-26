@@ -8,8 +8,8 @@ public interface ReadAction {
 //    public abstract void getSelectMethod(String method);
 
     
-    public abstract void setLazyness(boolean lazy);
-    public abstract boolean islazyCreation();
+    public abstract void setLazySelect(boolean lazy);
+    public abstract boolean isLazySelect();
     public abstract void setLazyInterval(int interval);
     public abstract int getLazyInterval();
 

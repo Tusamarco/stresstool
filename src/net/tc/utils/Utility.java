@@ -572,6 +572,9 @@ import javax.imageio.ImageIO;
 		 || obj instanceof java.lang.Long)
 	   return true;
 	 
+	 if(obj instanceof java.lang.String)
+		   return false;
+	 
   	 try  
   	 {  
   	    long i = new Long((Long) obj);  

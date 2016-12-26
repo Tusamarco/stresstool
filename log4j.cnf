@@ -4,10 +4,13 @@ stresstool.log.dir=/tmp/statlogs
 stresstool.log.file=stresstool.log
 
 #log4j.logger.APPLICATION=INFO,console,APPLICATION
-log4j.logger.APPLICATION=info,console,APPLICATION
-log4j.logger.ACTIONS=info,console,ACTIONS
-log4j.logger.MONITORS=INFO,MONITORS
+log4j.logger.APPLICATION=INFO,console,APPLICATION
+log4j.logger.ACTIONS=INFO,console
+#,ACTIONS
+log4j.logger.MONITORS=ERROR,MONITORS
 log4j.logger.STATS=INFO,STATS
+log4j.logger.SQL=ERROR,SQL 
+#,SQL
 log4j.logger.PERFORMANCE=ERROR,console,PERFORMANCE
 
 # Define the root logger to the system property "stresstool.root.logger".
@@ -52,6 +55,16 @@ log4j.appender.STATS.layout=org.apache.log4j.PatternLayout
 log4j.appender.STATS.layout.ConversionPattern=%m%n
 #log4j.appender.STATS.layout.ConversionPattern=%d{ISO8601} %-5p %c{2} (%F:%M(%L)) - %m%n
 
+#
+# SQL Appender
+#
+log4j.appender.SQL=org.apache.log4j.RollingFileAppender
+log4j.appender.SQL.File=${stresstool.log.dir}/SQL.log
+log4j.appender.SQL.MaxFileSize=50MB
+log4j.appender.SQL.MaxBackupIndex=30
+log4j.appender.SQL.layout=org.apache.log4j.PatternLayout
+log4j.appender.SQL.layout.ConversionPattern=%m%n
+#log4j.appender.SQL.layout.ConversionPattern=%d{ISO8601} %-5p %c{2} (%F:%M(%L)) - %m%n
 
 #
 # console

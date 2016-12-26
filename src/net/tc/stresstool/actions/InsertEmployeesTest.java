@@ -752,7 +752,7 @@ public class InsertEmployeesTest extends StressActionBase implements WriteAction
 
   public DataObject inizializeDataObject(DataObject thisSQLObject)
 	  throws StressToolActionException {
-	thisSQLObject.setSqlType(DataObject.SQL_CREATE);
+	thisSQLObject.setSqlType(DataObject.SQL_INSERT);
 	thisSQLObject.setBatchLoopLimit(this.getBatchSize());
 	thisSQLObject.setLazy(this.lazyCreation);
 	thisSQLObject.setLazyInterval(lazyInterval);
@@ -814,7 +814,7 @@ public class InsertEmployeesTest extends StressActionBase implements WriteAction
 	  SQLObject lSQLObj = new SQLObject();
 	  lSQLObj.setBatched(this.getBatchSize() > 1 ? true : false);
 	  lSQLObj.setPreparedStatment(false);
-	  lSQLObj.setSQLCommandType(DataObject.SQL_CREATE);
+	  lSQLObj.setSQLCommandType(DataObject.SQL_INSERT);
 	  lSQLObj.setBatchLoops(this.batchSize);
 	  lSQLObj.addSourceTables((Table)table);
 

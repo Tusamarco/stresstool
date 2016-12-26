@@ -19,8 +19,8 @@ public class Attribute {
 	private int storageSize = 0 ; //size in bytes
 	private boolean isLazy = true ; 
 	private String specialFunction = null;
-	private int upperLimit = 0 ;
-
+	private Long upperLimit = new Long(0) ;
+	private Long actionLimit = new Long(0);
 	
 	
     private boolean isNull = true;
@@ -167,13 +167,33 @@ public class Attribute {
 	/**
 	 * @return the upperLimit
 	 */
-	public int getUpperLimit() {
-	  return upperLimit;
+	public long getUpperLimit() {
+		if(upperLimit > 0)
+			return upperLimit;
+		if (value != null 
+				&& this.dataType.getDataTypeCategory() ==1){
+			if(value instanceof Integer)
+				upperLimit = new Long((Integer)value).longValue();
+			else if(value instanceof Long)
+				upperLimit = new Long((Long)value).longValue();
+			else
+				upperLimit = new Long(Long.MAX_VALUE).longValue();
+		}
+//		else if(value == null 
+//				&& this.dataType.getDataTypeCategory() ==1){
+//			if(value instanceof Integer)
+//				upperLimit = new Long(Integer.MAX_VALUE).longValue();
+//			else
+//				upperLimit = new Long(Long.MAX_VALUE).longValue();
+//		
+//		}
+			
+		return upperLimit;
 	}
 	/**
 	 * @param upperLimit the upperLimit to set
 	 */
-	public void setUpperLimit(int upperLimit) {
+	public void setUpperLimit(Long upperLimit) {
 	  this.upperLimit = upperLimit;
 	}
 }

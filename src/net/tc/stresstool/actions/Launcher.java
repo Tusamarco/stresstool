@@ -1,5 +1,6 @@
 package net.tc.stresstool.actions;
 
+import java.io.PrintWriter;
 import java.lang.ref.SoftReference;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Calendar;
@@ -85,7 +86,10 @@ public class Launcher {
 		init(config.getConfiguration(Configurator.MAIN_SECTION_NAME, StressTool.class));
 	    } catch (StressToolException e) {
 		// TODO Auto-generated catch block
-		e.printStackTrace();
+			try{String s =new String();PrintWriter pw = new PrintWriter(s);e.printStackTrace(pw);
+			StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error("");
+		}catch(Exception xxxxx){}
+
 	    }
 	    	    
 	}
@@ -180,11 +184,17 @@ public class Launcher {
 	} 
 	catch (StressToolConfigurationException e) {
 	    // TODO Auto-generated catch block
-	    e.printStackTrace();
+		try{String s =new String();PrintWriter pw = new PrintWriter(s);e.printStackTrace(pw);
+		StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error("");
+	}catch(Exception xxxxx){}
+
 	}
 	catch (StressToolException e) {
 	    // TODO Auto-generated catch block
-	    e.printStackTrace();
+		try{String s =new String();PrintWriter pw = new PrintWriter(s);e.printStackTrace(pw);
+		StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error("");
+	}catch(Exception xxxxx){}
+
 	}
 
 	
@@ -230,20 +240,29 @@ public class Launcher {
 		}
 
 	    } catch (StressToolException e) {
-		e.printStackTrace();
+			try{String s =new String();PrintWriter pw = new PrintWriter(s);e.printStackTrace(pw);
+			StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error("");
+		}catch(Exception xxxxx){}
+
 	    } catch (InstantiationException e) {
 		try {
 		    throw new StressToolConfigurationException(e);
 		} catch (StressToolConfigurationException e1) {
 		    // TODO Auto-generated catch block
-		    e1.printStackTrace();
+			try{String s =new String();PrintWriter pw = new PrintWriter(s);e1.printStackTrace(pw);
+			StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error("");
+		}catch(Exception xxxxx){}
+
 		}
 	    } catch (IllegalAccessException e) {
 		try {
 		    throw new StressToolConfigurationException(e);
 		} catch (StressToolConfigurationException e1) {
 		    // TODO Auto-generated catch block
-		    e1.printStackTrace();
+			try{String s =new String();PrintWriter pw = new PrintWriter(s);e1.printStackTrace(pw);
+			StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error("");
+		}catch(Exception xxxxx){}
+
 		}
 	    } catch (ClassNotFoundException e) {
 		try {
@@ -252,13 +271,19 @@ public class Launcher {
 		    			"Check the configuration and remove class declaration if Provider is not available.");
 		} catch (StressToolConfigurationException e1) {
 		    // TODO Auto-generated catch block
-		    e1.printStackTrace();
+			try{String s =new String();PrintWriter pw = new PrintWriter(s);e1.printStackTrace(pw);
+			StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error("");
+		}catch(Exception xxxxx){}
+
 		}
 		try {
 		    throw new StressToolConfigurationException(e);
 		} catch (StressToolConfigurationException e1) {
 		    // TODO Auto-generated catch block
-		    e1.printStackTrace();
+			try{String s =new String();PrintWriter pw = new PrintWriter(s);e1.printStackTrace(pw);
+			StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error("");
+		}catch(Exception xxxxx){}
+
 		}
 	    }
 	}
@@ -298,7 +323,10 @@ public class Launcher {
     
 	    
 	    
-        }catch(Exception ex1){ex1.printStackTrace();}
+        }catch(Exception ex1){				try{String s =new String();PrintWriter pw = new PrintWriter(s);ex1.printStackTrace(pw);
+		StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error("");
+	}catch(Exception xxxxx){}
+}
 	
 //	if(writeImplementationMap != null 
 //		&& writeImplementationMap.size() > 0 
@@ -463,7 +491,10 @@ public class Launcher {
 	   try {Thread.sleep(1000);
 	   StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).info("Countdown to start the threads ("+ this.getSemaphoreCountdownTime() +") current : "+ (getSemaphoreCountdownTime() - ic));
 	    latch.countDown();
-	   } catch (Exception e) {e.printStackTrace();}
+	   } catch (Exception e) {				try{String s =new String();PrintWriter pw = new PrintWriter(s);e.printStackTrace(pw);
+		StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error("");
+	}catch(Exception xxxxx){}
+}
 	    
 	}
 //	this.LaunchActions();
@@ -724,19 +755,22 @@ public class Launcher {
 		    return true;
 		} 
 		catch (InvocationTargetException e) {
-			e.printStackTrace();
-		    ExceptionMessages.setCurrentError(ExceptionMessages.ERROR_FATAL);
-		    throw new StressToolConfigurationException(e);
+			try{String s =new String();PrintWriter pw = new PrintWriter(s);e.printStackTrace(pw);
+			StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error("");
+		}catch(Exception xxxxx){}
 		}
 		catch (NoSuchMethodException e) {
-			e.printStackTrace();
-			ExceptionMessages.setCurrentError(ExceptionMessages.ERROR_FATAL);
-		    throw new StressToolConfigurationException(e);
+			try{String s =new String();PrintWriter pw = new PrintWriter(s);e.printStackTrace(pw);
+			StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error("");
+		}catch(Exception xxxxx){}
+
+			
 		}
 		catch (InstantiationException e) {
-			e.printStackTrace();
-			ExceptionMessages.setCurrentError(ExceptionMessages.ERROR_FATAL);
-		    throw new StressToolConfigurationException(e);
+			try{String s =new String();PrintWriter pw = new PrintWriter(s);e.printStackTrace(pw);
+			StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error("");
+		}catch(Exception xxxxx){}
+
 		    
 		} catch (IllegalAccessException e) {
 		    
@@ -749,11 +783,17 @@ public class Launcher {
 		
     	}catch (StressToolConfigurationException e) {
         	    // TODO Auto-generated catch block
-    	    e.printStackTrace();
+			try{String s =new String();PrintWriter pw = new PrintWriter(s);e.printStackTrace(pw);
+			StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error("");
+		}catch(Exception xxxxx){}
+
     	}
     	catch (StressToolException e) {
     	    // TODO Auto-generated catch block
-    	    e.printStackTrace();
+			try{String s =new String();PrintWriter pw = new PrintWriter(s);e.printStackTrace(pw);
+			StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error("");
+		}catch(Exception xxxxx){}
+
     	}
 	return false;
     }
@@ -955,7 +995,8 @@ public class Launcher {
 					    BeanUtils.setProperty((readImplementation), propertyName, 
 					    	config.getConfiguration(selectClass,StressTool.class).getParameter(propertyName).getValue());
 					    StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).debug(readImplementation.getClass().getName() + " " +
-					    		propertyName + " = " + config.getConfiguration(selectClass,StressTool.class).getParameter(propertyName).getValue());
+					    		propertyName + " = " + config.getConfiguration(selectClass,StressTool.class).getParameter(propertyName).getValue() + "  "
+					    +  BeanUtils.getProperty(readImplementation,propertyName).toString() );
 		    			
 					}
 				    	else{
@@ -986,13 +1027,22 @@ public class Launcher {
 	      
         } catch (InstantiationException e) {
 	      // TODO Auto-generated catch block
-	      e.printStackTrace();
+			try{String s =new String();PrintWriter pw = new PrintWriter(s);e.printStackTrace(pw);
+			StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error("");
+		}catch(Exception xxxxx){}
+
         } catch (IllegalAccessException e) {
 	      // TODO Auto-generated catch block
-	      e.printStackTrace();
+			try{String s =new String();PrintWriter pw = new PrintWriter(s);e.printStackTrace(pw);
+			StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error("");
+		}catch(Exception xxxxx){}
+
         } catch (ClassNotFoundException e) {
 	      // TODO Auto-generated catch block
-	      e.printStackTrace();
+			try{String s =new String();PrintWriter pw = new PrintWriter(s);e.printStackTrace(pw);
+			StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error("");
+		}catch(Exception xxxxx){}
+
         }
 	  }
 	  return null;

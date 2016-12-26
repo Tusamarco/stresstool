@@ -97,8 +97,11 @@ public class StructureDefinitionParserMySQL implements
 					table.setRowFormat(oTable.get("rowformat")!=null?(String)oTable.get("rowformat"):"");
 					table.setDataDirectory(oTable.get("datadir")!=null?(String)oTable.get("datadir"):"");
 					table.setTableSpace(oTable.get("tablespace")!=null?(String)oTable.get("tablespace"):"");
-					table.setWhereCondition(oTable.get("wherecondition")!=null?(String)oTable.get("wherecondition"):"");
+					table.setWhereConditionS(oTable.get("wherecondition_s")!=null?(String)oTable.get("wherecondition_s"):"");
+					table.setWhereConditionU(oTable.get("wherecondition_u")!=null?(String)oTable.get("wherecondition_u"):"");
+					table.setWhereConditionD(oTable.get("wherecondition_d")!=null?(String)oTable.get("wherecondition_d"):"");
 					table.setSelectCondition(oTable.get("selectcondition")!=null?(String)oTable.get("selectcondition"):"");
+					table.setUpdateSetAttributes(oTable.get("updatesetattributes")!=null?(String)oTable.get("updatesetattributes"):""); 
 					
 					
 					/*
@@ -187,12 +190,11 @@ public class StructureDefinitionParserMySQL implements
 						attribute.setDataDimension((String)oAttribute.get("datadimension")!= null?Integer.parseInt((String)oAttribute.get("datadimension")):0);
 						attribute.setAutoIncrement(oAttribute.get("autoincrement")!= null?true:false);
 						attribute.setSpecialFunction(oAttribute.get("specialFunction")!= null?(String)oAttribute.get("specialFunction"):null);
-						attribute.setUpperLimit(oAttribute.get("upperlimit")!= null?Integer.parseInt((String)oAttribute.get("upperlimit")):0);
-						
-						
+						attribute.setUpperLimit(oAttribute.get("upperlimit")!= null?Long.parseLong((String)oAttribute.get("upperlimit")):0);
+												
 						if(attribute.getDataType().getDataTypeCategory() == DataType.STRING_CATEGORY 
 							&& attribute.getUpperLimit() < 1){
-						  attribute.setUpperLimit(attribute.getDataDimension());
+						  attribute.setUpperLimit(new Long(attribute.getDataDimension()));
 						}
 						
 						if(oAttribute.get("default") != null 

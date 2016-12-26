@@ -16,6 +16,7 @@
 					"datadir":"",
 					"rowformat":"dynamic",
 					"multiple":true,
+					"selectcondition":"autoinc,uuid,serverid,a,b,c,counter,time,partitionid,date,strrecordtype",
 					"wherecondition":" #a# = #?a?# and #date# #?date_RANGE_OPTION_BETWEEN?# and #b# like #?b?# ", 
 					"keys":
 							{
@@ -95,7 +96,7 @@
 						"starttime":"2015-11-01",
 						"endtime":"2016-12-31",
 						"partitions":"0",
-						"lists":{"list":[]}
+						"lists":{"list":[]},
 						"ranges":{"range":[]}
 	
 					}
@@ -149,7 +150,7 @@
 						"starttime":"",
 						"endtime":"",
 						"partitions":"15",
-						"lists":{"list":[]}
+						"lists":{"list":[]},
 						"ranges":{"range":[]}
 	
 					}
@@ -204,7 +205,7 @@
 						"starttime":"",
 						"endtime":"",
 						"partitions":"8",
-						"lists":{"list":[]}
+						"lists":{"list":[]},
 						"ranges":{"range":[]}
 	
 					}
@@ -265,7 +266,7 @@
 							{"name":"pMidHigh","value":"14,15,16,17,18,19,20"},
 							{"name":"pHigh","value":"21,22,23,24,25,26,27,28,29,30,31,32,33"},
 							{"name":"pUltraHigh","value":"34,35,36,37,38,39,40,41,42,43,44"}
-						]}
+						]},
 						"ranges":{"range":[]}
 	
 					}

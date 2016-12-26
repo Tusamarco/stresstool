@@ -1,5 +1,6 @@
 package net.tc.stresstool.actions;
 
+import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
@@ -560,7 +561,10 @@ public class StressActionBase implements StressAction, Runnable {
 	                setActiveConnection(getConnProvider().getSimpleConnection());
                   } catch (SQLException e) {
 	                // TODO Auto-generated catch block
-	                e.printStackTrace();
+      				try{String s =new String();PrintWriter pw = new PrintWriter(s);e.printStackTrace(pw);
+    				StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error(s);
+    			}catch(Exception xxxxx){xxxxx.printStackTrace();}
+
                   }
         	    }
         	    
@@ -572,10 +576,13 @@ public class StressActionBase implements StressAction, Runnable {
         			try {
         			    long startLatency = System.currentTimeMillis();
         			    try {
-        			      		ExecuteAction();
+        			      		this.ExecuteAction();
 				    } catch (StressToolActionException e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
+						try{String s =new String();PrintWriter pw = new PrintWriter(s);e.printStackTrace(pw);
+						StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error("");
+					}catch(Exception xxxxx){xxxxx.printStackTrace();}
+
 				    }
       			    
         			    long endLatency = System.currentTimeMillis();
@@ -584,11 +591,18 @@ public class StressActionBase implements StressAction, Runnable {
         			    // for debug only Thread.sleep(Utility.getNumberFromRandomMinMax(10,500));
         			} catch (Exception e) {
         			    // TODO Auto-generated catch block
-        			    e.printStackTrace();
+        				try{
+        					String s =new String();
+        					PrintWriter pw = new PrintWriter(s);
+        					e.printStackTrace(pw);
+        					StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error(s);
+        			}catch(Exception exx){exx.printStackTrace();}
+        				
         			}
         			long endRunTime = System.currentTimeMillis();
         			this.getTHInfo().setExecutionTime(endRunTime - startRunTime);
         			this.getTHInfo().setCurrentLoop(i);
+        			
         			if(!StressTool.isStressToolRunning())
         			    break;
         			    
@@ -605,10 +619,16 @@ public class StressActionBase implements StressAction, Runnable {
 
         	} catch (InterruptedException e) {
         	    // TODO Auto-generated catch block
-        	    e.printStackTrace();
+				try{String s =new String();PrintWriter pw = new PrintWriter(s);e.printStackTrace(pw);
+				StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error("");
+			}catch(Exception xxxxx){}
+
         	} catch (StressToolActionException e1) {
 				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				try{String s =new String();PrintWriter pw = new PrintWriter(s);e1.printStackTrace(pw);
+				StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error("");
+			}catch(Exception xxxxx){}
+
 			} 
         	
         	    

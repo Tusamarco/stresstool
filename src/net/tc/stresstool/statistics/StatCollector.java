@@ -3,6 +3,7 @@ package net.tc.stresstool.statistics;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
+import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -96,7 +97,10 @@ public class StatCollector {
 
 	    } catch (StressToolException e) {
 		// TODO Auto-generated catch block
-		e.printStackTrace();
+			try{String s =new String();PrintWriter pw = new PrintWriter(s);e.printStackTrace(pw);
+			StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).error("");
+		}catch(Exception xxxxx){}
+
 	    }
 	    
 	    
@@ -173,7 +177,10 @@ if (StressTool.getLogProvider().getLogger(LogProvider.LOG_PERFORMANCE)
 		}
 
 	    } catch (StressToolException e) {
-		e.printStackTrace();
+			try{String s =new String();PrintWriter pw = new PrintWriter(s);e.printStackTrace(pw);
+			StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).error("");
+		}catch(Exception xxxxx){}
+
 	    } catch (InstantiationException e) {
 		throw new StressToolConfigurationException(e);
 	    } catch (IllegalAccessException e) {
@@ -240,7 +247,10 @@ if (StressTool.getLogProvider().getLogger(LogProvider.LOG_PERFORMANCE)
 				+ " this is the " + ic + " attempt, try again \n");
 		  } catch (StressToolException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+				try{String s =new String();PrintWriter pw = new PrintWriter(s);e.printStackTrace(pw);
+				StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).error("");
+			}catch(Exception xxxxx){}
+
 		  }
 
 		  if(statColl.processCollectedEvents(sp.getProviderName(),values)){

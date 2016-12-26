@@ -1,10 +1,14 @@
-package net.tc.stresstool.actions;
+	package net.tc.stresstool.actions;
 
+import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
+
+import com.mysql.jdbc.Statement;
 
 import net.tc.data.db.Attribute;
 import net.tc.data.db.Table;
@@ -28,7 +32,7 @@ public class SelectBase extends StressActionBase implements ReadAction{
   private int numberOfIntervalKeys =0 ;
   private String selectFilterMethod = "range"; // #range|in|match
   private int sleepSelect = 0; 
-
+              
   private int numberOfprimaryTables=1;
   private int numberOfSecondaryTables=0;
   private boolean lazySelect=true;
@@ -94,8 +98,8 @@ public class SelectBase extends StressActionBase implements ReadAction{
   public int getNumberOfprimaryTables() {
 	return numberOfprimaryTables;
   }
-  public void setNumberOfprimaryTables(int numberOfprimaryTables) {
-	this.numberOfprimaryTables = numberOfprimaryTables;
+  public void setNumberOfprimaryTables(int InnumberOfprimaryTables) {
+	this.numberOfprimaryTables = InnumberOfprimaryTables;
   }
   public int getNumberOfSecondaryTables() {
 	return numberOfSecondaryTables;
@@ -108,29 +112,21 @@ public class SelectBase extends StressActionBase implements ReadAction{
 	dataProviders =dataProviderIn;
 
   }
-  @Override
-  public void setLazyness(boolean lazy) {
-	lazySelect = lazy;
-
-  }
-  @Override
-  public boolean islazyCreation() {
-	return lazySelect;
-  }
-  @Override
+  
+  
   public void setLazyInterval(int interval) {
 	lazyInterval = interval;
 
   }
-  @Override
+  
   public int getLazyInterval() {
 	return lazyInterval;
   }
-  @Override
+  
   public int getSleepRead() {
 	return sleepSelect;
   }
-  @Override
+  
   public void setSleepRead(int sleepRead) {
 	sleepSelect = sleepRead;
 
@@ -157,7 +153,10 @@ public class SelectBase extends StressActionBase implements ReadAction{
 	  try {
 		conn = this.getConnProvider().getSimpleConnection();
 	  } catch (SQLException e) {
-		e.printStackTrace();
+			try{String s =new String();PrintWriter pw = new PrintWriter(s);e.printStackTrace(pw);
+			StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error("");
+		}catch(Exception xxxxx){}
+
 	  }
 	}
 	else{
@@ -176,7 +175,6 @@ public class SelectBase extends StressActionBase implements ReadAction{
 	}
 	this.myDataObject.executeSqlObject(this.getActionCode(),(com.mysql.jdbc.Connection) conn);
 	if(!this.isStickyconnection()){
-
 	  getConnProvider().returnConnection((com.mysql.jdbc.Connection)conn);
 	}
 
@@ -197,23 +195,30 @@ public class SelectBase extends StressActionBase implements ReadAction{
   
   public void getSelectObject() {
 	SQLObject lSQLObj = new SQLObject() ;
+	lSQLObj.setSQLCommandType(DataObject.SQL_READ);
 	SynchronizedMap SQLObjectContainer = new SynchronizedMap();
 
 	if(getBatchSize() < 1){
 	  setBatchSize(1);
 	}
 
-	for(int batchRun = 0 ; batchRun <= getBatchSize(); batchRun++){
+	for(int batchRun = 0 ; batchRun < getBatchSize(); batchRun++){
 	  ArrayList tables = new ArrayList();
-	  tables.add(getMainTable());
+	  Table newTable = getMainTable(lSQLObj);
+	  newTable.setJoinTables(this.filterSubTables(newTable, this.getTables()));
+	  tables.add(newTable);
 	  lSQLObj.setSourceTables(tables);
+	  
 	  String sqlSelectCommand = DataObject.SQL_SELECT_TEMPLATE;
-	  sqlSelectCommand = createSelect(sqlSelectCommand,lSQLObj);
-	  sqlSelectCommand = createWhere(sqlSelectCommand);
-	  sqlSelectCommand = createGroupBy(sqlSelectCommand);
-	  sqlSelectCommand = createOrderBy(sqlSelectCommand);
-	  sqlSelectCommand = createLimit(sqlSelectCommand);
-	  lSQLObj.setSingleSQLCommands(sqlSelectCommand);
+	  loadMaxWhereValues(newTable);
+	  sqlSelectCommand = createSelect(sqlSelectCommand,newTable);
+	  sqlSelectCommand = createWhere(sqlSelectCommand,newTable);
+	  sqlSelectCommand = createGroupBy(sqlSelectCommand,newTable);
+	  sqlSelectCommand = createOrderBy(sqlSelectCommand,newTable);
+	  sqlSelectCommand = createLimit(sqlSelectCommand,newTable);
+	  lSQLObj.getSQLCommands().add(sqlSelectCommand);
+	  
+//	  lSQLObj.setSingleSQLCommands(sqlSelectCommand);
 
 	}
 	SQLObjectContainer.put(this.getId(), lSQLObj);
@@ -221,20 +226,19 @@ public class SelectBase extends StressActionBase implements ReadAction{
   }
 
 
-  private String createLimit(String sqlSelectCommand) {
+  private String createLimit(String sqlSelectCommand,Table table) {
 
 	return sqlSelectCommand.replaceAll("#LIMIT#", "");
   }
-  private String createOrderBy(String sqlSelectCommand) {
+  private String createOrderBy(String sqlSelectCommand,Table table) {
 
 	return sqlSelectCommand.replaceAll("#ORDER_BY#", "");
   }
-  private String createGroupBy(String sqlSelectCommand) {
+  private String createGroupBy(String sqlSelectCommand,Table table) {
 	// TODO Auto-generated method stub
 	return sqlSelectCommand.replaceAll("#GROUP_BY#", "");
   }
   private Attribute[] getAttribs(Table table,String filter) {
-	// TODO Auto-generated method stub
 	if(table != null 
 		&& table.getMetaAttributes()!=null
 		&& table.getMetaAttributes().size() >0 ){
@@ -261,48 +265,85 @@ public class SelectBase extends StressActionBase implements ReadAction{
 	return null;
   }
 
-  private Table getMainTable(){
+  private Table getMainTable(SQLObject lSQl){
 	Table table = (Table) getTables()[Utility.getNumberFromRandomMinMax(new Long(0), new Long(getTables().length) ).intValue()];
 
+	if(checkIfTableExists(table,lSQl))
+		return getMainTable(lSQl);
+	
 	if(table.getParentTable() != null)
-	  return getMainTable();
+	  return getMainTable(lSQl);
 
+	
 	this.setSelectLeadingTable(table);
 	return table;
 
 
   }
-  private Table getSecondary(){
-	Table table = (Table) getTables()[Utility.getNumberFromRandomMinMax(new Long(0), new Long(getTables().length) ).intValue()];
-	if(table.getParentTable() == null)
-	  return getMainTable();
-
-
-	return table;
-
-
+//  private Table getSecondary(Table mainTable){
+//	if(mainTable.getJoinTables() != null && mainTable.getJoinTables().size() > 0  ){
+//		Table table = (Table) getTables()[Utility.getNumberFromRandomMinMax(new Long(0), new Long(mainTable.getJoinTables().size()) ).intValue()];
+//		return table;
+//	}
+//
+//
+//	return null;
+//
+//
+//  }
+  private boolean checkIfTableExists(Table tableIn,SQLObject lSQL){
+	  if(lSQL != null
+			  && lSQL.getSourceTables() != null){
+	  
+	  ArrayList<Table>	tables = (ArrayList)lSQL.getSourceTables();
+	  if(tables == null)
+		  	return false;
+	  
+	  for(Table table:tables){
+		  if(table.getName().equals(tableIn.getName()))
+			  return true;
+	  	}
+	  }
+	  return false;
+	  
   }
-  private String getJoinCondition(SQLObject lSQLObj){
-	String condition = null;
+  
+  ArrayList<Table> filterSubTables(Table parentTable, Table[] tables) {
+	  ArrayList<Table> subTables = new ArrayList();
+	  for(Table table:tables){
+		  
+		  if(table.getParentTable() !=null
+				  && !parentTable.getName().equals(table.getName())
+				  && parentTable.getName().indexOf(table.getParentTable()) > -1){
+			  subTables.add(table);
+		  }
+		  
+		
+	}
+	  // TODO Auto-generated method stub
+	return subTables;
+}
+private String getJoinCondition(Table table){
+	String condition = "";
 	int tablesToJoin = this.getNumberOfJoinTables();
 	String joinField = this.getJoinField();
 	//	  String joinCondition = this.getJoinCondition();
 
-	Table mainTable = (Table) lSQLObj.getSourceTables().get(0);
+	Table mainTable = table;
 
-	Table[] secondaryTable = new Table[tablesToJoin];
+	ArrayList<Table> secondaryTable = table.getJoinTables();
 
-	condition = mainTable.getName();
+	if(condition != null && !condition.equals(""))
+		condition = mainTable.getName();
+	
 	for (int iJ = 0 ; iJ < tablesToJoin ; iJ++){
-	  secondaryTable[iJ]= getSecondary();
+	 if(iJ < mainTable.getJoinTables().size()){	
 	  condition += " LEFT JOIN  " 
-		  + secondaryTable[iJ].getName()
+		  + secondaryTable.get(iJ).getName()
 		  + " ON " + mainTable.getName() + "." + joinField
-		  + " = " + secondaryTable[iJ].getName() + "." + joinField ;
+		  + " = " + secondaryTable.get(iJ).getName() + "." + joinField ;
+	 	}
 	}
-	this.setSelectJoinTables(secondaryTable);
-
-
 	return condition;
 
   }
@@ -331,16 +372,18 @@ public class SelectBase extends StressActionBase implements ReadAction{
 	this.selectJoinTables = selectJoinTables;
   }
 
-  private String createSelect(String sqlSelectCommand, SQLObject lSQLObj){
+  private String createSelect(String sqlSelectCommand, Table table){
 	StringBuffer sb = new StringBuffer();
 
 
 	//	  select.replaceAll("", replacement);
-	getMainTable();
-	sb.append( getSelectLeadingTable().getSelectCondition());
-	sb.append( " FROM " + getSelectLeadingTable().getName() );
+	//getMainTable();
+	if(table == null )
+		return null;
+	sb.append(table.parseSelectCondition());
+	sb.append( " FROM " + table.getName() );
 	if(this.getNumberOfJoinTables() > 0 ){
-	  sb.append(" " + this.getJoinCondition(lSQLObj));
+	  sb.append(" " + this.getJoinCondition(table));
 	}
 
 	sqlSelectCommand = sqlSelectCommand.replaceAll("#TABLE_CONDITION#", sb.toString());
@@ -349,12 +392,13 @@ public class SelectBase extends StressActionBase implements ReadAction{
 
   }
 
-  private String createWhere(String sqlSelectCommand){
-	if(getSelectLeadingTable()!= null){
+  private String createWhere(String sqlSelectCommand,Table table){
+	  
+	if(table!= null){
 	  StringBuffer  whereConditionString = new StringBuffer();
-
+ 
 	  whereConditionString.append(" WHERE ");
-	  whereConditionString.append(getSelectLeadingTable().parseWhere());
+	  whereConditionString.append(table.parseWhere(DataObject.SQL_READ));
 	  sqlSelectCommand = sqlSelectCommand.replaceAll("#WHERE#", whereConditionString.toString());
 
 	  return sqlSelectCommand;
@@ -397,4 +441,61 @@ public class SelectBase extends StressActionBase implements ReadAction{
   public void setTextAttributeMaxSearchlength(int textAttributeMaxSearchlength) {
     this.textAttributeMaxSearchlength = textAttributeMaxSearchlength;
   }	
+	private void loadMaxWhereValues(Table table){
+		// TODO Add method to load values from max value in tables.
+		ArrayList<Attribute> maxAttribute =  new ArrayList();
+		table.parseAttributeWhere(table.getWhereCondition(this.getMyDataObject().SQL_READ), maxAttribute);
+		StringBuffer sb = new StringBuffer();
+		
+		for(Object attrib : (Object[]) (maxAttribute.toArray())){
+				if (sb.length() > 1)
+					sb.append(",");
+				sb.append("MAX("+ ((Attribute)attrib).getName() +") as " +((Attribute)attrib).getName()+" ");
+		}	
+			String SQL = "Select " + sb.toString() + " FROM " + table.getName();
+			if(sb.length() > 1){
+				Connection conn = null;
+				if(this.getActiveConnection()==null){
+				  try {
+					conn = this.getConnProvider().getSimpleConnection();
+					Statement stmt = (Statement) conn.createStatement();
+					ResultSet rs = stmt.executeQuery(SQL);
+					if(rs != null ){
+						while (rs.next()){
+							for(Object attrib : (Object[]) (maxAttribute.toArray())){
+								if(((Attribute)attrib).getValue()== null){
+									((Attribute)attrib).setValue(rs.getObject(((Attribute)attrib).getName()));
+									table.getMetaAttributes().put(((Attribute)attrib).getName(), ((Attribute)attrib));
+								}
+							}
+						}
+					}
+					
+					
+				  } catch (SQLException e) {
+						try{String s =new String();PrintWriter pw = new PrintWriter(s);e.printStackTrace(pw);
+						StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error("");
+					}catch(Exception xxxxx){}
+
+				  }
+				  finally{
+					  
+					  this.getConnProvider().returnConnection((com.mysql.jdbc.Connection) conn);
+				  }
+				}
+				
+				
+			
+		}
+//		List<String> list = new ArrayList<String>(Arrays.asList(string.split(" , ")));
+		
+	}
+	public DataObject getMyDataObject() {
+		return myDataObject;
+	}
+	public void setMyDataObject(DataObject myDataObject) {
+		this.myDataObject = myDataObject;
+	}
+
+
 }

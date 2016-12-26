@@ -1,5 +1,6 @@
 package net.tc.stresstool.value;
 
+import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.Calendar;
@@ -8,6 +9,9 @@ import java.util.Random;
 
 import net.tc.data.db.Attribute;
 import net.tc.data.db.DataType;
+import net.tc.data.db.Table;
+import net.tc.stresstool.StressTool;
+import net.tc.stresstool.logs.LogProvider;
 import net.tc.utils.TimeTools;
 import net.tc.utils.Utility;
 
@@ -172,7 +176,11 @@ public class BasicValueProvider implements ValueProvider {
       default: throw new IllegalArgumentException("Invalid data type Category : " + dataType.getDataTypeCategory());
     	
     }
-	}catch(Throwable e){e.printStackTrace();}
+	}catch(Throwable e){			
+		try{String s =new String();PrintWriter pw = new PrintWriter(s);e.printStackTrace(pw);
+	StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).error("");
+}catch(Exception xxxxx){}
+;}
 	return null;
 	
   }
@@ -257,7 +265,21 @@ public class BasicValueProvider implements ValueProvider {
 	 return TimeTools.getCalendarFromCalendarDateAddDays(BasicValueProvider.getTestCalendar(),Utility.getNumberFromRandomMinMax(-100, 100).intValue()).getTime();
 	
   }
+  @Override
+  public Date getRandomDate(int rangeLength) {
+	 return TimeTools.getCalendarFromCalendarDateAddDays(BasicValueProvider.getTestCalendar(),Utility.getNumberFromRandomMinMax(-rangeLength, rangeLength).intValue()).getTime();
+	
+  }
+  public Date getRandomDate(int rangeLength,Calendar cal) {
+	 if(cal == null)
+		 return getRandomDate(rangeLength);
+	 
+	 return TimeTools.getCalendarFromCalendarDateAddDays(cal,Utility.getNumberFromRandomMinMax(-rangeLength, rangeLength).intValue()).getTime();
+	
+  }
 
+  
+  
   @Override
   public boolean readText(String path, int splitMethod) {
 	// TODO Auto-generated method stub
@@ -393,32 +415,32 @@ public Calendar resetCalendar(int timeDays) {
 }
 
 @Override
-public  Object getValueForRangeOption(Attribute attrib, String rangeCondition) {
+public  Object getValueForRangeOption(Table table,Attribute attrib, String rangeCondition,int rangeLength) {
 	switch(rangeCondition){
-		case "BETWEEN":return valueForBetween(attrib);
-		case "IN":return valueForIn(attrib);
-		case ">":return valueLessMoreThen(attrib, rangeCondition);
-		case "<":return valueLessMoreThen(attrib, rangeCondition);
+		case "BETWEEN":return valueForBetween(table,attrib,rangeLength);
+		case "IN":return valueForIn(table,attrib,rangeLength);
+		case ">":return valueLessMoreThen(table,attrib, rangeCondition,rangeLength);
+		case "<":return valueLessMoreThen(table,attrib, rangeCondition,rangeLength);
 		
 		default :break;
 	}		
 	return null;
 }
 
-private String valueLessMoreThen(Attribute attrib, String operator) {
+private String valueLessMoreThen(Table table,Attribute attrib, String operator,int rangeLength) {
 	if(attrib.getDataType().getDataTypeCategory() == DataType.NUMERIC_CATEGORY){
 		Long val1 = this.getRandomNumber(attrib.getUpperLimit());
-		Long val2 = this.getRandomNumber(attrib.getUpperLimit());
+		Long val2 = this.getRandomNumber(val1 + rangeLength );
 		String value = "";
 
 		if(val1 < val2){
-			value = " (" + attrib.getName() + " " + val1 + " " + operator + " " + val2 + ") "; 
+			value = " ("+ table.getName()+"." + attrib.getName() + " " + val1 + " " + operator + " " + val2 + ") "; 
 		}
 		else if(val1 > val2){
-			value = " (" + attrib.getName() + " " + val2 + " " + operator + " " + val1 + ") ";
+			value = " (" + table.getName() + "." + attrib.getName() + " " + val2 + " " + operator + " " + val1 + ") ";
 		}
 		else{
-			return valueLessMoreThen(attrib,operator);
+			return valueLessMoreThen(table,attrib,operator,rangeLength);
 		}
 		
 	}
@@ -427,13 +449,13 @@ private String valueLessMoreThen(Attribute attrib, String operator) {
 		Date date2 = this.getRandomDate();
 		String value = "";
 		if(date1.getTime() < date2.getTime()){
-			value = " (" + attrib.getName() + " " + TimeTools.getTimeStampFromDate(date1, null) + " " + operator + " " + TimeTools.getTimeStampFromDate(date2, null) + ") ";
+			value = " (" + table.getName() +"."+ attrib.getName() + " " + TimeTools.getTimeStampFromDate(date1, null) + " " + operator + " " + TimeTools.getTimeStampFromDate(date2, null) + ") ";
 		}
 		else if(date1.getTime() > date2.getTime()){
-			value = " (" + attrib.getName() + " " + TimeTools.getTimeStampFromDate(date2, null) + " " + operator + " " + TimeTools.getTimeStampFromDate(date1, null) + ") ";
+			value = " ("+ table.getName() + "." + attrib.getName() + " " + TimeTools.getTimeStampFromDate(date2, null) + " " + operator + " " + TimeTools.getTimeStampFromDate(date1, null) + ") ";
 		}
 		else{
-			return valueLessMoreThen(attrib,operator);
+			return valueLessMoreThen(table, attrib,operator,rangeLength);
 		}
 	}
 	else
@@ -443,10 +465,10 @@ private String valueLessMoreThen(Attribute attrib, String operator) {
 }
 
 
-private Object valueForIn(Attribute attrib) {
-	int loop = Utility.getNumberFromRandomMinMax(3, 200).intValue();
+private Object valueForIn(Table table,Attribute attrib,int rangeLength) {
+	int loop = Utility.getNumberFromRandomMinMax(3, rangeLength).intValue();
 	StringBuffer sb = new StringBuffer();
-	sb.append(" " + attrib.getName() + " IN (");
+	sb.append(" " + table.getName() + "." + attrib.getName() + " IN (");
 	
 	
 	if(attrib.getDataType().getDataTypeCategory() == DataType.NUMERIC_CATEGORY){
@@ -455,6 +477,7 @@ private Object valueForIn(Attribute attrib) {
 				sb.append(",");
 			sb.append(Utility.getNumberFromRandomMinMax(0, attrib.getUpperLimit()).toString());
 		}
+		sb.append(")");
 		
 	}else if(attrib.getDataType().getDataTypeCategory() == DataType.DATE_CATEGORY){
 		for(int ic = 0 ; ic < loop; ic++){
@@ -462,47 +485,54 @@ private Object valueForIn(Attribute attrib) {
 				sb.append(",");
 			sb.append("'" + TimeTools.getTimeStampFromDate(getRandomDate(), null) + "'");
 		}
+		sb.append(")");
 	}
 	else{
 		return null;
 	}
 	
-	
-	
-	// TODO Auto-generated method stub
-	return null;
+
+	return sb.toString();
 }
 
-private String valueForBetween(Attribute attrib) {
+private String valueForBetween(Table table, Attribute attrib,int rangeLength) {
   	String value = "";
 	if(attrib.getDataType().getDataTypeCategory() == DataType.NUMERIC_CATEGORY){
-		Long val1 = this.getRandomNumber(attrib.getUpperLimit());
-		Long val2 = this.getRandomNumber(attrib.getUpperLimit());
+//		Long val1 = this.getRandomNumber(attrib.getUpperLimit());
+		Long val1 = Utility.getNumberFromRandomMinMax(0, attrib.getUpperLimit());
+		
+		Long val2 = Utility.getNumberFromRandomMinMax((val1.longValue()-(rangeLength/2))>0?(val1.longValue()/2):0, val1.longValue()+(rangeLength/2));
 		
 
 		if(val1 < val2){
-			value = " (" + attrib.getName() + " BETWEEN " + val1 + " AND " + val2 + ") "; 
+			value = " (" + table.getName() + "." + attrib.getName() + " BETWEEN " + val1 + " AND " + val2 + ") "; 
 		}
 		else if(val1 > val2){
-			value = " (" + attrib.getName() + " BETWEEN " + val2 + " AND " + val1 + ") ";
+			value = " (" + table.getName() + "." + attrib.getName() + " BETWEEN " + val2 + " AND " + val1 + ") ";
 		}
 		else{
-			return valueForBetween(attrib);
+			return valueForBetween(table,attrib,rangeLength);
 		}
 		
 	}
 	else if(attrib.getDataType().getDataTypeCategory() == DataType.DATE_CATEGORY){
-		Date date1 = this.getRandomDate();
-		Date date2 = this.getRandomDate();
+		Calendar cal = null;
+		if(attrib.getValue() !=null && attrib.getValue() instanceof Date ){
+			cal = Calendar.getInstance();
+			cal.setTime((Date)attrib.getValue());
+		}
+		
+		Date date1 = this.getRandomDate(rangeLength,cal);
+		Date date2 = this.getRandomDate(rangeLength,cal);
 		
 		if(date1.getTime() < date2.getTime()){
-			value = " (" + attrib.getName() + " BETWEEN '" + TimeTools.getTimeStampFromDate(date1, null) + "' AND '" + TimeTools.getTimeStampFromDate(date2, null) + "') "; 
+			value = " ("+ table.getName() + "." + attrib.getName() + " BETWEEN '" + TimeTools.getTimeStampFromDate(date1, null) + "' AND '" + TimeTools.getTimeStampFromDate(date2, null) + "') "; 
 		}
 		else if(date1.getTime() > date2.getTime()){
-			value = " (" + attrib.getName() + " BETWEEN '" + TimeTools.getTimeStampFromDate(date2, null) + "' AND '" + TimeTools.getTimeStampFromDate(date1, null) + "') ";
+			value = " ("+ table.getName() + "." + attrib.getName() + " BETWEEN '" + TimeTools.getTimeStampFromDate(date2, null) + "' AND '" + TimeTools.getTimeStampFromDate(date1, null) + "') ";
 		}
 		else{
-			return valueForBetween(attrib);
+			return valueForBetween(table,attrib,rangeLength);
 		}
 	}
 	else

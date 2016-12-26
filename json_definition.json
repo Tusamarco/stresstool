@@ -16,8 +16,12 @@
 					"datadir":"",
 					"rowformat":"dynamic",
 					"multiple":true,
+					"rangeLength":"100",
 					"selectcondition":"autoinc,uuid,serverid,a,b,c,counter,time,partitionid,date,strrecordtype",
-					"wherecondition":" #a# = #?a?# and #date# #?date_RANGE_OPTION_BETWEEN?# and #b# like #?b?|20# ",
+					"wherecondition_s":" #a# #?a_RANGE_OPTION_BETWEEN?# and #date# #?date_RANGE_OPTION_BETWEEN?# and #b# like #?b?|20# ",
+					"wherecondition_u":" #a# #?a_RANGE_OPTION_BETWEEN|500?# ",
+					"wherecondition_d":" #a# #?a_RANGE_OPTION_BETWEEN|100?#  ",
+				    "example_where":" #autoinc# = #?autoinc?#  and #date# #?date_RANGE_OPTION_BETWEEN?# " ,
 					"keys":
 							{
 							"key":

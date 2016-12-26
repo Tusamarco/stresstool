@@ -44,8 +44,8 @@ import org.ini4j.*;
 import com.googlecode.lanterna.*;
 import com.googlecode.lanterna.screen.Screen;
 import com.googlecode.lanterna.terminal.Terminal;
-import com.googlecode.lanterna.terminal.TerminalSize;
-import com.googlecode.lanterna.terminal.text.FixedTerminalSizeProvider;
+//import com.googlecode.lanterna.terminal.TerminalSize;
+//import com.googlecode.lanterna.terminal.text.FixedTerminalSizeProvider;
 
 import net.tc.*;
 import net.tc.stresstool.actions.Launcher;
@@ -166,7 +166,15 @@ public class StressTool {
 	         * looping for a number of X loop = StatLoops if lower than repeatNumber
 	         * Or force the close if UseHardStop is true  
 	         */
-	        int loops = launcher.getStatLoops()< launcher.getRepeatNumber()?launcher.getStatLoops():launcher.getRepeatNumber();
+	    	int timeForLoop =launcher.getStatIntervalMs();
+	    	int loops = launcher.getStatLoops()> launcher.getRepeatNumber()?launcher.getStatLoops():launcher.getRepeatNumber();
+	    	if(timeForLoop < 1000){
+	    		loops = loops * (1000/timeForLoop);
+	    	}
+	    	else{
+	    		loops = loops / (timeForLoop/1000);
+	    	}
+
 	        
 	        StressTool.setStressToolRunning(true);
 	        
@@ -208,12 +216,12 @@ public class StressTool {
 	               consolePrinter.printLine(i);
 	               //	             }
 	               if(launcher.getInteractive() ==2 ){
-	            	 if(consolePrinter.askQuestion("Press \"#\" to stop StressTool", "#",false).toLowerCase().equals("#")){
+	            	 if(!consolePrinter.askQuestion("Press \"#\" to stop StressTool", "#",false)){
 	            	   StressTool.setStressToolRunning(false);
 	            	 };
 	               }
 	             }
-	             
+//	             System.out.println(i + ".");
 	             
 	             if(!StressTool.isStressToolRunning())
 	        	 break;
@@ -233,12 +241,25 @@ public class StressTool {
 	        
 	        
 	        
-	        printReport(stats);
+	        
 	        if(launcher.getInteractive() >1  && consolePrinter != null){
-	          while(!consolePrinter.askQuestion(ApplicationMessages.End_QUESTION,"y\n",true).toLowerCase().equals("y\n"));
+	          while(consolePrinter.askQuestion(ApplicationMessages.End_QUESTION,"y\n",true)){
+//	        	  try {
+//	        		   
+//					Thread.sleep(launcher.getStatIntervalMs());
+//				} catch (InterruptedException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+	          }
+	          
+	          ;
 	           
 	        }
+	        consolePrinter.close();
+	        printReport(stats);
 	        System.out.println("Close");
+	        
             }
         	catch(StressToolException ex){
         		ex.printStackTrace();
