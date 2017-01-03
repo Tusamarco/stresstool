@@ -124,6 +124,10 @@ public class SQLObject {
 		    .debug(
 		        "========================== Processing Table " + ((Table) table).getName() + " ================ [Start]");
 	  } catch (StressToolConfigurationException e) {}
+	  if(((Table)table).getInsertAttributes() == null)
+		  return "";
+	  
+	  String[] insertAttrib = ((Table)table).getInsertAttributes().split(","); 
 
 	  /*
 	   * loops cross batch loops
@@ -131,71 +135,77 @@ public class SQLObject {
 	  StringBuffer sqlValues = new StringBuffer();
 	  
 	  
-	  for (int iBatch = 0; iBatch <= this.batchLoops; iBatch++) {
+	  for (int iBatch = 0; iBatch < this.batchLoops; iBatch++) {
 		try{
     		StringBuffer singleSql = new StringBuffer();
     		if (sqlValues.length() > 1)
     		  sqlValues.append(",");
     		
     		singleSql.append("(");
-    		
+    		Object[] locAttribs = Attribs.getValuesAsArrayOrderByKey();
+    		for(int iInsert = 0 ; iInsert < insertAttrib.length;iInsert++ ){
+	    		for (Object attrib : locAttribs) {
+	    			if(((Attribute) attrib) != null 
+	    					&&((Attribute) attrib).getName().equals(insertAttrib[iInsert])){
+	    			
+						if (singleSql.length() > 1)
+							singleSql.append(", ");
 		
-    		for (Object attrib : Attribs.getValuesAsArrayOrderByKey()) {
-    		  if (singleSql.length() > 1)
-    			singleSql.append(", ");
-
-//			  System.out.println("=========== reset "+ this.isResetLazy()  +" Attrib Lazy: " +((Attribute) attrib).isLazy()  );
-    		  
-			  if (this.resetLazy || !((Attribute) attrib).isLazy()) {
-    			  
-//    			  if(!this.resetLazy && !((Attribute) attrib).isLazy())
-//    				  System.out.println("===========1 Attrib " + ((Attribute) attrib).getName() +" V:  " + ((Attribute) attrib).getValue() );
-    			  
-    			  if(((Attribute) attrib).getSpecialFunction() == null
-    					  && !((Attribute) attrib).isAutoIncrement()
-    					  ){
-    				if(((Attribute) attrib).isLazy()){
-    				  ((Attribute) attrib).setValue(StressTool.getValueProvider().provideValue(
-    						  ((Attribute) attrib).getDataType(), new Long(((Attribute) attrib).getUpperLimit())));
-    				}
-    				else{
-    				  ((Attribute) attrib).setValue(StressTool.getValueProvider().provideValue(
-						  ((Attribute) attrib).getDataType(), new Long(((Attribute) attrib).getUpperLimit())));
-    				  
-    				}
-    			  }
-    			  else{
-
-    				  if(((Attribute)attrib).isAutoIncrement()){
-    					  ((Attribute) attrib).setValue("NULL");
-    				  }
-    				  else{
-    					  ((Attribute) attrib).setValue(((Attribute) attrib).getSpecialFunction());
-    				  }
-    			  }
-
-//    			  filling = this.isResetLazy()?true:false;
-
-    		  }
-//			  if(!this.resetLazy && !((Attribute) attrib).isLazy())
-//				  System.out.println("===========2 Attrib " + ((Attribute) attrib).getName() +" V:  " + ((Attribute) attrib).getValue() );
-
-    		  
-    		  singleSql.append(((Attribute) attrib).getValue());
-
-//    		  		  try {StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).debug(
-//    		  				  (filling ? "" : "NOT")
-//    		  			  			+ "Filling Attribute "
-//    		  			            + ((Attribute) attrib).getName()
-//    		  			            + " DataType: "
-//    		  			            + DataType.getDataTypeStringByIdentifier(((Attribute) attrib).getDataType().getDataTypeId()) 
-//    		  			            + " Value : " + ((Attribute)attrib).getValue()
-//    		  			            + " Lazy = " + ((Attribute) attrib).isLazy());
-//    		  		  } catch (StressToolConfigurationException e) {e.printStackTrace();}
-
-
-
-    		}
+		//			  System.out.println("=========== reset "+ this.isResetLazy()  +" Attrib Lazy: " +((Attribute) attrib).isLazy()  );
+		    		  
+					  if (this.resetLazy || !((Attribute) attrib).isLazy()) {
+		    			  
+		//    			  if(!this.resetLazy && !((Attribute) attrib).isLazy())
+		//    				  System.out.println("===========1 Attrib " + ((Attribute) attrib).getName() +" V:  " + ((Attribute) attrib).getValue() );
+		    			  
+		    			  if(((Attribute) attrib).getSpecialFunction() == null
+		    					  && !((Attribute) attrib).isAutoIncrement()
+		    					  ){
+		    				if(((Attribute) attrib).isLazy()){
+		    				  ((Attribute) attrib).setValue(StressTool.getValueProvider().provideValue(
+		    						  ((Attribute) attrib).getDataType(), new Long(((Attribute) attrib).getUpperLimit())));
+		    				}
+		    				else{
+		    				  ((Attribute) attrib).setValue(StressTool.getValueProvider().provideValue(
+								  ((Attribute) attrib).getDataType(), new Long(((Attribute) attrib).getUpperLimit())));
+		    				  
+		    				}
+		    			  }
+		    			  else{
+		
+		    				  if(((Attribute)attrib).isAutoIncrement()){
+		    					  ((Attribute) attrib).setValue("NULL");
+		    				  }
+		    				  else{
+		    					  ((Attribute) attrib).setValue(((Attribute) attrib).getSpecialFunction());
+		    				  }
+		    			  }
+		
+		//    			  filling = this.isResetLazy()?true:false;
+		
+		    		  }
+		//			  if(!this.resetLazy && !((Attribute) attrib).isLazy())
+		//				  System.out.println("===========2 Attrib " + ((Attribute) attrib).getName() +" V:  " + ((Attribute) attrib).getValue() );
+		
+		    		  
+		    		  singleSql.append(((Attribute) attrib).getValue());
+		
+		//    		  		  try {StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).debug(
+		//    		  				  (filling ? "" : "NOT")
+		//    		  			  			+ "Filling Attribute "
+		//    		  			            + ((Attribute) attrib).getName()
+		//    		  			            + " DataType: "
+		//    		  			            + DataType.getDataTypeStringByIdentifier(((Attribute) attrib).getDataType().getDataTypeId()) 
+		//    		  			            + " Value : " + ((Attribute)attrib).getValue()
+		//    		  			            + " Lazy = " + ((Attribute) attrib).isLazy());
+		//    		  		  } catch (StressToolConfigurationException e) {e.printStackTrace();}
+		
+		    		  break;
+		
+		    		}
+	    		}
+	    	}
+    		
     		singleSql.append(")");
     		sqlValues.append(singleSql);
     		singleSql.delete(0, singleSql.length());

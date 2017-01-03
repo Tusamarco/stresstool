@@ -86,7 +86,8 @@ public class StressTool {
 	 */
 	private Logger applicationLogger ;
 	private static LogProvider logProvider;
-	private  Launcher launcher;
+	private Launcher launcher;
+	private static SynchronizedMap threadsInfo = new SynchronizedMap(0);
 	/**
 	 * @uml.property  name="connectionInformation"
 	 */
@@ -192,7 +193,10 @@ public class StressTool {
 //	          int aInsert =  new Float( maxInsert).intValue();
 
 	          for(int i = 0 ; i < loops; i++ ){
-	             stats.collectStatistics();
+	            
+	        	 if(StressTool.isStressToolRunning()) 
+	        	  stats.collectStatistics();
+	            
 	             if(launcher.getStatLoops() > loops 
 	        	     && launcher.isUseHardStop())
 	        	 break;
@@ -719,4 +723,25 @@ public class StressTool {
 	public static void setValueProvider(ValueProvider valueProviderIn) {
 	    valueProvider = valueProviderIn;
 	}
+
+
+
+
+
+	public static SynchronizedMap getThreadsInfo() {
+		return threadsInfo;
+	}
+
+
+
+
+
+//	public static void setThreadsInfo(SynchronizedMap threadsInfo) {
+//		threadsInfo = threadsInfo;
+//	}
+
+
+
+
+
 }

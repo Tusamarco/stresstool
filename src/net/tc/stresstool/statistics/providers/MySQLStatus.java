@@ -13,8 +13,10 @@ import java.util.Map;
 import java.util.Vector;
 
 import net.tc.stresstool.StressTool;
+import net.tc.stresstool.actions.StressAction;
 import net.tc.stresstool.exceptions.StressToolGenericException;
 import net.tc.stresstool.logs.LogProvider;
+import net.tc.stresstool.statistics.ActionTHElement;
 import net.tc.stresstool.statistics.StatEvent;
 import net.tc.utils.SynchronizedMap;
 import net.tc.utils.Utility;
@@ -97,11 +99,7 @@ public class MySQLStatus extends MySQLSuper implements StatsProvider, Reporter {
           try {
 	    throw new StressToolGenericException(eex);
 	} catch (StressToolGenericException e) {
-	    
-		try{String s =new String();PrintWriter pw = new PrintWriter(s);e.printStackTrace(pw);
-		StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).error("");
-	}catch(Exception xxxxx){}
-
+		e.printStackTrace();
 	}
       }
       finally
@@ -114,10 +112,7 @@ public class MySQLStatus extends MySQLSuper implements StatsProvider, Reporter {
               return statusReport;
               
           } catch (SQLException ex) {
-  			try{String s =new String();PrintWriter pw = new PrintWriter(s);ex.printStackTrace(pw);
-  			StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).error("");
-  		}catch(Exception xxxxx){}
-
+  			ex.printStackTrace();
           }
 
       }
@@ -134,7 +129,7 @@ public class MySQLStatus extends MySQLSuper implements StatsProvider, Reporter {
     
     @Override
     protected StringBuffer printReport(StringBuffer sb) {
-    	String[] coms = new String[]{"Bytes_sent"};
+    	
     	long totalExecutionTime = 0;
     	if(reporterGroup == null) 
     	    return sb;
@@ -160,6 +155,31 @@ public class MySQLStatus extends MySQLSuper implements StatsProvider, Reporter {
     //        pw.println("Total Number Of query Executed for reads  = " + this.getTotalQueryToRunReads());
     //        pw.println("Total Number Of query Executed for deletes  = " + this.getTotalQueryToRunDeletes());
        try{
+ 	   
+    	  Object[] threads = (Object[]) StressTool.getThreadsInfo().values().toArray();
+    	  String[] actions = new String[]{"Insert","Update","Delete","Select"};
+   	   	  pw.println("------------------------------  Threads EXECUTION INFORMATION -----------------------------------------");
+
+    	   for(String action:actions){
+    		   pw.println("------------------------------ " + action);
+    		   
+	    	   for(Object thInfo:threads){
+	    		   if(thInfo == null)
+	    			   continue;
+	    		  if(((ActionTHElement)thInfo).getAction().toUpperCase().equals(action.toUpperCase())){
+	    		   pw.println("ThreadID = " +  ((ActionTHElement)thInfo).getId() 
+	    				   + " Tot Execution time = " +((ActionTHElement)thInfo).getTotalEcecutionTime()
+	    				   + " Max Execution time = " + ((ActionTHElement)thInfo).getMaxExectime() 
+	    				   + " Min Execution time = " + ((ActionTHElement)thInfo).getMinExectime()
+	    				   );
+	    		  }
+	    	   }
+    	   }
+    	   
+    	   
+    	   
+    	   
+    	   
             pw.println("------------------------------ "+this.getProviderName()+" DATABASE INFORMATION -----------------------------------------");
             pw.println("Provider  = " + getProviderName());
             pw.println("Start time  = " + Utility.getTimeStamp(reporterGroup.getStartTime(),"yy/MM/dd hh:mm:ss:SSSS a"));
@@ -297,10 +317,7 @@ public class MySQLStatus extends MySQLSuper implements StatsProvider, Reporter {
             pw.println("Number of Threads_running = " + this.getMaxResultByName("Threads_running",false) );
        }
        catch(Throwable th){
-			try{String s =new String();PrintWriter pw2= new PrintWriter(s);th.printStackTrace(pw2);
-			StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).error("");
-		}catch(Exception xxxxx){}
-
+    	   th.printStackTrace();
        }
     
             if(flushrowonfile){

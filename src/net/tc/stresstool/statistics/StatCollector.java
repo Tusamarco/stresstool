@@ -246,10 +246,7 @@ if (StressTool.getLogProvider().getLogger(LogProvider.LOG_PERFORMANCE)
 				+ " Provider " + sp.getProviderName() + " sent event to StatCollection but the process dicard the information \n" 
 				+ " this is the " + ic + " attempt, try again \n");
 		  } catch (StressToolException e) {
-			// TODO Auto-generated catch block
-				try{String s =new String();PrintWriter pw = new PrintWriter(s);e.printStackTrace(pw);
-				StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).error("");
-			}catch(Exception xxxxx){}
+			e.printStackTrace();
 
 		  }
 

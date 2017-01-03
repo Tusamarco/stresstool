@@ -76,6 +76,7 @@ public class Launcher {
     private Date startDate = null;
     private Date endDate = null ;
     private int daysdiffernce = 0; 
+    private String exitOn = "all"; //
     
     
     public Launcher(Configurator configIn) {
@@ -117,6 +118,7 @@ public class Launcher {
     	this.setDaysdiffernce(Integer.parseInt((String) configuration.getParameter("daysdiffernce").getValue()));
     	this.setStartDate(this.getTestCalendar().getTime());
     	this.setEndDate(TimeTools.getCalendarFromCalendarDateAddDays(this.getTestCalendar(), this.getDaysdiffernce()));
+    	this.setExitOn( configuration.getParameter("exiton")!=null?(String)configuration.getParameter("exiton").getValue():"all");
     	
     	/**
     	 * Initialize the Launcher configuration related to the actions classes 
@@ -471,11 +473,13 @@ public class Launcher {
     public boolean LaunchActions() {
 	int semaphore = this.checkForRunningOrBreak();
 	if(this.actionInitialized 
+		&& semaphore != ActionTHElement.SEMAPHORE_NOT_INITIALIZED
 		&& semaphore != ActionTHElement.SEMAPHORE_RED
 	){
 	    return true;
 	}
-	else if (semaphore == ActionTHElement.SEMAPHORE_RED){
+	else if (this.actionInitialized && 
+			semaphore == ActionTHElement.SEMAPHORE_RED){
 	    return false; 
 	}
 	
@@ -594,11 +598,43 @@ public class Launcher {
         	} 
 	}
 	
-	if(insertSemaphore < ActionTHElement.SEMAPHORE_RED && selectSemaphore == ActionTHElement.SEMAPHORE_RED )
-	    return ActionTHElement.SEMAPHORE_YELLOW;
-	else if((insertSemaphore == ActionTHElement.SEMAPHORE_RED || selectSemaphore == ActionTHElement.SEMAPHORE_RED) 
-		&& (updateSemaphore >= ActionTHElement.SEMAPHORE_YELLOW || deleteSemaphore >= ActionTHElement.SEMAPHORE_YELLOW))
-	    return ActionTHElement.SEMAPHORE_RED;
+//	if(insertSemaphore < ActionTHElement.SEMAPHORE_RED && selectSemaphore == ActionTHElement.SEMAPHORE_RED )
+//	    return ActionTHElement.SEMAPHORE_YELLOW;
+//	else if((insertSemaphore == ActionTHElement.SEMAPHORE_RED || selectSemaphore == ActionTHElement.SEMAPHORE_RED) 
+//		&& (updateSemaphore >= ActionTHElement.SEMAPHORE_YELLOW || deleteSemaphore >= ActionTHElement.SEMAPHORE_YELLOW))
+//	    return ActionTHElement.SEMAPHORE_RED;
+//	
+	
+		if (insertSemaphore == 100
+				&& selectSemaphore == 100
+				&& updateSemaphore == 100
+				&& deleteSemaphore == 100) {
+			return ActionTHElement.SEMAPHORE_NOT_INITIALIZED;
+		}
+
+	if(this.getExitOn().equals("all")){
+		if(
+			(insertSemaphore  == ActionTHElement.SEMAPHORE_RED ||  insertSemaphore == 100)
+			&& (selectSemaphore  == ActionTHElement.SEMAPHORE_RED ||  selectSemaphore == 100)
+			&& (updateSemaphore  == ActionTHElement.SEMAPHORE_RED ||  updateSemaphore == 100)
+			&& (deleteSemaphore  == ActionTHElement.SEMAPHORE_RED ||  deleteSemaphore == 100)		
+		){
+			return ActionTHElement.SEMAPHORE_RED;}
+		
+	}
+	else if(this.getExitOn().equals("dml")){
+		if(
+			(insertSemaphore  == ActionTHElement.SEMAPHORE_RED ||  insertSemaphore == 100)
+			&& (updateSemaphore  == ActionTHElement.SEMAPHORE_RED ||  updateSemaphore == 100)
+			&& (deleteSemaphore  == ActionTHElement.SEMAPHORE_RED ||  deleteSemaphore == 100)		
+		){
+			return ActionTHElement.SEMAPHORE_RED;}
+	}
+	else if(this.getExitOn().equals("read")){
+			if((selectSemaphore  == ActionTHElement.SEMAPHORE_RED ||  selectSemaphore == 100)){
+				return ActionTHElement.SEMAPHORE_RED;}
+	}
+	
 	
 	return ActionTHElement.SEMAPHORE_YELLOW;
     }
@@ -1348,6 +1384,14 @@ public class Launcher {
 	
 	public void resetValueProviderCalendar(){
 		((BasicValueProvider) StressTool.getValueProvider()).resetCalendar(daysdiffernce);
+	}
+
+	public String getExitOn() {
+		return exitOn;
+	}
+
+	public void setExitOn(String exitOn) {
+		this.exitOn = exitOn;
 	}
 		
 }

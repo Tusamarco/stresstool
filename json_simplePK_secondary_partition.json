@@ -1,0 +1,114 @@
+{
+	"database":"test2",
+	"characterSet":"utf8",
+	"tables":{
+		"table":[
+				{
+					"database":"test2",
+					"tablename":"simplePKSec",
+					"engine":"innodb",
+					"primarykey":["autoInc"],
+					"autoincrementvalue":5340,
+					"defaultcharset":"utf8",
+					"defaultcollation":"utf8_bin",
+					"haspartition":false,
+					"tablespace":"",
+					"datadir":"",
+					"rowformat":"dynamic",
+					"multiple":true,
+					"rangeLength":"100",
+					"selectcondition":"autoinc,serverid,a,b,counter,time,strrecordtype",
+					"updatesetattributes":"#a#,#b#,#serverid#,#time#",
+					"wherecondition_s":" #time# #?time_RANGE_OPTION_BETWEEN|30?time#",
+					"wherecondition_u":" #autoInc#=#?autoInc?autoInc#",
+					"wherecondition_u_secondary_unable":" #a# #?a_RANGE_OPTION_BETWEEN|100?a#  #time# #?time_RANGE_OPTION_BETWEEN|1000?time# ",
+					"wherecondition_d":" #autoInc#=#?autoInc?autoInc#",
+					"wherecondition_d":" #a# #?a_RANGE_OPTION_BETWEEN|100?a# AND #time# #?time_RANGE_OPTION_BETWEEN|1000?time# ",
+				    "example_where":" #autoinc# = #?autoinc?autoinc#  and #date# #?date_RANGE_OPTION_BETWEEN?date#  and #b# like #?b|20?b# " ,
+					"keys":
+							{
+							"key":
+								[								
+									{"name":"IDX_a","unique":false,"attributes":["a"]},
+									{"name":"IDX_time","unique":false,"attributes":["time"]}			
+			
+								]
+							},	
+					"attributes":{
+						"attribute":
+							[
+								{"name":"autoInc","datatype":"bigint","datadimension":"11","default":"","null":false,"autoincrement":true,"where_attribute":true},
+								{"name":"serverid","datatype":"smallint","datadimension":"6","default":"","null":false,"where_attribute":false},
+								{"name":"a","datatype":"int","datadimension":"11","default":"","null":false,"where_attribute":true},				
+								{"name":"b","datatype":"varchar","datadimension":"100","default":"","null":false,"where_attribute":true},
+								{"name":"counter","datatype":"bigint","datadimension":"20","default":"","null":true},								
+								{"name":"time","datatype":"timestamp","default":"CURRENT_TIMESTAMP","onUpdate":"CURRENT_TIMESTAMP","null":false,"specialFunction":"NOW()","where_attribute":true},
+								{"name":"strrecordtype","datatype":"char","datadimension":"3","default":"","null":true}				
+							]
+					},
+					"partitionDefinition":{
+	
+					}
+				},		
+				{
+					"database":"test2",
+					"tablename":"simplePKSecPart",
+					"engine":"innodb",
+					"multiple":false,
+					"primarykey":["date","autoInc"],
+					"autoincrementvalue":0,
+					"defaultcharset":"utf8",
+					"defaultcollation":"utf8_bin",
+					"tablespace":"",
+					"datadir":"",
+					"rowformat":"dynamic",
+					"selectcondition":"autoinc,uuid,serverid,a,b,c,counter,time,partitionid,date,strrecordtype",
+					"updatesetattributes":"#a#,#b#,#time#,#uuid#,#counter#",
+					"wherecondition_s":"#date# #?date_RANGE_OPTION_BETWEEN|200?date# #autoInc# #?autoInc_RANGE_OPTION_IN|200?autoInc#",
+					"wherecondition_u":"#date# #?date_RANGE_OPTION_BETWEEN|20?date# #autoInc# #?autoInc_RANGE_OPTION_IN|200?autoInc#",
+					"wherecondition_d":"#date# #?date_RANGE_OPTION_BETWEEN|20?date#",
+				    "example_where":" #autoInc# = #?autoInc?autoinc#  and #date# #?date_RANGE_OPTION_BETWEEN?date# #date# #?date_RANGE_OPTION_BETWEEN?date#  and #b# like #?b|20?b#" ,
+					
+					
+					"keys":
+							{
+							"key":
+								[
+									{"name":"IDX_a","unique":false,"attributes":["a"]},
+									{"name":"IDX_autoinc","unique":false,"attributes":["autoInc"]}			
+								]
+							},
+					"haspartition":true,	
+					"attributes":{
+						"attribute":
+							[
+								{"name":"autoInc","datatype":"bigint","datadimension":"11","default":"","null":false,"autoincrement":true},
+								{"name":"uuid","datatype":"char","datadimension":"36","default":"","null":false,"specialFunction":"UUID()"},				
+								{"name":"serverid","datatype":"smallint","datadimension":"6","default":"","null":false},				
+								{"name":"a","datatype":"int","datadimension":"11","default":"","null":false},
+								{"name":"b","datatype":"varchar","datadimension":"100","default":"","null":false},
+								{"name":"c","datatype":"char","datadimension":"200","default":"","null":false},
+								{"name":"counter","datatype":"bigint","datadimension":"20","default":"","null":true},								
+								{"name":"time","datatype":"timestamp","default":"CURRENT_TIMESTAMP","ON UPDATE":"CURRENT_TIMESTAMP","null":false,"specialFunction":"NOW()"},
+								{"name":"partitionid","datatype":"int","datadimension":"11","upperlimit":"10","default":"0","null":true},								
+								{"name":"date","datatype":"date","default":"","null":false,"lazy":"0"},
+								{"name":"strrecordtype","datatype":"char","datadimension":"3","default":"","null":true}				
+							]
+					},
+					"partitionDefinition":{
+						"partitionBy":"range",
+						"subpartition":false,
+						"attributes":["date"],
+						"function":"to_days",
+						"interval":"month",
+						"starttime":"2016-03-01",
+						"endtime":"2018-12-31",
+						"partitions":"0",
+						"lists":{"list":[]},
+						"ranges":{"range":[]}
+	
+					}
+				}
+			]
+		}
+}

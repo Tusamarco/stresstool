@@ -1,5 +1,8 @@
 package net.tc.data.db;
 
+import net.tc.stresstool.StressTool;
+import net.tc.stresstool.exceptions.StressToolConfigurationException;
+import net.tc.stresstool.logs.LogProvider;
 import net.tc.utils.SynchronizedMap;
 import net.tc.utils.Utility;
 
@@ -93,13 +96,19 @@ public class Attribute {
 	}
 
 	public String getValueAsString( int stingLength) {
-  	
+		if(this.getValue() == null)
+			return null;
+			
     	switch (getDataType().getDataTypeId()){
          	case DataType.TINYINT: return ((Integer)getValue()).toString();
         	case DataType.SMALLINT:return ((Integer)getValue()).toString();
         	case DataType.MEDIUMINT:return ((Integer)getValue()).toString();
         	case DataType.INT: return ((Integer)getValue()).toString();
-        	case DataType.BIGINT:return ((Long)getValue()).toString();
+        	case DataType.BIGINT: return String.valueOf(this.getValue());
+//        	case DataType.BIGINT: try{if(this.getValue()==null ){return "0";}
+//        				else{System.out.println(this.getValue());
+//        					return ((Long)this.getValue())
+//        							.toString();}}catch(Exception ex){try{StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).error("Cast exception " + this.getValue());}catch(StressToolConfigurationException e){}};
         	case DataType.FLOAT: return ((String)getValue());
         	case DataType.DOUBLE: return ((Double)getValue()).toString();
         	case DataType.DECIMAL: return ((java.math.BigDecimal)getValue()).toString(); 
@@ -131,8 +140,8 @@ public class Attribute {
 	}
 
 	
-	public void setValue(Object value) {
-		this.value = value;
+	public void setValue(Object valueIn) {
+		this.value = valueIn;
 	}
 	public int getStorageSize() {
 		return storageSize;

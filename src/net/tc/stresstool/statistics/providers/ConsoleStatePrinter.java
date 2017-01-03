@@ -267,6 +267,7 @@ public class ConsoleStatePrinter implements StatsProvider,Reporter,Runnable {
 	    Key key = null;
 	    StringBuffer sb = new StringBuffer();
 	    if(block){
+	    		key = screen.readInput();
         	    while(key == null || key.getKind() != Key.Kind.Enter){
         	    	screen.refresh();
         	    	key = screen.readInput();
@@ -283,6 +284,7 @@ public class ConsoleStatePrinter implements StatsProvider,Reporter,Runnable {
 	    }
 	    else{
     		key = screen.readInput();
+//    		System.out.println(key!=null?key.getCharacter():"");
 //    		try {Thread.sleep(100);} catch (InterruptedException e) {}
     		if(key != null){
             		sb.append(key.getCharacter());

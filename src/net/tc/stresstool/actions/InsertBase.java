@@ -124,7 +124,7 @@ public class InsertBase extends StressActionBase implements WriteAction,
 	public Schema  CreateSchema(boolean createSchema) {
 	    	Schema schema = null;
 
-	    	Map tableInstances = new SynchronizedMap(0);
+	    Map tableInstances = new SynchronizedMap(0);
 		tableInstances.put(Table.TABLE_PARENT, getNumberOfprimaryTables());
 		tableInstances.put(Table.TABLE_CHILD, getNumberOfSecondaryTables());			
 
@@ -449,9 +449,11 @@ public class InsertBase extends StressActionBase implements WriteAction,
  * SQLObject has the a counter with the number of execution done (lazyExecCount), that will be used to refresh the 
  * values in accordance to the lazyInterval value 
  */
-	for (Object table : thisSQLObject.getTables()) {
+	for (Object inTable : thisSQLObject.getTables()) {
 	    if(sbAttribs.length() > 0) sbAttribs.delete(0, sbAttribs.length());
 
+	    Table table = ((Table) inTable);
+	    
 	    int iNumTables = 0;
 
 	    thisSQLObject.setAttribs(getAttribs((Table) table, filter));
@@ -487,6 +489,7 @@ public class InsertBase extends StressActionBase implements WriteAction,
 
 		if (sbAttribs != null && sbAttribs.length() > 0) {
 		    localSQLTemplate = localSQLTemplate.replace("#ATTRIBS#", sbAttribs.toString());
+		    table.setInsertAttributes(sbAttribs.toString());
 		} else {
 		    throw new StressToolActionException(
 			    "INSERT SQL SYNTAX ISSUE attribs names not valid or Null");

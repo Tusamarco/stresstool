@@ -330,7 +330,7 @@ public class SynchronizedMap  implements Map
 	return null;
   }
 
-  public Object remove( Object key )
+  public synchronized Object remove( Object key )
   {
 	if(  key == null || keys == null || values == null )
 	  return null;
@@ -355,7 +355,7 @@ public class SynchronizedMap  implements Map
   /**
    * Insert an object into the collection
    */
-   public Object  put( Object tk, Object tv )
+   public synchronized Object  put( Object tk, Object tv )
   {
 	if(  tk == null || keys == null || values == null )
 	  return null;
@@ -374,7 +374,7 @@ public class SynchronizedMap  implements Map
 	 return keys.get(pos);
    }
 
-   public Object getValueByPosition(int pos){
+   public synchronized Object getValueByPosition(int pos){
 	 return values.get(pos);
    }
 
@@ -390,7 +390,7 @@ public class SynchronizedMap  implements Map
 	 ois.defaultReadObject();
    }
 
-   public Object[] getValuesAsArrayOrderByKey(){
+   public synchronized Object[] getValuesAsArrayOrderByKey(){
 	 if(keys !=null && keys.size()>0){
 	   Object[] keys = getKeyasOrderedArray();
 	   Object[] values = new Object[keys.length];
@@ -424,7 +424,8 @@ public class SynchronizedMap  implements Map
 	 Object[] oA = new Object[keys.size()];
 	 for(int i = 0 ; i < keys.size() ; i++)
 	 {
-	   oA[i] = keys.get(i);
+	   if(i < keys.size())
+		   oA[i] = keys.get(i);
 	 }
 	 return oA;
    }
