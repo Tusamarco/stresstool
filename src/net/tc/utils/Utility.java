@@ -113,7 +113,7 @@ import javax.imageio.ImageIO;
 	    
 	    for(int i = 0 ; i < args.length ; i++){
 		String sectionName =(String)args[i].split("@")[0];
-		if(!MapL1.containsKey(sectionName)){
+		if(!MapL1.containsKey(sectionName) && args[i].indexOf("@") >0){
 		    String key = (String)args[i].split("@")[1].split("=")[0];
 		    String value = (String)args[i].split("@")[1].split("=")[1];
 		    MapL1.put(sectionName, null);

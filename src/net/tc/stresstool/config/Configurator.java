@@ -103,11 +103,18 @@ public class Configurator {
 	 */
 	private SynchronizedMap readArgs(String[] args, Class imPlementingClass) throws StressToolException {
 	    	configurationArgs = new SynchronizedMap(0);
-	    	String[] args2 =new String[args.length -1  ];
-	    	
-	    	
-		for(int i = 0; i < args2.length; i++){
-		    args2[i] = args[i + 1];
+	    String[] inArgs = null; 
+	    if(args.length > 1 && args[1].indexOf(",") > 0){
+	    	inArgs= args[1].split(",");
+	    }	
+	    else
+	    	inArgs = args;
+	    
+	    String[] args2 =new String[inArgs.length  ];
+	    
+		for(int i = 0; i < inArgs.length; i++){
+//		    args2[i] = args[i + 1];
+		    args2[i] = inArgs[i ];
 		}
 		Map argsM = net.tc.utils.Utility.convertArgsToMap(args2);
 		

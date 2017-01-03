@@ -195,6 +195,7 @@ public class UpdateBase extends StressActionBase implements UpdateAction {
 		  sqlUpdateCommand = createLimit(sqlUpdateCommand,newTable);
 //		  lSQLObj.setSingleSQLCommands(sqlUpdateCommand);
 		  lSQLObj.getSQLCommands().add(sqlUpdateCommand);
+		  
 
 		}
 		SQLObjectContainer.put(this.getId(), lSQLObj);
@@ -305,10 +306,21 @@ private boolean checkIfTableExists(Table tableIn,SQLObject lSQL){
 					if(rs != null ){
 						while (rs.next()){
 							for(Object attrib : (Object[]) (maxAttribute.toArray())){
-								if(((Attribute)attrib).getValue()== null){
+//								if(((Attribute)attrib).getValue()== null){
 									((Attribute)attrib).setValue(rs.getObject(((Attribute)attrib).getName()));
+									if(Utility.isNumeric(((Attribute)attrib).getValue()) 
+											&& (
+													((Attribute)attrib).getValue() instanceof Long
+													|| ((Attribute)attrib).getValue() instanceof Integer
+												)
+											){
+												if(((Attribute)attrib).getValue() instanceof Long)
+													((Attribute)attrib).setUpperLimit(Long.valueOf(String.valueOf(((Attribute)attrib).getValue().equals("NULL")?"0":String.valueOf(((Attribute)attrib).getValue()))));
+												else
+													((Attribute)attrib).setUpperLimit(Long.valueOf(String.valueOf(((Attribute)attrib).getValue().equals("NULL")?"0":String.valueOf(((Attribute)attrib).getValue()))));
+									}
 									table.getMetaAttributes().put(((Attribute)attrib).getName(), ((Attribute)attrib));
-								}
+//								}
 							}
 						}
 					}
@@ -317,6 +329,7 @@ private boolean checkIfTableExists(Table tableIn,SQLObject lSQL){
 				  } catch (SQLException e) {
 						try{String s =new String();PrintWriter pw = new PrintWriter(s);e.printStackTrace(pw);
 						StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error("");
+						e.printStackTrace();
 					}catch(Exception xxxxx){}
 
 				  }
@@ -339,7 +352,10 @@ private boolean checkIfTableExists(Table tableIn,SQLObject lSQL){
 		StringBuffer sqlValues = new StringBuffer();
 		
 		Attribute[] attribs = this.getAttribs(table, null);
-		for(Attribute attrib:attribs){			
+		for(Attribute attrib:attribs){
+			if(attrib != null 
+					&& attrib.getName() == null)
+				continue;
 			if(table.getUpdateSetAttributes().indexOf("#"+attrib.getName()+"#") > -1){
 				if (sqlValues.length() > 1)
 					sqlValues.append(", ");
@@ -373,7 +389,8 @@ private boolean checkIfTableExists(Table tableIn,SQLObject lSQL){
 		  SynchronizedMap attr = table.getMetaAttributes();
 		  Attribute[] attrR = new Attribute[attr.size()];
 		  for(int i=0; i< attr.size();i++){
-			attrR[i]= (Attribute) attr.getValueByPosition(i);
+			  if(i < attr.size())
+				  attrR[i]= (Attribute) attr.getValueByPosition(i);
 		  }
 
 		  return attrR;

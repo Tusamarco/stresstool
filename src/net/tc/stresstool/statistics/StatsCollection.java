@@ -129,9 +129,7 @@ public class StatsCollection {
         	    	}
 	    	}
 	    	catch(Throwable th){
-				try{String s =new String();PrintWriter pw = new PrintWriter(s);th.printStackTrace(pw);
-				StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).error("");
-			}catch(Exception xxxxx){}
+				th.printStackTrace();
 
 	    	}
 	    	return group;

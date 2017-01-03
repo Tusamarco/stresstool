@@ -292,7 +292,7 @@ public class MySQLSuper implements StatsProvider, Reporter {
             	if (eventColl != null && eventColl.getCollection().size() > 0) {
                 	try{
                 	 StatEvent eventMin =  (StatEvent)eventColl.getCollection().get(new Long(1));
-                	 StatEvent eventMax =  (StatEvent)eventColl.getCollection().get(new Long(eventColl.getCollection().size()));
+                	 StatEvent eventMax =  (StatEvent)((SynchronizedMap)eventColl.getCollection()).getValueByPosition(eventColl.getCollection().size()-1);
                 	 startValue = Long.parseLong((String)eventMin.getValue());
                      endValue = Long.parseLong((String) eventMax.getValue() );
                 	}

@@ -51,6 +51,7 @@ public class Table {
 	private int rangeLength = 50;
 	private ArrayList<Table> joinTables = new ArrayList(); 
 	private String updateSetAttributes = null;
+	private String insertAttributes = null;
 	
 	public Table() {
 	    rows = new SynchronizedMap(0);
@@ -520,6 +521,9 @@ public class Table {
 			  int stringLength = 0 ;
 			  int attribRangeLenght = this.getRangeLength();
 			  String attName = ((Attribute)attrib).getName();
+			  if(((Attribute)attrib).getUpperLimit() ==0){
+//				  ((Attribute)attrib).setUpperLimit(((Long)((Attribute)attrib).getValue())>0?(Long)(((Attribute)attrib).getValue()):0 );
+			  }
 
 			  if(whereCondition.indexOf("#?" + attName + "_RANGE_OPTION_") >0){
 				  	String catchme = ""; 
@@ -557,9 +561,28 @@ public class Table {
 				}
 				else{
 				  whereCondition = whereCondition.replaceFirst("#"+ attName+"#", this.getName() + "." + attName);
-				  String condition = whereCondition.substring(whereCondition.indexOf("#?"+ attName),(whereCondition.indexOf("?"+attName+"#") +(2 + attName.length())));
-				  
-//				  String length = whereCondition.substring((whereCondition.indexOf("#?"+ ((Attribute)attrib).getName() +"?"+attName+"#")), whereCondition.length());
+				  String condition = null;
+
+				  if(whereCondition.indexOf("#?") > 0){
+					  try{
+						  	condition = whereCondition.substring(
+							  whereCondition.indexOf("#?"+ attName),
+							  (whereCondition.indexOf("?"+attName+"#") 
+									  + (2 
+									  + attName.length()
+									  )
+									)
+							  );
+					  }
+					  catch(Exception ex){
+						  System.out.println(whereCondition);
+						  ex.printStackTrace();
+					  }
+				  }
+				  else
+					  condition = whereCondition;
+
+				  //				  String length = whereCondition.substring((whereCondition.indexOf("#?"+ ((Attribute)attrib).getName() +"?"+attName+"#")), whereCondition.length());
 				  if(condition.indexOf("|") > 0 ){
 					  String nLength = condition.substring(condition.indexOf("|") + 1,condition.indexOf("?"+attName+"#")) ;
 					  stringLength = Integer.parseInt(nLength);
@@ -597,7 +620,8 @@ public class Table {
 		 */
 		for(Object attrib: (Object[])this.getMetaAttributes().getValuesAsArrayOrderByKey()){
 //			System.out.println("---------- " + ((Attribute)attrib).getName());
-			if(whereCondition.indexOf("#" + ((Attribute)attrib).getName() + "#") > 0){
+			if(whereCondition != null && ((Attribute)attrib) != null &&
+					whereCondition.indexOf("#" + ((Attribute)attrib).getName() + "#") > 0){
 //				System.out.println("---------- 2 " + ((Attribute)attrib).getName());
 				attribsWhere.add((Attribute)attrib) ;
 				
@@ -688,6 +712,16 @@ public class Table {
 
 	public void setUpdateSetAttributes(String updateSetAttributes) {
 		this.updateSetAttributes = updateSetAttributes;
+	}
+
+
+	public String getInsertAttributes() {
+		return insertAttributes;
+	}
+
+
+	public void setInsertAttributes(String insertAttributes) {
+		this.insertAttributes = insertAttributes;
 	}
 
 }

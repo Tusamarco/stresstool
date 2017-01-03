@@ -546,7 +546,7 @@ public class StressActionBase implements StressAction, Runnable {
         		
         		if (!ExecutePreliminaryAction())
         			 new StressToolException("Action failed to initialize");
-        		
+        		        		
         	    latch.await();
         	    /**
         	     * run action loop here
@@ -591,17 +591,20 @@ public class StressActionBase implements StressAction, Runnable {
         			    // for debug only Thread.sleep(Utility.getNumberFromRandomMinMax(10,500));
         			} catch (Exception e) {
         			    // TODO Auto-generated catch block
-        				try{
-        					String s =new String();
-        					PrintWriter pw = new PrintWriter(s);
-        					e.printStackTrace(pw);
-        					StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error(s);
-        			}catch(Exception exx){exx.printStackTrace();}
+        				e.printStackTrace();
+        				//        				try{
+//        					String s =new String();
+//        					PrintWriter pw = new PrintWriter(s);
+//        					e.printStackTrace(pw);
+//        					StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error(s);
+//        			}catch(Exception exx){exx.printStackTrace();}
         				
         			}
         			long endRunTime = System.currentTimeMillis();
         			this.getTHInfo().setExecutionTime(endRunTime - startRunTime);
+        			this.getTHInfo().setTotalEcecutionTime(endRunTime - startTime);
         			this.getTHInfo().setCurrentLoop(i);
+        			StressTool.getThreadsInfo().put(this.getTHInfo().getId(), this.getTHInfo());
         			
         			if(!StressTool.isStressToolRunning())
         			    break;
