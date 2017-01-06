@@ -1,7 +1,7 @@
 [main]
 #connection oriented settings
-#connUrl=jdbc:mysql://192.168.0.5:3306
-connUrl=jdbc:mysql://127.0.0.1:3306
+connUrl=jdbc:mysql://192.168.0.5:3306
+#connUrl=jdbc:mysql://127.0.0.1:3306
 database=test3
 user=stress	
 password=test
@@ -19,15 +19,15 @@ doDelete=false
 doReport=true 
 doSimple=false 
 doSimplePk=false 
-droptable=false
+droptable=true
 ignoreBinlog=false
 operationShort=true  
 poolNumber=6
-pctInsert=50
-pctUpdate=100 
-pctSelect=100 
-pctDelete=100 
-repeatNumber=1000
+pctInsert=100
+pctUpdate=00 
+pctSelect=00 
+pctDelete=00 
+repeatNumber=100
 HardStopLimit=100
 UseHardStop=false
 StatIntervalMs=1000
@@ -129,7 +129,7 @@ lazyInterval=1
 batchSize=1
 #jsonFile=/Users/marcotusa/programs/JBuilder/workspace/stresstool/json_definition_long.json
 #jsonFile=/Users/marcotusa/programs/JBuilder/workspace/stresstool/json_definition.json
-jsonFile=/Users/marcotusa/programs/JBuilder/workspace/stresstool/json_oltp.json
+jsonFile=json_oltp.json
 
 [net.tc.stresstool.actions.UpdateBase]
 usePrepareStatement=false

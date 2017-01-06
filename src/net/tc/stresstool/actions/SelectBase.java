@@ -1,5 +1,7 @@
 	package net.tc.stresstool.actions;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -153,9 +155,14 @@ public class SelectBase extends StressActionBase implements ReadAction{
 	  try {
 		conn = this.getConnProvider().getSimpleConnection();
 	  } catch (SQLException e) {
-			try{String s =new String();PrintWriter pw = new PrintWriter(s);e.printStackTrace(pw);
-			StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error("");
-		}catch(Exception xxxxx){}
+			try{					
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				PrintStream ps = new PrintStream(baos);				
+				e.printStackTrace(ps);
+				String s =new String(baos.toByteArray());
+				StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error(s);
+				System.exit(1)  ;
+		}catch(Exception ex){ex.printStackTrace();}
 
 	  }
 	}
@@ -478,9 +485,15 @@ private String getJoinCondition(Table table){
 					
 					
 				  } catch (SQLException e) {
-						try{String s =new String();PrintWriter pw = new PrintWriter(s);e.printStackTrace(pw);
-						StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error("");
-					}catch(Exception xxxxx){}
+						try{					
+							ByteArrayOutputStream baos = new ByteArrayOutputStream();
+							PrintStream ps = new PrintStream(baos);				
+							e.printStackTrace(ps);
+							String s =new String(baos.toByteArray());
+							StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error(s);
+							System.exit(1)  ;
+					}catch(Exception ex){ex.printStackTrace();}
+
 
 				  }
 				  finally{

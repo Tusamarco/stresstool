@@ -1,6 +1,8 @@
 package net.tc.stresstool.actions;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileReader;
+import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -83,10 +85,14 @@ public class InsertBase extends StressActionBase implements WriteAction,
 		    conn.close();
 		    conn = null;
 		} catch (SQLException e1) {
-		    // TODO Auto-generated catch block
-			try{String s =new String();PrintWriter pw = new PrintWriter(s);e1.printStackTrace(pw);
-			StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error("");
-		}catch(Exception xxxxx){}
+			try{					
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				PrintStream ps = new PrintStream(baos);				
+				e1.printStackTrace(ps);
+				String s =new String(baos.toByteArray());
+				StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error(s);
+				System.exit(1)  ;
+		}catch(Exception ex){ex.printStackTrace();}
 
 		}
 
@@ -182,19 +188,28 @@ public class InsertBase extends StressActionBase implements WriteAction,
 				conn.close();
 				conn = null;
 			    } catch (SQLException e1) {
-				// TODO Auto-generated catch block
-					try{String s =new String();PrintWriter pw = new PrintWriter(s);e1.printStackTrace(pw);
-					StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error("");
-				}catch(Exception xxxxx){}
+					try{					
+						ByteArrayOutputStream baos = new ByteArrayOutputStream();
+						PrintStream ps = new PrintStream(baos);				
+						e1.printStackTrace(ps);
+						String s =new String(baos.toByteArray());
+						StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error(s);
+						System.exit(1)  ;
+				}catch(Exception ex){ex.printStackTrace();}
 
 			    }
 			}			
 				
 		}
 		catch(Exception e){
-				try{String s =new String();PrintWriter pw = new PrintWriter(s);e.printStackTrace(pw);
-				StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error("");
-			}catch(Exception xxxxx){}
+				try{					
+					ByteArrayOutputStream baos = new ByteArrayOutputStream();
+					PrintStream ps = new PrintStream(baos);				
+					e.printStackTrace(ps);
+					String s =new String(baos.toByteArray());
+					StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error(s);
+					System.exit(1)  ;
+			}catch(Exception ex){ex.printStackTrace();}
 		}
 		finally{
 		    return schema;
@@ -230,10 +245,14 @@ public class InsertBase extends StressActionBase implements WriteAction,
 		    conn.close();
 		    conn = null;
 		} catch (SQLException e1) {
-		    // TODO Auto-generated catch block
-			try{String s =new String();PrintWriter pw = new PrintWriter(s);e1.printStackTrace(pw);
-			StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error("");
-		}catch(Exception xxxxx){}
+			try{					
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				PrintStream ps = new PrintStream(baos);				
+				e1.printStackTrace(ps);
+				String s =new String(baos.toByteArray());
+				StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error(s);
+				System.exit(1)  ;
+		}catch(Exception ex){ex.printStackTrace();}
 
 		}
 
@@ -349,10 +368,15 @@ public class InsertBase extends StressActionBase implements WriteAction,
 		try {
 	      conn = this.getConnProvider().getSimpleConnection();
         } catch (SQLException e) {
-	      // TODO Auto-generated catch block
-			try{String s =new String();PrintWriter pw = new PrintWriter(s);e.printStackTrace(pw);
-			StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error("");
-		}catch(Exception xxxxx){}
+			try{					
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				PrintStream ps = new PrintStream(baos);				
+				e.printStackTrace(ps);
+				String s =new String(baos.toByteArray());
+				StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error(s);
+				System.exit(1)  ;
+		}catch(Exception ex){ex.printStackTrace();}
+
 
         }
 	  }
@@ -386,9 +410,15 @@ public class InsertBase extends StressActionBase implements WriteAction,
 	    try {
 	      this.myDataObject =  inizializeDataObject(new DataObject());
         } catch (StressToolActionException e) {
-			try{String s =new String();PrintWriter pw = new PrintWriter(s);e.printStackTrace(pw);
-			StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error("");
-		}catch(Exception xxxxx){}
+			try{					
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				PrintStream ps = new PrintStream(baos);				
+				e.printStackTrace(ps);
+				String s =new String(baos.toByteArray());
+				StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error(s);
+				System.exit(1)  ;
+		}catch(Exception ex){ex.printStackTrace();}
+
 
         }
      	if(this.myDataObject.isInizialized()){

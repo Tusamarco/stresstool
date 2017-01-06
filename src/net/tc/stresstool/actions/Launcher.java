@@ -1,5 +1,7 @@
 package net.tc.stresstool.actions;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.lang.ref.SoftReference;
 import java.lang.reflect.InvocationTargetException;
@@ -86,10 +88,15 @@ public class Launcher {
 		connMapcoordinates = validatePermission(config.getConfiguration(Configurator.MAIN_SECTION_NAME, StressTool.class));
 		init(config.getConfiguration(Configurator.MAIN_SECTION_NAME, StressTool.class));
 	    } catch (StressToolException e) {
-		// TODO Auto-generated catch block
-			try{String s =new String();PrintWriter pw = new PrintWriter(s);e.printStackTrace(pw);
-			StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error("");
-		}catch(Exception xxxxx){}
+			try{					
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				PrintStream ps = new PrintStream(baos);				
+				e.printStackTrace(ps);
+				String s =new String(baos.toByteArray());
+				StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error(s);
+				System.exit(1)  ;
+		}catch(Exception ex){ex.printStackTrace();}
+
 
 	    }
 	    	    
@@ -185,17 +192,27 @@ public class Launcher {
 	
 	} 
 	catch (StressToolConfigurationException e) {
-	    // TODO Auto-generated catch block
-		try{String s =new String();PrintWriter pw = new PrintWriter(s);e.printStackTrace(pw);
-		StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error("");
-	}catch(Exception xxxxx){}
+		try{					
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			PrintStream ps = new PrintStream(baos);				
+			e.printStackTrace(ps);
+			String s =new String(baos.toByteArray());
+			StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error(s);
+			System.exit(1)  ;
+	}catch(Exception ex){ex.printStackTrace();}
+
 
 	}
 	catch (StressToolException e) {
-	    // TODO Auto-generated catch block
-		try{String s =new String();PrintWriter pw = new PrintWriter(s);e.printStackTrace(pw);
-		StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error("");
-	}catch(Exception xxxxx){}
+		try{					
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			PrintStream ps = new PrintStream(baos);				
+			e.printStackTrace(ps);
+			String s =new String(baos.toByteArray());
+			StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error(s);
+			System.exit(1)  ;
+	}catch(Exception ex){ex.printStackTrace();}
+
 
 	}
 
@@ -242,28 +259,43 @@ public class Launcher {
 		}
 
 	    } catch (StressToolException e) {
-			try{String s =new String();PrintWriter pw = new PrintWriter(s);e.printStackTrace(pw);
-			StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error("");
-		}catch(Exception xxxxx){}
+			try{					
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				PrintStream ps = new PrintStream(baos);				
+				e.printStackTrace(ps);
+				String s =new String(baos.toByteArray());
+				StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error(s);
+				System.exit(1)  ;
+		}catch(Exception ex){ex.printStackTrace();}
 
 	    } catch (InstantiationException e) {
 		try {
 		    throw new StressToolConfigurationException(e);
 		} catch (StressToolConfigurationException e1) {
-		    // TODO Auto-generated catch block
-			try{String s =new String();PrintWriter pw = new PrintWriter(s);e1.printStackTrace(pw);
-			StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error("");
-		}catch(Exception xxxxx){}
+			try{					
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				PrintStream ps = new PrintStream(baos);				
+				e.printStackTrace(ps);
+				String s =new String(baos.toByteArray());
+				StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error(s);
+				System.exit(1)  ;
+		}catch(Exception ex){ex.printStackTrace();}
+
 
 		}
 	    } catch (IllegalAccessException e) {
 		try {
 		    throw new StressToolConfigurationException(e);
 		} catch (StressToolConfigurationException e1) {
-		    // TODO Auto-generated catch block
-			try{String s =new String();PrintWriter pw = new PrintWriter(s);e1.printStackTrace(pw);
-			StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error("");
-		}catch(Exception xxxxx){}
+			try{					
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				PrintStream ps = new PrintStream(baos);				
+				e.printStackTrace(ps);
+				String s =new String(baos.toByteArray());
+				StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error(s);
+				System.exit(1)  ;
+		}catch(Exception ex){ex.printStackTrace();}
+
 
 		}
 	    } catch (ClassNotFoundException e) {
@@ -273,18 +305,29 @@ public class Launcher {
 		    			"Check the configuration and remove class declaration if Provider is not available.");
 		} catch (StressToolConfigurationException e1) {
 		    // TODO Auto-generated catch block
-			try{String s =new String();PrintWriter pw = new PrintWriter(s);e1.printStackTrace(pw);
-			StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error("");
-		}catch(Exception xxxxx){}
+			try{					
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				PrintStream ps = new PrintStream(baos);				
+				e.printStackTrace(ps);
+				String s =new String(baos.toByteArray());
+				StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error(s);
+				System.exit(1)  ;
+		}catch(Exception ex){ex.printStackTrace();}
+
 
 		}
 		try {
 		    throw new StressToolConfigurationException(e);
 		} catch (StressToolConfigurationException e1) {
 		    // TODO Auto-generated catch block
-			try{String s =new String();PrintWriter pw = new PrintWriter(s);e1.printStackTrace(pw);
-			StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error("");
-		}catch(Exception xxxxx){}
+			try{					
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				PrintStream ps = new PrintStream(baos);				
+				e.printStackTrace(ps);
+				String s =new String(baos.toByteArray());
+				StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error(s);
+				System.exit(1)  ;
+		}catch(Exception ex){ex.printStackTrace();}
 
 		}
 	    }
@@ -325,9 +368,15 @@ public class Launcher {
     
 	    
 	    
-        }catch(Exception ex1){				try{String s =new String();PrintWriter pw = new PrintWriter(s);ex1.printStackTrace(pw);
-		StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error("");
-	}catch(Exception xxxxx){}
+        }catch(Exception ex1){
+			try{					
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				PrintStream ps = new PrintStream(baos);				
+				ex1.printStackTrace(ps);
+				String s =new String(baos.toByteArray());
+				StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error(s);
+				System.exit(1)  ;
+		}catch(Exception ex){ex.printStackTrace();}
 }
 	
 //	if(writeImplementationMap != null 
@@ -495,9 +544,16 @@ public class Launcher {
 	   try {Thread.sleep(1000);
 	   StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).info("Countdown to start the threads ("+ this.getSemaphoreCountdownTime() +") current : "+ (getSemaphoreCountdownTime() - ic));
 	    latch.countDown();
-	   } catch (Exception e) {				try{String s =new String();PrintWriter pw = new PrintWriter(s);e.printStackTrace(pw);
-		StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error("");
-	}catch(Exception xxxxx){}
+	   } catch (Exception e) {
+			try{					
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				PrintStream ps = new PrintStream(baos);				
+				e.printStackTrace(ps);
+				String s =new String(baos.toByteArray());
+				StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error(s);
+				System.exit(1)  ;
+		}catch(Exception ex){ex.printStackTrace();}
+
 }
 	    
 	}
@@ -791,21 +847,36 @@ public class Launcher {
 		    return true;
 		} 
 		catch (InvocationTargetException e) {
-			try{String s =new String();PrintWriter pw = new PrintWriter(s);e.printStackTrace(pw);
-			StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error("");
-		}catch(Exception xxxxx){}
+			try{					
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				PrintStream ps = new PrintStream(baos);				
+				e.printStackTrace(ps);
+				String s =new String(baos.toByteArray());
+				StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error(s);
+				System.exit(1)  ;
+		}catch(Exception ex){ex.printStackTrace();}
 		}
 		catch (NoSuchMethodException e) {
-			try{String s =new String();PrintWriter pw = new PrintWriter(s);e.printStackTrace(pw);
-			StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error("");
-		}catch(Exception xxxxx){}
+			try{					
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				PrintStream ps = new PrintStream(baos);				
+				e.printStackTrace(ps);
+				String s =new String(baos.toByteArray());
+				StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error(s);
+				System.exit(1)  ;
+		}catch(Exception ex){ex.printStackTrace();}
 
 			
 		}
 		catch (InstantiationException e) {
-			try{String s =new String();PrintWriter pw = new PrintWriter(s);e.printStackTrace(pw);
-			StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error("");
-		}catch(Exception xxxxx){}
+			try{					
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				PrintStream ps = new PrintStream(baos);				
+				e.printStackTrace(ps);
+				String s =new String(baos.toByteArray());
+				StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error(s);
+				System.exit(1)  ;
+		}catch(Exception ex){ex.printStackTrace();}
 
 		    
 		} catch (IllegalAccessException e) {
@@ -819,16 +890,25 @@ public class Launcher {
 		
     	}catch (StressToolConfigurationException e) {
         	    // TODO Auto-generated catch block
-			try{String s =new String();PrintWriter pw = new PrintWriter(s);e.printStackTrace(pw);
-			StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error("");
-		}catch(Exception xxxxx){}
+			try{					
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				PrintStream ps = new PrintStream(baos);				
+				e.printStackTrace(ps);
+				String s =new String(baos.toByteArray());
+				StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error(s);
+				System.exit(1)  ;
+		}catch(Exception ex){ex.printStackTrace();}
 
     	}
     	catch (StressToolException e) {
-    	    // TODO Auto-generated catch block
-			try{String s =new String();PrintWriter pw = new PrintWriter(s);e.printStackTrace(pw);
-			StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error("");
-		}catch(Exception xxxxx){}
+			try{					
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				PrintStream ps = new PrintStream(baos);				
+				e.printStackTrace(ps);
+				String s =new String(baos.toByteArray());
+				StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error(s);
+				System.exit(1)  ;
+		}catch(Exception ex){ex.printStackTrace();}
 
     	}
 	return false;
@@ -1063,21 +1143,36 @@ public class Launcher {
 	      
         } catch (InstantiationException e) {
 	      // TODO Auto-generated catch block
-			try{String s =new String();PrintWriter pw = new PrintWriter(s);e.printStackTrace(pw);
-			StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error("");
-		}catch(Exception xxxxx){}
+			try{					
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				PrintStream ps = new PrintStream(baos);				
+				e.printStackTrace(ps);
+				String s =new String(baos.toByteArray());
+				StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error(s);
+				System.exit(1)  ;
+		}catch(Exception ex){ex.printStackTrace();}
 
         } catch (IllegalAccessException e) {
 	      // TODO Auto-generated catch block
-			try{String s =new String();PrintWriter pw = new PrintWriter(s);e.printStackTrace(pw);
-			StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error("");
-		}catch(Exception xxxxx){}
+			try{					
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				PrintStream ps = new PrintStream(baos);				
+				e.printStackTrace(ps);
+				String s =new String(baos.toByteArray());
+				StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error(s);
+				System.exit(1)  ;
+		}catch(Exception ex){ex.printStackTrace();}
 
         } catch (ClassNotFoundException e) {
 	      // TODO Auto-generated catch block
-			try{String s =new String();PrintWriter pw = new PrintWriter(s);e.printStackTrace(pw);
-			StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error("");
-		}catch(Exception xxxxx){}
+			try{					
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				PrintStream ps = new PrintStream(baos);				
+				e.printStackTrace(ps);
+				String s =new String(baos.toByteArray());
+				StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error(s);
+				System.exit(1)  ;
+		}catch(Exception ex){ex.printStackTrace();}
 
         }
 	  }
