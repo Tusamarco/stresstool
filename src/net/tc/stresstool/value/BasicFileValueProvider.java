@@ -183,17 +183,31 @@ public class BasicFileValueProvider extends BasicValueProvider implements ValueP
     	ax.printStackTrace();
     	
       }
-      int upto = length>upperbound?upperbound:length;
+      
+      if(!Utility.isPositiveInt(upperbound))
+    	  upperbound = (upperbound *-1);
+      
+      int upto=0;
+      if(length > 0 && length < upperbound )
+    	  upto= length;
+      else
+    	  upto = upperbound;
+      
+      upto=upto>txtFile.length?txtFile.length:upto;
+      
+//      int upto = length>upperbound?upperbound:length;
      
 //      sb.append("\"");
-      while (sb.length() < upto)
-      {
-    	  if(textPos >= txtFile.length)
-    		  textPos =0;
-    	  sb.append(txtFile[textPos++]);
-    	  if(sb.length() > upto)
-    		break;
-      }
+      try{
+	      while (sb.length() < upto)
+	      {
+	    	  if(textPos >= txtFile.length)
+	    		  textPos =0;
+	    	  sb.append(txtFile[textPos++]);
+	    	  if(sb.length() > upto)
+	    		break;
+	      }
+      }catch(Exception ex){ex.printStackTrace();}
 
       return sb.subSequence(0, upto).toString();
 //      + "\"";

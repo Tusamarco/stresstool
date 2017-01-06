@@ -568,6 +568,9 @@ import javax.imageio.ImageIO;
   }  
    public static boolean isNumeric(Object obj)  
   {  
+	   if(obj == null)
+	  	return false;
+	   
 	 if(obj instanceof java.lang.Integer
 		 || obj instanceof java.lang.Long)
 	   return true;
@@ -582,7 +585,10 @@ import javax.imageio.ImageIO;
   	catch(NumberFormatException nfe)  
   	{  
   		return false;  
-  	}  
+  	}
+  	catch(ClassCastException cast){
+  		return false;
+  	}
   	return true;  
   }  
 

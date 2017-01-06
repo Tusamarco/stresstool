@@ -268,10 +268,15 @@ private boolean checkIfTableExists(Table tableIn,SQLObject lSQL){
 	  ArrayList<Table>	tables = (ArrayList)lSQL.getSourceTables();
 	  if(tables == null)
 		  	return false;
-	  
+	  int found = 0;
 	  for(Table table:tables){
-		  if(table.getName().equals(tableIn.getName()))
+		  if(table.getName().equals(tableIn.getName())  && getTables().length >= this.batchSize)
 			  return true;
+		  else if(table.getName().equals(tableIn.getName())  && getTables().length < this.batchSize && getTables().length > 1){
+			  found++;
+			  if((getTables().length/found) < 2)
+				  return true;
+		  }
 	  	}
 	  }
 	  return false;
@@ -291,12 +296,12 @@ private boolean checkIfTableExists(Table tableIn,SQLObject lSQL){
 		StringBuffer sb = new StringBuffer();
 		
 		for(Object attrib : (Object[]) (maxAttribute.toArray())){
-				if (sb.length() > 1)
+				if (sb.length() > 0)
 					sb.append(",");
 				sb.append("MAX("+ ((Attribute)attrib).getName() +") as " +((Attribute)attrib).getName()+" ");
 		}	
 			String SQL = "Select " + sb.toString() + " FROM " + table.getName();
-			if(sb.length() > 1){
+			if(sb.length() > 0){
 				Connection conn = null;
 				if(this.getActiveConnection()==null){
 				  try {
@@ -326,15 +331,10 @@ private boolean checkIfTableExists(Table tableIn,SQLObject lSQL){
 					}
 					
 					
-				  } catch (SQLException e) {
-						try{String s =new String();PrintWriter pw = new PrintWriter(s);e.printStackTrace(pw);
-						StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error("");
+				  } catch (Exception e) {
 						e.printStackTrace();
-					}catch(Exception xxxxx){}
-
 				  }
 				  finally{
-					  
 					  this.getConnProvider().returnConnection((com.mysql.jdbc.Connection) conn);
 				  }
 				}
@@ -357,7 +357,7 @@ private boolean checkIfTableExists(Table tableIn,SQLObject lSQL){
 					&& attrib.getName() == null)
 				continue;
 			if(table.getUpdateSetAttributes().indexOf("#"+attrib.getName()+"#") > -1){
-				if (sqlValues.length() > 1)
+				if (sqlValues.length() > 0)
 					sqlValues.append(", ");
 
 				if (attrib.getSpecialFunction() == null && !attrib.isAutoIncrement()) {

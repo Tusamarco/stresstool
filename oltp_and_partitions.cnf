@@ -2,14 +2,14 @@
 #connection oriented settings
 #connUrl=jdbc:mysql://192.168.0.5:3306
 connUrl=jdbc:mysql://127.0.0.1:3306
-database=test2
+database=test3
 user=stress	
 password=test
 connParameters=autoReconnect=true  
 connectionPool=false
 connectionPoolClass= 
 selectForceAutocommitOff=false
-stickyconnection=true
+stickyconnection=false
 
 
 FKEnable=false
@@ -22,12 +22,12 @@ doSimplePk=false
 droptable=false
 ignoreBinlog=false
 operationShort=true  
-poolNumber=1
-pctInsert=00
+poolNumber=6
+pctInsert=50
 pctUpdate=100 
 pctSelect=100 
 pctDelete=100 
-repeatNumber=10000
+repeatNumber=1000
 HardStopLimit=100
 UseHardStop=false
 StatIntervalMs=1000
@@ -88,13 +88,14 @@ processaverage=true
 
 
 [net.tc.stresstool.actions.DeleteBase] 
+#for consistency the number of tables should never be higher than the ones declared in the Insert class
 sleepDelete=100 
 usePrepareStatement=false
 deleteRange = 100
-batchSize=1
+batchSize=50
 lazyInterval=0
 lazyDelete=false
-numberOfprimaryTables=300
+numberOfprimaryTables=10
 
 [net.tc.stresstool.actions.SelectBase]
 #for consistency the number of tables should never be higher than the ones declared in the Insert class
@@ -104,9 +105,9 @@ SelectFilterMethod=in
 SleepSelect=100 
 
 numberOfprimaryTables=300
-numberOfSecondaryTables=0
+numberOfSecondaryTables=200
 numberOfIntervalKeys=100
-numberOfJoinTables=0
+numberOfJoinTables=3
 joinField=a
 forceIndex=false
 indexName=IDX_as
@@ -118,38 +119,21 @@ textAttributeMaxSearchlength=5
 
 [net.tc.stresstool.actions.InsertBase]
 usePrepareStatement=false
-numberOfprimaryTables=50
-numberOfSecondaryTables=0
+numberOfprimaryTables=30
+numberOfSecondaryTables=20
 useAutoIncrement=true
 joinField=a
 sleepWrite=10
 lazyCreation=true
-lazyInterval=10
+lazyInterval=1
 batchSize=1
 #jsonFile=/Users/marcotusa/programs/JBuilder/workspace/stresstool/json_definition_long.json
 #jsonFile=/Users/marcotusa/programs/JBuilder/workspace/stresstool/json_definition.json
-jsonFile=/Users/marcotusa/programs/JBuilder/workspace/stresstool/json_simplePK_secondary_partition.json
-
-
-#[net.tc.stresstool.actions.InsertEmployeesTest]
-#usePrepareStatement=false
-#numberOfprimaryTables=1
-#numberOfSecondaryTables=1
-#useAutoIncrement=true
-#joinField=a
-#sleepWrite=100
-#lazyCreation=true
-#lazyInterval=200
-#batchSize=50
-
-
-
-
-
+jsonFile=/Users/marcotusa/programs/JBuilder/workspace/stresstool/json_oltp.json
 
 [net.tc.stresstool.actions.UpdateBase]
 usePrepareStatement=false
-delayStartRecords = 1000
+delayStartRecords = 100
 numberOfprimaryTables=300
 numberOfSecondaryTables=0
 useAutoIncrement=true
@@ -157,4 +141,4 @@ joinField=a
 sleepUpdate=100
 lazyUpdate=true
 lazyInterval=4
-batchSize=1
+batchSize=50

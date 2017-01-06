@@ -4,11 +4,11 @@
 	"tables":{
 		"table":[
 				{
-					"database":"test",
-					"tablename":"tbtest",
+					"database":"test3",
+					"tablename":"oltp1tb",
 					"engine":"innodb",
 					"primarykey":["autoInc"],
-					"autoincrementvalue":5340,
+					"autoincrementvalue":0,
 					"defaultcharset":"utf8",
 					"defaultcollation":"utf8_bin",
 					"haspartition":false,
@@ -16,15 +16,20 @@
 					"datadir":"",
 					"rowformat":"dynamic",
 					"multiple":true,
+					"rangeLength":"100",
 					"selectcondition":"autoinc,uuid,serverid,a,b,c,counter,time,partitionid,date,strrecordtype",
-					"wherecondition":" #a# = #?a?# and #date# #?date_RANGE_OPTION_BETWEEN?# and #b# like #?b?# ", 
+					"updatesetattributes":"#a#,#b#,#serverid#,#time#,#uuid#",
+					"wherecondition_s":" #time# #?time_RANGE_OPTION_BETWEEN|3000?time# AND #a# #?a_RANGE_OPTION_BETWEEN|100?a# AND #b# like #?b|20?b#",
+					"wherecondition_u":" #date# #?date_RANGE_OPTION_BETWEEN|30?date# AND #b# like #?b|5?b#",
+					"wherecondition_d":" #date# #?date_RANGE_OPTION_BETWEEN|30?date# AND #uuid# #?uuid_RANGE_OPTION_IN|100?uuid#",
+				    "example_where":" #autoinc# = #?autoinc?autoinc#  AND #date# #?date_RANGE_OPTION_BETWEEN?date#  and #b# like #?b|20?b# " ,
 					"keys":
 							{
 							"key":
 								[ 
-									{"name":"IDX_a","unique":false,"attributes":["a"]},
-									{"name":"IDX_uuid","unique":false,"attributes":["uuid"]},			
-									{"name":"IDX_date","unique":false,"attributes":["date"]}			
+									{"name":"IDX_a","unique":false,"attributes":["a","time"]},
+									{"name":"IDX_uuid","unique":false,"attributes":["uuid","date"]},			
+									{"name":"IDX_date","unique":false,"attributes":["date","b"]}			
 			
 								]
 							},	
@@ -49,8 +54,8 @@
 					}
 				},
 				{
-					"database":"test",
-					"tablename":"tbtestPart",
+					"database":"test3",
+					"tablename":"oltpPart",
 					"engine":"innodb",
 					"multiple":false,
 					"primarykey":["date","autoInc"],
@@ -60,6 +65,13 @@
 					"tablespace":"",
 					"datadir":"",
 					"rowformat":"dynamic",
+					"selectcondition":"autoinc,uuid,serverid,a,b,c,counter,time,partitionid,date,strrecordtype",
+					"updatesetattributes":"#a#,#b#,#time#,#uuid#,#counter#",
+					"wherecondition_s":"#date# #?date_RANGE_OPTION_BETWEEN|300?date# AND #a# #?a_RANGE_OPTION_BETWEEN|1000?a#",
+					"wherecondition_u":"#date# #?date_RANGE_OPTION_BETWEEN|10?date# AND #b# like #?b|20?b#",
+					"wherecondition_d":"#date# #?date_RANGE_OPTION_BETWEEN|100?date# AND #autoInc# #?autoInc_RANGE_OPTION_IN|200?autoInc#",
+				    "example_where":" #autoInc# = #?autoInc?autoinc#  and #date# #?date_RANGE_OPTION_BETWEEN?date# #date# #?date_RANGE_OPTION_BETWEEN?date#  and #b# like #?b|20?b#" ,
+					
 					
 					"keys":
 							{
@@ -93,8 +105,8 @@
 						"attributes":["date"],
 						"function":"to_days",
 						"interval":"month",
-						"starttime":"2015-11-01",
-						"endtime":"2016-12-31",
+						"starttime":"2016-11-01",
+						"endtime":"2019-12-31",
 						"partitions":"0",
 						"lists":{"list":[]},
 						"ranges":{"range":[]}
@@ -103,8 +115,8 @@
 				},				
 
 				{
-					"database":"test",
-					"tablename":"tbtestPartHash",
+					"database":"test3",
+					"tablename":"oltpPartHash",
 					"engine":"innodb",
 					"multiple":false,
 					"primarykey":["autoInc"],
@@ -114,6 +126,12 @@
 					"tablespace":"",
 					"datadir":"",
 					"rowformat":"dynamic",
+					"selectcondition":"autoinc,uuid,serverid,a,b,c,counter,time,partitionid,date,strrecordtype",
+					"updatesetattributes":"#a#,#b#,#time#,#uuid#,#counter#",
+					"wherecondition_s":"#autoInc# #?autoInc_RANGE_OPTION_BETWEEN|300?autoInc# AND #a# #?a_RANGE_OPTION_BETWEEN|1000?a#",
+					"wherecondition_u":"#autoInc# #?autoInc_RANGE_OPTION_BETWEEN|50?autoInc# AND #b# like #?b|20?b#",
+					"wherecondition_d":"#autoInc# #?autoInc_RANGE_OPTION_BETWEEN|20?autoInc# ",
+					
 					
 					"keys":
 							{
@@ -157,11 +175,11 @@
 				},				
 
 				{
-					"database":"test",
-					"tablename":"tbtestPartKey",
+					"database":"test3",
+					"tablename":"oltpPartKey",
 					"parent":"",
 					"engine":"innodb",
-					"multiple":true,
+					"multiple":false,
 					"primarykey":["autoInc","a"],
 					"autoincrementvalue":0,
 					"defaultcharset":"utf8",
@@ -169,6 +187,12 @@
 					"tablespace":"",
 					"datadir":"",
 					"rowformat":"dynamic",
+					"selectcondition":"autoinc,uuid,serverid,a,b,c,counter,time,partitionid,date,strrecordtype",
+					"updatesetattributes":"#a#,#b#,#time#,#uuid#,#counter#",
+					"wherecondition_s":"#autoInc# #?autoInc_RANGE_OPTION_BETWEEN|300?autoInc# AND #a# #?a_RANGE_OPTION_BETWEEN|1000?a#",
+					"wherecondition_u":"#autoInc# #?autoInc_RANGE_OPTION_BETWEEN|50?autoInc# AND #b# like #?b|20?b#",
+					"wherecondition_d":"#autoInc# #?autoInc_RANGE_OPTION_BETWEEN|20?autoInc# ",
+					
 					
 					"keys":
 							{
@@ -210,81 +234,24 @@
 	
 					}
 				},				
-
-
 				{
-					"database":"test",
-					"tablename":"tbtestPartList",
+					"database":"test3",
+					"tablename":"oltp_child",
+					"parent":"oltp1tb",
 					"engine":"innodb",
-					"multiple":false,
-					"primarykey":["partitionid","autoInc"],
+					"multiple":true,
+					"primarykey":["a","bb"],
 					"autoincrementvalue":0,
 					"defaultcharset":"utf8",
 					"defaultcollation":"utf8_bin",
 					"tablespace":"",
 					"datadir":"",
 					"rowformat":"dynamic",
-					
-					"keys":
-							{
-							"key":
-								[
-									{"name":"IDX_a","unique":false,"attributes":["a"]},
-									{"name":"IDX_uuid","unique":false,"attributes":["uuid"]},
-									{"name":"IDX_autoinc","unique":false,"attributes":["autoInc"]}			
-								]
-							},
-					"haspartition":true,	
-					"attributes":{
-						"attribute":
-							[
-								{"name":"autoInc","datatype":"bigint","datadimension":"11","default":"","null":false,"autoincrement":true},
-								{"name":"uuid","datatype":"char","datadimension":"36","default":"","null":false,"specialFunction":"UUID()"},				
-								{"name":"serverid","datatype":"smallint","datadimension":"6","default":"","null":false},				
-								{"name":"a","datatype":"int","datadimension":"11","default":"","null":false},
-								{"name":"b","datatype":"varchar","datadimension":"100","default":"","null":false},
-								{"name":"c","datatype":"char","datadimension":"200","default":"","null":false},
-								{"name":"counter","datatype":"bigint","datadimension":"20","default":"","null":true},								
-								{"name":"time","datatype":"timestamp","default":"CURRENT_TIMESTAMP","ON UPDATE":"CURRENT_TIMESTAMP","null":false,"specialFunction":"NOW()"},
-								{"name":"partitionid","datatype":"int","datadimension":"11","upperlimit":"10","default":"0","null":true},								
-								{"name":"date","datatype":"date","default":"","null":false,"lazy":"0"},
-								{"name":"strrecordtype","datatype":"char","datadimension":"3","default":"","null":true}				
-							]
-					},
-					"partitionDefinition":{
-						"partitionBy":"list",
-						"subpartition":false,
-						"attributes":["partitionid"],
-						"function":"",
-						"interval":"",
-						"starttime":"",
-						"endtime":"",
-						"partitions":"",
-						"lists":{"list":[
-							{"name":"pLow","value":"0,1,2,3,4,5,6"},
-							{"name":"pMid","value":"7,8,9,10,11,12,13"},
-							{"name":"pMidHigh","value":"14,15,16,17,18,19,20"},
-							{"name":"pHigh","value":"21,22,23,24,25,26,27,28,29,30,31,32,33"},
-							{"name":"pUltraHigh","value":"34,35,36,37,38,39,40,41,42,43,44"}
-						]},
-						"ranges":{"range":[]}
-	
-					}
-				},				
-
-				{
-					"database":"test",
-					"tablename":"tbtest_child",
-					"parent":"tbtest",
-					"engine":"innodb",
-					"multiple":true,
-					"primarykey":["a","bb"],
-					"autoincrementvalue":5340,
-					"defaultcharset":"utf8",
-					"defaultcollation":"utf8_bin",
-					"tablespace":"",
-					"datadir":"",
-					"rowformat":"dynamic",
+					"selectcondition":"a,serverid,bb,time,partitionid,stroperation",
+					"updatesetattributes":"#serverid#,#time#,#partitionid#,#stroperation#",
+					"wherecondition_s":" #time# #?time_RANGE_OPTION_BETWEEN|3000?time# AND #a# #?a_RANGE_OPTION_BETWEEN|100?a#",
+					"wherecondition_u":" #date# #?date_RANGE_OPTION_BETWEEN|30?date# AND #bb# #?bb_RANGE_OPTION_IN|300?bb#",
+					"wherecondition_d":" #date# #?date_RANGE_OPTION_BETWEEN|30?date# AND #serverid# #?serverid_RANGE_OPTION_IN|100?serverid# ",
 					"keys":
 							{
 							"key":
@@ -308,7 +275,46 @@
 					"partitionDefinition":{
 	
 					}
+				},
+				{
+					"database":"test3",
+					"tablename":"oltp_child_blob",
+					"parent":"oltpPart",
+					"engine":"innodb",
+					"multiple":false,
+					"primarykey":["a","bb"],
+					"autoincrementvalue":0,
+					"defaultcharset":"utf8",
+					"defaultcollation":"utf8_bin",
+					"tablespace":"",
+					"datadir":"",
+					"rowformat":"dynamic",
+					"selectcondition":"a,bb,text",
+					"updatesetattributes":"#a#,#bb#,#serverid#,#time#",
+					"wherecondition_s":" #time# #?time_RANGE_OPTION_BETWEEN|3000?time# AND #a# #?a_RANGE_OPTION_BETWEEN|100?a#",
+					"wherecondition_u":" #date# #?date_RANGE_OPTION_BETWEEN|30?date# AND #bb# #?bb_RANGE_OPTION_IN|300?bb#",
+					"wherecondition_d":" #date# #?date_RANGE_OPTION_BETWEEN|30?date# AND #serverid# #?serverid_RANGE_OPTION_IN|100?serverid# ",
+					"keys":
+							{
+							"key":
+								[			
+									{"name":"bb","unique":true,"attributes":["bb"]}			
+								]
+							},
+					"haspartition":false,	
+					"attributes":{
+						"attribute":
+							[
+								{"name":"a","datatype":"int","datadimension":"11","default":"","null":false},
+								{"name":"text","datatype":"LONGTEXT","default":"","null":false},				
+								{"name":"bb","datatype":"int","datadimension":"11","default":"","null":false,"autoincrement":true}
+							]
+					},
+					"partitionDefinition":{
+	
+					}
 				}
+				
 
 			]
 		}

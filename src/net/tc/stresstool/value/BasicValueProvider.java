@@ -146,14 +146,14 @@ public class BasicValueProvider implements ValueProvider {
 	  	case DataType.LONGBLOB:
        	  {
     	    int lowerbound = 0;
-    	    long upperbound = Long.parseLong("4294967296");
+    	    long upperbound = Long.parseLong("4294967");
     	    return ("\"" + getString(Utility.getNumberFromRandomMinMax(0, upperbound),length.intValue()) +"\"");
      	  }
 	  	case DataType.LONGTEXT:
        	  {
     	    int lowerbound = 0;
-    	    long upperbound = Long.parseLong("4294967296");
-    	    return ("\"" + getString(Utility.getNumberFromRandomMinMax(0, upperbound),length.intValue()) +"\"");
+    	    long upperbound = Long.parseLong("4294967");
+    	    return ("\"" + this.getString(Utility.getNumberFromRandomMinMax(0, upperbound),length.intValue()) +"\"");
      	  }    	  
     	}
     	break;
@@ -486,6 +486,18 @@ private Object valueForIn(Table table,Attribute attrib,int rangeLength) {
 			sb.append("'" + TimeTools.getTimeStampFromDate(getRandomDate(), null) + "'");
 		}
 		sb.append(")");
+	}
+	else if(attrib.getSpecialFunction() != null 
+			&& !attrib.getSpecialFunction().equals("")){
+		for(int ic = 0 ; ic < loop; ic++){
+			if(ic > 0)
+				sb.append(",");
+			sb.append(attrib.getSpecialFunction());
+		}
+		sb.append(")");
+
+		
+		
 	}
 	else{
 		return null;
