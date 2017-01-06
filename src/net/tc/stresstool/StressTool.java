@@ -197,7 +197,8 @@ public class StressTool {
 	        	 if(StressTool.isStressToolRunning()) 
 	        	  stats.collectStatistics();
 	            
-	             if(launcher.getStatLoops() > loops 
+	             if(
+	            	i > launcher.getHardStopLimit()  
 	        	     && launcher.isUseHardStop())
 	        	 break;
 	             

@@ -209,16 +209,22 @@ public class DeleteBase extends StressActionBase implements DeleteAction{
 		  ArrayList<Table>	tables = (ArrayList)lSQL.getSourceTables();
 		  if(tables == null)
 			  	return false;
-		  
+		  int found = 0;
 		  for(Table table:tables){
-			  if(table.getName().equals(tableIn.getName()))
+			  if(table.getName().equals(tableIn.getName())  && getTables().length >= this.batchSize)
 				  return true;
+			  else if(table.getName().equals(tableIn.getName())  && getTables().length < this.batchSize && getTables().length > 1){
+				  found++;
+				  if((getTables().length/found) < 2)
+					  return true;
+			  }
 		  	}
 		  }
 		  return false;
 		  
-	}	  
-	public Table getLeadingTable() {
+	  }
+
+	  public Table getLeadingTable() {
 		return leadingTable;
 	}
 	public void setLeadingTable(Table leadingTable) {
@@ -232,12 +238,12 @@ public class DeleteBase extends StressActionBase implements DeleteAction{
 		StringBuffer sb = new StringBuffer();
 		
 		for(Object attrib : (Object[]) (maxAttribute.toArray())){
-				if (sb.length() > 1)
+				if (sb.length() > 0)
 					sb.append(",");
 				sb.append("MAX("+ ((Attribute)attrib).getName() +") as " +((Attribute)attrib).getName()+" ");
 		}	
 			String SQL = "Select " + sb.toString() + " FROM " + table.getName();
-			if(sb.length() > 1){
+			if(sb.length() > 0){
 				Connection conn = null;
 				if(this.getActiveConnection()==null){
 				  try {

@@ -20,6 +20,7 @@ import java.util.Map;
 
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.Statement;
+import com.mysql.jdbc.exceptions.MySQLSyntaxErrorException;
 
 public class DataObject extends MultiLanguage
 {
@@ -284,9 +285,15 @@ public class DataObject extends MultiLanguage
 			 Statement stmt = (Statement) conn.createStatement();
 			for(int ac = 0 ; ac < commands.size(); ac++){
 				try{StressTool.getLogProvider().getLogger(LogProvider.LOG_SQL).info(commands.get(ac)  );}catch(StressToolConfigurationException e){}	
-			  ResultSet rs = stmt.executeQuery(commands.get(ac));
-			  rs.last();
-			  lines[ac] = rs.getRow();
+			  ResultSet rs = null;
+			  try{
+				  rs = stmt.executeQuery(commands.get(ac));
+				  rs.last();
+				  lines[ac] = rs.getRow();
+			  }catch(Exception mx){
+				  System.out.println(commands.get(ac));mx.printStackTrace();
+				  }
+			  
 			  try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).info("Execute SQL command(s) Retrived Rows:"+lines[ac] +  "  : " + commands.get(ac)  );}catch(StressToolConfigurationException e){}	
 			  rs.close();
 			  rs = null;

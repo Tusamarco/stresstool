@@ -21,10 +21,10 @@
 					"updatesetattributes":"#a#,#b#,#serverid#,#time#",
 					"wherecondition_s":" #time# #?time_RANGE_OPTION_BETWEEN|30?time#",
 					"wherecondition_u":" #autoInc#=#?autoInc?autoInc#",
-					"wherecondition_u_secondary_unable":" #a# #?a_RANGE_OPTION_BETWEEN|100?a#  #time# #?time_RANGE_OPTION_BETWEEN|1000?time# ",
+					"wherecondition_u_secondary_unable":" #a# #?a_RANGE_OPTION_BETWEEN|100?a# AND #time# #?time_RANGE_OPTION_BETWEEN|1000?time# ",
 					"wherecondition_d":" #autoInc#=#?autoInc?autoInc#",
 					"wherecondition_d":" #a# #?a_RANGE_OPTION_BETWEEN|100?a# AND #time# #?time_RANGE_OPTION_BETWEEN|1000?time# ",
-				    "example_where":" #autoinc# = #?autoinc?autoinc#  and #date# #?date_RANGE_OPTION_BETWEEN?date#  and #b# like #?b|20?b# " ,
+				    "example_where":" #autoinc# = #?autoinc?autoinc#  aAND #date# #?date_RANGE_OPTION_BETWEEN?date#  and #b# like #?b|20?b# " ,
 					"keys":
 							{
 							"key":
@@ -64,9 +64,9 @@
 					"rowformat":"dynamic",
 					"selectcondition":"autoinc,uuid,serverid,a,b,c,counter,time,partitionid,date,strrecordtype",
 					"updatesetattributes":"#a#,#b#,#time#,#uuid#,#counter#",
-					"wherecondition_s":"#date# #?date_RANGE_OPTION_BETWEEN|200?date# #autoInc# #?autoInc_RANGE_OPTION_IN|200?autoInc#",
-					"wherecondition_u":"#date# #?date_RANGE_OPTION_BETWEEN|20?date# #autoInc# #?autoInc_RANGE_OPTION_IN|200?autoInc#",
-					"wherecondition_d":"#date# #?date_RANGE_OPTION_BETWEEN|20?date#",
+					"wherecondition_s":"#date# #?date_RANGE_OPTION_BETWEEN|300?date# AND #autoInc# #?autoInc_RANGE_OPTION_IN|200?autoInc#",
+					"wherecondition_u":"#date# #?date_RANGE_OPTION_BETWEEN?date# AND #autoInc# #?autoInc_RANGE_OPTION_IN|200?autoInc#",
+					"wherecondition_d":"#date# #?date_RANGE_OPTION_BETWEEN?date#",
 				    "example_where":" #autoInc# = #?autoInc?autoinc#  and #date# #?date_RANGE_OPTION_BETWEEN?date# #date# #?date_RANGE_OPTION_BETWEEN?date#  and #b# like #?b|20?b#" ,
 					
 					

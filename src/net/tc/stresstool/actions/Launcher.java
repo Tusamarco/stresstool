@@ -76,7 +76,7 @@ public class Launcher {
     private Date startDate = null;
     private Date endDate = null ;
     private int daysdiffernce = 0; 
-    private String exitOn = "all"; //
+    private String exitOn = "all"; //#dml #read
     
     
     public Launcher(Configurator configIn) {

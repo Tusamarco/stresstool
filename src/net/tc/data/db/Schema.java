@@ -103,7 +103,7 @@ public class Schema {
 
 	    
 	}
-	if(sbTables.length() > 1){
+	if(sbTables.length() > 0){
 	    sbSchema.append(sbTables + "\n");
 	    sbSchema.append("SET FOREIGN_KEY_CHECKS=1;\n");
 //	    sbSchema.append("SET SQL_NOTES=1;\n");
@@ -191,7 +191,12 @@ public class Schema {
 	    
 	    for(Object idx:table.getIndexes().getValuesAsArrayOrderByKey()){
 		for(Object idxColname:((Index)idx).getColumnsDefinition()){
-		    ((Attribute)table.getMetaAttributes((String)idxColname)).setLazy(false); 
+		    try{
+		    	((Attribute)table.getMetaAttributes((String)idxColname)).setLazy(false); 
+		    }catch(Exception ex){
+		    	System.out.println(" Table  " + table.getName() + " Attrib " + (String)idxColname) ;
+		    	ex.printStackTrace();
+		    }
 //		    System.out.println(((Attribute)table.getMetaAttributes((String)idxColname)).isLazy());
 		}
 		

@@ -340,7 +340,7 @@ public class Table {
 	    StringBuffer sbAtt = new StringBuffer();
 	    
 	    while (itAtt.hasNext()){
-		if (sbAtt.length() > 1)
+		if (sbAtt.length() > 0)
 		    	sbAtt.append(",\n");
 		Attribute attribute = (Attribute) this.getMetaAttributes((String)itAtt.next());
 		sbAtt.append("`"+ attribute.getName() +"` ");
@@ -369,7 +369,7 @@ public class Table {
 	    Iterator itIdx = this.getIndexes().iterator();
 	    if(itIdx != null){
 		while(itIdx.hasNext()){
-		    if(sbIdx.length() > 1)
+		    if(sbIdx.length() > 0)
 			sbIdx.append(", \n");
 		    Index idx = this.getIndex((String) itIdx.next());
 		    if(idx.isUnique()){
@@ -383,7 +383,7 @@ public class Table {
 	    }
 	    
 	    sbHead.append(sbAtt.toString());
-	    if(sbIdx.length() > 1){
+	    if(sbIdx.length() > 0){
 		sbHead.append(",\n");
 		sbHead.append(sbIdx.toString());
 	    }
@@ -621,7 +621,7 @@ public class Table {
 		for(Object attrib: (Object[])this.getMetaAttributes().getValuesAsArrayOrderByKey()){
 //			System.out.println("---------- " + ((Attribute)attrib).getName());
 			if(whereCondition != null && ((Attribute)attrib) != null &&
-					whereCondition.indexOf("#" + ((Attribute)attrib).getName() + "#") > 0){
+					whereCondition.indexOf("#" + ((Attribute)attrib).getName() + "#") > -1){
 //				System.out.println("---------- 2 " + ((Attribute)attrib).getName());
 				attribsWhere.add((Attribute)attrib) ;
 				

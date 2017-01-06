@@ -134,7 +134,7 @@ public class Index implements Comparator {
 	if(this.getColumnsDefinition() != null){
 	    StringBuffer def = new StringBuffer();
 	    for (String sr : this.getColumnsDefinition() ){
-		if(def.length() > 1)
+		if(def.length() > 0)
 		    def.append(", ");
 		def.append(sr);
 	    }

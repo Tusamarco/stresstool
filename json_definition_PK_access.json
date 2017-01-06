@@ -36,11 +36,11 @@
 					"attributes":{
 						"attribute":
 							[
-								{"name":"autoInc","datatype":"bigint","datadimension":"11","default":"","null":false,"autoincrement":true,"where_attribute":true},
+								{"name":"autoInc","datatype":"bigint","datadimension":"11","default":"","null":false,"autoincrement":true},
 								{"name":"uuid","datatype":"char","datadimension":"36","default":"","null":false,"specialFunction":"UUID()"},				
-								{"name":"serverid","datatype":"smallint","datadimension":"6","default":"","null":false,"where_attribute":false},
-								{"name":"a","datatype":"int","datadimension":"11","default":"","null":false,"where_attribute":true},				
-								{"name":"b","datatype":"varchar","datadimension":"100","default":"","null":false,"where_attribute":true},
+								{"name":"serverid","datatype":"smallint","datadimension":"6","default":"","null":false},
+								{"name":"a","datatype":"int","datadimension":"11","default":"","null":false},				
+								{"name":"b","datatype":"varchar","datadimension":"100","default":"","null":false},
 								{"name":"c","datatype":"char","datadimension":"200","default":"","null":false},
 								{"name":"counter","datatype":"bigint","datadimension":"20","default":"","null":true},								
 								{"name":"time","datatype":"timestamp","default":"CURRENT_TIMESTAMP","onUpdate":"CURRENT_TIMESTAMP","null":false,"specialFunction":"NOW()"},
