@@ -348,12 +348,14 @@ public class InsertBase extends StressActionBase implements WriteAction,
 	/**
 	 * @return the tableEngine
 	 */
+	@Deprecated
 	public String getTableEngine() {
 	    return tableEngine;
 	}
 	/**
 	 * @param tableEngine the tableEngine to set
 	 */
+	@Deprecated
 	public void setTableEngine(String tableEngine) {
 	    this.tableEngine = tableEngine;
 	}

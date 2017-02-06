@@ -395,6 +395,9 @@ public class DataObject extends MultiLanguage
 		    		e.printStackTrace();
 		    }
 		}
+		else if(sqle.getErrorCode() == 1146){
+				try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error("ERROR Found for thread = " + Thread.currentThread().getId() + " " + sqle.getLocalizedMessage());}catch(StressToolConfigurationException e){}
+		}
 		else if(sqle.getErrorCode() > 0 
 				&& sqle.getErrorCode() != 1452
 				&& sqle.getErrorCode() != 1205
@@ -405,8 +408,9 @@ public class DataObject extends MultiLanguage
 //		    	sqle.printStackTrace();
 		    	
 		    	try {
-		    			iLine = executeSQL(stmt);
-		    			Thread.sleep(500);
+		    		Thread.sleep(500);	
+		    		iLine = executeSQL(stmt);
+		    			
 		    } catch (InterruptedException e) {
 		    	try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).warn("Error from JDBC for thread = " + Thread.currentThread().getId() +" | " + sqle.getErrorCode() + " : " +sqle.getMessage()+ "\n Reducing the FLOW and try to recover transaction");}catch(StressToolConfigurationException ew){}
 		    	Thread.sleep(500);

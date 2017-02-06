@@ -375,6 +375,13 @@ public class SynchronizedMap  implements Map
    }
 
    public synchronized Object getValueByPosition(int pos){
+//	if(pos < this.size()){
+//		return values.get(pos);
+//	} 
+//	else{
+//		System.out.println("Error " + this.size() + values.get(values.size() -1));
+//		return values.get(pos);
+//	}
 	 return values.get(pos);
    }
 

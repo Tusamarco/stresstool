@@ -1,8 +1,8 @@
 [main]
 #connection oriented settings
 #connUrl=jdbc:mysql://192.168.0.5:3306
-connUrl=jdbc:mysql://127.0.0.1:3306
-database=test1
+connUrl=jdbc:mysql://127.0.0.1:3307
+database=test3
 user=stress	
 password=test
 connParameters=autoReconnect=true  
@@ -22,12 +22,13 @@ doSimplePk=false
 droptable=false
 ignoreBinlog=false
 operationShort=true  
-poolNumber=1
-pctInsert=0
+poolNumber=10
+pctInsert=50
 pctUpdate=100 
 pctSelect=0 
-pctDelete=0 
-repeatNumber=500
+pctDelete=100 
+#repeatNumber=1
+repeatNumber=5000
 HardStopLimit=1000
 UseHardStop=false
 StatIntervalMs=100
@@ -117,18 +118,18 @@ textAttributeMaxSearchlength=5
 
 [net.tc.stresstool.actions.InsertBase]
 usePrepareStatement=false
-numberOfprimaryTables=300
+numberOfprimaryTables=1
 numberOfSecondaryTables=0
 useAutoIncrement=true
 joinField=a
-sleepWrite=10
+sleepWrite=500
 lazyCreation=true
 lazyInterval=10
 batchSize=1
 #jsonFile=/Users/marcotusa/programs/JBuilder/workspace/stresstool/json_definition_long.json
 #jsonFile=/Users/marcotusa/programs/JBuilder/workspace/stresstool/json_definition.json
-jsonFile=/Users/marcotusa/programs/JBuilder/workspace/stresstool/json_simplePk.json
-
+#jsonFile=/Users/marcotusa/programs/JBuilder/workspace/stresstool/json_simplePk.json
+jsonFile=/Users/marcotusa/programs/JBuilder/workspace/stresstool/json_simplePk_test_for_Page.json
 
 #[net.tc.stresstool.actions.InsertEmployeesTest]
 #usePrepareStatement=false
@@ -152,7 +153,7 @@ numberOfprimaryTables=1
 numberOfSecondaryTables=0
 useAutoIncrement=true
 joinField=a
-sleepUpdate=100
+sleepUpdate=500
 lazyUpdate=false
 lazyInterval=10
 batchSize=10

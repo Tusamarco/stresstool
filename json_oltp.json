@@ -306,7 +306,7 @@
 						"attribute":
 							[
 								{"name":"a","datatype":"int","datadimension":"11","default":"","null":false},
-								{"name":"text","datatype":"LONGTEXT","default":"","null":false},				
+								{"name":"text","datatype":"LONGTEXT","default":"","upperlimit":"5000","null":false},				
 								{"name":"bb","datatype":"int","datadimension":"11","default":"","null":false,"autoincrement":true}
 							]
 					},

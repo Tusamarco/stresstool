@@ -395,10 +395,10 @@ public class StressTool {
 	    sb.append("* droptable  [true|false] = drop tables on test DB\n");
 	    sb.append("* poolNumber (number of threads)\n");
 	    sb.append("* repeatNumber the cycle the threads will do(cycles)\n");
-	    sb.append("* tableEngine mysql engine (MyISAM; InnoDb; Memory; ndbcluster; mariaDB)\n");
+	    sb.append("* @Deprecated tableEngine mysql engine (MyISAM; InnoDb; Memory; ndbcluster; mariaDB)\n");
 	    sb.append("* sleepFor Thread sleep time (milliseconds default is 0 ms)\n");
 	    sb.append("* dolog DON'T USE IT write the log on standard output\n");
-	    sb.append("* dbType [Oracle|MySQL] default MySQL\n");
+	    sb.append("* @Deprecated dbType [Oracle|MySQL] default MySQL\n");
 	    sb.append("* doDelete perform Delete operation while inserting\n");
 	    sb.append("* doBatch operate insert with batch inserting values(1,2,3),(5,2,6) ... fix number of batch=50 \n");
 	    sb.append("* pctInsert %of the total threads to dedicate to Insert \n");
@@ -407,8 +407,8 @@ public class StressTool {
 	    sb.append("* insertDefaultClass/selectDefaultClass/deleteDefaultClass you can specify the custome class by action need to implement \n RunnableQuery(Insert|Select|Delete)Interface \n");
 	    sb.append("* ignorebinlog instruct the tool to insert the command to IGNORE the flush to binary log,\n this will works only if you a user with SUPER privileages \n");
 	    sb.append("* e.g. jdbc:mysql://127.0.0.1:3306/test?user=test&password=test&autoReconnect=true --createtable=true --truncate=false");
-	    sb.append(" --droptable=true --poolNumber=1 --repeatNumber=1 --tableEngine=InnoDB --sleepFor=0 --dbType=MySQL --doDelete=false --doBatch=false ");
-	    sb.append(" --pctInsert=100 --pctSelect=100 --pctDelete=10 --doReport=true|false (default=true) --doSimplePk=true|false (default=false) --ignorebinlog=true (default = false)\n");
+	    sb.append(" --droptable=true --poolNumber=1 --repeatNumber=1 --sleepFor=0 --doDelete=false --doBatch=false ");
+	    sb.append(" --pctInsert=100 --pctSelect=100 --pctDelete=10 --doReport=true|false (default=true) --ignorebinlog=true (default = false)\n");
 	    //sb.append("* e.g. jdbc:oracle:thin:@hostname:1526:orcl\n");
 
 	    sb.append("*/\n");

@@ -85,9 +85,11 @@ public class SelectBase extends StressActionBase implements ReadAction{
   public void setNumberOfIntervalKeys(int numberOfIntervalKeys) {
 	this.numberOfIntervalKeys = numberOfIntervalKeys;
   }
+  @Deprecated
   public String getSelectFilterMethod() {
 	return selectFilterMethod;
   }
+  @Deprecated
   public void setSelectFilterMethod(String selectFilterMethod) {
 	this.selectFilterMethod = selectFilterMethod;
   }

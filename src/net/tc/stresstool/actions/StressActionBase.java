@@ -169,6 +169,7 @@ public class StressActionBase implements StressAction, Runnable {
     /* (non-Javadoc)
 	 * @see net.tc.stresstool.actions.StressAction#isDoSimple()
 	 */
+    @Deprecated
     @Override
 	public boolean isDoSimple() {
         return doSimple;
@@ -178,6 +179,7 @@ public class StressActionBase implements StressAction, Runnable {
 	 * @see net.tc.stresstool.actions.StressAction#setDoSimple(boolean)
 	 */
     @Override
+    @Deprecated
 	public void setDoSimple(boolean doSimple) {
         this.doSimple = doSimple;
     }
@@ -186,6 +188,7 @@ public class StressActionBase implements StressAction, Runnable {
 	 * @see net.tc.stresstool.actions.StressAction#isDoSimplePk()
 	 */
     @Override
+    @Deprecated
 	public boolean isDoSimplePk() {
         return doSimplePk;
     }
@@ -194,6 +197,7 @@ public class StressActionBase implements StressAction, Runnable {
 	 * @see net.tc.stresstool.actions.StressAction#setDoSimplePk(boolean)
 	 */
     @Override
+    @Deprecated
 	public void setDoSimplePk(boolean doSimplePk) {
         this.doSimplePk = doSimplePk;
     }
@@ -234,6 +238,7 @@ public class StressActionBase implements StressAction, Runnable {
 	 * @see net.tc.stresstool.actions.StressAction#isOperationShort()
 	 */
     @Override
+    @Deprecated
 	public boolean isOperationShort() {
         return operationShort;
     }
@@ -242,6 +247,7 @@ public class StressActionBase implements StressAction, Runnable {
 	 * @see net.tc.stresstool.actions.StressAction#setOperationShort(boolean)
 	 */
     @Override
+    @Deprecated
 	public void setOperationShort(boolean operationShort) {
         this.operationShort = operationShort;
     }

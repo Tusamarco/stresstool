@@ -1,7 +1,7 @@
 [main]
 #connection oriented settings
-connUrl=jdbc:mysql://192.168.0.5:3306
-#connUrl=jdbc:mysql://127.0.0.1:3306
+#connUrl=jdbc:mysql://192.168.0.5:3306
+connUrl=jdbc:mysql://127.0.0.1:3306
 database=test3
 user=stress	
 password=test
@@ -17,24 +17,24 @@ createTable=true
 dbType=MySQL 
 doDelete=false 
 doReport=true 
-doSimple=false 
-doSimplePk=false 
-droptable=true
+#doSimple=false #@Deprecated
+#doSimplePk=false #@Deprecated
+droptable=false
 ignoreBinlog=false
-operationShort=true  
-poolNumber=6
+#operationShort=true  #@Deprecated
+poolNumber=4
 pctInsert=100
 pctUpdate=00 
 pctSelect=00 
 pctDelete=00 
-repeatNumber=100
+repeatNumber=1000
 HardStopLimit=100
 UseHardStop=false
 StatIntervalMs=1000
 StatLoops = 100
 SemaphoreCountdownTime = 2
 # table engine comma separated with % value; 
-TableEngine=InnoDB|90,MyISAM|10
+#TableEngine=InnoDB|90,MyISAM|10 #@Deprecated
 truncate=false
 # Interactive mode [0 no|1 console output|2 console output + not exit until question is answered ] default 2 
 interactive = 2
@@ -100,7 +100,7 @@ numberOfprimaryTables=10
 [net.tc.stresstool.actions.SelectBase]
 #for consistency the number of tables should never be higher than the ones declared in the Insert class
 usePrepareStatement=false
-SelectFilterMethod=in
+#SelectFilterMethod=in #@Deprecated
 #range|in|match
 SleepSelect=100 
 
@@ -122,11 +122,11 @@ usePrepareStatement=false
 numberOfprimaryTables=30
 numberOfSecondaryTables=20
 useAutoIncrement=true
-joinField=a
-sleepWrite=10
+#joinField=a
+sleepWrite=1000
 lazyCreation=true
 lazyInterval=1
-batchSize=1
+batchSize=10
 #jsonFile=/Users/marcotusa/programs/JBuilder/workspace/stresstool/json_definition_long.json
 #jsonFile=/Users/marcotusa/programs/JBuilder/workspace/stresstool/json_definition.json
 jsonFile=json_oltp.json

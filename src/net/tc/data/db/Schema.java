@@ -189,16 +189,18 @@ public class Schema {
 		
 	    }
 	    
-	    for(Object idx:table.getIndexes().getValuesAsArrayOrderByKey()){
-		for(Object idxColname:((Index)idx).getColumnsDefinition()){
-		    try{
-		    	((Attribute)table.getMetaAttributes((String)idxColname)).setLazy(false); 
-		    }catch(Exception ex){
-		    	System.out.println(" Table  " + table.getName() + " Attrib " + (String)idxColname) ;
-		    	ex.printStackTrace();
+	    if(table.getIndexes().getValuesAsArrayOrderByKey() != null){
+		    for(Object idx:table.getIndexes().getValuesAsArrayOrderByKey()){
+				for(Object idxColname:((Index)idx).getColumnsDefinition()){
+				    try{
+				    	((Attribute)table.getMetaAttributes((String)idxColname)).setLazy(false); 
+				    }catch(Exception ex){
+				    	System.out.println(" Table  " + table.getName() + " Attrib " + (String)idxColname) ;
+				    	ex.printStackTrace();
+				    }
+		//		    System.out.println(((Attribute)table.getMetaAttributes((String)idxColname)).isLazy());
+				}
 		    }
-//		    System.out.println(((Attribute)table.getMetaAttributes((String)idxColname)).isLazy());
-		}
 		
 	    }
 	}
