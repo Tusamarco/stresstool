@@ -208,7 +208,7 @@ public class StressTool {
 	              */
 	             if(calendarReset == 0){
 	            	 launcher.resetValueProviderCalendar();
-	            	 calendarReset = 10 ; 
+	            	 calendarReset = 3 ; 
 	             }
 	             else
 	            	 calendarReset--;
@@ -249,17 +249,8 @@ public class StressTool {
 	        
 	        if(launcher.getInteractive() >1  && consolePrinter != null){
 	          while(consolePrinter.askQuestion(ApplicationMessages.End_QUESTION,"y\n",true)){
-//	        	  try {
-//	        		   
-//					Thread.sleep(launcher.getStatIntervalMs());
-//				} catch (InterruptedException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
+	        	  //
 	          }
-	          
-	          ;
-	           
 	        }
 	        consolePrinter.close();
 	        printReport(stats);

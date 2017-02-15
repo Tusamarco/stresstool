@@ -268,17 +268,25 @@ public class ConsoleStatePrinter implements StatsProvider,Reporter,Runnable {
 	    StringBuffer sb = new StringBuffer();
 	    if(block){
 	    		key = screen.readInput();
+	    		if(key != null)
+	    			System.out.println(key.getCharacter());
+	    		
         	    while(key == null || key.getKind() != Key.Kind.Enter){
         	    	screen.refresh();
+        	    	try {Thread.sleep(100);} catch (InterruptedException e) {}
+        	    	
         	    	key = screen.readInput();
-//	        		System.out.println(key!=null?key.getCharacter():"");
-	        		try {Thread.sleep(500);} catch (InterruptedException e) {}
+//    	    		if(key != null)
+//    	    			System.out.println(key.getCharacter());
+	        		
+//    	    		try {Thread.sleep(1000);} catch (InterruptedException e) {}
+
 	        		if(key != null){
 	                		sb.append(key.getCharacter());
 	                		screen.putString((28 + (question.length())),screen.getTerminalSize().getRows() -1 , sb.toString(), Terminal.Color.WHITE, Terminal.Color.BLACK);
 	                		screen.refresh();
 	        		}
-	        		if(sb.toString().equals("y"))
+	        		if(key != null && key.getCharacter() == 'y')
 	        			return false;
         	    }
 	    }
@@ -291,8 +299,14 @@ public class ConsoleStatePrinter implements StatsProvider,Reporter,Runnable {
             		screen.putString((28 + (question.length())),screen.getTerminalSize().getRows() -1 , sb.toString(), Terminal.Color.WHITE, Terminal.Color.BLACK);
             		screen.refresh();
     		}
-    		if(sb.toString().equals(exitString))
+    		if(exitString.length() > 1){
+    			if(sb.toString().equals(exitString))
     		    	return false;
+    		}
+    		else{
+    			if(key != null && exitString.length() > 0 && key.getCharacter() == exitString.charAt(0))
+    		    	return false;
+    		}
 	    }
 	    
 	    

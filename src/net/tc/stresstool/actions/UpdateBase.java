@@ -328,7 +328,17 @@ private boolean checkIfTableExists(Table tableIn,SQLObject lSQL){
 												)
 											){
 												if(((Attribute)attrib).getValue() instanceof Long)
-													((Attribute)attrib).setUpperLimit(Long.valueOf(String.valueOf(((Attribute)attrib).getValue().equals("NULL")?"0":String.valueOf(((Attribute)attrib).getValue()))));
+												try{
+													
+													String localValue = String.valueOf(((Attribute)attrib).getValue());
+													if(localValue ==null || localValue.equals("NULL")){
+														localValue = "0";
+													}
+													((Attribute)attrib).setUpperLimit(Long.valueOf(localValue));
+												}
+												catch(NumberFormatException en){
+													en.printStackTrace();
+												} 
 												else
 													((Attribute)attrib).setUpperLimit(Long.valueOf(String.valueOf(((Attribute)attrib).getValue().equals("NULL")?"0":String.valueOf(((Attribute)attrib).getValue()))));
 									}

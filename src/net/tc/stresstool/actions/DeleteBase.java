@@ -147,7 +147,7 @@ public class DeleteBase extends StressActionBase implements DeleteAction{
 		  setBatchSize(1);
 		}
 
-		for(int batchRun = 0 ; batchRun <= getBatchSize(); batchRun++){
+		for(int batchRun = 0 ; batchRun < getBatchSize(); batchRun++){
 		  ArrayList<Table> tables = new ArrayList<Table>();
 		  Table newTable = getMainTable(lSQLObj);
 		  tables.add(newTable);

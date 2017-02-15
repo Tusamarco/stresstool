@@ -112,7 +112,7 @@ public class Attribute {
         	case DataType.FLOAT: return ((String)getValue());
         	case DataType.DOUBLE: return ((Double)getValue()).toString();
         	case DataType.DECIMAL: return ((java.math.BigDecimal)getValue()).toString(); 
-        	case DataType.BIT: return ((Integer)getValue()).toString();
+        	case DataType.BIT: return ((Byte)getValue()).toString();
         	case DataType.YEAR: return ((Integer)getValue()).toString();
         	case DataType.DATE: return ((String)getValue());
         	case DataType.TIME: return ((String)getValue());
