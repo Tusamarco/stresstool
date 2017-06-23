@@ -1,16 +1,15 @@
 [main]
 #connection oriented settings
-#connUrl=jdbc:mysql://192.168.1.50:6033
-#connUrl=jdbc:mysql://192.168.1.108:3306
 connUrl=jdbc:mysql://127.0.0.1:3306
-database=windmills
-user=stress	
+#connUrl=jdbc:mysql://192.168.0.23:6033
+database=mirror
+user=load_RW	
 password=test
 connParameters=autoReconnect=true  
 connectionPool=false
 connectionPoolClass= 
-selectForceAutocommitOff=false
-stickyconnection=false
+selectForceAutocommitOff=true
+stickyconnection=true
 
 
 FKEnable=false
@@ -23,23 +22,23 @@ doSimplePk=false
 droptable=false
 ignoreBinlog=false
 operationShort=true  
-poolNumber=1
-pctInsert=00
+poolNumber=16
+pctInsert=100
 pctUpdate=0 
-pctSelect=100 
-pctDelete=0
+pctSelect=00 
+pctDelete=00 
 #repeatNumber=1
-repeatNumber=30000
+repeatNumber=10000
 HardStopLimit=1000
 UseHardStop=false
 StatIntervalMs=1000
 StatLoops = 100
-SemaphoreCountdownTime = 3
+SemaphoreCountdownTime = 2
 # table engine comma separated with % value; 
-TableEngine=InnoDB|90,MyISAM|10
+#Deprecated -- TableEngine=InnoDB|90,MyISAM|10
 truncate=false
 # Interactive mode [0 no|1 console output|2 console output + not exit until question is answered ] default 2 
-interactive = 2
+interactive = 0
 
 
 DeleteClass=net.tc.stresstool.actions.DeleteBase 
@@ -51,21 +50,21 @@ ValueProvider=net.tc.stresstool.value.BasicFileValueProvider
 
 
 
-#logPathStats=/tmp/stats.csv
-#logPathStatReport=/tmp/reportstat.txt
-#logPathReport=/tmp/report.txt
+logPathStats=/tmp/stats.csv
+logPathStatReport=/tmp/reportstat.txt
+logPathReport=/tmp/report.txt
 appendLogStat=true
 insertStatHeaders=true
 appendLogReport=true
 
-datafilepath=/opt/shakespere.txt
+datafilepath=shakespere.txt
 
 
 #manage the calendar options
 # YYYY-MM-DD HH:MM:SS
 # daysdiffernce is the target/final date of the period 
-calendardate=2017-03-31 00:00:01 
-daysdiffernce=90
+calendardate=2017-04-31 00:00:01 
+daysdiffernce=200
 
 
 [logs]
@@ -78,9 +77,8 @@ monitorlog=MONITORS
 [statistics]
 rootdirectory=/tmp/stats
 #this parameter says to write a CSV file for each provider (in root dir)
-flushrowonfile=true
+flushrowonfile=false
 providerclass=net.tc.stresstool.statistics.providers.MySQLStatus
-#,net.tc.stresstool.statistics.providers.InnoDBMetrics
 #,net.tc.stresstool.statistics.providers.InnoDB
 #,net.tc.stresstool.statistics.providers.MySQLPerfSchema,net.tc.stresstool.statistics.providers.MySQLSProclist
 eventhistory=350
@@ -127,11 +125,11 @@ joinField=millid
 sleepWrite=500
 lazyCreation=true
 lazyInterval=5
-batchSize=10
+batchSize=1
 #jsonFile=/Users/marcotusa/programs/JBuilder/workspace/stresstool/json_definition_long.json
 #jsonFile=/Users/marcotusa/programs/JBuilder/workspace/stresstool/json_definition.json
 #jsonFile=/Users/marcotusa/programs/JBuilder/workspace/stresstool/json_simplePk.json
-jsonFile=wind_mill_example.json
+jsonFile=mirror.json
 
 #[net.tc.stresstool.actions.InsertEmployeesTest]
 #usePrepareStatement=false
@@ -155,7 +153,7 @@ numberOfprimaryTables=1
 numberOfSecondaryTables=0
 useAutoIncrement=true
 joinField=a
-sleepUpdate=500
+sleepUpdate=200
 lazyUpdate=false
 lazyInterval=10
 batchSize=10

@@ -180,7 +180,7 @@ if (StressTool.getLogProvider().getLogger(LogProvider.LOG_PERFORMANCE)
         		    	sp.setStatsOutFile(rootPath);
            		    	
 			}
-        		    providers.put(sectionName, sp);
+        		    providers.put(sectionName+'.'+sp.getStatGroup(), sp);
 		    }
 		}
 

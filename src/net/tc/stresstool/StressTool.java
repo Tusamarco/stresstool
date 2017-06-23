@@ -252,7 +252,8 @@ public class StressTool {
 	        	  //
 	          }
 	        }
-	        consolePrinter.close();
+	        if(consolePrinter !=null)
+	        	consolePrinter.close();
 	        printReport(stats);
 	        System.out.println("Close");
 	        

@@ -1,5 +1,6 @@
 package net.tc.stresstool.statistics;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 import net.tc.stresstool.StressTool;
@@ -190,6 +191,11 @@ public class StatsGroups {
         this.groupName = groupName;
     }
 
+    public String[] getEventsCollactionNames(){
+    	return (String[]) eventCollectionMap.keySet().toArray();
+    	
+    	//return null;
+    }
     
     
 

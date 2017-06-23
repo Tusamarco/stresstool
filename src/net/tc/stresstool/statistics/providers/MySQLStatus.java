@@ -25,6 +25,7 @@ import net.tc.utils.file.FileDataWriter;
 public class MySQLStatus extends MySQLSuper implements StatsProvider, Reporter {
     public MySQLStatus() {
 	 super();
+	 this.setStatGroupName("STATUS");
     }
 
 //    @Override

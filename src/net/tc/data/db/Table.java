@@ -41,9 +41,9 @@ public class Table {
 	private String tableSpace = null;
 	private int  rowFormatInt = 0;
 	private String dataDirectory = null;
-	private String whereCondition_s = null;
-	private String whereCondition_u = null;
-	private String whereCondition_d = null;
+	private ConditionCollection whereCondition_s = new ConditionCollection();
+	private ConditionCollection whereCondition_u = new ConditionCollection();;
+	private ConditionCollection whereCondition_d = new ConditionCollection();;
 	private String selectCondition = null;
 	private ArrayList<Attribute> attribsWhereS = new ArrayList();
 	private ArrayList<Attribute> attribsWhereU = new ArrayList();
@@ -494,15 +494,15 @@ public class Table {
 	 * @return the whereCondition
 	 */
 	public String getWhereConditionS() {
-	  return whereCondition_s;
+	  return whereCondition_s.getCondition().getCondition();
 	}
 
 
 	/**
-	 * @param whereCondition the whereCondition to set
+	 * @param condCol the whereCondition to set
 	 */
-	public void setWhereConditionS(String whereCondition) {
-	  this.whereCondition_s = whereCondition;
+	public void setWhereConditionS(ConditionCollection condCol) {
+	  this.whereCondition_s = condCol;
 	}
 	
 	public String parseWhere(int sqlType){
@@ -641,22 +641,22 @@ public class Table {
 
 
 	public String getWhereConditionU() {
-		return whereCondition_u;
+		return whereCondition_u.getCondition().getCondition();
 	}
 
 
-	public void setWhereConditionU(String whereCondition) {
-		this.whereCondition_u = whereCondition;
+	public void setWhereConditionU(ConditionCollection condCol) {
+		this.whereCondition_u = condCol;
 	}
 
 
 	public String getWhereConditionD() {
-		return whereCondition_d;
+		return whereCondition_d.getCondition().getCondition();
 	}
 
 
-	public void setWhereConditionD(String whereCondition) {
-		this.whereCondition_d = whereCondition;
+	public void setWhereConditionD(ConditionCollection condCol) {
+		this.whereCondition_d = condCol;
 	}
 	public String getWhereCondition(int slqType) {
 		  switch (slqType){
@@ -722,6 +722,36 @@ public class Table {
 
 	public void setInsertAttributes(String insertAttributes) {
 		this.insertAttributes = insertAttributes;
+	}
+
+
+	public ConditionCollection getWhereCondition_s() {
+		return whereCondition_s;
+	}
+
+
+	public void setWhereCondition_s(ConditionCollection whereCondition_s) {
+		this.whereCondition_s = whereCondition_s;
+	}
+
+
+	public ConditionCollection getWhereCondition_u() {
+		return whereCondition_u;
+	}
+
+
+	public void setWhereCondition_u(ConditionCollection whereCondition_u) {
+		this.whereCondition_u = whereCondition_u;
+	}
+
+
+	public ConditionCollection getWhereCondition_d() {
+		return whereCondition_d;
+	}
+
+
+	public void setWhereCondition_d(ConditionCollection whereCondition_d) {
+		this.whereCondition_d = whereCondition_d;
 	}
 
 }

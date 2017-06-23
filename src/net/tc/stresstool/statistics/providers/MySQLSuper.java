@@ -47,7 +47,7 @@ public class MySQLSuper implements StatsProvider, Reporter {
     /**
      * @uml.property  name="statGroupName"
      */
-    protected final String statGroupName = "STATUS";
+    protected String statGroupName = "";
     /**
      * @uml.property  name="statsFile"
      * @uml.associationEnd  
@@ -591,6 +591,13 @@ public class MySQLSuper implements StatsProvider, Reporter {
 	    return conn;
     }
 
+	public String getStatGroupName() {
+		return statGroupName;
+	}
+
+	void setStatGroupName(String gName) {
+		statGroupName=gName;
+	}
 
 	
 

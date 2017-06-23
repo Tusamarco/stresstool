@@ -1,11 +1,11 @@
 {
-	"database":"windmills",
+	"database":"mirror",
 	"characterSet":"utf8",
 	"tables":{
 		"table":[
 				{
-					"database":"windmills",
-					"tablename":"wmillAUTOINC",
+					"database":"mirror",
+					"tablename":"mirtabAUTOINC",
 					"engine":"innodb",
 					"primarykey":["id"],
 					"autoincrementvalue":0,
@@ -20,30 +20,15 @@
 					"selectcondition":"millid,id, kwatts_s,date,time,active",
 					"example_selectcondition":"autoinc,uuid,serverid,a,b,c,counter,time,partitionid,date,strrecordtype",
 					"updatesetattributes":"#active#",
-					"wherecondition_s":{
-							"condition":[
-								{"weight":100,"condition_string":" #millid#=#?millid?millid# and #active#=#?active?active#"},
-								{"weight":10,"condition_string":" #id#=#?id?id#"}
-							]
-					},
-					"wherecondition_u":{
-							"condition":[
-								{"weight":1,"condition_string":" #id#=#?id?id#"}
-							]
-					},
-					"wherecondition_d":{
-							"condition":[
-								{"weight":1,"condition_string":" #millid#=#?millid?millid# and #active#=0"},
-								{"weight":10,"condition_string":" #id#=#?id?id#"}
-							]
-					},
+					"wherecondition_s":" #millid#=#?millid?millid# and #active#=#?active?active#",
+					"wherecondition_u":" #id#=#?id?id#",
+					"wherecondition_d":" #id#=#?id?id# ",
 				    "example_where":" #autoinc# = #?autoinc?autoinc#  and #date# #?date_RANGE_OPTION_BETWEEN?date#  and #b# like #?b|20?b# " ,
 					"keys":
 							{
 							"key":
 								[
-									{"name":"IDX_millid","unique":false,"attributes":["millid"]},
-									{"name":"IDX_active","unique":false,"attributes":["id","active"]}
+									{"name":"IDX_millid","unique":false,"attributes":["millid"]}
 								]
 							},	
 					"attributes":{
@@ -65,8 +50,8 @@
 					}
 				},
 				{
-					"database":"windmills",
-					"tablename":"wmillMID",
+					"database":"mirror",
+					"tablename":"mirtabMID",
 					"engine":"innodb",
 					"primarykey":["millid","id"],
 					"autoincrementvalue":0,
@@ -81,30 +66,15 @@
 					"selectcondition":"millid,id, kwatts_s,date,time,active",
 					"example_selectcondition":"autoinc,uuid,serverid,a,b,c,counter,time,partitionid,date,strrecordtype",
 					"updatesetattributes":"#active#",
-					"wherecondition_s":{
-							"condition":[
-								{"weight":100,"condition_string":" #millid#=#?millid?millid# and #active#=#?active?active#"},
-								{"weight":10,"condition_string":" #id#=#?id?id#"}
-							]
-					},
-					"wherecondition_u":{
-							"condition":[
-								{"weight":1,"condition_string":" #id#=#?id?id#"}
-							]
-					},
-					"wherecondition_d":{
-							"condition":[
-								{"weight":1,"condition_string":" #millid#=#?millid?millid# and #active#=0"},
-								{"weight":10,"condition_string":" #id#=#?id?id#"}
-							]
-					},
+					"wherecondition_s":" #millid#=#?millid?millid# and #active#=#?active?active#",
+					"wherecondition_u":" #id#=#?id?id#",
+					"wherecondition_d":" #id#=#?id?id# ",
 				    "example_where":" #autoinc# = #?autoinc?autoinc#  and #date# #?date_RANGE_OPTION_BETWEEN?date#  and #b# like #?b|20?b# " ,
 					"keys":
 							{
 							"key":
 								[
-									{"name":"IDX_id","unique":false,"attributes":["id"]},
-									{"name":"IDX_mid","unique":false,"attributes":["millid","active"]}
+									{"name":"IDX_id","unique":false,"attributes":["id"]}
 								]
 							},	
 					"attributes":{
@@ -126,8 +96,8 @@
 					}
 				},
 				{
-					"database":"windmills",
-					"tablename":"wmillMIDUUID",
+					"database":"mirror",
+					"tablename":"mirtabMIDUUID",
 					"engine":"innodb",
 					"primarykey":["millid","uuid"],
 					"autoincrementvalue":0,
@@ -142,30 +112,15 @@
 					"selectcondition":"millid,id, kwatts_s,date,time,active",
 					"example_selectcondition":"autoinc,uuid,serverid,a,b,c,counter,time,partitionid,date,strrecordtype",
 					"updatesetattributes":"#active#",
-					"wherecondition_s":{
-							"condition":[
-								{"weight":100,"condition_string":" #millid#=#?millid?millid# and #active#=#?active?active#"},
-								{"weight":10,"condition_string":" #id#=#?id?id#"}
-							]
-					},
-					"wherecondition_u":{
-							"condition":[
-								{"weight":1,"condition_string":" #id#=#?id?id#"}
-							]
-					},
-					"wherecondition_d":{
-							"condition":[
-								{"weight":1,"condition_string":" #millid#=#?millid?millid# and #active#=0"},
-								{"weight":10,"condition_string":" #id#=#?id?id#"}
-							]
-					},
+					"wherecondition_s":" #millid#=#?millid?millid# and #active#=#?active?active#",
+					"wherecondition_u":" #id#=#?id?id#",
+					"wherecondition_d":" #id#=#?id?id# ",
 				    "example_where":" #autoinc# = #?autoinc?autoinc#  and #date# #?date_RANGE_OPTION_BETWEEN?date#  and #b# like #?b|20?b# " ,
 					"keys":
 							{
 							"key":
 								[
-									{"name":"IDX_id","unique":true,"attributes":["id"]},
-									{"name":"IDX_mid","unique":false,"attributes":["millid","active"]}
+									{"name":"IDX_id","unique":true,"attributes":["id"]}
 								]
 							},	
 					"attributes":{
@@ -187,8 +142,8 @@
 					}
 				},
 				{
-					"database":"windmills",
-					"tablename":"wmillMIDPart",
+					"database":"mirror",
+					"tablename":"mirtabMIDPart",
 					"engine":"innodb",
 					"primarykey":["millid","id"],
 					"autoincrementvalue":0,
@@ -203,30 +158,15 @@
 					"selectcondition":"millid,id, kwatts_s,date,time,active",
 					"example_selectcondition":"autoinc,uuid,serverid,a,b,c,counter,time,partitionid,date,strrecordtype",
 					"updatesetattributes":"#active#",
-					"wherecondition_s":{
-							"condition":[
-								{"weight":100,"condition_string":" #millid#=#?millid?millid# and #active#=#?active?active#"},
-								{"weight":10,"condition_string":" #id#=#?id?id#"}
-							]
-					},
-					"wherecondition_u":{
-							"condition":[
-								{"weight":1,"condition_string":" #id#=#?id?id#"}
-							]
-					},
-					"wherecondition_d":{
-							"condition":[
-								{"weight":1,"condition_string":" #millid#=#?millid?millid# and #active#=0"},
-								{"weight":10,"condition_string":" #id#=#?id?id#"}
-							]
-					},
+					"wherecondition_s":" #millid#=#?millid?millid# and #active#=#?active?active#",
+					"wherecondition_u":" #id#=#?id?id#",
+					"wherecondition_d":" #id#=#?id?id# ",
 				    "example_where":" #autoinc# = #?autoinc?autoinc#  and #date# #?date_RANGE_OPTION_BETWEEN?date#  and #b# like #?b|20?b# " ,
 					"keys":
 							{
 							"key":
 								[
-									{"name":"IDX_id","unique":false,"attributes":["id"]},
-									{"name":"IDX_mid","unique":false,"attributes":["millid","active"]}
+									{"name":"IDX_id","unique":false,"attributes":["id"]}
 								]
 							},	
 					"attributes":{
