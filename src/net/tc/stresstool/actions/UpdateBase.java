@@ -407,7 +407,7 @@ private boolean checkIfTableExists(Table tableIn,SQLObject lSQL){
 		  SynchronizedMap attr = table.getMetaAttributes();
 		  Attribute[] attrR = new Attribute[attr.size()];
 		  for(int i=0; i< attr.size();i++){
-			  if(i < attr.size())
+			  if(i < attr.size() && i <= attrR.length)
 				  attrR[i]= (Attribute) attr.getValueByPosition(i);
 		  }
 
