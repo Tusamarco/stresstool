@@ -9,9 +9,14 @@ log4j.logger.ACTIONS=ERROR,console
 #,ACTIONS
 log4j.logger.MONITORS=ERROR,MONITORS
 log4j.logger.STATS=ERROR,STATS
-log4j.logger.SQL=INFO,console 
+log4j.logger.SQL=ERROR,console 
 #,SQL
 log4j.logger.PERFORMANCE=ERROR,console,PERFORMANCE
+
+#HIKARI
+log4j.logger.com.zaxxer.hikari=DEBUG,console,CONPOOL
+
+
 
 # Define the root logger to the system property "stresstool.root.logger".
 log4j.rootLogger=${stresstool.root.logger}
@@ -19,6 +24,20 @@ log4j.rootLogger=${stresstool.root.logger}
 
 # Logging Threshold
 log4j.threshhold=ALL
+
+
+#
+# Connection Pool appender
+#
+log4j.appender.CONPOOL=org.apache.log4j.RollingFileAppender
+log4j.appender.CONPOOL.File=${stresstool.log.dir}/conpool.log
+log4j.appender.CONPOOL.MaxFileSize=50MB
+log4j.appender.CONPOOL.MaxBackupIndex=2
+log4j.appender.CONPOOL.layout=org.apache.log4j.PatternLayout
+log4j.appender.CONPOOL.layout.ConversionPattern=%d{ISO8601},%p,%m%n
+#log4j.appender.CONPOOL.layout.ConversionPattern=%d{ISO8601} %-5p %c{2} (%F:%M(%L)) - %m%n
+
+
 
 #
 # Action Appender

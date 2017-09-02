@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
-import com.mysql.jdbc.Connection;
+import java.sql.Connection;
 
 import net.tc.data.db.ConnectionProvider;
 import net.tc.data.db.Schema;
@@ -566,7 +566,7 @@ public class StressActionBase implements StressAction, Runnable {
         	     */
         	    if(isStickyconnection() &&  getActiveConnection() == null){
         	      try {
-	                setActiveConnection(getConnProvider().getSimpleConnection());
+	                setActiveConnection(getConnProvider().getConnection());
                   } catch (SQLException e) {
 	                // TODO Auto-generated catch block
       				try{					
@@ -617,6 +617,9 @@ public class StressActionBase implements StressAction, Runnable {
 //        					StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error(s);
 //        			}catch(Exception exx){exx.printStackTrace();}
         				
+        			}
+        			finally{
+ 
         			}
         			long endRunTime = System.currentTimeMillis();
         			this.getTHInfo().setExecutionTime(endRunTime - startRunTime);

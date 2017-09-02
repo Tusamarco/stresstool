@@ -368,7 +368,7 @@ public class InsertBase extends StressActionBase implements WriteAction,
 	  Connection conn = null;
 	  if(this.getActiveConnection()==null){
 		try {
-	      conn = this.getConnProvider().getSimpleConnection();
+	      conn = this.getConnProvider().getConnection();
         } catch (SQLException e) {
 			try{					
 				ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -390,11 +390,11 @@ public class InsertBase extends StressActionBase implements WriteAction,
 	   */
 	  	
 //	  System.out.println("EXECUTINg ACTION A FOR ID " + this.getTHInfo().getId() + " Action code " + this.getActionCode());
-	  this.myDataObject.executeSqlObject(this.getActionCode(),(com.mysql.jdbc.Connection) conn);
+	  this.myDataObject.executeSqlObject(this.getActionCode(),(java.sql.Connection) conn);
 		
 	  if(!this.isStickyconnection()){
 		
-		getConnProvider().returnConnection((com.mysql.jdbc.Connection)conn);
+		getConnProvider().returnConnection((java.sql.Connection)conn);
 	  }
 	  
 	}

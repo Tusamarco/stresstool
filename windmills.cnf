@@ -1,17 +1,19 @@
 [main]
 #connection oriented settings
-#connUrl=jdbc:mysql://192.168.1.50:6033
+connUrl=jdbc:mysql://192.168.1.50:6033
 #connUrl=jdbc:mysql://192.168.1.108:3306
-connUrl=jdbc:mysql://127.0.0.1:3306
+#connUrl=jdbc:mysql://127.0.0.1:3306
 database=windmills
-user=stress	
+user=stress
 password=test
 connParameters=autoReconnect=true  
 connectionPool=false
 connectionPoolClass= 
-selectForceAutocommitOff=false
+selectForceAutocommitOff=true
 stickyconnection=false
-
+useConnectionPool=true
+connectionPoolType=0
+#at the moment we only support hikari
 
 FKEnable=false
 createTable=true 
@@ -24,8 +26,8 @@ droptable=false
 ignoreBinlog=false
 operationShort=true  
 poolNumber=1
-pctInsert=00
-pctUpdate=0 
+pctInsert=100
+pctUpdate=50 
 pctSelect=100 
 pctDelete=0
 #repeatNumber=1

@@ -369,7 +369,7 @@ public class MySQLSuper implements StatsProvider, Reporter {
         
         try {
             conn = connProvider.getSimpleConnection();
-            conn.setAutoCommit(false);
+//TODO check if needed             conn.setAutoCommit(false);
             stmt = conn.createStatement();
 
             
@@ -499,6 +499,7 @@ public class MySQLSuper implements StatsProvider, Reporter {
         	try {
         		rs.close();
         		stmt.close();
+        		conn.commit();
 				conn.close();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block

@@ -18,9 +18,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
 
-import com.mysql.jdbc.Connection;
-import com.mysql.jdbc.Statement;
-import com.mysql.jdbc.exceptions.MySQLSyntaxErrorException;
+import java.sql.Connection;
+import java.sql.Statement;
+
 
 public class DataObject extends MultiLanguage
 {
@@ -198,7 +198,7 @@ public class DataObject extends MultiLanguage
 	public void setSQL(SynchronizedMap SQLContainer) {
 	    this.SQLContainer = SQLContainer;
 	}
-	public int[] executeSqlObject(int actionType,Connection conn){
+	public int[] executeSqlObject(int actionType,java.sql.Connection conn){
 	  
 	  switch (actionType){
 		case StressAction.INSERT_ID_CONST:return executeInsert(conn); 
@@ -231,7 +231,7 @@ public class DataObject extends MultiLanguage
 //	  return lines;
 //    }
 
-	private int[] executeDML(Connection conn) {
+	private int[] executeDML(java.sql.Connection conn) {
 		
 		  if(this.getSqlObjects() != null  
 				  && this.getSqlObjects().getValueByPosition(0) != null){
@@ -272,7 +272,7 @@ public class DataObject extends MultiLanguage
 	  return new int[0];
     }
 
-	private int[] executeSelect(Connection conn) {
+	private int[] executeSelect(java.sql.Connection conn) {
 	  if(this.getSqlObjects() != null  
 		  && this.getSqlObjects().getValueByPosition(0) != null){
 			
@@ -310,7 +310,7 @@ public class DataObject extends MultiLanguage
 	  return null;
 	}
 
-	public int[] executeInsert(Connection conn) {
+	public int[] executeInsert(java.sql.Connection conn) {
 	  int[] rows = null;
 	    try {
 	      
