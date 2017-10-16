@@ -3,6 +3,7 @@ package net.tc.data.generic;
 import java.util.ArrayList;
 
 import net.tc.data.db.*;
+import net.tc.stresstool.PerformanceEvaluator;
 import net.tc.stresstool.StressTool;
 import net.tc.stresstool.exceptions.StressToolConfigurationException;
 import net.tc.stresstool.logs.LogProvider;
@@ -112,6 +113,9 @@ public class SQLObject {
 	 * @return
 	 */
   public String getValues() {
+	  long performanceTimeStart = 0;
+	  try {if (StressTool.getLogProvider().getLogger(LogProvider.LOG_PACTIONS).isInfoEnabled()) {performanceTimeStart=System.nanoTime();}} catch (StressToolConfigurationException e1) {e1.printStackTrace();}
+
 	  SQLCommands = new ArrayList();
 	  boolean filling = false;
 	  for (Object table : this.getSourceTables()) {
@@ -225,6 +229,8 @@ public class SQLObject {
 	  
 	  this.setResetLazy(this.resetLazy?false:isResetLazy());
 	  
+	  executionPerformance(performanceTimeStart," VALUE GENERATOR ");
+	  
 	  return sqlValues.toString();
 	}
 	return null;
@@ -322,4 +328,25 @@ public class SQLObject {
 	  
 	  return null;
 	}
+
+	private void executionPerformance(long performanceTimeStart, String text) {
+		/*Performance evaluation section [header] start*/
+		try {
+		    if (StressTool.getLogProvider()
+			    .getLogger(LogProvider.LOG_PACTIONS)
+			    .isInfoEnabled()) {
+			
+			StressTool
+				.getLogProvider()
+				.getLogger(LogProvider.LOG_PACTIONS)
+				.info(StressTool.getLogProvider().LOG_EXEC_TIME
+					+ " "+ text + " exec perf:"
+					+ PerformanceEvaluator
+						.getTimeEvaluation(performanceTimeStart));
+		    }
+		} catch (Throwable th) {
+		}
+		/*Performance evaluation section [header] END*/
+	}
+
 }

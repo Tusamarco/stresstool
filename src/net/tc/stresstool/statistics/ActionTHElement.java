@@ -1,4 +1,7 @@
 package net.tc.stresstool.statistics;
+
+import java.util.ArrayList;
+
 /*
  * This class contain information about the status of the thread
  * the information is reported at EACH action thread loop,
@@ -30,6 +33,11 @@ public class ActionTHElement {
     long minLatency = 0;
     long maxLatency = 0;
     long totalEcecutionTime =0;
+    long maxGetConnectionTime=0;
+    long minGetConnectionTime=0;
+    long avgGetConnectionTime=0;
+    ArrayList <Long> getConnectionTime= new ArrayList();
+    
     int rowsProcessed=0;
     boolean isActive = false;
     int ready = SEMAPHORE_NOT_INITIALIZED;
@@ -274,6 +282,38 @@ public class ActionTHElement {
 	 */
 	public void setTotalEcecutionTime(long totalEcecutionTime) {
 	    this.totalEcecutionTime = totalEcecutionTime;
+	}
+
+	public long getMaxGetConnectionTime() {
+		return maxGetConnectionTime;
+	}
+
+	public void setMaxGetConnectionTime(long maxGetConnectionTime) {
+		this.maxGetConnectionTime = maxGetConnectionTime;
+	}
+
+	public long getMinGetConnectionTime() {
+		return minGetConnectionTime;
+	}
+
+	public void setMinGetConnectionTime(long minGetConnectionTime) {
+		this.minGetConnectionTime = minGetConnectionTime;
+	}
+
+	public long getAvgGetConnectionTime() {
+		return avgGetConnectionTime;
+	}
+
+	private void setAvgGetConnectionTime(long avgGetConnectionTime) {
+		this.avgGetConnectionTime = avgGetConnectionTime;
+	}
+
+	public ArrayList<Long> getGetConnectionTime() {
+		return getConnectionTime;
+	}
+
+	public void setGetConnectionTime(ArrayList<Long> getConnectionTime) {
+		this.getConnectionTime = getConnectionTime;
 	}
 
 

@@ -123,7 +123,6 @@ public class InnoDBMetrics extends MySQLSuper implements StatsProvider, Reporter
     @Override
     public StringBuffer printReport(String StatsGroupName,
 	    StringBuffer incomingBuffer) {
-	// TODO Auto-generated method stub
 	return printReport(incomingBuffer);
 	
     }

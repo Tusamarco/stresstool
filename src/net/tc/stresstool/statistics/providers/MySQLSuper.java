@@ -545,7 +545,7 @@ public class MySQLSuper implements StatsProvider, Reporter {
             return false;
         }
         
-        /*Performance evaluation section [header] start*/
+    /*Performance evaluation section [header] start*/
 	try {
 	    if (StressTool.getLogProvider()
 		    .getLogger(LogProvider.LOG_PERFORMANCE)

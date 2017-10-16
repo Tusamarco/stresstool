@@ -2,6 +2,7 @@ package net.tc.data.generic;
 
 import net.tc.data.common.MultiLanguage;
 import net.tc.data.db.*;
+import net.tc.stresstool.PerformanceEvaluator;
 import net.tc.stresstool.StressTool;
 import net.tc.stresstool.actions.StressAction;
 import net.tc.stresstool.exceptions.StressToolConfigurationException;
@@ -48,6 +49,19 @@ public class DataObject extends MultiLanguage
 	private int lockRetry;
 	private int lazyExecCount = 0;
     
+	private String getMethodText(int SQL_ID){
+		switch (SQL_ID){
+		case 1000: return "INSERT";
+		case 2000: return "READ";
+		case 3000: return "UPDATE";
+		case 4000: return "DELETE";
+		case 5000: return "DDL";
+		
+		}
+		return "";
+		
+	}
+	
 	public DataObject()
 	{
 	}
@@ -209,7 +223,7 @@ public class DataObject extends MultiLanguage
 		
 	  }
 	  return null;
-	  
+
 	}
 
 //	private int[] executeDelete(Connection conn) {
@@ -236,6 +250,9 @@ public class DataObject extends MultiLanguage
 		  if(this.getSqlObjects() != null  
 				  && this.getSqlObjects().getValueByPosition(0) != null){
 			  
+			  long performanceTimeStart = 0;
+			  try {if (StressTool.getLogProvider().getLogger(LogProvider.LOG_PACTIONS).isInfoEnabled()) {performanceTimeStart=System.nanoTime();}} catch (StressToolConfigurationException e1) {e1.printStackTrace();}
+
 			  SQLObject sqlu = (SQLObject) this.getSqlObjects().getValueByPosition(0);
 			  int[] lines = new int[sqlu.getSQLCommands().size()];
 			  String[] commands = new String[sqlu.getSQLCommands().size()];
@@ -267,6 +284,7 @@ public class DataObject extends MultiLanguage
 					ex.printStackTrace();
 					
 				}
+			  executionPerformance(performanceTimeStart,this.getMethodText(sqlu.getSQLCommandType()));
 			  return lines;
 		  }
 	  return new int[0];
@@ -275,8 +293,10 @@ public class DataObject extends MultiLanguage
 	private int[] executeSelect(java.sql.Connection conn) {
 	  if(this.getSqlObjects() != null  
 		  && this.getSqlObjects().getValueByPosition(0) != null){
+		  	long performanceTimeStart = 0;
+		  	try {if (StressTool.getLogProvider().getLogger(LogProvider.LOG_PACTIONS).isInfoEnabled()) {performanceTimeStart=System.nanoTime();}} catch (StressToolConfigurationException e1) {e1.printStackTrace();}
 			
-			SQLObject sqlo = (SQLObject) this.getSqlObjects().getValueByPosition(0);
+		  	SQLObject sqlo = (SQLObject) this.getSqlObjects().getValueByPosition(0);
 			sqlo.setSQLCommandType(SQL_READ);
 			ArrayList<String> commands = sqlo.getSQLCommands();
 			int[] lines = new int[commands.size()];
@@ -299,7 +319,7 @@ public class DataObject extends MultiLanguage
 			  rs = null;
 			}
 			
-
+			executionPerformance(performanceTimeStart,this.getMethodText(SQL_READ));
             return lines;
 			
 			}catch(Exception ex)
@@ -312,7 +332,11 @@ public class DataObject extends MultiLanguage
 
 	public int[] executeInsert(java.sql.Connection conn) {
 	  int[] rows = null;
-	    try {
+
+	  long performanceTimeStart = 0;
+	  try {if (StressTool.getLogProvider().getLogger(LogProvider.LOG_PACTIONS).isInfoEnabled()) {performanceTimeStart=System.nanoTime();}} catch (StressToolConfigurationException e1) {e1.printStackTrace();}
+	  
+	  try {
 	      
 	      try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).debug("******************* RESET? "+ this.getLazyExecCount() + " ***********************" );}catch(StressToolConfigurationException e){}
 	    	
@@ -367,8 +391,30 @@ public class DataObject extends MultiLanguage
 	    if(getLazyInterval() < getLazyExecCount()){
 	      setLazyExecCount(0);
 	    }
+	    executionPerformance(performanceTimeStart,this.getMethodText(SQL_INSERT));
+
 	    return rows;
     }
+
+	private void executionPerformance(long performanceTimeStart, String text) {
+		/*Performance evaluation section [header] start*/
+		try {
+		    if (StressTool.getLogProvider()
+			    .getLogger(LogProvider.LOG_PACTIONS)
+			    .isInfoEnabled()) {
+			
+			StressTool
+				.getLogProvider()
+				.getLogger(LogProvider.LOG_PACTIONS)
+				.info(StressTool.getLogProvider().LOG_EXEC_TIME
+					+ " "+ text + " exec perf:"
+					+ PerformanceEvaluator
+						.getTimeEvaluation(performanceTimeStart));
+		    }
+		} catch (Throwable th) {
+		}
+		/*Performance evaluation section [header] END*/
+	}
 
 	public int[] executeSQL(Statement stmt) throws Exception {
 	    int[] iLine= new int[0];

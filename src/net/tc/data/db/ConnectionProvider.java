@@ -15,8 +15,10 @@ import java.sql.Connection;
 public class ConnectionProvider {
     private ConnectionInformation connInfo = null;
     private DataSource dataSource =null;
+    private Configuration configuration =null;
 
-    public ConnectionProvider(Configuration configuration) {
+    public ConnectionProvider(Configuration configurationIn) {
+    	configuration =configurationIn;
 		connInfo = new ConnectionInformation();
 		
 		connInfo.setConnUrl((String) configuration.getParameter("connUrl").getValue());
@@ -75,8 +77,9 @@ public class ConnectionProvider {
 			     config.setJdbcUrl(connInfo.getConnUrl() + "/" + connInfo.getDatabase());
 			     config.setUsername(connInfo.getUser());
 			     config.setPassword(connInfo.getPassword());
-			     config.setMaximumPoolSize(10);
+			     config.setMaximumPoolSize(20);
 			     config.setAutoCommit(false);
+//			     config.setLeakDetectionThreshold(500);
 			     config.addDataSourceProperty("cachePrepStmts", "true");
 			     config.addDataSourceProperty("prepStmtCacheSize", "250");
 			     config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");

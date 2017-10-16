@@ -1,10 +1,10 @@
 [main]
 #connection oriented settings
-connUrl=jdbc:mysql://192.168.1.50:6033
-#connUrl=jdbc:mysql://192.168.1.108:3306
+connUrl=jdbc:mysql://192.168.1.11:6033
+#connUrl=jdbc:mysql://192.168.1.205:3306
 #connUrl=jdbc:mysql://127.0.0.1:3306
 database=windmills
-user=stress
+user=pxc_test
 password=test
 connParameters=autoReconnect=true  
 connectionPool=false
@@ -12,7 +12,7 @@ connectionPoolClass=
 selectForceAutocommitOff=true
 stickyconnection=false
 useConnectionPool=true
-connectionPoolType=0
+connectionPoolType=1
 #at the moment we only support hikari
 
 FKEnable=false
@@ -25,13 +25,13 @@ doSimplePk=false
 droptable=false
 ignoreBinlog=false
 operationShort=true  
-poolNumber=1
+poolNumber=4
 pctInsert=100
 pctUpdate=50 
 pctSelect=100 
 pctDelete=0
 #repeatNumber=1
-repeatNumber=30000
+repeatNumber=5000
 HardStopLimit=1000
 UseHardStop=false
 StatIntervalMs=1000
@@ -66,8 +66,8 @@ datafilepath=/opt/shakespere.txt
 #manage the calendar options
 # YYYY-MM-DD HH:MM:SS
 # daysdiffernce is the target/final date of the period 
-calendardate=2017-03-31 00:00:01 
-daysdiffernce=90
+calendardate=2017-09-30 00:00:01 
+daysdiffernce=180
 
 
 [logs]
@@ -89,6 +89,18 @@ eventhistory=350
 actionhistory=120
 processaverage=true
 
+[com.zaxxer.hikari]
+dataSource.cachePrepStmts=true
+dataSource.prepStmtCacheSize=250
+dataSource.prepStmtCacheSqlLimit=2048
+dataSource.useServerPrepStmts=true
+dataSource.useLocalSessionState=true
+dataSource.useLocalTransactionState=true
+dataSource.rewriteBatchedStatements=true
+dataSource.cacheResultSetMetadata=true
+dataSource.cacheServerConfiguration=true
+dataSource.elideSetAutoCommits=true
+dataSource.maintainTimeStats=false
 
 
 [net.tc.stresstool.actions.DeleteBase] 
