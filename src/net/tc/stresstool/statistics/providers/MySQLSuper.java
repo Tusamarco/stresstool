@@ -499,7 +499,8 @@ public class MySQLSuper implements StatsProvider, Reporter {
         	try {
         		rs.close();
         		stmt.close();
-        		conn.commit();
+        		if(!conn.getAutoCommit())
+        			conn.commit();
 				conn.close();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
@@ -568,29 +569,29 @@ public class MySQLSuper implements StatsProvider, Reporter {
 
 
     }
-    @Deprecated
-    /*
-     * Do not use use ConnectionProvider instead from Launcher
-     */
-    public synchronized static Connection initConnection(Map connMapcoordinates)
-	throws SQLException {
-	    Connection conn;
-	    if(connMapcoordinates.get("dbtype") != null &&  !((String)connMapcoordinates.get("dbtype")).toLowerCase().equals("MySQL".toLowerCase()))
-	    {
-	    	conn=DriverManager.getConnection((String)connMapcoordinates.get("dbtype"),"test", "test");
-	    }
-	    else{
-	    String connectionString = (String)connMapcoordinates.get("jdbcUrl")
-	        	    +"/"+(String)connMapcoordinates.get("database")
-	        	    +"?user="+(String)connMapcoordinates.get("user")
-	        	    +"&password="+(String)connMapcoordinates.get("password")
-	        	    +"&"+(String)connMapcoordinates.get("connparameters");
-	    
-	    
-	    conn= DriverManager.getConnection(connectionString);
-	    }
-	    return conn;
-    }
+//    @Deprecated
+//    /*
+//     * Do not use this, use ConnectionProvider instead from Launcher
+//     */
+//    public synchronized static Connection initConnection(Map connMapcoordinates)
+//	throws SQLException {
+//	    Connection conn;
+//	    if(connMapcoordinates.get("dbtype") != null &&  !((String)connMapcoordinates.get("dbtype")).toLowerCase().equals("MySQL".toLowerCase()))
+//	    {
+//	    	conn=DriverManager.getConnection((String)connMapcoordinates.get("dbtype"),"test", "test");
+//	    }
+//	    else{
+//	    String connectionString = (String)connMapcoordinates.get("jdbcUrl")
+//	        	    +"/"+(String)connMapcoordinates.get("database")
+//	        	    +"?user="+(String)connMapcoordinates.get("user")
+//	        	    +"&password="+(String)connMapcoordinates.get("password")
+//	        	    +"&"+(String)connMapcoordinates.get("connparameters");
+//	    
+//	    
+//	    conn= DriverManager.getConnection(connectionString);
+//	    }
+//	    return conn;
+//    }
 
 	public String getStatGroupName() {
 		return statGroupName;

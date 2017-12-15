@@ -83,6 +83,8 @@ public class ConnectionProvider {
 			     config.addDataSourceProperty("cachePrepStmts", "true");
 			     config.addDataSourceProperty("prepStmtCacheSize", "250");
 			     config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
+			     config.setIdleTimeout(1000);
+			     
 			     datasource = new HikariDataSource(config);
 			    
 
@@ -104,11 +106,12 @@ public class ConnectionProvider {
 	if(this.connInfo != null){
 		SoftReference sf = null;
 		Connection conn;
-		if (this.getDataSource() !=null){
+		if (this.getDataSource() !=null ){
 			sf = new SoftReference<Connection>( conn= (Connection) this.getDataSource().getConnection());
-			if(connInfo.isSelectForceAutocommitOff()){
-				((Connection) sf.get()).setAutoCommit(false);
-			}
+//			if(connInfo.isSelectForceAutocommitOff()){
+//				((Connection) sf.get()).setAutoCommit(false);
+//			}
+
 		}
 		else{
 		
@@ -189,7 +192,8 @@ public class ConnectionProvider {
     public boolean returnConnection(Connection conn){
     	try{
     		if(conn!=null && !conn.isClosed()){
-    			conn.commit();
+    			if(!conn.getAutoCommit())
+    				conn.commit();
     			conn.close();
     			conn = null;
     		}

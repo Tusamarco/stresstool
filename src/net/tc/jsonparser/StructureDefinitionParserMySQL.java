@@ -100,20 +100,19 @@ public class StructureDefinitionParserMySQL implements
 //					table.setWhereConditionS(oTable.get("wherecondition_s")!=null?(String)oTable.get("wherecondition_s"):"");
 //					table.setWhereConditionU(oTable.get("wherecondition_u")!=null?(String)oTable.get("wherecondition_u"):"");
 //					table.setWhereConditionD(oTable.get("wherecondition_d")!=null?(String)oTable.get("wherecondition_d"):"");
-					table.setSelectCondition(oTable.get("selectcondition")!=null?(String)oTable.get("selectcondition"):"");
+//					table.setSelectCondition(oTable.get("selectcondition")!=null?(String)oTable.get("selectcondition"):"");
 					table.setUpdateSetAttributes(oTable.get("updatesetattributes")!=null?(String)oTable.get("updatesetattributes"):""); 
 					/*
-					 * Parse conditions
+					 * Parse select conditions
 					 * 
 					 */
-					String[] condTypeS = {"s", "u", "d"};
-					for(String condType : condTypeS ){
-						int id = 1;
+					{
 						ConditionCollection condCol = new ConditionCollection();
-						JSONObject whereCondS = (JSONObject)oTable.get("wherecondition_"+condType);
-
-						if(whereCondS != null){
-							JSONArray arConditions = (JSONArray)whereCondS.get("condition");
+						JSONObject SelectCondS = (JSONObject)oTable.get("selectcondition");
+						int id = 1;
+	
+						if( SelectCondS != null){
+							JSONArray arConditions = (JSONArray) SelectCondS.get("condition");
 							/*
 							 * Loading attributes from Json file
 							 */
@@ -122,15 +121,47 @@ public class StructureDefinitionParserMySQL implements
 								Condition condition = new Condition();
 								condition.setWeight((Long) aCondition.get("weight"));
 								condition.setCondition((String) aCondition.get("condition_string"));
+								condition.setType(Condition.SELECT_CONDITION);
 								condCol.setCondition(id++, condition);
 							}
-							switch(condType){
-								case "s": table.setWhereConditionS(condCol);break;
-								case "u": table.setWhereConditionU(condCol);break;
-								case "d": table.setWhereConditionD(condCol);break;
+							table.setSelectCondition_S(condCol);
 							
-							}
-						}	
+						}
+						
+					}
+					
+					/*
+					 * Parse conditions
+					 * 
+					 */
+					{
+						String[] condTypeS = {"s", "u", "d"};
+						for(String condType : condTypeS ){
+							int id = 1;
+							ConditionCollection condCol = new ConditionCollection();
+							JSONObject whereCondS = (JSONObject)oTable.get("wherecondition_"+condType);
+	
+							if(whereCondS != null){
+								JSONArray arConditions = (JSONArray)whereCondS.get("condition");
+								/*
+								 * Loading attributes from Json file
+								 */
+								for(Object oa: arConditions){
+									JSONObject aCondition = (JSONObject) oa;
+									Condition condition = new Condition();
+									condition.setWeight((Long) aCondition.get("weight"));
+									condition.setCondition((String) aCondition.get("condition_string"));
+									condition.setType(Condition.WHERE_CONDITION);
+									condCol.setCondition(id++, condition);
+								}
+								switch(condType){
+									case "s": table.setWhereConditionS(condCol);break;
+									case "u": table.setWhereConditionU(condCol);break;
+									case "d": table.setWhereConditionD(condCol);break;
+								
+								}
+							}	
+						}
 					}
 					
 					/*

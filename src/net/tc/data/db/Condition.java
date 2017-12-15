@@ -3,9 +3,9 @@ package net.tc.data.db;
 
 
 public class Condition {
-	static int SELECT_CONDITION=1;
-	static int WHERE_CONDITION=2;
-	static int UPDATE_CONDITION=3;
+	public static int SELECT_CONDITION=1;
+	public static int WHERE_CONDITION=2;
+	public static int UPDATE_CONDITION=3;
 	
 	public Long weight = null;
 	public int type = 0;
