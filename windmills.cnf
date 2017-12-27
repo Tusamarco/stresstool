@@ -11,12 +11,12 @@ connectionPool=false
 connectionPoolClass= 
 selectForceAutocommitOff=true
 stickyconnection=false
-useConnectionPool=false
-connectionPoolType=0
+useConnectionPool=true
+connectionPoolType=1
 #at the moment we only support hikari
 
 FKEnable=false
-createTable=true 
+createTable=false 
 dbType=MySQL 
 doDelete=false 
 doReport=true 
@@ -26,12 +26,12 @@ droptable=false
 ignoreBinlog=false
 operationShort=false  
 poolNumber=6
-pctInsert=100
+pctInsert=00
 pctUpdate=0 
 pctSelect=100 
-pctDelete=50
+pctDelete=0
 #repeatNumber=1
-repeatNumber=5000
+repeatNumber=100
 HardStopLimit=1000
 UseHardStop=false
 StatIntervalMs=1000
@@ -119,17 +119,17 @@ SelectFilterMethod=in
 #range|in|match
 SleepSelect=100 
 
-numberOfprimaryTables=1
-numberOfSecondaryTables=0
+numberOfprimaryTables=5
+numberOfSecondaryTables=5
 numberOfIntervalKeys=100
 numberOfJoinTables=0
 joinField=a
 forceIndex=false
 indexName=IDX_as
 lazySelect=true
-lazyInterval=0
+lazyInterval=1
 #joinCondition=Left - experimental
-batchSize = 1
+batchSize = 10
 textAttributeMaxSearchlength=5
 
 [net.tc.stresstool.actions.InsertBase]
