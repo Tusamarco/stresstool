@@ -5,13 +5,22 @@ stresstool.log.file=stresstool.log
 
 #log4j.logger.APPLICATION=debug,console,APPLICATION
 log4j.logger.APPLICATION=ERROR,console,APPLICATION
-log4j.logger.ACTIONS=ERROR,console
+log4j.logger.ACTIONS=error,console
 #,ACTIONS
 log4j.logger.MONITORS=ERROR,MONITORS
 log4j.logger.STATS=ERROR,STATS
-log4j.logger.SQL=INFO,console 
+log4j.logger.SQL=ERROR,console 
 #,SQL
-log4j.logger.PERFORMANCE=ERROR,console,PERFORMANCE
+log4j.logger.PERFORMANCE=error,console,PERFORMANCE
+log4j.logger.PCONNECTION=error,console
+#,PCONNECTION
+log4j.logger.PACTIONS=error,console,PACTIONS
+
+
+#HIKARI
+log4j.logger.com.zaxxer.hikari=ERROR,console,CONPOOL
+
+
 
 # Define the root logger to the system property "stresstool.root.logger".
 log4j.rootLogger=${stresstool.root.logger}
@@ -19,6 +28,20 @@ log4j.rootLogger=${stresstool.root.logger}
 
 # Logging Threshold
 log4j.threshhold=ALL
+
+
+#
+# Connection Pool appender
+#
+log4j.appender.CONPOOL=org.apache.log4j.RollingFileAppender
+log4j.appender.CONPOOL.File=${stresstool.log.dir}/conpool.log
+log4j.appender.CONPOOL.MaxFileSize=50MB
+log4j.appender.CONPOOL.MaxBackupIndex=2
+log4j.appender.CONPOOL.layout=org.apache.log4j.PatternLayout
+log4j.appender.CONPOOL.layout.ConversionPattern=%d{ISO8601},%p,%m%n
+#log4j.appender.CONPOOL.layout.ConversionPattern=%d{ISO8601} %-5p %c{2} (%F:%M(%L)) - %m%n
+
+
 
 #
 # Action Appender
@@ -87,7 +110,8 @@ log4j.appender.APPLICATION.MaxBackupIndex=30
 log4j.appender.APPLICATION.layout=org.apache.log4j.PatternLayout
 log4j.appender.APPLICATION.layout.ConversionPattern=%d{ISO8601} %-5p %c{2} - %m%n
 
-
+#Performance logs appenders
+##Basic
 log4j.appender.PERFORMANCE=org.apache.log4j.RollingFileAppender
 log4j.appender.PERFORMANCE.File=${stresstool.log.dir}/performance.txt
 log4j.appender.PERFORMANCE.MaxFileSize=50MB
@@ -95,8 +119,34 @@ log4j.appender.PERFORMANCE.MaxBackupIndex=30
 log4j.appender.PERFORMANCE.layout=org.apache.log4j.PatternLayout
 log4j.appender.PERFORMANCE.layout.ConversionPattern=%d{ISO8601} %-5p %c{2} - %m%n
 #log4j.appender.PERFORMANCE.layout.ConversionPattern=%d{ISO8601} %-5p (%C:%M(%L)) - %m%n
-%highlight{%d %-5level: (%C:%M(%L)) - %m%n throwable}{FATAL=white, ERROR=red, WARN=blue, INFO=black, DEBUG=green, TRACE=blue}
+#%highlight{%d %-5level: (%C:%M(%L)) - %m%n throwable}{FATAL=white, ERROR=red, WARN=blue, INFO=black, DEBUG=green, TRACE=blue}
 #%d{ISO8601},%p,(%C - %M :%L), %m%n
+
+
+##connection
+log4j.appender.PCONNECTION=org.apache.log4j.RollingFileAppender
+log4j.appender.PCONNECTION.File=${stresstool.log.dir}/pconnection.txt
+log4j.appender.PCONNECTION.MaxFileSize=50MB
+log4j.appender.PCONNECTION.MaxBackupIndex=30
+log4j.appender.PCONNECTION.layout=org.apache.log4j.PatternLayout
+log4j.appender.PCONNECTION.layout.ConversionPattern=%d{ISO8601} %-5p %c{2} - %m%n
+#log4j.appender.PCONNECTION.layout.ConversionPattern=%d{ISO8601} %-5p (%C:%M(%L)) - %m%n
+#%highlight{%d %-5level: (%C:%M(%L)) - %m%n throwable}{FATAL=white, ERROR=red, WARN=blue, INFO=black, DEBUG=green, TRACE=blue}
+#%d{ISO8601},%p,(%C - %M :%L), %m%n
+
+##Actions
+log4j.appender.PACTIONS=org.apache.log4j.RollingFileAppender
+log4j.appender.PACTIONS.File=${stresstool.log.dir}/pactions.txt
+log4j.appender.PACTIONS.MaxFileSize=50MB
+log4j.appender.PACTIONS.MaxBackupIndex=30
+log4j.appender.PACTIONS.layout=org.apache.log4j.PatternLayout
+log4j.appender.PACTIONS.layout.ConversionPattern=%d{ISO8601} %-5p %c{2} - %m%n
+#log4j.appender.PACTIONS.layout.ConversionPattern=%d{ISO8601} %-5p (%C:%M(%L)) - %m%n
+#%highlight{%d %-5level: (%C:%M(%L)) - %m%n throwable}{FATAL=white, ERROR=red, WARN=blue, INFO=black, DEBUG=green, TRACE=blue}
+#%d{ISO8601},%p,(%C - %M :%L), %m%n
+
+
+
 
 #
 # Null Appender

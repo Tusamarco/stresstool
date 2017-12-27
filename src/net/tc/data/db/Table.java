@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import net.tc.data.generic.DataObject;
+import net.tc.stresstool.PerformanceEvaluator;
 import net.tc.stresstool.StressTool;
 import net.tc.stresstool.actions.StressAction;
 import net.tc.stresstool.exceptions.StressToolConfigurationException;
@@ -42,9 +43,9 @@ public class Table {
 	private int  rowFormatInt = 0;
 	private String dataDirectory = null;
 	private ConditionCollection whereCondition_s = new ConditionCollection();
-	private ConditionCollection whereCondition_u = new ConditionCollection();;
-	private ConditionCollection whereCondition_d = new ConditionCollection();;
-	private String selectCondition = null;
+	private ConditionCollection whereCondition_u = new ConditionCollection();
+	private ConditionCollection whereCondition_d = new ConditionCollection();
+	private ConditionCollection selectCondition_S = new ConditionCollection();
 	private ArrayList<Attribute> attribsWhereS = new ArrayList();
 	private ArrayList<Attribute> attribsWhereU = new ArrayList();
 	private ArrayList<Attribute> attribsWhereD = new ArrayList();
@@ -506,6 +507,10 @@ public class Table {
 	}
 	
 	public String parseWhere(int sqlType){
+	    long performanceTimeStart = 0;
+		try {if (StressTool.getLogProvider().getLogger(LogProvider.LOG_PACTIONS).isInfoEnabled()) {performanceTimeStart=System.nanoTime();}} catch (StressToolConfigurationException e1) {e1.printStackTrace();}
+
+		
 	  	String whereCondition = this.getWhereCondition(sqlType);
 	  	ArrayList<Attribute> attribsWhere = new ArrayList();
 	  	
@@ -610,6 +615,7 @@ public class Table {
 			
 		}
 		
+		executionPerformance(performanceTimeStart," PARSE WHERE ");
 		return whereCondition;
 	}
 
@@ -631,15 +637,19 @@ public class Table {
 
 
 	public String getSelectCondition() {
-		return selectCondition;
+		return selectCondition_S.getCondition().getCondition();
 	}
 
 
-	public void setSelectCondition(String selectCondition) {
-		this.selectCondition = selectCondition;
+	public void setSelectCondition_S(ConditionCollection condCol) {
+		this.selectCondition_S = condCol;
 	}
 
+	public ConditionCollection getSelectCondition_S() {
+		return selectCondition_S;
+	}
 
+	
 	public String getWhereConditionU() {
 		return whereCondition_u.getCondition().getCondition();
 	}
@@ -681,9 +691,9 @@ public class Table {
 	}
 	
 	public String parseSelectCondition(){
-		if(selectCondition == null || selectCondition.equals(""))
+		if(selectCondition_S == null || selectCondition_S.getCondition().equals(""))
 			return null;
-		String[] selects=selectCondition.split(",");
+		String[] selects=this.getSelectCondition().split(",");
 		StringBuffer sb = new StringBuffer();
 		for(String select:selects ){
 			if(sb.length() > 0)
@@ -752,6 +762,26 @@ public class Table {
 
 	public void setWhereCondition_d(ConditionCollection whereCondition_d) {
 		this.whereCondition_d = whereCondition_d;
+	}
+	
+	private void executionPerformance(long performanceTimeStart, String text) {
+		/*Performance evaluation section [header] start*/
+		try {
+		    if (StressTool.getLogProvider()
+			    .getLogger(LogProvider.LOG_PACTIONS)
+			    .isInfoEnabled()) {
+			
+			StressTool
+				.getLogProvider()
+				.getLogger(LogProvider.LOG_PACTIONS)
+				.info(StressTool.getLogProvider().LOG_EXEC_TIME
+					+ " "+ text + " exec perf:"
+					+ PerformanceEvaluator
+						.getTimeEvaluation(performanceTimeStart));
+		    }
+		} catch (Throwable th) {
+		}
+		/*Performance evaluation section [header] END*/
 	}
 
 }

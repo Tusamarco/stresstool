@@ -668,7 +668,8 @@ public class InsertEmployeesTest extends StressActionBase implements WriteAction
 		  //              	    	tableEmpNo.put("tbtest"+iTable, maxId);
 		  try{
 			stmt.execute("update tbtestmax  set maxid="+maxId+" where tablename = 'tbtest"+ iTable +"'");
-			conn.commit();
+			if(!conn.getAutoCommit())
+				conn.commit();
 		  }
 		  catch (SQLException ssq){ssq.printStackTrace();}
 		}
@@ -727,7 +728,9 @@ public class InsertEmployeesTest extends StressActionBase implements WriteAction
 		for(int iTable = 1; iTable <= this.getNumberOfprimaryTables(); iTable++){
 		  try{
 			stmt.execute("replace into tbtestmax values ('tbtest" + iTable + "', 2)" );
-			conn.commit();
+			if(!conn.getAutoCommit())
+				conn.commit();
+
 		  }catch(SQLException ssq){ssq.printStackTrace();}
 		}                    
 	  }

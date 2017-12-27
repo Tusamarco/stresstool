@@ -91,10 +91,10 @@ public class MySQLSuper implements StatsProvider, Reporter {
         lastSampleTime = Utility.getHour()+":"+Utility.getMinute()+":"+Utility.getSecond();
         status = getStatus(conn);
     
-        if(eventsName == null)
+        if(status != null && eventsName == null)
             eventsName = ((SynchronizedMap)status).getKeyasOrderedStringArray();
         
-        if(flushrowonfile){
+        if(flushrowonfile && status !=null){
             writeStatsOnFile(status);
         }
             
@@ -369,7 +369,7 @@ public class MySQLSuper implements StatsProvider, Reporter {
         
         try {
             conn = connProvider.getSimpleConnection();
-            conn.setAutoCommit(false);
+//TODO check if needed             conn.setAutoCommit(false);
             stmt = conn.createStatement();
 
             
@@ -499,6 +499,8 @@ public class MySQLSuper implements StatsProvider, Reporter {
         	try {
         		rs.close();
         		stmt.close();
+        		if(!conn.getAutoCommit())
+        			conn.commit();
 				conn.close();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
@@ -544,7 +546,7 @@ public class MySQLSuper implements StatsProvider, Reporter {
             return false;
         }
         
-        /*Performance evaluation section [header] start*/
+    /*Performance evaluation section [header] start*/
 	try {
 	    if (StressTool.getLogProvider()
 		    .getLogger(LogProvider.LOG_PERFORMANCE)
@@ -567,29 +569,29 @@ public class MySQLSuper implements StatsProvider, Reporter {
 
 
     }
-    @Deprecated
-    /*
-     * Do not use use ConnectionProvider instead from Launcher
-     */
-    public synchronized static Connection initConnection(Map connMapcoordinates)
-	throws SQLException {
-	    Connection conn;
-	    if(connMapcoordinates.get("dbtype") != null &&  !((String)connMapcoordinates.get("dbtype")).toLowerCase().equals("MySQL".toLowerCase()))
-	    {
-	    	conn=DriverManager.getConnection((String)connMapcoordinates.get("dbtype"),"test", "test");
-	    }
-	    else{
-	    String connectionString = (String)connMapcoordinates.get("jdbcUrl")
-	        	    +"/"+(String)connMapcoordinates.get("database")
-	        	    +"?user="+(String)connMapcoordinates.get("user")
-	        	    +"&password="+(String)connMapcoordinates.get("password")
-	        	    +"&"+(String)connMapcoordinates.get("connparameters");
-	    
-	    
-	    conn= DriverManager.getConnection(connectionString);
-	    }
-	    return conn;
-    }
+//    @Deprecated
+//    /*
+//     * Do not use this, use ConnectionProvider instead from Launcher
+//     */
+//    public synchronized static Connection initConnection(Map connMapcoordinates)
+//	throws SQLException {
+//	    Connection conn;
+//	    if(connMapcoordinates.get("dbtype") != null &&  !((String)connMapcoordinates.get("dbtype")).toLowerCase().equals("MySQL".toLowerCase()))
+//	    {
+//	    	conn=DriverManager.getConnection((String)connMapcoordinates.get("dbtype"),"test", "test");
+//	    }
+//	    else{
+//	    String connectionString = (String)connMapcoordinates.get("jdbcUrl")
+//	        	    +"/"+(String)connMapcoordinates.get("database")
+//	        	    +"?user="+(String)connMapcoordinates.get("user")
+//	        	    +"&password="+(String)connMapcoordinates.get("password")
+//	        	    +"&"+(String)connMapcoordinates.get("connparameters");
+//	    
+//	    
+//	    conn= DriverManager.getConnection(connectionString);
+//	    }
+//	    return conn;
+//    }
 
 	public String getStatGroupName() {
 		return statGroupName;

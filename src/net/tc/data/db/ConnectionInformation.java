@@ -10,8 +10,15 @@ public class ConnectionInformation {
 	private String connParameters = null;  
 	private boolean connectionPool=false ;
 	private String connectionPoolClass= null; 
+	private int connectionPoolType=0 ;
 	private boolean selectForceAutocommitOff=false;
 	private boolean stikyconnection=false ;
+	
+	public static final int  NONE = 0;
+	public static final int HIKARI = 1;
+	public static final int C3P0 = 2;
+	public static final int TOMCAT = 3;
+	
 	/**
 	 * @return the connUrl
 	 */
@@ -131,6 +138,12 @@ public class ConnectionInformation {
 	 */
 	public void setDbType(String dbType) {
 	    this.dbType = dbType;
+	}
+	public int getConnectionPoolType() {
+		return connectionPoolType;
+	}
+	public void setConnectionPoolType(int connectionPoolType) {
+		this.connectionPoolType = connectionPoolType;
 	} 
 
 }

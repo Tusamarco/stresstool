@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
-import com.mysql.jdbc.Statement;
+import java.sql.Statement;
 
 import net.tc.data.db.Attribute;
 import net.tc.data.db.Table;
@@ -155,7 +155,7 @@ public class SelectBase extends StressActionBase implements ReadAction{
 	Connection conn = null;
 	if(this.getActiveConnection()==null){
 	  try {
-		conn = this.getConnProvider().getSimpleConnection();
+		conn = this.getConnProvider().getConnection();
 	  } catch (SQLException e) {
 			try{					
 				ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -182,9 +182,9 @@ public class SelectBase extends StressActionBase implements ReadAction{
 	  }
 	  currentLazyLoop +=1;
 	}
-	this.myDataObject.executeSqlObject(this.getActionCode(),(com.mysql.jdbc.Connection) conn);
+	this.myDataObject.executeSqlObject(this.getActionCode(),(java.sql.Connection) conn);
 	if(!this.isStickyconnection()){
-	  getConnProvider().returnConnection((com.mysql.jdbc.Connection)conn);
+	  getConnProvider().returnConnection((java.sql.Connection)conn);
 	}
 
   }
@@ -471,7 +471,7 @@ private String getJoinCondition(Table table){
 				Connection conn = null;
 				if(this.getActiveConnection()==null){
 				  try {
-					conn = this.getConnProvider().getSimpleConnection();
+					conn = this.getConnProvider().getConnection();
 					Statement stmt = (Statement) conn.createStatement();
 					ResultSet rs = stmt.executeQuery(SQL);
 					if(rs != null ){
@@ -500,7 +500,7 @@ private String getJoinCondition(Table table){
 				  }
 				  finally{
 					  
-					  this.getConnProvider().returnConnection((com.mysql.jdbc.Connection) conn);
+					  this.getConnProvider().returnConnection((java.sql.Connection) conn);
 				  }
 				}
 				

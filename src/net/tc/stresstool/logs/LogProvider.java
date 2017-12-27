@@ -8,6 +8,7 @@ import java.util.Vector;
 import org.apache.log4j.Appender;
 import org.apache.log4j.EnhancedPatternLayout;
 import org.apache.log4j.Layout;
+import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
@@ -42,6 +43,8 @@ public class LogProvider {
     public static String LOG_ACTIONS = "ACTIONS";
     public static String LOG_MONITORS = "MONITORS";
     public static String LOG_PERFORMANCE = "PERFORMANCE";
+    public static String LOG_PCONNECTION = "PCONNECTION";
+    public static String LOG_PACTIONS = "PACTIONS";
     public static String LOG_EXEC_TIME = "Execution time: ";
     
     public LogProvider() {
@@ -56,6 +59,7 @@ public class LogProvider {
         		loggerName = ((Logger)e.nextElement()).getName();
         		System.out.println("Testing Logger :"+ loggerName) ;
         		Logger loggerTest = Logger.getLogger(loggerName);
+        		
         		if(loggerTest.isDebugEnabled()){
         		    
         		    Enumeration it = (Enumeration)Logger.getLogger(loggerName).getAllAppenders();

@@ -1,17 +1,19 @@
 [main]
 #connection oriented settings
-#connUrl=jdbc:mysql://192.168.1.50:6033
-#connUrl=jdbc:mysql://192.168.1.108:3306
-connUrl=jdbc:mysql://127.0.0.1:3306
+connUrl=jdbc:mysql://192.168.1.11:6033
+#connUrl=jdbc:mysql://192.168.1.205:3306
+#connUrl=jdbc:mysql://127.0.0.1:3306
 database=windmills
-user=stress	
+user=pxc_test
 password=test
 connParameters=autoReconnect=true  
 connectionPool=false
 connectionPoolClass= 
-selectForceAutocommitOff=false
+selectForceAutocommitOff=true
 stickyconnection=false
-
+useConnectionPool=false
+connectionPoolType=0
+#at the moment we only support hikari
 
 FKEnable=false
 createTable=true 
@@ -22,14 +24,14 @@ doSimple=false
 doSimplePk=false 
 droptable=false
 ignoreBinlog=false
-operationShort=true  
-poolNumber=1
-pctInsert=00
+operationShort=false  
+poolNumber=6
+pctInsert=100
 pctUpdate=0 
 pctSelect=100 
-pctDelete=0
+pctDelete=50
 #repeatNumber=1
-repeatNumber=30000
+repeatNumber=5000
 HardStopLimit=1000
 UseHardStop=false
 StatIntervalMs=1000
@@ -64,8 +66,8 @@ datafilepath=/opt/shakespere.txt
 #manage the calendar options
 # YYYY-MM-DD HH:MM:SS
 # daysdiffernce is the target/final date of the period 
-calendardate=2017-03-31 00:00:01 
-daysdiffernce=90
+calendardate=2017-09-30 00:00:01 
+daysdiffernce=180
 
 
 [logs]
@@ -87,6 +89,18 @@ eventhistory=350
 actionhistory=120
 processaverage=true
 
+[com.zaxxer.hikari]
+dataSource.cachePrepStmts=true
+dataSource.prepStmtCacheSize=250
+dataSource.prepStmtCacheSqlLimit=2048
+dataSource.useServerPrepStmts=true
+dataSource.useLocalSessionState=true
+dataSource.useLocalTransactionState=true
+dataSource.rewriteBatchedStatements=true
+dataSource.cacheResultSetMetadata=true
+dataSource.cacheServerConfiguration=true
+dataSource.elideSetAutoCommits=true
+dataSource.maintainTimeStats=false
 
 
 [net.tc.stresstool.actions.DeleteBase] 
@@ -113,7 +127,7 @@ joinField=a
 forceIndex=false
 indexName=IDX_as
 lazySelect=true
-lazyInterval=10
+lazyInterval=0
 #joinCondition=Left - experimental
 batchSize = 1
 textAttributeMaxSearchlength=5
@@ -124,14 +138,14 @@ numberOfprimaryTables=1
 numberOfSecondaryTables=0
 useAutoIncrement=true
 joinField=millid
-sleepWrite=500
+sleepWrite=10
 lazyCreation=true
 lazyInterval=5
-batchSize=10
+batchSize=20
 #jsonFile=/Users/marcotusa/programs/JBuilder/workspace/stresstool/json_definition_long.json
 #jsonFile=/Users/marcotusa/programs/JBuilder/workspace/stresstool/json_definition.json
 #jsonFile=/Users/marcotusa/programs/JBuilder/workspace/stresstool/json_simplePk.json
-jsonFile=wind_mill_example.json
+jsonFile=wind_mill_example2.json
 
 #[net.tc.stresstool.actions.InsertEmployeesTest]
 #usePrepareStatement=false
