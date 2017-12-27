@@ -91,10 +91,10 @@ public class MySQLSuper implements StatsProvider, Reporter {
         lastSampleTime = Utility.getHour()+":"+Utility.getMinute()+":"+Utility.getSecond();
         status = getStatus(conn);
     
-        if(eventsName == null)
+        if(status != null && eventsName == null)
             eventsName = ((SynchronizedMap)status).getKeyasOrderedStringArray();
         
-        if(flushrowonfile){
+        if(flushrowonfile && status !=null){
             writeStatsOnFile(status);
         }
             

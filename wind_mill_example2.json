@@ -51,7 +51,7 @@
 							{
 							"key":
 								[
-									{"name":"IDX_millid","unique":false,"attributes":["millid"]},
+									{"name":"IDX_millid","unique":false,"attributes":["millid","active"]},
 									{"name":"IDX_active","unique":false,"attributes":["id","active"]}
 								]
 							},	

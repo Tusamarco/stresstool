@@ -12,6 +12,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Vector;
 
+import com.mysql.jdbc.exceptions.jdbc4.CommunicationsException;
+
 import net.tc.stresstool.StressTool;
 import net.tc.stresstool.actions.StressAction;
 import net.tc.stresstool.exceptions.StressToolGenericException;
@@ -40,30 +42,44 @@ public class MySQLStatus extends MySQLSuper implements StatsProvider, Reporter {
           return null;
       try{
           stmt = conn.createStatement();
-          rs = stmt.executeQuery("SHOW GLOBAL STATUS");
-          /* TIME must be present in any collected stats
-           * Filling the base Event entity
-           */
+
           long time = System.currentTimeMillis();
-          while(rs.next())
-          {
-              StatEvent event = new StatEvent();
-              
-              String name = "";
-              String value = "";
-              name = rs.getString("Variable_name");
-              value = rs.getString("Value");
-              event.setCollection(this.statGroupName);
-              event.setTime(time);
-              event.setProvider(this.getClass().getCanonicalName());
-              event.setEvent(name);
-              event.setValue(value);
-              event.setId(loopNumber);
-              event.setOrder(internalOrder);
-              
-              statusReport.put(name,event);
-              internalOrder++;
+          try{
+              rs = stmt.executeQuery("SHOW GLOBAL STATUS");
+              /* TIME must be present in any collected stats
+               * Filling the base Event entity
+               */
+	          while(rs.next())
+	          {
+	              StatEvent event = new StatEvent();
+	              
+	              String name = "";
+	              String value = "";
+	              name = rs.getString("Variable_name");
+	              value = rs.getString("Value");
+	              event.setCollection(this.statGroupName);
+	              event.setTime(time);
+	              event.setProvider(this.getClass().getCanonicalName());
+	              event.setEvent(name);
+	              event.setValue(value);
+	              event.setId(loopNumber);
+	              event.setOrder(internalOrder);
+	              
+	              statusReport.put(name,event);
+	              internalOrder++;
+	          }
           }
+          catch(Exception sqlx){
+        	  sqlx.printStackTrace();
+              try{
+            	  rs.close();
+            	  rs = null;
+            	  stmt.close();
+            	  stmt = null;
+//              return statusReport;
+            	  return null;
+              }catch(Throwable th ){return null;}
+        }
          
  /*         
           rs = stmt.executeQuery("SELECT * from ndbinfo.counters");
@@ -98,25 +114,35 @@ public class MySQLStatus extends MySQLSuper implements StatsProvider, Reporter {
       catch (Exception eex)
       {
           try {
-	    throw new StressToolGenericException(eex);
-	} catch (StressToolGenericException e) {
-		e.printStackTrace();
-	}
+        	  	throw new StressToolGenericException(eex);
+          	  } catch (StressToolGenericException e) {
+          		  	e.printStackTrace();
+          	  	}
       }
-      finally
-      {
-          try {
-              rs.close();
-              rs = null;
-              stmt.close();
-              stmt = null;
-              return statusReport;
-              
-          } catch (SQLException ex) {
-  			ex.printStackTrace();
-          }
+//      finally
+//      {
+//          try {
+//              rs.close();
+//              rs = null;
+//              stmt.close();
+//              stmt = null;
+//              return statusReport;
+//              
+//          } catch (SQLException ex) {
+//  			ex.printStackTrace();
+//          }
+//
+//      }
+      try {
+    	  rs.close();
+	      rs = null;
+	      stmt.close();
+	      stmt = null;
+	      return statusReport;
+      } catch (SQLException e) {
+			e.printStackTrace();
+      }
 
-      }
       return null;
     }
 

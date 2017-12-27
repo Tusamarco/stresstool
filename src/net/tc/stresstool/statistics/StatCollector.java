@@ -48,6 +48,7 @@ public class StatCollector {
      * @uml.associationEnd  multiplicity="(1 1)"
      */
     StatsCollection statColl = null;
+    ConnectionProvider connectionProvider = null;
     /**
      * @uml.property  name="connectionInformation"
      */
@@ -120,6 +121,8 @@ public class StatCollector {
 	/* retrieve stat provider information and feed initial structure*/
 	Iterator it = configs.getSectionsName();
 	setRootPath(configs);
+	
+	connectionProvider = connProvider;
 	
 	providers  = new SynchronizedMap(0);
 	
@@ -242,8 +245,14 @@ if (StressTool.getLogProvider().getLogger(LogProvider.LOG_PERFORMANCE)
 	}
 	/*Performance evaluation section [tail] END*/
        
-        StatsProvider sp = null;
-	
+    StatsProvider sp = null;
+    try{
+		if(conn == null || conn.isClosed()){
+			conn = this.connectionProvider.getSimpleConnection();
+		}
+    }catch(SQLException sqlx1){sqlx1.printStackTrace();}
+    
+    
 	for(int iCstat = 0 ; iCstat < providers.size(); iCstat++){
 	    sp = (StatsProvider)((SynchronizedMap)providers).getValueByPosition(iCstat);
 	    Map values =  sp.collectStatistics(conn);
@@ -251,7 +260,7 @@ if (StressTool.getLogProvider().getLogger(LogProvider.LOG_PERFORMANCE)
 	    /* try to load information on the Stat Collection
 	     * if it failed for any reason will try 3 times then give up 
 	     */
-	    if(!statColl.processCollectedEvents(sp.getProviderName(),values)){
+	    if(values != null && !statColl.processCollectedEvents(sp.getProviderName(),values)){
 		int errorRepeat = 0;
 		
 		for(int ic =0 ; ic <= 3 ;ic++){

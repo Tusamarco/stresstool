@@ -5,20 +5,20 @@ stresstool.log.file=stresstool.log
 
 #log4j.logger.APPLICATION=debug,console,APPLICATION
 log4j.logger.APPLICATION=ERROR,console,APPLICATION
-log4j.logger.ACTIONS=ERROR,console
+log4j.logger.ACTIONS=error,console
 #,ACTIONS
 log4j.logger.MONITORS=ERROR,MONITORS
 log4j.logger.STATS=ERROR,STATS
 log4j.logger.SQL=ERROR,console 
 #,SQL
 log4j.logger.PERFORMANCE=error,console,PERFORMANCE
-log4j.logger.PCONNECTION=info,console
+log4j.logger.PCONNECTION=error,console
 #,PCONNECTION
 log4j.logger.PACTIONS=error,console,PACTIONS
 
 
 #HIKARI
-log4j.logger.com.zaxxer.hikari=DEBUG,console,CONPOOL
+log4j.logger.com.zaxxer.hikari=ERROR,console,CONPOOL
 
 
 
