@@ -1,8 +1,6 @@
 package net.tc.data.db;
 
-import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
-
-public class TCDataSource  extends MysqlDataSource{
+public class TCDataSource  extends com.mysql.cj.jdbc.MysqlDataSource{
 	int type =0 ;
 
 	public TCDataSource() {

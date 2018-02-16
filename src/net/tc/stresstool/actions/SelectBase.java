@@ -492,7 +492,10 @@ private String getJoinCondition(Table table){
 							PrintStream ps = new PrintStream(baos);				
 							e.printStackTrace(ps);
 							String s =new String(baos.toByteArray());
-							StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error(s);
+							StringBuffer sb1 = new StringBuffer();
+							sb1.append(s);
+							sb1.append(SQL);
+							StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error(sb1.toString());
 							System.exit(1)  ;
 					}catch(Exception ex){ex.printStackTrace();}
 

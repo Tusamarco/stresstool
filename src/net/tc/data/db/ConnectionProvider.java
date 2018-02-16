@@ -71,6 +71,7 @@ public class ConnectionProvider {
 			        	    +"/"+ connInfo.getDatabase()
 			        	    +"?user="+connInfo.getUser()
 			        	    +"&password="+ connInfo.getPassword()
+			        	    +"&useSSL=false"
 			        	    +"&"+ connInfo.getConnParameters();
 			    
 		         
@@ -123,6 +124,7 @@ public class ConnectionProvider {
 			        	    +"/"+ connInfo.getDatabase()
 			        	    +"?user="+connInfo.getUser()
 			        	    +"&password="+ connInfo.getPassword()
+			        	    +"&useSSL=false"
 			        	    +"&"+ connInfo.getConnParameters();
 			    
 			    myDataSource.setUrl(connectionString);
