@@ -3,6 +3,7 @@ package net.tc.stresstool.statistics;
 import java.util.Arrays;
 import java.util.Map;
 
+import jdk.internal.org.objectweb.asm.tree.analysis.Value;
 import net.tc.utils.MathU;
 import net.tc.utils.SynchronizedMap;
 
@@ -133,22 +134,25 @@ public class EventCollection {
      * @param averageValue the averageValue to set
      */
     public final void setAverageValue(Long averageValueIn) {
-	if(!processAverage)
-	    return;
-	
-	if(collection.size() <= 1){
-	    averageValue = new Double(averageValueIn);
-	    return;
-	}
-	StatEvent[] valuesa =new StatEvent[0];
-	StatEvent[] values = (StatEvent[])((SynchronizedMap) collection).values().toArray(valuesa);
-	Long[] valuesL = new Long[values.length +1];
-	for(int i =0; i < values.length; i++){
-	    valuesL[i] = new Long(values[i].getValue().toString());
-	}
-	valuesL[valuesL.length -1] = averageValueIn;
-	
-        averageValue = MathU.getAverage(valuesL);
+		if(!processAverage)
+		    return;
+		
+		if(collection.size() <= 1){
+		    averageValue = new Double(averageValueIn);
+		    return;
+		}
+		StatEvent[] valuesa =new StatEvent[0];
+		StatEvent[] values = (StatEvent[])((SynchronizedMap) collection).values().toArray(valuesa);
+		Long[] valuesL = new Long[values.length +1];
+		
+		
+		
+		for(int i =0; i < values.length; i++){
+		    valuesL[i] = new Long(values[i].getValue().toString());
+		}
+   
+		valuesL[valuesL.length -1] = averageValueIn;
+		averageValue = MathU.getAverage(valuesL);
     }
 
     /**
