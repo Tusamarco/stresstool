@@ -23,6 +23,11 @@ package net.tc.stresstool;
  * <p>Company: tusacentral</p>
  *
  */
+
+/**
+ * V x.0
+ */
+
 import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
