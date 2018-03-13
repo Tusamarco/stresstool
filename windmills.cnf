@@ -1,3 +1,4 @@
+#v2
 [main]
 #connection oriented settings
 connUrl=jdbc:mysql://192.168.1.11:6033
