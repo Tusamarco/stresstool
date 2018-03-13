@@ -1,11 +1,13 @@
 [main]
 #connection oriented settings
 connUrl=jdbc:mysql://192.168.1.11:6033
-#connUrl=jdbc:mysql://192.168.1.205:3306
+#connUrl=jdbc:mysql://192.168.1.55:3306
 #connUrl=jdbc:mysql://127.0.0.1:3306
 database=windmills
-user=pxc_test
+user=m8_test
+#user=pxc_test
 password=test
+skipPermissionTest=true
 connParameters=autoReconnect=true  
 connectionPool=false
 connectionPoolClass= 
@@ -16,7 +18,7 @@ connectionPoolType=1
 #at the moment we only support hikari
 
 FKEnable=false
-createTable=false 
+createTable=true 
 dbType=MySQL 
 doDelete=false 
 doReport=true 
@@ -25,13 +27,13 @@ doSimplePk=false
 droptable=false
 ignoreBinlog=false
 operationShort=false  
-poolNumber=6
-pctInsert=00
+poolNumber=1
+pctInsert=100
 pctUpdate=0 
 pctSelect=100 
 pctDelete=0
 #repeatNumber=1
-repeatNumber=100
+repeatNumber=5000
 HardStopLimit=1000
 UseHardStop=false
 StatIntervalMs=1000

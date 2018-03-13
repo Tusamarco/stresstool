@@ -70,7 +70,7 @@ public class MySQLStatus extends MySQLSuper implements StatsProvider, Reporter {
 	          }
           }
           catch(Exception sqlx){
-        	  sqlx.printStackTrace();
+        	 // sqlx.printStackTrace();
               try{
             	  rs.close();
             	  rs = null;

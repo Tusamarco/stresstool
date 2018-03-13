@@ -436,5 +436,15 @@ public class ConsoleStatePrinter implements StatsProvider,Reporter,Runnable {
 		// TODO Auto-generated method stub
 		
 	}
+	@Override
+	public void setDefaultSchema(String defaultSchema) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public String getDefaultSchema() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

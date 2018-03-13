@@ -80,6 +80,7 @@ public class MySQLSuper implements StatsProvider, Reporter {
      * @uml.associationEnd  
      */
     protected  StatsGroups reporterGroup = null;
+    protected String DefaultSchema = null;
 
     public MySQLSuper() {
 	super();
@@ -470,7 +471,7 @@ public class MySQLSuper implements StatsProvider, Reporter {
             		"from mysql.db " +
             		"where user=substring(CURRENT_USER(),1,locate('@',CURRENT_USER())-1) " +
             		"and host=substring(CURRENT_USER(),locate('@',CURRENT_USER())+1)" +
-            		" and db='test'";
+            		" and db='" + this.getDefaultSchema() + "'";
         	
         	applicationLogger.debug("SQL for privileges General:" + sql);
         	rs = stmt.executeQuery(sql);
@@ -599,6 +600,17 @@ public class MySQLSuper implements StatsProvider, Reporter {
 
 	void setStatGroupName(String gName) {
 		statGroupName=gName;
+	}
+
+	@Override
+	public void setDefaultSchema(String defaultSchema) {
+		DefaultSchema=defaultSchema;
+		
+	}
+
+	@Override
+	public String getDefaultSchema() {
+		return DefaultSchema;
 	}
 
 	

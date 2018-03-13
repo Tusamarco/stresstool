@@ -248,13 +248,18 @@ public class Launcher {
 		    String cfv =(String) conf.getParameter(StatCollector.PROVIDER_PARAMETER_NAME).getValue();
 		    String[] providerNames = cfv.split(",");
 		    StatsProvider sp = null;
-		    for(int isp =0 ; isp < providerNames.length;isp++){
-			if(providerNames[isp] != null && !providerNames[isp].equals("") ){
-			    currentProviderClassName = providerNames[isp];
-        		    	sp = (StatsProvider)Class.forName(providerNames[isp].trim()).newInstance();
-           		    	
-			}
-        		    valid = sp.validatePermissions(connProvider);
+		    if(!Boolean.valueOf((String)configuration.getParameter("skipPermissionTest").getValue())){
+			    for(int isp =0 ; isp < providerNames.length;isp++){
+				if(providerNames[isp] != null && !providerNames[isp].equals("") ){
+				    currentProviderClassName = providerNames[isp];
+	        		    	sp = (StatsProvider)Class.forName(providerNames[isp].trim()).newInstance();
+	           		    	
+				}
+	        		sp.setDefaultSchema(configuration.getParameter("database").getValue().toString());    
+					valid = sp.validatePermissions(connProvider);
+			    }
+		    }else{
+		    	valid = true;
 		    }
 		}
 

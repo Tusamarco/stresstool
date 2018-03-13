@@ -84,6 +84,7 @@ public class ConnectionProvider {
 			     config.addDataSourceProperty("cachePrepStmts", "true");
 			     config.addDataSourceProperty("prepStmtCacheSize", "250");
 			     config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
+			     config.addDataSourceProperty("useSSL", "false");
 			     config.setIdleTimeout(1000);
 			     
 			     datasource = new HikariDataSource(config);

@@ -35,5 +35,7 @@ public interface StatsProvider {
     	public void setStatsOutFile(String rootPath);
     	public void setFlushDataOnfile(boolean flushrowonfile);
     	public boolean validatePermissions(ConnectionProvider connProvider);
+    	public void setDefaultSchema(String defaultSchema);
+    	public String getDefaultSchema();
 //	Map getStatus(Connection conn);
 }
