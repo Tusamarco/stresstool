@@ -409,7 +409,7 @@ public class DataObject extends MultiLanguage
 				.info(StressTool.getLogProvider().LOG_EXEC_TIME
 					+ " "+ text + " exec perf:"
 					+ PerformanceEvaluator
-						.getTimeEvaluation(performanceTimeStart));
+						.getTimeEvaluationNs(performanceTimeStart));
 		    }
 		} catch (Throwable th) {
 		}

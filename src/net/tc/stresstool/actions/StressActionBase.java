@@ -592,6 +592,7 @@ public class StressActionBase implements StressAction, Runnable {
         	    	long startRunTime=0;
         	    	long endRunTime = 0;
         	    	long connectionTimens=System.nanoTime();
+        	    	this.getTHInfo().setCurrentLoop(i+1);
         	    	/*
             	     * if db connection can be sticky is set here, otherwise at each EXECUTION implementing class must get connection 
             	     * when running
@@ -620,6 +621,7 @@ public class StressActionBase implements StressAction, Runnable {
         	    		getActiveConnection();
         	    		connectionTimens=(System.nanoTime() - connectionTimens);
         	    	}
+        	    	this.getTHInfo().setConnectionTime(connectionTimens);
 
         	    	try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).debug(" ==== ACTION "+ this.getTHInfo().getAction() +" Thread internal Id "+ this.getTHInfo().getId() +" running "+ i );}catch(StressToolConfigurationException e){}
         			try {
@@ -656,9 +658,10 @@ public class StressActionBase implements StressAction, Runnable {
  
         			}
         			
+        			
         			this.getTHInfo().setExecutionTime(endRunTime - startRunTime);
-        			this.getTHInfo().setTotalEcecutionTime(PerformanceEvaluator.getTimeEvaluationMs(startTime));
-        			this.getTHInfo().setCurrentLoop(i);
+        			this.getTHInfo().setTotalEcecutionTime(PerformanceEvaluator.getTimeEvaluationSec(startTime));
+        			
         			StressTool.getThreadsInfo().put(this.getTHInfo().getId(), this.getTHInfo());
 
         			if(!isStickyconnection()){
@@ -680,8 +683,8 @@ public class StressActionBase implements StressAction, Runnable {
 						.info(StressTool.getLogProvider().LOG_EXEC_TIME
 							+ this.getTHInfo().getId() + " "
 							+ " Thread Time (ns): "
-							+ PerformanceEvaluator.getTimeEvaluation(startLatency));
-    			    	}} catch (StressToolConfigurationException e1) {e1.printStackTrace();}
+							+ PerformanceEvaluator.getTimeEvaluationNs(startLatency));
+    			    	}} catch (Throwable e1) {}
     			    
 // TODO This can become a memory leak shit 
     			     /* 
@@ -700,7 +703,7 @@ public class StressActionBase implements StressAction, Runnable {
     						.info(StressTool.getLogProvider().LOG_EXEC_TIME
     							+ " Connection Time (ns): "
     							+ connectionTimens
-    							+ " ms: " + PerformanceEvaluator.getMSFromNamo(connectionTimens)
+    							+ " ms: " + PerformanceEvaluator.getMSFromNano(connectionTimens)
     							);
     				    }
     				} catch (Throwable th) {
@@ -711,7 +714,7 @@ public class StressActionBase implements StressAction, Runnable {
     			    
         	    }
         	    
-        	    this.getTHInfo().setTotalEcecutionTime(PerformanceEvaluator.getTimeEvaluationMs(startTime));
+        	    this.getTHInfo().setTotalEcecutionTime(PerformanceEvaluator.getTimeEvaluationSec(startTime));
         	    this.getTHInfo().setReady(ActionTHElement.SEMAPHORE_RED);
         	    
         	    try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).debug(" ==== ACTION "+ this.getTHInfo().getAction() +" Thread internal Id "+ this.getTHInfo().getId() +" Sys Thread Id "+ this.getTHInfo().getThId()+" ended ===="  );}catch(StressToolConfigurationException e){}

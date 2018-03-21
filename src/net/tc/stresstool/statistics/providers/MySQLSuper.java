@@ -559,7 +559,7 @@ public class MySQLSuper implements StatsProvider, Reporter {
 			.debug(StressTool.getLogProvider().LOG_EXEC_TIME
 				+ ":"
 				+ PerformanceEvaluator
-					.getTimeEvaluation(performanceTimeStart));
+					.getTimeEvaluationNs(performanceTimeStart));
 	    }
 	} catch (Throwable th) {
 	}

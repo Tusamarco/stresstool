@@ -29,13 +29,17 @@ public class ActionTHElement {
     long executionTime =0;
     long minExectime =0;
     long maxExectime = 0;
+    long avgExecTime=0;
     long latency = 0;
     long minLatency = 0;
     long maxLatency = 0;
+    long avgLatency =0 ;
     long totalEcecutionTime =0;
-    long maxGetConnectionTime=0;
-    long minGetConnectionTime=0;
-    long avgGetConnectionTime=0;
+    long maxConnectionTime=0;
+    long minConnectionTime=0;
+    long avgConnectionTime=0;
+    int batchSize=1;
+    
     ArrayList <Long> getConnectionTime= new ArrayList();
     
     int rowsProcessed=0;
@@ -170,7 +174,8 @@ public class ActionTHElement {
     			||(this.getMinExectime() == 0 && executionTime > 0)){
     			this.minExectime = executionTime;
     	}
-        this.executionTime = executionTime;
+    	this.avgExecTime = (executionTime/this.getCurrentLoop());
+//        this.executionTime = executionTime;
     }
 
     /**
@@ -267,6 +272,8 @@ public class ActionTHElement {
     			|| (this.getMinLatency() == 0 && latency > 0)){
     			this.minLatency = latency;
     	}
+    	
+    	this.avgLatency = (latency/this.getCurrentLoop());
 
 	}
 
@@ -284,36 +291,58 @@ public class ActionTHElement {
 	    this.totalEcecutionTime = totalEcecutionTime;
 	}
 
-	public long getMaxGetConnectionTime() {
-		return maxGetConnectionTime;
+	public void setConnectionTime(long connectionTime){
+    	if(connectionTime > this.getMaxConnectionTime()){
+    		this.maxConnectionTime = connectionTime;
+    	}
+    	else if(connectionTime < this.getMinConnectionTime() 
+    			|| (this.getMinConnectionTime() == 0 && connectionTime > 0)){
+    			this.minConnectionTime = connectionTime;
+    	}
+    	
+    	this.avgConnectionTime = (connectionTime/this.getCurrentLoop());
+
+		
+		
+	}
+	
+	public long getMaxConnectionTime() {
+		return maxConnectionTime;
 	}
 
-	public void setMaxGetConnectionTime(long maxGetConnectionTime) {
-		this.maxGetConnectionTime = maxGetConnectionTime;
+
+	public long getMinConnectionTime() {
+		return minConnectionTime;
 	}
 
-	public long getMinGetConnectionTime() {
-		return minGetConnectionTime;
+
+	public long getAvgConnectionTime() {
+		return avgConnectionTime;
 	}
 
-	public void setMinGetConnectionTime(long minGetConnectionTime) {
-		this.minGetConnectionTime = minGetConnectionTime;
-	}
 
-	public long getAvgGetConnectionTime() {
-		return avgGetConnectionTime;
-	}
-
-	private void setAvgGetConnectionTime(long avgGetConnectionTime) {
-		this.avgGetConnectionTime = avgGetConnectionTime;
-	}
-
-	public ArrayList<Long> getGetConnectionTime() {
+	public ArrayList<Long> getConnectionTime() {
 		return getConnectionTime;
 	}
 
-	public void setGetConnectionTime(ArrayList<Long> getConnectionTime) {
+	public void setConnectionTimeAR(ArrayList<Long> getConnectionTime) {
 		this.getConnectionTime = getConnectionTime;
+	}
+
+	public long getAvgExecTime() {
+		return avgExecTime;
+	}
+
+	public long getAvgLatency() {
+		return avgLatency;
+	}
+
+	public int getBatchSize() {
+		return batchSize;
+	}
+
+	public void setBatchSize(int batchSize) {
+		this.batchSize = batchSize;
 	}
 
 

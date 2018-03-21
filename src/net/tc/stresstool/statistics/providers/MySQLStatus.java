@@ -183,26 +183,26 @@ public class MySQLStatus extends MySQLSuper implements StatsProvider, Reporter {
     //        pw.println("Total Number Of query Executed for deletes  = " + this.getTotalQueryToRunDeletes());
        try{
  	   
-    	  Object[] threads = (Object[]) StressTool.getThreadsInfo().values().toArray();
-    	  String[] actions = new String[]{"Insert","Update","Delete","Select"};
-   	   	  pw.println("------------------------------  Threads EXECUTION INFORMATION -----------------------------------------");
-
-    	   for(String action:actions){
-    		   pw.println("------------------------------ " + action);
-    		   
-	    	   for(Object thInfo:threads){
-	    		   if(thInfo == null)
-	    			   continue;
-	    		  if(((ActionTHElement)thInfo).getAction().toUpperCase().equals(action.toUpperCase())){
-	    		   pw.println("ThreadID = " +  ((ActionTHElement)thInfo).getId() 
-	    				   + " Tot Execution time = " +((ActionTHElement)thInfo).getTotalEcecutionTime()
-	    				   + " Max Execution time = " + ((ActionTHElement)thInfo).getMaxExectime() 
-	    				   + " Min Execution time = " + ((ActionTHElement)thInfo).getMinExectime()
-	    				   );
-	    		  }
-	    	   }
-    	   }
-    	   
+//    	  Object[] threads = (Object[]) StressTool.getThreadsInfo().values().toArray();
+//    	  String[] actions = new String[]{"Insert","Update","Delete","Select"};
+//   	   	  pw.println("------------------------------  Threads EXECUTION INFORMATION -----------------------------------------");
+//
+//    	   for(String action:actions){
+//    		   pw.println("------------------------------ " + action);
+//    		   
+//	    	   for(Object thInfo:threads){
+//	    		   if(thInfo == null)
+//	    			   continue;
+//	    		  if(((ActionTHElement)thInfo).getAction().toUpperCase().equals(action.toUpperCase())){
+//	    		   pw.println("ThreadID = " +  ((ActionTHElement)thInfo).getId() 
+//	    				   + " Tot Execution time = " +((ActionTHElement)thInfo).getTotalEcecutionTime()
+//	    				   + " Max Execution time = " + ((ActionTHElement)thInfo).getMaxExectime() 
+//	    				   + " Min Execution time = " + ((ActionTHElement)thInfo).getMinExectime()
+//	    				   );
+//	    		  }
+//	    	   }
+//    	   }
+//    	   
     	   
     	   
     	   

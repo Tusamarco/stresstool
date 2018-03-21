@@ -154,13 +154,13 @@ public class StatCollector {
     private Map getProviders(Configurator configs, Iterator it)
 	    throws StressToolException {
 	
-/*Performance evaluation section [tail] start*/
-long performanceTimeStart = 0;
-long performanceTimeEnd = 0;
-if (StressTool.getLogProvider().getLogger(LogProvider.LOG_PERFORMANCE)
-	.isDebugEnabled())
-    performanceTimeStart = System.nanoTime();
-/*Performance evaluation section [tail] END*/
+	/*Performance evaluation section [tail] start*/
+	long performanceTimeStart = 0;
+	long performanceTimeEnd = 0;
+	if (StressTool.getLogProvider().getLogger(LogProvider.LOG_PERFORMANCE)
+		.isDebugEnabled())
+	    performanceTimeStart = System.nanoTime();
+	/*Performance evaluation section [tail] END*/
 	
 	String currentProviderClassName ="";
 	while(it.hasNext()){
@@ -222,7 +222,7 @@ if (StressTool.getLogProvider().getLogger(LogProvider.LOG_PERFORMANCE)
 			.debug(StressTool.getLogProvider().LOG_EXEC_TIME
 				+ ":"
 				+ PerformanceEvaluator
-					.getTimeEvaluation(performanceTimeStart));
+					.getTimeEvaluationNs(performanceTimeStart));
 	    }
 	} catch (Throwable th) {
 	}
@@ -296,7 +296,7 @@ if (StressTool.getLogProvider().getLogger(LogProvider.LOG_PERFORMANCE)
 			.getLogProvider()
 			.getLogger(LogProvider.LOG_PERFORMANCE)
 			.debug(StressTool.getLogProvider().LOG_EXEC_TIME + ":"
-				+ PerformanceEvaluator.getTimeEvaluation(performanceTimeStart));
+				+ PerformanceEvaluator.getTimeEvaluationNs(performanceTimeStart));
 	    }
 	} catch (Throwable th) {
 	}
