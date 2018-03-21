@@ -147,6 +147,11 @@ public class ActionsReporter implements Reporter, StatsProvider {
  		   long maxExecU=0;
  		   long maxExecS=0;
  		   long maxExecD=0;
+ 		   
+ 		   long batchI=1;
+		   long batchU=1;
+		   long batchS=1;
+		   long batchD=1;
 
  		   for(String action:actions){
 	 		   pw.println("------------------------------ " + action);
@@ -168,18 +173,22 @@ public class ActionsReporter implements Reporter, StatsProvider {
 			    		   	case "insert":
 			    		   		tInserts = tInserts + (((ActionTHElement)thInfo).getCurrentLoop() * ((ActionTHElement)thInfo).getBatchSize());
 			    		   		maxExecI = (((ActionTHElement)thInfo).getTotalEcecutionTime() > maxExecI)?((ActionTHElement)thInfo).getTotalEcecutionTime():maxExecI;  
+			    		   		batchI=((ActionTHElement)thInfo).getBatchSize();
 			    		   		break;
 			    		   	case "select":
 			    		   		tSelects = tSelects + (((ActionTHElement)thInfo).getCurrentLoop() * ((ActionTHElement)thInfo).getBatchSize()); 
 			    		   		maxExecS = (((ActionTHElement)thInfo).getTotalEcecutionTime() > maxExecS)?((ActionTHElement)thInfo).getTotalEcecutionTime():maxExecS;
+			    		   		batchS=((ActionTHElement)thInfo).getBatchSize();
 			    		   		break;
 			    		   	case "update":
 			    		   		tUpdates = tUpdates + (((ActionTHElement)thInfo).getCurrentLoop() * ((ActionTHElement)thInfo).getBatchSize()); 
 			    		   		maxExecU = (((ActionTHElement)thInfo).getTotalEcecutionTime() > maxExecU)?((ActionTHElement)thInfo).getTotalEcecutionTime():maxExecU;
+			    		   		batchU=((ActionTHElement)thInfo).getBatchSize();
 			    		   		break;
 			    		   	case "delete":
 			    		   		tDeletes = tDeletes + (((ActionTHElement)thInfo).getCurrentLoop() * ((ActionTHElement)thInfo).getBatchSize()); 
 			    		   		maxExecD = (((ActionTHElement)thInfo).getTotalEcecutionTime() > maxExecD)?((ActionTHElement)thInfo).getTotalEcecutionTime():maxExecD;
+			    		   		batchD=((ActionTHElement)thInfo).getBatchSize();
 			    		   		break;
 			    		   }
 		    		   
@@ -187,10 +196,10 @@ public class ActionsReporter implements Reporter, StatsProvider {
 		    	 }
 		    	   
 	 	   }
- 		   if(maxExecS > 0 )pw.println("select tot " + tSelects + " Sel/S " + (tSelects/maxExecS) );
- 		   if(maxExecI > 0 )pw.println("insert tot " + tInserts + " Ins/S " + (tInserts/maxExecI) );
- 		   if(maxExecU > 0 )pw.println("update tot " + tUpdates + " Up/S " + (tUpdates/maxExecU) );
- 		   if(maxExecD > 0 )pw.println("delete tot " + tDeletes + " Del/S " + (tDeletes/maxExecD) );
+ 		   if(maxExecS > 0 )pw.println("select tot " + tSelects + " Sel/S " + (tSelects/maxExecS) * batchS );
+ 		   if(maxExecI > 0 )pw.println("insert tot " + tInserts + " Ins/S " + (tInserts/maxExecI) *batchI );
+ 		   if(maxExecU > 0 )pw.println("update tot " + tUpdates + " Up/S " + (tUpdates/maxExecU) * batchU);
+ 		   if(maxExecD > 0 )pw.println("delete tot " + tDeletes + " Del/S " + (tDeletes/maxExecD)*batchD );
  		   pw.println("------------------------------  Threads EXECUTION INFORMATION END -----------------------------------------");
 	    }   
 	    catch(Throwable th){
