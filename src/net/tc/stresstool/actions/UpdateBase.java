@@ -178,9 +178,9 @@ public class UpdateBase extends StressActionBase implements UpdateAction {
 		lSQLObj.setSQLCommandType(DataObject.SQL_UPDATE);
 		SynchronizedMap SQLObjectContainer = new SynchronizedMap();
 
-		if(getBatchSize() < 1){
-		  setBatchSize(1);
-		}
+//		if(getBatchSize() < 1){
+//		  setBatchSize(1);
+//		}
 
 		for(int batchRun = 0 ; batchRun < getBatchSize(); batchRun++){
 		  ArrayList tables = new ArrayList();

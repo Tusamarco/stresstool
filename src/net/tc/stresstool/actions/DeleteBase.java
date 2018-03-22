@@ -143,9 +143,9 @@ public class DeleteBase extends StressActionBase implements DeleteAction{
 		lSQLObj.setSQLCommandType(DataObject.SQL_DELETE);
 		SynchronizedMap SQLObjectContainer = new SynchronizedMap();
 
-		if(getBatchSize() < 1){
-		  setBatchSize(1);
-		}
+//		if(getBatchSize() < 1){
+//		  setBatchSize(1);
+//		}
 
 		for(int batchRun = 0 ; batchRun < getBatchSize(); batchRun++){
 		  ArrayList<Table> tables = new ArrayList<Table>();

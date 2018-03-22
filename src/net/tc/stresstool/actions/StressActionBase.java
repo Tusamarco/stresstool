@@ -36,7 +36,8 @@ public class StressActionBase implements StressAction, Runnable {
     private boolean createTable=true ;
 //    private dbType=MySQL; 
     private boolean doDelete=false; 
-    private int doBatch=30;
+    private int batchSize = 0; 
+    private int doBatch=1;
     private boolean doReport=true;
     private boolean doSimple=false ; 
     private boolean doSimplePk=false; 
@@ -713,7 +714,7 @@ public class StressActionBase implements StressAction, Runnable {
 
     			    
         	    }
-        	    
+        	    this.getTHInfo().setBatchSize(this.getBatchSize());
         	    this.getTHInfo().setTotalEcecutionTime(PerformanceEvaluator.getTimeEvaluationSec(startTime));
         	    this.getTHInfo().setReady(ActionTHElement.SEMAPHORE_RED);
         	    
@@ -1021,6 +1022,14 @@ public class StressActionBase implements StressAction, Runnable {
 	 */
 	public void setFKEnable(boolean fKEnable) {
 	  FKEnable = fKEnable;
+	}
+
+	public int getBatchSize() {
+		return batchSize;
+	}
+
+	public void setBatchSize(int batchSize) {
+		this.batchSize = batchSize;
 	}
 	
 

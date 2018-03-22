@@ -41,7 +41,7 @@ public class InsertBase extends StressActionBase implements WriteAction,
     private int sleepWrite=0;
     private boolean lazyCreation=true;
     private int lazyInterval=5000;
-    private int batchSize = 0; 
+//    private int batchSize = 0; 
     private String jsonFile = "";
     private String tableEngine = "InnoDB";
     
@@ -263,15 +263,15 @@ public class InsertBase extends StressActionBase implements WriteAction,
 	    return false;
 		
 	}
-	@Override
-	public void setBatchSize(int batchSize) {
-		this.batchSize = batchSize;
-		
-	}
-	@Override
-	public int getBatchSize() {
-		return this.batchSize;
-	}
+//	@Override
+//	public void setBatchSize(int batchSize) {
+//		this.batchSize = batchSize;
+//		
+//	}
+//	@Override
+//	public int getBatchSize() {
+//		return this.batchSize;
+//	}
 	@Override
 	public void setUseAutoIncrement(boolean useAutoIncrement) {
 		this.useAutoIncrement = useAutoIncrement;
@@ -507,7 +507,7 @@ public class InsertBase extends StressActionBase implements WriteAction,
 		lSQLObj.setBatched(this.getBatchSize() > 1 ? true : false);
 		lSQLObj.setPreparedStatment(false);
 		lSQLObj.setSQLCommandType(DataObject.SQL_INSERT);
-		lSQLObj.setBatchLoops(this.batchSize);
+		lSQLObj.setBatchLoops(this.getBatchSize());
 		lSQLObj.addSourceTables((Table)table);
 		
 		

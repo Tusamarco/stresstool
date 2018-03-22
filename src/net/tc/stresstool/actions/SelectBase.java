@@ -48,7 +48,7 @@ public class SelectBase extends StressActionBase implements ReadAction{
    */
   private Table selectLeadingTable =  null;
   private Table[] selectJoinTables =  null;
-  private int batchSize = 0;
+//  private int batchSize = 0;
   private int currentLazyLoop = 0 ;
   private int textAttributeMaxSearchlength = 50;
 
@@ -207,9 +207,9 @@ public class SelectBase extends StressActionBase implements ReadAction{
 	lSQLObj.setSQLCommandType(DataObject.SQL_READ);
 	SynchronizedMap SQLObjectContainer = new SynchronizedMap();
 
-	if(getBatchSize() < 1){
-	  setBatchSize(1);
-	}
+//	if(getBatchSize() < 1){
+//	  setBatchSize(1);
+//	}
 
 	for(int batchRun = 0 ; batchRun < getBatchSize(); batchRun++){
 	  ArrayList tables = new ArrayList();
@@ -309,9 +309,9 @@ public class SelectBase extends StressActionBase implements ReadAction{
 		  	return false;
 	  int found = 0;
 	  for(Table table:tables){
-		  if(table.getName().equals(tableIn.getName())  && getTables().length >= this.batchSize)
+		  if(table.getName().equals(tableIn.getName())  && getTables().length >= this.getBatchSize())
 			  return true;
-		  else if(table.getName().equals(tableIn.getName())  && getTables().length < this.batchSize && getTables().length > 1){
+		  else if(table.getName().equals(tableIn.getName())  && getTables().length < this.getBatchSize() && getTables().length > 1){
 			  found++;
 			  if((getTables().length/found) < 2)
 				  return true;
@@ -434,15 +434,15 @@ private String getJoinCondition(Table table){
   /**
    * @return the batchSize
    */
-  public int getBatchSize() {
-	return batchSize;
-  }
-  /**
-   * @param batchSize the batchSize to set
-   */
-  public void setBatchSize(int batchSize) {
-	this.batchSize = batchSize;
-  }
+//  public int getBatchSize() {
+//	return batchSize;
+//  }
+//  /**
+//   * @param batchSize the batchSize to set
+//   */
+//  public void setBatchSize(int batchSize) {
+//	this.batchSize = batchSize;
+//  }
   /**
    * @return the textAttributeMaxSearchlength
    */
