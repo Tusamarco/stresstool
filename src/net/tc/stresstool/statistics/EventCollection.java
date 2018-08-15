@@ -148,8 +148,13 @@ public class EventCollection {
 		
 		
 		for(int i =0; i < values.length; i++){
-		    valuesL[i] = new Long(values[i].getValue().toString());
+		  try{
+			   valuesL[i] = new Long(values[i].getValue().toString());
+		     }catch(NumberFormatException numb){
+		    	 valuesL[i] = new Long(0);
+		     }
 		}
+		
    
 		valuesL[valuesL.length -1] = averageValueIn;
 		averageValue = MathU.getAverage(valuesL);
