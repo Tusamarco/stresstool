@@ -1,5 +1,7 @@
 package net.tc.data.db;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.lang.ref.SoftReference;
 import java.sql.SQLException;
 
@@ -7,8 +9,11 @@ import javax.sql.DataSource;
 
 import com.zaxxer.hikari.*;
 
-
+import net.tc.stresstool.StressTool;
 import net.tc.stresstool.config.Configuration;
+import net.tc.stresstool.config.Configurator;
+import net.tc.stresstool.exceptions.StressToolException;
+import net.tc.stresstool.logs.LogProvider;
 
 import java.sql.Connection;
 
@@ -16,9 +21,11 @@ public class ConnectionProvider {
     private ConnectionInformation connInfo = null;
     private DataSource dataSource =null;
     private Configuration configuration =null;
+    private Configurator config = null;
 
-    public ConnectionProvider(Configuration configurationIn) {
-    	configuration =configurationIn;
+    public ConnectionProvider(Configurator configIn) {
+    	config = configIn; 
+    	configuration = getConfiguration(Configurator.MAIN_SECTION_NAME, StressTool.class);
 		connInfo = new ConnectionInformation();
 		
 		connInfo.setConnUrl((String) configuration.getParameter("connUrl").getValue());
@@ -32,6 +39,22 @@ public class ConnectionProvider {
 	    if(configuration.getParameter("connectionPoolType").getValue()!=null)connInfo.setConnectionPoolType((Integer)Integer.parseInt((String)configuration.getParameter("connectionPoolType").getValue()));
 
     }
+
+	private Configuration getConfiguration(String section, Class classObj) {
+		try {
+			return config.getConfiguration(section, classObj);
+		} catch (StressToolException e) {
+			try{					
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				PrintStream ps = new PrintStream(baos);				
+				e.printStackTrace(ps);
+				String s =new String(baos.toByteArray());
+				StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error(s);
+				System.exit(1)  ;}catch(Exception ex){ex.printStackTrace();}
+				
+		}
+		return null;
+	}
 
     /**
      * @return the conInfo
@@ -66,6 +89,7 @@ public class ConnectionProvider {
 			else{
 				DataSource datasource;
 
+				Configuration hikariConf = this.getConfiguration("com.zaxxer.hikari", StressTool.class);
 			    HikariConfig config = new HikariConfig();
 			    String connectionString = connInfo.getConnUrl()
 			        	    +"/"+ connInfo.getDatabase()
@@ -78,14 +102,51 @@ public class ConnectionProvider {
 			     config.setJdbcUrl(connInfo.getConnUrl() + "/" + connInfo.getDatabase());
 			     config.setUsername(connInfo.getUser());
 			     config.setPassword(connInfo.getPassword());
-			     config.setMaximumPoolSize(20);
-			     config.setAutoCommit(false);
-//			     config.setLeakDetectionThreshold(500);
-			     config.addDataSourceProperty("cachePrepStmts", "true");
-			     config.addDataSourceProperty("prepStmtCacheSize", "250");
-			     config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
-			     config.addDataSourceProperty("useSSL", "false");
-			     config.setIdleTimeout(1000);
+//			     config.setMaximumPoolSize(200);
+//			     config.setAutoCommit(false);
+////			     config.setLeakDetectionThreshold(500);
+//			     config.addDataSourceProperty("cachePrepStmts", "true");
+//			     config.addDataSourceProperty("prepStmtCacheSize", "250");
+//			     config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
+//			     config.addDataSourceProperty("useSSL", "false");
+//			     config.setIdleTimeout(1000);
+
+			     config.setMaximumPoolSize(Integer.parseInt((String) hikariConf.getParameter("maximumPoolSize").getValue()));
+			     config.setAutoCommit(Boolean.parseBoolean((String) hikariConf.getParameter("autoCommits").getValue()));
+			     config.setLeakDetectionThreshold(Long.parseLong((String) hikariConf.getParameter("leakDetectionThreshold").getValue()));
+			     config.addDataSourceProperty("useServerPrepStmts",(String) hikariConf.getParameter("useServerPrepStmts").getValue());
+			     config.addDataSourceProperty("cachePrepStmts", (String) hikariConf.getParameter("cachePrepStmts").getValue());
+			     config.addDataSourceProperty("prepStmtCacheSize",(String)hikariConf.getParameter("prepStmtCacheSize").getValue()  );
+			     config.addDataSourceProperty("prepStmtCacheSqlLimit",(String)hikariConf.getParameter("prepStmtCacheSqlLimit").getValue());
+			     config.addDataSourceProperty("useSSL",(String) hikariConf.getParameter("useSSL").getValue());
+			     
+			     config.addDataSourceProperty("rewriteBatchedStatements",(String) hikariConf.getParameter("rewriteBatchedStatements").getValue());
+			     config.addDataSourceProperty("cacheResultSetMetadata",(String) hikariConf.getParameter("cacheResultSetMetadata").getValue());
+			     config.addDataSourceProperty("cacheServerConfiguration",(String) hikariConf.getParameter("cacheServerConfiguration").getValue());
+			     config.addDataSourceProperty("maintainTimeStats",(String) hikariConf.getParameter("maintainTimeStats").getValue());
+			     config.setIdleTimeout(Integer.parseInt((String) hikariConf.getParameter("idleTimeout").getValue()));
+		     
+			     
+			     
+		    /*  cachePrepStmts=true
+			    prepStmtCacheSize=250
+			    prepStmtCacheSqlLimit=2048
+			    leakDetectionThreshold=1000
+			    maximumPoolSize = 50
+			    useServerPrepStmts=true
+			    useLocalSessionState=true
+			    useLocalTransactionState=true
+			    rewriteBatchedStatements=true
+			    cacheResultSetMetadata=true
+			    cacheServerConfiguration=true
+			    autoCommits=true
+			    maintainTimeStats=false
+			    useSSL=false
+			    idleTimeout=100
+			    */ 
+			     
+			     
+			     
 			     
 			     datasource = new HikariDataSource(config);
 			    

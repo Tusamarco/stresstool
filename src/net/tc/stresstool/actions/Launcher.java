@@ -231,7 +231,7 @@ public class Launcher {
         Map providers = new SynchronizedMap();
         
         
-        this.setConnProvider(new ConnectionProvider(configuration));
+        this.setConnProvider(new ConnectionProvider(config));
 
 	Iterator it = config.getSectionsName();
 	

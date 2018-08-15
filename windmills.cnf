@@ -95,17 +95,26 @@ actionhistory=120
 processaverage=true
 
 [com.zaxxer.hikari]
-dataSource.cachePrepStmts=true
-dataSource.prepStmtCacheSize=250
-dataSource.prepStmtCacheSqlLimit=2048
-dataSource.useServerPrepStmts=true
-dataSource.useLocalSessionState=true
-dataSource.useLocalTransactionState=true
-dataSource.rewriteBatchedStatements=true
-dataSource.cacheResultSetMetadata=true
-dataSource.cacheServerConfiguration=true
-dataSource.elideSetAutoCommits=true
-dataSource.maintainTimeStats=false
+#dataSource properties
+#dataSourceClassName=org.postgresql.ds.PGSimpleDataSource
+#dataSource.user=test
+
+idleTimeout=100000
+cachePrepStmts=true
+prepStmtCacheSize=250
+prepStmtCacheSqlLimit=2048
+leakDetectionThreshold=1000
+maximumPoolSize = 50
+useServerPrepStmts=true
+useLocalSessionState=true
+useLocalTransactionState=true
+rewriteBatchedStatements=true
+cacheResultSetMetadata=true
+cacheServerConfiguration=true
+autoCommits=false
+maintainTimeStats=false
+useSSL=false
+
 
 
 [net.tc.stresstool.actions.DeleteBase] 
