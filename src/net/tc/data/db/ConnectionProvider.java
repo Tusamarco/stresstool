@@ -31,7 +31,7 @@ public class ConnectionProvider {
 		connInfo.setConnUrl((String) configuration.getParameter("connUrl").getValue());
 		connInfo.setDatabase((String)configuration.getParameter("database").getValue());
 	    connInfo.setUser((String) configuration.getParameter("user").getValue());
-	    connInfo.setPassword((String) configuration.getParameter("password").getValue());
+	    connInfo.setPassword(configuration.getParameter("password")!=null?(String) configuration.getParameter("password").getValue():null);
 	    connInfo.setDbType((String) configuration.getParameter("dbType").getValue());
 	    connInfo.setConnParameters((String) configuration.getParameter("connParameters").getValue());
 	    connInfo.setSelectForceAutocommitOff((Boolean)Boolean.parseBoolean((String)configuration.getParameter("selectForceAutocommitOff").getValue()));
@@ -94,10 +94,10 @@ public class ConnectionProvider {
 			    String connectionString = connInfo.getConnUrl()
 			        	    +"/"+ connInfo.getDatabase()
 			        	    +"?user="+connInfo.getUser()
-			        	    +"&password="+ connInfo.getPassword()
-			        	    +"&useSSL=false"
+			           	    +"&useSSL=false"
 			        	    +"&"+ connInfo.getConnParameters();
 			    
+			    connectionString =  connInfo.getPassword()!=null?connectionString + "&password="+ connInfo.getPassword():connectionString +"";
 		         
 			     config.setJdbcUrl(connInfo.getConnUrl() + "/" + connInfo.getDatabase());
 			     config.setUsername(connInfo.getUser());
@@ -185,9 +185,10 @@ public class ConnectionProvider {
 			    String connectionString = connInfo.getConnUrl()
 			        	    +"/"+ connInfo.getDatabase()
 			        	    +"?user="+connInfo.getUser()
-			        	    +"&password="+ connInfo.getPassword()
 			        	    +"&useSSL=false"
 			        	    +"&"+ connInfo.getConnParameters();
+			    
+			    connectionString =  connInfo.getPassword()!=null?connectionString + "&password="+ connInfo.getPassword():connectionString +"";
 			    
 			    myDataSource.setUrl(connectionString);
 			    this.setDataSource(myDataSource);
