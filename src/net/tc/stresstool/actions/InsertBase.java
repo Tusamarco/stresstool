@@ -11,6 +11,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import net.tc.data.db.Attribute;
+import net.tc.data.db.DbType;
 import net.tc.data.db.Schema;
 import net.tc.data.db.Table;
 import net.tc.data.generic.DataObject;
@@ -145,8 +146,18 @@ public class InsertBase extends StressActionBase implements WriteAction,
 
 			StringBuffer sbCreate = new StringBuffer();
 			
+			
 			JSONParser parser = new JSONParser();
-			StructureDefinitionParser strParser = new StructureDefinitionParserMySQL();
+			StructureDefinitionParser strParser = null;
+			
+			switch(this.getDbType().getName().toLowerCase()){
+				case "mysql":    strParser = new StructureDefinitionParserMySQL();    break;
+				case "postgres": strParser = new StructureDefinitionParserMySQL();    break;
+			    default:         strParser = new StructureDefinitionParserMySQL();    break;
+			
+			}
+			
+			new StructureDefinitionParserMySQL();
 			FileReader fr = new FileReader(this.getJsonFile());
 			schema = strParser.parseSchema(parser, fr,tableInstances);
 
@@ -582,6 +593,7 @@ public class InsertBase extends StressActionBase implements WriteAction,
 	    
 	    return null;
 	}
+	
 	
 	
 

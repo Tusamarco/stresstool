@@ -638,33 +638,35 @@ public class StressTool {
 
 
 
-
-@Deprecated 
 /**
- * this method is not supported use ConnectionProvider instead
- * @param connMapcoordinates
- * @return
- * @throws SQLException
- */
-	public static Connection initConnection(Map connMapcoordinates)
-		throws SQLException {
-	    Connection conn;
-	    if(connMapcoordinates.get("dbtype") != null &&  !((String)connMapcoordinates.get("dbtype")).toLowerCase().equals("MySQL".toLowerCase()))
-	    {
-	    conn=DriverManager.getConnection((String)connMapcoordinates.get("dbtype"),"test", "test");
-	    }
-	    else{
-	    String connectionString = (String)connMapcoordinates.get("jdbcUrl")
-	        	    +"/"+(String)connMapcoordinates.get("database")
-	        	    +"?user="+(String)connMapcoordinates.get("user")
-	        	    +"&password="+(String)connMapcoordinates.get("password")
-	        	    +"&"+(String)connMapcoordinates.get("connparameters");
-	    
-	    
-	    conn= DriverManager.getConnection(connectionString);
-	    }
-	    return conn;
-	}
+	TODO REMOVE THIS SHIT!!
+*/
+//@Deprecated 
+///**
+// * this method is not supported use ConnectionProvider instead
+// * @param connMapcoordinates
+// * @return
+// * @throws SQLException
+// */
+//	public static Connection initConnection(Map connMapcoordinates)
+//		throws SQLException {
+//	    Connection conn;
+//	    if(connMapcoordinates.get("dbtype") != null &&  !((String)connMapcoordinates.get("dbtype")).toLowerCase().equals("MySQL".toLowerCase()))
+//	    {
+//	    conn=DriverManager.getConnection((String)connMapcoordinates.get("dbtype"),"test", "test");
+//	    }
+//	    else{
+//	    String connectionString = (String)connMapcoordinates.get("jdbcUrl")
+//	        	    +"/"+(String)connMapcoordinates.get("database")
+//	        	    +"?user="+(String)connMapcoordinates.get("user")
+//	        	    +"&password="+(String)connMapcoordinates.get("password")
+//	        	    +"&"+(String)connMapcoordinates.get("connparameters");
+//	    
+//	    
+//	    conn= DriverManager.getConnection(connectionString);
+//	    }
+//	    return conn;
+//	}
 	private void printReport(StatCollector stats){
 	    stats.PrintFinalReport();
 	    

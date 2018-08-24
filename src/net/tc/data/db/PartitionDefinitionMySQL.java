@@ -23,7 +23,7 @@ import net.tc.utils.Utility;
  * v1
  */
 
-public class PartitionDefinition {
+public class PartitionDefinitionMySQL  extends PartitionDefinition{
 	
 	public static final String PARTITION_TYPE_RANGE = "RANGE";
 	public static final String PARTITION_TYPE_LIST = "LIST";
@@ -64,31 +64,7 @@ public class PartitionDefinition {
 	public static final String INTERVAL_PARTITION_MONTH = "MONTH";
 	public static final String INTERVAL_PARTITION_YEAR = "YEAR";
 	
-	protected String tableName = null;
-	protected String partitionType = null;
-	protected String partitionsSize = null;
-	protected ArrayList attributes = null;
-	protected String partitionDeclaration = null;
-	protected SynchronizedMap partitions = null;
-	protected Date startDate = null;
-	protected Date endDate = null;
-	protected String function = null;
-	protected String interval = INTERVAL_PARTITION_DAY;
-	
-		
-//	"lists":{"list":[]}
-//	"ranges":{"range":[]}
-	
-	
-	public String getTableName() {
-		return tableName;
-	}
-	public void setTableName(String tableName) {
-		this.tableName = tableName;
-	}
-	public String getPartitionType() {
-		return partitionType;
-	}
+
 	public void setPartitionType(String partitionTypeIn) throws StressToolGenericException {
 	    if(partitionTypeIn == null)
 		return;
@@ -105,67 +81,11 @@ public class PartitionDefinition {
 	
 	    
 	}
-	public String getPartitionsSize() {
-		return partitionsSize;
-	}
-	public void setPartitionsSize(String partitionsSize) {
-		this.partitionsSize = partitionsSize;
-	}
-	public ArrayList getAttributes() {
-		return attributes;
-	}
-	public void setAttributes(ArrayList arColPart) {
-		this.attributes = arColPart;
-	}
-	public String getPartitionDeclaration() {
-		return partitionDeclaration;
-	}
-	public void setPartitionDeclaration(String partitionDeclaration) {
-		this.partitionDeclaration = partitionDeclaration;
-	}
-	public SynchronizedMap getPartitions() {
-		return partitions;
-	}
-	public void setPartitions(SynchronizedMap partitions) {
-		this.partitions = partitions;
-	}
-	/**
-	 * @return the startDate
-	 */
-	public Date getStartDate() {
-	    return startDate;
-	}
-	/**
-	 * @param startDate the startDate to set
-	 */
-	public void setStartDate(String startDate) {
-	    if(startDate == null) return;
-	    String format = "yyyy-MM-dd";
-	    this.startDate = TimeTools.getDate(startDate, format);
-	}
-	/**
-	 * @return the endDate
-	 */
-	public Date getEndDate() {
-	    return endDate;
-	}
-	/**
-	 * @param endDate the endDate to set
-	 */
-	public void setEndDate(String endDate) {
-	    if(endDate == null) return;
-	    String format = "yyyy-MM-dd";
-	    this.endDate = TimeTools.getDate(endDate, format);
-	}
-	/**
-	 * @return the function
-	 */
-	public String getFunction() {
-	    return function;
-	}
+
 	/**
 	 * @param function the function to set
 	 */
+	@Override
 	public void setFunction(String functionIn) {
 	    if(functionIn == null) return;
 	    
@@ -244,15 +164,11 @@ public class PartitionDefinition {
 	    }
 		
 	}
-	/**
-	 * @return the interval
-	 */
-	public String getInterval() {
-	    return interval;
-	}
+
 	/**
 	 * @param interval the interval to set
 	 */
+	@Override
 	public void setInterval(String intervalIn) {
 	    if(intervalIn == null) return;
 	    
@@ -272,6 +188,7 @@ public class PartitionDefinition {
 	 * partitions and to return a string buffer containing the SQL
 	 * @return
 	 */
+	@Override
     public StringBuffer getSQLPartitionDefinition() {
 	if (this == null)
 	    return null;
@@ -301,7 +218,7 @@ public class PartitionDefinition {
 
     }
 
-    
+    @Override
     protected String getKey(PartitionDefinition partitionDefinition) {
 	String sql = "PARTITION BY KEY ("
 		+ Utility.getArrayListAsDelimitedString(
@@ -309,7 +226,8 @@ public class PartitionDefinition {
 		+ ") \n PARTITIONS " + partitionDefinition.getPartitionsSize();
 	return sql;
     }
-
+    
+    @Override
     protected String getHash(PartitionDefinition pd) {
 	StringBuffer sql = new StringBuffer();
 	sql.append("PARTITION BY HASH (");
@@ -324,6 +242,7 @@ public class PartitionDefinition {
 	return sql.toString();
     }
 
+    @Override
     protected String getRange(PartitionDefinition pd) {
 	StringBuffer sql = new StringBuffer();
 	String name = null;
@@ -355,7 +274,6 @@ public class PartitionDefinition {
 	    pts = pd.getPartitions();
 	}
 	    
-//	    int i = 0;
 	    for(int i =0; i < pts.size(); i++){
 		String key = (String) pts.getKeyasOrderedArray()[i];
 		Partition pt = (Partition) pts.get(key);
@@ -383,7 +301,8 @@ public class PartitionDefinition {
 	return sql.toString();
 
     }
-
+    
+    @Override
     protected String getList(PartitionDefinition pd) {
 	StringBuffer sql = new StringBuffer();
 	String name = null;
@@ -419,11 +338,7 @@ public class PartitionDefinition {
 
     }
 
-    protected String getColumns(PartitionDefinition partitionDefinition) {
-	// TODO Auto-generated method stub
-	return null;
-    }
-
+    @Override
     protected Map partitionRangeCalculation(PartitionDefinition pd){
 	if (pd == null || pd.getStartDate() == null || pd.getEndDate() == null)
 	    return null;
@@ -471,9 +386,5 @@ public class PartitionDefinition {
 
     }
 
-    protected int daysBetween(java.util.Date date, java.util.Date date2) {
-
-	return (int) ((date2.getTime() - date.getTime()) / (1000 * 60 * 60 * 24));
-    }
 	
  }

@@ -32,7 +32,7 @@ public class ConnectionProvider {
 		connInfo.setDatabase((String)configuration.getParameter("database").getValue());
 	    connInfo.setUser((String) configuration.getParameter("user").getValue());
 	    connInfo.setPassword(configuration.getParameter("password")!=null?(String) configuration.getParameter("password").getValue():null);
-	    connInfo.setDbType((String) configuration.getParameter("dbType").getValue());
+	    connInfo.setDbType((String) configuration.getParameter("dbTypeName").getValue());
 	    connInfo.setConnParameters((String) configuration.getParameter("connParameters").getValue());
 	    connInfo.setSelectForceAutocommitOff((Boolean)Boolean.parseBoolean((String)configuration.getParameter("selectForceAutocommitOff").getValue()));
 	    if(configuration.getParameter("useConnectionPool").getValue()!=null)connInfo.setConnectionPool((Boolean)Boolean.parseBoolean((String)configuration.getParameter("useConnectionPool").getValue()));

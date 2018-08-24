@@ -11,7 +11,7 @@ import net.tc.stresstool.statistics.providers.MySQLSuper;
 import net.tc.utils.SynchronizedMap;
 import net.tc.utils.Utility;
 
-
+@Deprecated
 public class MySQLParitionHandler extends MySQLSuper{
     PartitionDefinition partitionDefinition = null;
     

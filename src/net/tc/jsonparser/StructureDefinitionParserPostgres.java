@@ -16,7 +16,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-public class StructureDefinitionParserMySQL implements
+public class StructureDefinitionParserPostgres implements
 		StructureDefinitionParser {
 
 	/* (non-Javadoc)

@@ -12,5 +12,4 @@ public interface CreateAction {
     public abstract void setActionTableSecondary();
     public abstract Schema CreateSchema(boolean createSchema);
     public abstract boolean DropSchema(String[] schema);
-
-}
+ }

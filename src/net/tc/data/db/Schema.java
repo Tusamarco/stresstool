@@ -19,6 +19,10 @@ public class Schema {
 	private String defaultCollation = null;
 	private int size = 0;
 	private SynchronizedMap tables = null;
+	public Schema() {
+		
+	}
+	
 	public String getName() {
 		return name;
 	}
@@ -179,7 +183,7 @@ public class Schema {
 	return this;
     }
     
-    private void setLazyFields(){
+    protected void setLazyFields(){
 	Iterator tablesIt = this.getTables().iterator();
 	while (tablesIt.hasNext()) {
 	    Table table = this.getTable((String) tablesIt.next());

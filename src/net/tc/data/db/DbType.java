@@ -1,4 +1,4 @@
-package net.tc.stresstool;
+package net.tc.data.db;
 
 public class DbType {
 
@@ -6,7 +6,13 @@ public class DbType {
     private String version;
     private String platform;
     private int bitVersion;
-    /**
+    
+    
+    public DbType(String name) {
+		super();
+		this.name = name;
+	}
+	/**
      * @return the name
      */
     public final String getName() {

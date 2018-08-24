@@ -18,7 +18,8 @@ log4j.logger.PACTIONS=error,console,PACTIONS
 
 
 #HIKARI
-log4j.logger.com.zaxxer.hikari=ERROR,console,CONPOOL
+log4j.logger.com.zaxxer.hikari=info,console
+#,CONPOOL
 
 
 
