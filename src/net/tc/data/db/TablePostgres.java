@@ -5,9 +5,9 @@ import net.tc.stresstool.StressTool;
 import net.tc.stresstool.exceptions.StressToolConfigurationException;
 import net.tc.stresstool.logs.LogProvider;
 
-public class TableMySQL extends Table {
+public class TablePostgres extends Table {
 	
-	public TableMySQL() {
+	public TablePostgres() {
 		super();
 	}
 	

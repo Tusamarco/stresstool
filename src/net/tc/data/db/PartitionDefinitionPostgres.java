@@ -23,7 +23,9 @@ import net.tc.utils.Utility;
  * v1
  */
 
-public class PartitionDefinitionMySQL  extends PartitionDefinition{
+public class PartitionDefinitionPostgres  extends PartitionDefinition{
+	
+	
 	
 	public static final String PARTITION_TYPE_RANGE = "RANGE";
 	public static final String PARTITION_TYPE_LIST = "LIST";
@@ -64,8 +66,9 @@ public class PartitionDefinitionMySQL  extends PartitionDefinition{
 	public static final String INTERVAL_PARTITION_MONTH = "MONTH";
 	public static final String INTERVAL_PARTITION_YEAR = "YEAR";
 	
-	public PartitionDefinitionMySQL(){
+	public PartitionDefinitionPostgres(){
 		super();
+		
 	}
 
 	public void setPartitionType(String partitionTypeIn) throws StressToolGenericException {

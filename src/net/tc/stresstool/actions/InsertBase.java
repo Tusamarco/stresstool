@@ -18,6 +18,7 @@ import net.tc.data.generic.DataObject;
 import net.tc.data.generic.SQLObject;
 import net.tc.jsonparser.StructureDefinitionParser;
 import net.tc.jsonparser.StructureDefinitionParserMySQL;
+import net.tc.jsonparser.StructureDefinitionParserPostgres;
 import net.tc.stresstool.StressTool;
 import net.tc.stresstool.exceptions.ExceptionMessages;
 import net.tc.stresstool.exceptions.StressToolActionException;
@@ -152,7 +153,7 @@ public class InsertBase extends StressActionBase implements WriteAction,
 			
 			switch(this.getDbType().getName().toLowerCase()){
 				case "mysql":    strParser = new StructureDefinitionParserMySQL();    break;
-				case "postgres": strParser = new StructureDefinitionParserMySQL();    break;
+				case "postgres": strParser = new StructureDefinitionParserPostgres();    break;
 			    default:         strParser = new StructureDefinitionParserMySQL();    break;
 			
 			}

@@ -57,7 +57,7 @@ public class StructureDefinitionParserPostgres implements
 				 * Parse Schema as object
 				 */
 
-				schema = new SchemaMySQL();
+				schema = new SchemaPostgres();
 				schema.setName(dbName);
 				schema.setDefaultCharacterSet((String)objectDefinition.get("defaultCharacterSet")!=null?(String)objectDefinition.get("defaultCharacterSet"):null);
 				schema.setTables(new SynchronizedMap(0));
@@ -78,7 +78,7 @@ public class StructureDefinitionParserPostgres implements
 				    	ArrayList attribsWIthIndex = new ArrayList(); 
 				    	
 					JSONObject oTable = (JSONObject) o;
-					Table table = new TableMySQL();
+					Table table = new TablePostgres();
 					table.setName((String)oTable.get("tablename"));
 
 					table.setSchemaName((String)oTable.get("database"));
@@ -292,7 +292,7 @@ public class StructureDefinitionParserPostgres implements
 					if(table.isHasPartition()){
 					    if(oTable.get("partitionDefinition") != null){
 						JSONObject oPartDef = (JSONObject)oTable.get("partitionDefinition");
-						PartitionDefinition partDef = new PartitionDefinitionMySQL();
+						PartitionDefinition partDef = new PartitionDefinitionPostgres();
 						partDef.setTableName(table.getName());
 						partDef.setPartitionType((String)oPartDef.get("partitionBy")!=null?(String)oPartDef.get("partitionBy"):null);
 
