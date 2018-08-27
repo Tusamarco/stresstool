@@ -36,7 +36,9 @@ public class SchemaPostgres extends Schema {
 	StringBuffer sbSchema = new StringBuffer();
 	StringBuffer sbTables = new StringBuffer();
 
-	sbSchema.append("SET FOREIGN_KEY_CHECKS=0;\n");
+	//FIXME foreign keys in Postgres cannot be disable, but triggers manage them yes. Task must be done at table level and not here
+ 	
+//	sbSchema.append("SET FOREIGN_KEY_CHECKS=0;\n");
 //	sbSchema.append("SET SQL_NOTES=0;\n");
 
 	Iterator tablesIt = this.getTables().iterator();
@@ -56,7 +58,8 @@ public class SchemaPostgres extends Schema {
 	}
 	if(sbTables.length() > 0){
 	    sbSchema.append(sbTables + "\n");
-	    sbSchema.append("SET FOREIGN_KEY_CHECKS=1;\n");
+	    //FIXME here instead this the list of tables with ALTER TABLE b ENABLE TRIGGER ALL;
+//	    sbSchema.append("SET FOREIGN_KEY_CHECKS=1;\n");
 //	    sbSchema.append("SET SQL_NOTES=1;\n");
 //	    StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).debug("Schema Definition SQL = [\n" + sbSchema.toString() + "\n ]"  );
 	    return sbSchema;

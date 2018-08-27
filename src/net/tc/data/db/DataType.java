@@ -1,7 +1,10 @@
 package net.tc.data.db;
 
 public class DataType {
-
+/**
+ * NOTE 
+ * DataType class is a map SQL/Java and it should be standard cross DBTYPE
+ */
     public static final int NUMERIC_CATEGORY = 1;
     public static final int STRING_CATEGORY = 2;
     public static final int DATE_CATEGORY = 3;

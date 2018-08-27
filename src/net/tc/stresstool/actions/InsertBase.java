@@ -150,7 +150,10 @@ public class InsertBase extends StressActionBase implements WriteAction,
 			
 			JSONParser parser = new JSONParser();
 			StructureDefinitionParser strParser = null;
-			
+			/**
+			 * NOTE common place used to switch by DB type.
+			 * Need to make it more obj oriented though 
+			 */
 			switch(this.getDbType().getName().toLowerCase()){
 				case "mysql":    strParser = new StructureDefinitionParserMySQL();    break;
 				case "postgres": strParser = new StructureDefinitionParserPostgres();    break;
@@ -158,7 +161,6 @@ public class InsertBase extends StressActionBase implements WriteAction,
 			
 			}
 			
-			new StructureDefinitionParserMySQL();
 			FileReader fr = new FileReader(this.getJsonFile());
 			schema = strParser.parseSchema(parser, fr,tableInstances);
 

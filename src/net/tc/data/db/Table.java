@@ -15,6 +15,10 @@ import net.tc.utils.SynchronizedMap;
 import net.tc.utils.Utility;
 
 public class Table {
+	/**
+	 * NOTE
+	 * Table class is a superclass implementing common methods cross DBType
+	 */
     	public static final Integer TABLE_PARENT=0;
     	public static final Integer TABLE_CHILD=1;
 	protected String name = null;

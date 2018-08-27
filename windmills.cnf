@@ -43,7 +43,7 @@ StatIntervalMs=1000
 StatLoops = 100
 SemaphoreCountdownTime = 3
 # table engine comma separated with % value; 
-TableEngine=InnoDB|90,MyISAM|10
+# deprecated ##TableEngine=InnoDB|90,MyISAM|10
 truncate=false
 # Interactive mode [0 no|1 console output|2 console output + not exit until question is answered ] default 2 
 interactive = 2
@@ -86,8 +86,7 @@ monitorlog=MONITORS
 rootdirectory=/tmp/stats
 #this parameter says to write a CSV file for each provider (in root dir)
 flushrowonfile=false
-providerclass=net.tc.stresstool.statistics.providers.ActionsReporter
-#,net.tc.stresstool.statistics.providers.MySQLStatus
+providerclass=net.tc.stresstool.statistics.providers.ActionsReporter,net.tc.stresstool.statistics.providers.MySQLStatus
 
 #,net.tc.stresstool.statistics.providers.InnoDBMetrics
 #,net.tc.stresstool.statistics.providers.InnoDB

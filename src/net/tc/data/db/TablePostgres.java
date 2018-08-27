@@ -38,13 +38,26 @@ public class TablePostgres extends Table {
 		    + this.getSchemaName() +"."
 		    + this.getName() 
 		    +"(\n");
-	    
+//FIXME disable triggers by tab;e
+/**
+ * NOTE
+ * a method can be to add the list of tables at create time and after creation immediately add the trigger disable.
+ * then at the end of the process activate all of them.
+ * BEGIN;
+ * ALTER TABLE b DISABLE TRIGGER ALL;
+ * -- now the RI over table b is disabled
+ * ALTER TABLE b ENABLE TRIGGER ALL;
+ * COMMIT;
+ * 
+ */
 	    sbTail.append("\n )\n");
-	    sbTail.append(this.getStorageEngine()!=null?"ENGINE="+getStorageEngine() + " ":"");
-	    sbTail.append(this.getDefaultCharacterSet()!=null?"CHARSET="+getDefaultCharacterSet() + " ":"");
-	    sbTail.append(this.getDefaultCollation()!=null?"COLLATE="+getDefaultCollation() + " ":"");
+	    //FIXME NO storage engine or row format in Postgres; COLLATION is at column level, no char_set, tablespace takes no data dir
 	    
-	    sbTail.append(this.getRowFormat()!=null?"ROW_FORMAT="+getRowFormat() + " ":"");
+//	    sbTail.append(this.getStorageEngine()!=null?"ENGINE="+getStorageEngine() + " ":"");
+//	    sbTail.append(this.getDefaultCharacterSet()!=null?"CHARSET="+getDefaultCharacterSet() + " ":"");
+//	    sbTail.append(this.getDefaultCollation()!=null?"COLLATE="+getDefaultCollation() + " ":"");
+	    
+//	    sbTail.append(this.getRowFormat()!=null?"ROW_FORMAT="+getRowFormat() + " ":"");
 	    sbTail.append(this.getDataDirectory()!=null?"DATA DIRECTORY="+getDataDirectory() + " ":"");
 	    sbTail.append(this.getTableSpace()!=null?"TABLESPACE="+getTableSpace() + " ":"");
 	    
