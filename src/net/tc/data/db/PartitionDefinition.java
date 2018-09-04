@@ -266,7 +266,13 @@ public class PartitionDefinition {
 	    
 	    
 	}
-	
+	/**
+	 * this method is used to calculate the 
+	 * partitions and to return a string buffer containing the SQL
+	 * @return
+	 */
+
+
 	/**
 	 * this method is used to calculate the 
 	 * partitions and to return a string buffer containing the SQL
@@ -300,7 +306,6 @@ public class PartitionDefinition {
 	return sbPartition;
 
     }
-
     
     protected String getKey(PartitionDefinition partitionDefinition) {
 	String sql = "PARTITION BY KEY ("

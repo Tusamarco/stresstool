@@ -102,7 +102,15 @@ public class SchemaPostgres extends Schema {
 		    if(numberOfTables > 1)
 			table.setInstanceNumber(i);
 		    
-		    Table newTable = new TableMySQL();
+		    Table newTable = null;
+		    if(table instanceof TableMySQL){
+		    	newTable =  new TableMySQL();
+		    }
+		    else{
+		    	newTable = new TablePostgres();
+		    }
+		    
+		    
 		    try {
 			BeanUtils.copyProperties(newTable, table);
 			newTable.setMetaAttributes(table.getMetaAttributes());

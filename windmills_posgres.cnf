@@ -1,17 +1,25 @@
 #v2
 [main]
-#DBTYPE is going to be mandatory from this version of StressTool 
+#==========
+# Mandatory
+#==========
+#DBTYPE is mandatory from this version of StressTool 
 #possible options are mysql|postgres
-dbTypeName=MySQL
-#connection oriented settings
+#dbTypeName=postgres
+dbTypeName=mysql
+
+#==========
+# Connection section
+#==========
 #connUrl=jdbc:mysql://192.168.1.11:6033
 connUrl=jdbc:mysql://192.168.1.55:3306
+#connUrl=jdbc:postgres://192.168.1.83:5432
 #connUrl=jdbc:mysql://127.0.0.1:3306
+#database=test
+schema=windmills
 database=windmills
-user=app3
-#user=pxc_test
-#password=test
-skipPermissionTest=true
+user=app1
+password=test
 connParameters=autoReconnect=true  
 connectionPool=false
 connectionPoolClass= 
@@ -20,35 +28,63 @@ stickyconnection=false
 useConnectionPool=true
 connectionPoolType=1
 #at the moment we only support hikari
+skipPermissionTest=true
 
+
+#========== 
+# Global options
+#==========
 FKEnable=false
 createTable=true 
+
+droptable=true
+truncate=false
+ignoreBinlog=false
+
+datafilepath=shakespere.txt
+
+#manage the calendar options
+# YYYY-MM-DD HH:MM:SS
+# daysdiffernce is the target/final date of the period 
+calendardate=2018-01-30 00:00:01 
+daysdiffernce=360
+
+
+#deprecated
+doSimplePk=false 
+operationShort=false
 doDelete=false 
 doReport=true 
-doSimple=false 
-doSimplePk=false 
-droptable=true
-ignoreBinlog=false
-operationShort=false  
+doSimple=false
+  
+#==========
+# scalability / load settings  
+#==========
 poolNumber=1
 pctInsert=100
-pctUpdate=100 
-pctSelect=100 
-pctDelete=100
+pctUpdate=00 
+pctSelect=000 
+pctDelete=000
 #repeatNumber=1
-repeatNumber=10
+repeatNumber=5000
+
+#==========
+# console display settings
+#==========
 HardStopLimit=10
-UseHardStop=true
+UseHardStop=false
 StatIntervalMs=1000
 StatLoops = 100
 SemaphoreCountdownTime = 3
 # table engine comma separated with % value; 
 # deprecated ##TableEngine=InnoDB|90,MyISAM|10
-truncate=false
+
 # Interactive mode [0 no|1 console output|2 console output + not exit until question is answered ] default 2 
 interactive = 2
 
-
+#==========
+# class/Actions assignments 
+#==========
 DeleteClass=net.tc.stresstool.actions.DeleteBase 
 SelectClass=net.tc.stresstool.actions.SelectBase
 InsertClass=net.tc.stresstool.actions.InsertBase
@@ -56,23 +92,14 @@ InsertClass=net.tc.stresstool.actions.InsertBase
 UpdateClass=net.tc.stresstool.actions.UpdateBase
 ValueProvider=net.tc.stresstool.value.BasicFileValueProvider
 
-
-
-#logPathStats=/tmp/stats.csv
-#logPathStatReport=/tmp/reportstat.txt
-#logPathReport=/tmp/report.txt
+#==========
+# global log settings
+#==========
 appendLogStat=true
 insertStatHeaders=true
 appendLogReport=true
 
-datafilepath=/opt/shakespere.txt
 
-
-#manage the calendar options
-# YYYY-MM-DD HH:MM:SS
-# daysdiffernce is the target/final date of the period 
-calendardate=2017-09-30 00:00:01 
-daysdiffernce=180
 
 
 [logs]
@@ -85,8 +112,9 @@ monitorlog=MONITORS
 [statistics]
 rootdirectory=/tmp/stats
 #this parameter says to write a CSV file for each provider (in root dir)
-flushrowonfile=false
-providerclass=net.tc.stresstool.statistics.providers.ActionsReporter,net.tc.stresstool.statistics.providers.MySQLStatus
+flushrowonfile=true
+providerclass=net.tc.stresstool.statistics.providers.ActionsReporter
+#,net.tc.stresstool.statistics.providers.MySQLStatus
 
 #,net.tc.stresstool.statistics.providers.InnoDBMetrics
 #,net.tc.stresstool.statistics.providers.InnoDB
@@ -104,7 +132,7 @@ idleTimeout=100000
 cachePrepStmts=true
 prepStmtCacheSize=250
 prepStmtCacheSqlLimit=2048
-leakDetectionThreshold=1000
+leakDetectionThreshold=10000
 maximumPoolSize = 50
 useServerPrepStmts=true
 useLocalSessionState=true
@@ -115,8 +143,16 @@ cacheServerConfiguration=true
 autoCommits=false
 maintainTimeStats=false
 useSSL=false
+maxLifetime=300000
 
-
+#######
+# NOTE
+# all the settings related to 
+# numberOfprimaryTables=5
+# numberOfSecondaryTables=5
+# numberOfJoinTables=0
+#
+# are deprecate because the settings on how to query and delete now are in the Json file that define the tables.
 
 [net.tc.stresstool.actions.DeleteBase] 
 sleepDelete=100 
@@ -135,41 +171,50 @@ SelectFilterMethod=in
 #range|in|match
 SleepSelect=100 
 
+numberOfIntervalKeys=100
+lazySelect=true
+lazyInterval=1
+batchSize = 4
+textAttributeMaxSearchlength=5
+
+#deprecated
 numberOfprimaryTables=5
 numberOfSecondaryTables=5
-numberOfIntervalKeys=100
 numberOfJoinTables=0
 joinField=a
 forceIndex=false
 indexName=IDX_as
-lazySelect=true
-lazyInterval=1
-#joinCondition=Left - experimental
-batchSize = 4
-textAttributeMaxSearchlength=5
+
+
+
 
 [net.tc.stresstool.actions.InsertBase]
 usePrepareStatement=false
-numberOfprimaryTables=1
-numberOfSecondaryTables=0
 useAutoIncrement=true
-joinField=millid
 sleepWrite=10
 lazyCreation=true
 lazyInterval=5
 batchSize=20
 jsonFile=wind_mill_example2.json
 
+#deprecated
+joinField=millid
+numberOfprimaryTables=1
+numberOfSecondaryTables=0
+
+
 
 
 [net.tc.stresstool.actions.UpdateBase]
 usePrepareStatement=false
 delayStartRecords = 1000
-numberOfprimaryTables=1
-numberOfSecondaryTables=0
 useAutoIncrement=true
 joinField=a
 sleepUpdate=500
 lazyUpdate=false
 lazyInterval=10
 batchSize=5
+
+#deprecated
+numberOfprimaryTables=1
+numberOfSecondaryTables=0

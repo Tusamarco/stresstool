@@ -13,6 +13,7 @@ import net.tc.data.db.Attribute;
 import net.tc.data.db.DataType;
 import net.tc.data.db.Table;
 import net.tc.stresstool.StressTool;
+import net.tc.stresstool.exceptions.StressToolConfigurationException;
 import net.tc.stresstool.logs.LogProvider;
 import net.tc.utils.TimeTools;
 import net.tc.utils.Utility;
@@ -24,6 +25,8 @@ public class BasicValueProvider implements ValueProvider {
   		static final String[] alphaUTFChinese = new String[]{"表","情","。","另","外","极","少","数","中","文","在","存","储","的","时","候","也","遇","到"};
   		static Random rnd = new Random();  		
   		private static Calendar testCalendar = null;
+  		 
+  		
   @Override
   public Long getRandomNumber() {
 	return Utility.getNumberFromRandom(new Long(System.currentTimeMillis()).intValue());
@@ -89,37 +92,37 @@ public class BasicValueProvider implements ValueProvider {
      	  {
       	    int lowerbound = 0;
       	    long upperbound = 254;
-      	    return ("\"" + getString(Utility.getNumberFromRandomMinMax(0, upperbound),length.intValue()) +"\"");
+      	    return ("'" + getString(Utility.getNumberFromRandomMinMax(0, upperbound),length.intValue()) +"'");
      	  }
 	  	case DataType.BINARY: 
      	  {
     	    int lowerbound = 0;
     	    long upperbound = 254;
-    	    return ("\"" + getString(Utility.getNumberFromRandomMinMax(0, upperbound),length.intValue()) +"\"");
+    	    return ("'" + getString(Utility.getNumberFromRandomMinMax(0, upperbound),length.intValue()) +"'");
      	  }
 	  	case DataType.VARCHAR: 
      	  {
     	    int lowerbound = 0;
     	    long upperbound = 65535;
-    	    return ("\"" + getString(Utility.getNumberFromRandomMinMax(0, upperbound),length.intValue()) +"\"");
+    	    return ("'" + getString(Utility.getNumberFromRandomMinMax(0, upperbound),length.intValue()) +"'");
      	  }
 	  	case DataType.VARBINARY: 
      	  {
     	    int lowerbound = 0;
     	    long upperbound = 65535;
-    	    return ("\"" + getString(Utility.getNumberFromRandomMinMax(0, upperbound),length.intValue()) +"\"");
+    	    return ("'" + getString(Utility.getNumberFromRandomMinMax(0, upperbound),length.intValue()) +"'");
      	  }
 	  	case DataType.TINYBLOB: 
      	  {
     	    int lowerbound = 0;
     	    long upperbound = 254;
-    	    return ("\"" + getString(Utility.getNumberFromRandomMinMax(0, upperbound),length.intValue()) +"\"");
+    	    return ("'" + getString(Utility.getNumberFromRandomMinMax(0, upperbound),length.intValue()) +"'");
      	  }
 	  	case DataType.TINYTEXT: 
        	  {
     	    int lowerbound = 0;
     	    long upperbound = 254;
-    	    return ("\"" + getString(upperbound,length.intValue()) + "\"");
+    	    return ("'" + getString(upperbound,length.intValue()) + "'");
      	  }
 	  	case DataType.BLOB: 
        	  {
@@ -131,31 +134,31 @@ public class BasicValueProvider implements ValueProvider {
        	  {
     	    int lowerbound = 0;
     	    long upperbound = 65535;
-    	    return ("\"" + getString(Utility.getNumberFromRandomMinMax(0, upperbound),length.intValue()) +"\"");
+    	    return ("'" + getString(Utility.getNumberFromRandomMinMax(0, upperbound),length.intValue()) +"'");
      	  }
 	  	case DataType.MEDIUMBLOB: 
        	  {
     	    int lowerbound = 0;
     	    long upperbound = 16777216;
-    	    return ("\"" + getString(Utility.getNumberFromRandomMinMax(0, upperbound),length.intValue()) +"\"");
+    	    return ("'" + getString(Utility.getNumberFromRandomMinMax(0, upperbound),length.intValue()) +"'");
      	  }
 	  	case DataType.MEDIUMTEXT: 
        	  {
     	    int lowerbound = 0;
     	    long upperbound = 16777216;
-    	    return ("\"" + getString(Utility.getNumberFromRandomMinMax(0, upperbound),length.intValue()) +"\"");
+    	    return ("'" + getString(Utility.getNumberFromRandomMinMax(0, upperbound),length.intValue()) +"'");
      	  }
 	  	case DataType.LONGBLOB:
        	  {
     	    int lowerbound = 0;
     	    long upperbound = Long.parseLong("4294967");
-    	    return ("\"" + getString(Utility.getNumberFromRandomMinMax(0, upperbound),length.intValue()) +"\"");
+    	    return ("'" + getString(Utility.getNumberFromRandomMinMax(0, upperbound),length.intValue()) +"'");
      	  }
 	  	case DataType.LONGTEXT:
        	  {
     	    int lowerbound = 0;
     	    long upperbound = Long.parseLong("4294967");
-    	    return ("\"" + this.getString(Utility.getNumberFromRandomMinMax(0, upperbound),length.intValue()) +"\"");
+    	    return ("'" + this.getString(Utility.getNumberFromRandomMinMax(0, upperbound),length.intValue()) +"'");
      	  }    	  
     	}
     	break;
@@ -163,15 +166,15 @@ public class BasicValueProvider implements ValueProvider {
       case DataType.DATE_CATEGORY:
     	switch (dataType.getDataTypeId()){
     	 case DataType.YEAR: 	
-    		  return ("\"" + getYear(length.intValue()) + "\"");
-      	case DataType.DATE:
-      		return ("\"" + getDate(length.intValue())+ "\"");
+    		  return ("'" + getYear(length.intValue()) + "'");
+    		  case DataType.DATE:
+      		return ("'" + getDate(length.intValue())+ "'");
       	case DataType.TIME:
-      		return ("\"" + getTime(length.intValue())+ "\"");
+      		return ("'" + getTime(length.intValue())+ "'");
       	case DataType.DATETIME:
-      		return ("\"" + getDateTime(length.intValue())+ "\"");
+      		return ("'" + getDateTime(length.intValue())+ "'");
       	case DataType.TIMESTAMP:
-      		return ("\"" + getTimestamp(length.intValue())+ "\"");
+      		return ("'" + getTimestamp(length.intValue())+ "'");
       	}
     	break;    	
     	
@@ -412,13 +415,18 @@ public class BasicValueProvider implements ValueProvider {
   }
 
 @Override
-public Calendar resetCalendar(int timeDays) {
-	int days = Utility.getUnsignNumberFromRandomMinMax((timeDays * -1), timeDays).intValue();
+public Calendar resetCalendar(int timeDays, String testDate) {
+	int days = 0;
+	TimeTools.getCalendar(testDate);
+	Calendar nowCal = TimeTools.getCalendar(testDate);
+//	Calendar.getInstance();
+	days = Utility.getUnsignNumberFromRandomMinMax((timeDays * -1), timeDays).intValue();
 	
 	String now = TimeTools.getTimeStamp(BasicValueProvider.getTestCalendar(), "yyyy-MM-dd HH:mm:ss");
-	testCalendar = TimeTools.getCalendarFromCalendarDateAddDays(testCalendar, days);
+	testCalendar = TimeTools.getCalendarFromCalendarDateAddDays(nowCal, days);
 	String after = TimeTools.getTimeStamp(BasicValueProvider.getTestCalendar(), "yyyy-MM-dd HH:mm:ss"); 
 	BasicValueProvider.setTestCalendar(testCalendar);
+	try{StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).info(" ==== Resetting the Calendar NOW "+ now +" == Days " + days + " ==== After " + after  );}catch(StressToolConfigurationException e){}
 	return BasicValueProvider.getTestCalendar();
 }
 
@@ -559,6 +567,12 @@ private String valueForBetween(Table table, Attribute attrib,int rangeLength) {
 		return null;
 	
 	return value;
+}
+
+@Override
+public Calendar getCalendar() {
+	// TODO Auto-generated method stub
+	return this.getTestCalendar();
 }
 
 

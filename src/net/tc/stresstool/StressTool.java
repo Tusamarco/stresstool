@@ -213,7 +213,7 @@ public class StressTool {
 	              */
 	             if(calendarReset == 0){
 	            	 launcher.resetValueProviderCalendar();
-	            	 calendarReset = 3 ; 
+	            	 calendarReset = 10 ; 
 	             }
 	             else
 	            	 calendarReset--;

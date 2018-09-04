@@ -5,7 +5,7 @@ import java.io.ObjectOutputStream;
 import java.io.ObjectInputStream;
 import java.io.IOException;
 
-import net.tc.comparators.OrderByOrderProperty;
+
 /**
  * This class exist because the "normal" implementation of the Map interface has a serious BUG
  * It return as Hash code the sum of the hash code that the map itself contains that means that
@@ -13,37 +13,45 @@ import net.tc.comparators.OrderByOrderProperty;
  * load a map inside another map the new Map could  replace an existing object also if the keys
  * are different.
  *
- * More: this map implementation is using vectors internally that are automatically syncronized
+ * More: this map implementation is using vectors internally that are automatically synchronized
  */
 public class SynchronizedMap  implements Map 
 {
   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+/**
    */
-  private Vector keys = null;
+  private Vector<Object> keys = null;
   /**
    */
-  private Vector values = null;
+  private Vector<Object> values = null;
 
   public SynchronizedMap()
   {
-	keys = new Vector(0,1);
-	values = new Vector(0,1);
+	super();
+	keys = new Vector<Object>(0,1);
+	values = new Vector<Object>(0,1);
 
   }
   public SynchronizedMap(int initialCapacity)
   {
-	keys = new Vector(initialCapacity,1);
-	values = new Vector(initialCapacity,1);
+	 super();
+	keys = new Vector<Object>(initialCapacity,1);
+	values = new Vector<Object>(initialCapacity,1);
   }
   public SynchronizedMap(int initialCapacity, int loadFactor)
   {
-	keys = new Vector(initialCapacity,loadFactor);
-	values = new Vector(initialCapacity,loadFactor);
+	  super();
+	keys = new Vector<Object>(initialCapacity,loadFactor);
+	values = new Vector<Object>(initialCapacity,loadFactor);
   }
   public SynchronizedMap(Map m)
   {
-	keys = new Vector(0,1);
-	values = new Vector(0,1);
+	  super();
+	keys = new Vector<Object>(0,1);
+	values = new Vector<Object>(0,1);
 	putAll(m);
   }
 
@@ -185,15 +193,15 @@ public class SynchronizedMap  implements Map
 	return null;
   }
 
-  public Collection values()
+  public Collection<Object> values()
   {
 	if( keys == null && values == null  )
 	  return null;
 
 	return values;
   }
-
-  public void putAll( Map t )
+  
+public void putAll( Map t )
   {
 	if( t == null )
 	  return;
@@ -214,7 +222,7 @@ public class SynchronizedMap  implements Map
 	if( t == null )
 	  return;
 	try{
-	  Map tMap = new SynchronizedMap(t.size());
+	  Map<Object, Object> tMap = new SynchronizedMap(t.size());
 	  Iterator it = t.keySet().iterator();
 	  while( it.hasNext() )
 	  {
@@ -230,17 +238,17 @@ public class SynchronizedMap  implements Map
   }
 
 
-  public Iterator iterator()
+  public Iterator<Object> iterator()
   {
 	if(keys == null)
 	  return null;
 
 	return keys.iterator();
   }
-  public Set keySet()
+  public Set<Object> keySet()
   {
 	if(keys != null)
-	  return new HashSet((Collection)keys.subList(0,keys.size()));
+	  return new HashSet<Object>((Collection<Object>)keys.subList(0,keys.size()));
 	return null;
   }
 
@@ -264,16 +272,16 @@ public class SynchronizedMap  implements Map
 	return null;
   }
 
-  public List get(Object inkey, int pos)
+  public List<Object> get(Object inkey, int pos)
   {
-	List l = null;
+	List<Object> l = null;
 	if( keys == null || keys.size() <= 0)
 	  return null;
 	if(keys.get(0) instanceof SynchronizedMap)
 	{
 	  if(((SynchronizedMap)keys.get(0)).keys.size() >= pos)
 	  {
-		l = new ArrayList(0);
+		l = new ArrayList<Object>(0);
 		for( int i = 0; i < keys.size(); i++ )
 		{
 		  SynchronizedMap k = ( SynchronizedMap ) keys.get( i );

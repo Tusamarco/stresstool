@@ -211,8 +211,8 @@ public class Schema {
 	
     }
     
-    public String[] deployDropTable(Map tablesInstances){
-	ArrayList<String> tables = new ArrayList();
+    public Table[] deployDropTable(Map tablesInstances){
+	ArrayList<Table> tables = new ArrayList();
 	
 	Iterator tablesIt = this.getTables().iterator();
 	/*
@@ -243,11 +243,11 @@ public class Schema {
 //    		else{
 //    		    	tables.add(table.getName());
 //    		}
-	      tables.add(table.getName());
+	      tables.add(table);
 	    }
 	}
 	if(tables != null  & tables.size() > 0 )
-	    return (String[])  tables.toArray(new String[tables.size()]);
+	    return (Table[])  tables.toArray(new Table[tables.size()]);
 	
 	return null;
     }

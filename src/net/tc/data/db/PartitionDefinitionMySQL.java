@@ -346,7 +346,7 @@ public class PartitionDefinitionMySQL  extends PartitionDefinition{
 	if (pd == null || pd.getStartDate() == null || pd.getEndDate() == null)
 	    return null;
 
-	Map partitions = new SynchronizedMap(0);
+	Map partitions = new SynchronizedMap(10);
 
 	Calendar calCurr = new GregorianCalendar();
 	Calendar cal1 = new GregorianCalendar();

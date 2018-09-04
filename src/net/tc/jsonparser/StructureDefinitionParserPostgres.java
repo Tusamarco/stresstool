@@ -246,7 +246,7 @@ public class StructureDefinitionParserPostgres implements
 						+ attribute.getName());
 						if(attribsWIthIndex.contains(attribute.getName()))
 						    attribute.setHasIndex(true);
-						attribute.setDataType(new DataType(DataType.getDataTypeIdentifierByString((String)oAttribute.get("datatype"))));
+						attribute.setDataType(new DataType(DataType.getDataTypeIdentifierByString((String)oAttribute.get("datatype"),ConnectionInformation.POSTGRES)));
 						attribute.setDataDimension((String)oAttribute.get("datadimension")!= null?Integer.parseInt((String)oAttribute.get("datadimension")):0);
 						attribute.setAutoIncrement(oAttribute.get("autoincrement")!= null?true:false);
 						attribute.setSpecialFunction(oAttribute.get("specialFunction")!= null?(String)oAttribute.get("specialFunction"):null);

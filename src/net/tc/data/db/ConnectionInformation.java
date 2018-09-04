@@ -13,11 +13,15 @@ public class ConnectionInformation {
 	private int connectionPoolType=0 ;
 	private boolean selectForceAutocommitOff=false;
 	private boolean stikyconnection=false ;
+	private String schema="";
 	
 	public static final int  NONE = 0;
 	public static final int HIKARI = 1;
 	public static final int C3P0 = 2;
 	public static final int TOMCAT = 3;
+	
+	public static final String MYSQL = "MYSQL";
+	public static final String POSTGRES = "POSTGRES";
 	
 	/**
 	 * @return the connUrl
@@ -144,6 +148,12 @@ public class ConnectionInformation {
 	}
 	public void setConnectionPoolType(int connectionPoolType) {
 		this.connectionPoolType = connectionPoolType;
+	}
+	public String getSchema() {
+		return schema;
+	}
+	public void setSchema(String schema) {
+		this.schema = schema;
 	} 
 
 }

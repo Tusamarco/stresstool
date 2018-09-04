@@ -308,7 +308,7 @@ private boolean checkIfTableExists(Table tableIn,SQLObject lSQL){
 					sb.append(",");
 				sb.append("MAX("+ ((Attribute)attrib).getName() +") as " +((Attribute)attrib).getName()+" ");
 		}	
-			String SQL = "Select " + sb.toString() + " FROM " + table.getName();
+			String SQL = "Select " + sb.toString() + " FROM "+ table.getSchemaName() +"." + table.getName();
 			if(sb.length() > 0){
 				Connection conn = null;
 				if(this.getActiveConnection()==null){

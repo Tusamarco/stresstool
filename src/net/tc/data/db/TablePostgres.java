@@ -29,10 +29,10 @@ public class TablePostgres extends Table {
 	    StringBuffer sbHead = new StringBuffer();
 	    StringBuffer sbTail = new StringBuffer();
 	    
-	    sbHead.append("/* CREATE TABLE "
-		    + this.getSchemaName() +"."
-		    + this.getName() 
-		    + " */\n");
+//	    sbHead.append("/* CREATE TABLE "
+//		    + this.getSchemaName() +"."
+//		    + this.getName() 
+//		    + " */\n");
 	    
 	    sbHead.append("CREATE TABLE IF NOT EXISTS "
 		    + this.getSchemaName() +"."
@@ -49,8 +49,69 @@ public class TablePostgres extends Table {
  * ALTER TABLE b ENABLE TRIGGER ALL;
  * COMMIT;
  * 
+ * THIS IS HOW PG may work
+ * 
+ * #############################
+NOT partitioned table
+
+CREATE TABLE IF NOT EXISTS windmills.wmillAUTOINC(
+id bigserial NOT NULL,
+uuid CHAR(36) NOT NULL   ,
+millid SMALLINT NOT NULL   ,
+kwatts_s INT NOT NULL   ,
+date DATE NOT NULL   ,
+location VARCHAR(50) NOT NULL   ,
+active SMALLINT NOT NULL DEFAULT 1  ,
+time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+strrecordtype CHAR(3) NOT NULL   , 
+PRIMARY KEY (id));
+
+Create Unique index windmills_wmillAUTOINC_UQ on windmills.wmillAUTOINC USING btree(uuid);
+Create Unique index windmills_wmillAUTOINC_1 on windmills.wmillAUTOINC USING btree(millid,active);
+Create Unique index windmills_wmillAUTOINC_2 on windmills.wmillAUTOINC USING btree(id,active);
+
+
+#############################
+PARTITIONED
+    
+CREATE TABLE windmills.partition1
+(
+    id bigserial NOT NULL,
+    date date NOT NULL,
+    text character varying(255),
+    serialn bigserial NOT NULL
+) PARTITION BY RANGE (date) 
+TABLESPACE test_tb1;
+ALTER TABLE windmills.partition1
+    OWNER to app1;
+
+CREATE TABLE windmills.partition1_pt1 PARTITION OF windmills.partition1
+    FOR VALUES FROM ('2018-08-01') TO ('2018-08-31');
+alter table windmills.partition1_pt1 ADD constraint partition1_pt1_pk primary key (date,id);
+Create Unique index partition1_pt1_uk on windmills.partition1_pt1 USING btree(serialn);
+Create index partition1_pt1_txt on windmills.partition1_pt1 USING btree(text);
+
+
+CREATE TABLE windmills.partition1_pt2 PARTITION OF windmills.partition1
+    FOR VALUES FROM ('2018-09-01') TO ('2018-09-30');
+alter table windmills.partition1_pt2 ADD constraint partition1_pt2_pk primary key (date,id);
+Create Unique index partition1_pt2_uk on windmills.partition1_pt2 USING btree(serialn);
+Create index partition1_pt2_txt on windmills.partition1_pt2 USING btree(text);
+
+    
+alter table windmills.partition1_p1 ADD constraint partition1_pt1_pk primary key (date,id);
+Create Unique index partition1_pt1_uk on windmills.partition1_pt1 USING btree(serialn);
+
+ * 
+ * 
+ * 
  */
-	    sbTail.append("\n )\n");
+	    
+	    
+	    
+	    
+	    
+	    sbTail.append("\n");
 	    //FIXME NO storage engine or row format in Postgres; COLLATION is at column level, no char_set, tablespace takes no data dir
 	    
 //	    sbTail.append(this.getStorageEngine()!=null?"ENGINE="+getStorageEngine() + " ":"");
@@ -58,7 +119,8 @@ public class TablePostgres extends Table {
 //	    sbTail.append(this.getDefaultCollation()!=null?"COLLATE="+getDefaultCollation() + " ":"");
 	    
 //	    sbTail.append(this.getRowFormat()!=null?"ROW_FORMAT="+getRowFormat() + " ":"");
-	    sbTail.append(this.getDataDirectory()!=null?"DATA DIRECTORY="+getDataDirectory() + " ":"");
+//	    sbTail.append(this.getDataDirectory()!=null?"DATA DIRECTORY="+getDataDirectory() + " ":"");
+	    
 	    sbTail.append(this.getTableSpace()!=null?"TABLESPACE="+getTableSpace() + " ":"");
 	    
 	    /*
@@ -66,19 +128,94 @@ public class TablePostgres extends Table {
 	     */
 	    Iterator itAtt = getMetaAttributes().iterator();
 	    StringBuffer sbAtt = new StringBuffer();
+	    StringBuffer sbConstraints  = new StringBuffer();
+	    StringBuffer sbpartition  = new StringBuffer();
+	    
+	    /*
+	     * Add partitioninformation if present
+	     */
+	    if(this.getPartitionDefinition() !=null){
+	    	sbpartition.append(this.getPartitionDefinition().getSQLPartitionDefinition());
+		
+	    }
+
+	    
 	    
 	    while (itAtt.hasNext()){
-		if (sbAtt.length() > 0)
-		    	sbAtt.append(",\n");
-		Attribute attribute = (Attribute) this.getMetaAttributes((String)itAtt.next());
-		sbAtt.append("`"+ attribute.getName() +"` ");
-		sbAtt.append(DataType.getDataTypeStringByIdentifier(attribute.getDataType().getDataTypeId()) 
-			+ (attribute.getDataDimension()>0?"("+attribute.getDataDimension()+") ":" "));
-		sbAtt.append(attribute.isNull()?"NULL ":"NOT NULL ");
-		sbAtt.append(attribute.isAutoIncrement()?" AUTO_INCREMENT ":"");
-		sbAtt.append(attribute.getDefaultValue()!=null?"DEFAULT " + attribute.getDefaultValue() + " ":" ");
-		sbAtt.append(attribute.getOnUpdate()!=null?"ON UPDATE " + attribute.getOnUpdate() + " ":" ");
+			if (sbAtt.length() > 0)
+			    	sbAtt.append(",\n");
+			Attribute attribute = (Attribute) this.getMetaAttributes((String)itAtt.next());
+			sbAtt.append(""+ attribute.getName() +" ");
+			String dataTypeName = DataType.getDataTypeStringByIdentifier(attribute.getDataType().getDataTypeId(),ConnectionInformation.POSTGRES);
+			if(dataTypeName.equals(DataType.BIGINT) && attribute.isAutoIncrement()){
+				dataTypeName =  "BIGSERIAL";
+			}
+			else if(attribute.isAutoIncrement()){
+				dataTypeName =  "SERIAL";
+			}
+			if(attribute.getDataType().getDataTypeCategory() != DataType.NUMERIC_CATEGORY) 
+				sbAtt.append(dataTypeName + (attribute.getDataDimension()>0?"("+attribute.getDataDimension()+") ":" ") + " ");
+			else
+				sbAtt.append(dataTypeName + " ");
+			
+			sbAtt.append(attribute.isNull()?"NULL ":"NOT NULL ");
+			sbAtt.append(attribute.getDefaultValue()!=null?"DEFAULT " + attribute.getDefaultValue() + " ":" ");
+			
+			if(attribute.getOnUpdate()!=null){
+				sbConstraints.append("DROP FUNCTION IF EXISTS "+ this.getSchemaName() +".update_modified_"+this.getName()+"_"+attribute.getName()+"();\n");
+				sbConstraints.append("CREATE FUNCTION "+ this.getSchemaName() +".update_modified_"+this.getName()+"_"+attribute.getName()+"()\n");
+				sbConstraints.append("RETURNS TRIGGER AS $$\n");
+				sbConstraints.append("BEGIN\n");
+				sbConstraints.append("	IF row(NEW.*) IS DISTINCT FROM row(OLD.*) THEN\n");
+				sbConstraints.append("		NEW."+attribute.getName()+" = "+attribute.getSpecialFunction()+"@\n");
+				sbConstraints.append("		RETURN NEW@\n");
+				sbConstraints.append("	ELSE\n");
+				sbConstraints.append("		RETURN OLD@\n");
+				sbConstraints.append("  END IF@\n");
+				sbConstraints.append("END@\n");
+				sbConstraints.append("$$ language 'plpgsql';\n");
+				
+				if(this.getPartitionDefinition() ==null){
+					sbConstraints.append("DROP TRIGGER IF EXISTS TRG_"+ this.getSchemaName() +"_update_modified_"+this.getName()+"_"+attribute.getName()+" ON "
+											+ this.getSchemaName() +"."+this.getName()+";\n");
+					sbConstraints.append("CREATE TRIGGER TRG_"+ this.getSchemaName() +"_update_modified_"+this.getName()+"_"+attribute.getName()+" BEFORE UPDATE ON "
+							+ this.getSchemaName() +"."+this.getName()+" FOR EACH ROW EXECUTE PROCEDURE  "
+							+ this.getSchemaName() +".update_modified_"+this.getName()+"_"+attribute.getName()+"();\n");
+				}
+				else {
+					for(int ia=0; ia < ((PartitionDefinitionPostgres)this.getPartitionDefinition()).getPartitionsName().size(); ia++){
+			    		String partitionName=(String) ((PartitionDefinitionPostgres)this.getPartitionDefinition()).getPartitionsName().get(ia);
+						sbConstraints.append("DROP TRIGGER IF EXISTS TRG_"+ this.getSchemaName() +"_update_modified_"+partitionName+"_"+attribute.getName()+" ON "
+								+ this.getSchemaName() +"."+partitionName+";\n");
+						sbConstraints.append("CREATE TRIGGER TRG_"+ this.getSchemaName() +"_update_modified_"+partitionName+"_"+attribute.getName()+" BEFORE UPDATE ON "
+						+ this.getSchemaName() +"."+partitionName+" FOR EACH ROW EXECUTE PROCEDURE  "
+						+ this.getSchemaName() +".update_modified_"+this.getName()+"_"+attribute.getName()+"();\n");
+					}
+
+				}
+				
+				
+				
+			}
+			
+			//sbAtt.append(attribute.getOnUpdate()!=null?"ON UPDATE " + attribute.getOnUpdate() + " ":" ");
+
 	    }
+	    PrimaryKey pk = this.getPrimaryKey();
+	    String strPK = null;
+	    if(pk != null && this.getPartitionDefinition() == null){
+	    	sbAtt.append(",\n PRIMARY KEY (" + pk.getIndexes().getKeyasUnorderdString() + ")\n");
+	    	sbAtt.append(")\n");
+	    }
+	    if(this.getPartitionDefinition() !=null){
+	    	sbAtt.append(")\n" + ((PartitionDefinitionPostgres)this.getPartitionDefinition()).getSQLMainTablePartitionDefinition());
+	    }
+
+	    
+	    
+	    sbAtt.append(";\n");
+	    
+	    
 
 	    /*
 	     * Cycle the indexes
@@ -87,48 +224,71 @@ public class TablePostgres extends Table {
 	    /*
 	     * first PK
 	     */
-	    PrimaryKey pk = this.getPrimaryKey();
-	    String strPK = null;
 	    StringBuffer sbIdx = new StringBuffer();
-	    if(pk != null){
-		sbIdx.append(" PRIMARY KEY (" + pk.getIndexes().getKeyasUnorderdString() + ") ");
-	    }
 	    
 	    Iterator itIdx = this.getIndexes().iterator();
+	    
+	    if(this.getPartitionDefinition() !=null){
+	    	for(int ia=0; ia < ((PartitionDefinitionPostgres)this.getPartitionDefinition()).getPartitionsName().size(); ia++){
+	    		String partitionName=(String) ((PartitionDefinitionPostgres)this.getPartitionDefinition()).getPartitionsName().get(ia);
+	    		sbIdx.append("ALTER TABLE "+ partitionName +" ADD PRIMARY KEY (" + pk.getIndexes().getKeyasUnorderdString() + ");\n");
+	    	}
+	    	
+	    }
+	    
 	    if(itIdx != null){
 		while(itIdx.hasNext()){
-		    if(sbIdx.length() > 0)
-			sbIdx.append(", \n");
-		    Index idx = this.getIndex((String) itIdx.next());
-		    if(idx.isUnique()){
-			sbIdx.append(" UNIQUE `"+ idx.getName() + "` ");
-		    }else{
-			sbIdx.append(" INDEX `"+ idx.getName() + "` ");
-		    }
-		    sbIdx.append("(" + idx.getColumnsDefinitionAsString() +  ") ");
+			if(this.getPartitionDefinition() ==null){
+			    Index idx = this.getIndex((String) itIdx.next());
+			    if(idx.isUnique()){
+				sbIdx.append("CREATE UNIQUE INDEX if not exists "+ idx.getName() + " ");
+			    }else{
+				sbIdx.append("CREATE INDEX if not exists "+ idx.getName() + " ");
+			    }
+			    sbIdx.append("ON " + this.getSchemaName() +"."+ this.getName() + " ");
+			    sbIdx.append("USING BTREE(" + idx.getColumnsDefinitionAsString() +  ");\n");
+			}
+			else{
+				Index idx = this.getIndex((String) itIdx.next());
+				for(int ia=0; ia < ((PartitionDefinitionPostgres)this.getPartitionDefinition()).getPartitionsName().size(); ia++){
+					String partitionName=(String) ((PartitionDefinitionPostgres)this.getPartitionDefinition()).getPartitionsName().get(ia);				    
+				    if(idx.isUnique()){
+					sbIdx.append("CREATE UNIQUE INDEX if not exists "+ idx.getName()+ "_" + partitionName + " ");
+				    }else{
+					sbIdx.append("CREATE INDEX if not exists "+ idx.getName()+ "_" + partitionName  + " ");
+				    }
+				    sbIdx.append("ON " + this.getSchemaName() +"."+ partitionName + " ");
+				    sbIdx.append("USING BTREE(" + idx.getColumnsDefinitionAsString() +  ");\n");
+				    
+				}
+				
+			}
 		    
 		}
 	    }
 	    
 	    sbHead.append(sbAtt.toString());
+	    
+	    if(sbpartition.length() > 0)
+	    	sbHead.append(sbpartition.toString());
 	    if(sbIdx.length() > 0){
-		sbHead.append(",\n");
+//		sbHead.append("\n");
 		sbHead.append(sbIdx.toString());
+		if(sbConstraints.length() > 0)
+			sbHead.append(sbConstraints.toString());
 	    }
 
-	    /*
-	     * Attach the table definition
-	     * 
-	     */
-	    sbHead.append(sbTail.toString());
 	    
 	    /*
-	     * Add partitioninformation if present
+	     * Attach the tail table definition
+	     * 
 	     */
-	    if(this.getPartitionDefinition() !=null){
-		sbHead.append(this.getPartitionDefinition().getSQLPartitionDefinition());
-		
-	    }
+	    if(sbTail.length()> 0)
+	    	sbHead.append(sbTail.toString());
+	    
+
+	    
+
 		
 	    
 	    StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).debug( "\n"+ sbHead.toString() + "\n "  );

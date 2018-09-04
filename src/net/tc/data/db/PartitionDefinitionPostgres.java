@@ -25,7 +25,10 @@ import net.tc.utils.Utility;
 
 public class PartitionDefinitionPostgres  extends PartitionDefinition{
 	
-	
+	/** 
+	 * Specific for Postgres object
+	 */
+	private ArrayList<String> partitionsName = new ArrayList<String>();
 	
 	public static final String PARTITION_TYPE_RANGE = "RANGE";
 	public static final String PARTITION_TYPE_LIST = "LIST";
@@ -194,6 +197,38 @@ public class PartitionDefinitionPostgres  extends PartitionDefinition{
 	 * partitions and to return a string buffer containing the SQL
 	 * @return
 	 */
+    public StringBuffer getSQLMainTablePartitionDefinition() {
+	if (this == null)
+	    return null;
+
+	StringBuffer sbPartition = new StringBuffer();
+	String partitionType = this.getPartitionType();
+
+	switch (partitionType) {
+	case PartitionDefinition.PARTITION_TYPE_COLUMNS:
+	   //TODO still to do 
+//		sbPartition.append(getColumns(this));
+	    break;
+	case PartitionDefinition.PARTITION_TYPE_LIST:
+		//TODO still to do
+//		sbPartition.append(getList(this));
+	    break;
+	case PartitionDefinition.PARTITION_TYPE_RANGE:
+	    sbPartition.append(this.getRangeTableDefinition(this));
+	    break;
+	case PartitionDefinition.PARTITION_TYPE_HASH:
+		//TODO still to do
+//	    sbPartition.append(getHash(this));
+	    break;
+	case PartitionDefinition.PARTITION_TYPE_KEY:
+		//TODO still to do
+//	    sbPartition.append(getKey(this));
+	    break;
+
+	}
+	return sbPartition;
+
+    }
 	@Override
     public StringBuffer getSQLPartitionDefinition() {
 	if (this == null)
@@ -248,21 +283,40 @@ public class PartitionDefinitionPostgres  extends PartitionDefinition{
 	return sql.toString();
     }
 
+    public String getRangeTableDefinition(PartitionDefinition pd){
+    		StringBuffer sql = new StringBuffer();
+    		String name = null;
+    		String values = null;
+    		sql.append("PARTITION BY RANGE ");
+    		sql.append("(");
+    		if (pd.getFunction() != null && !pd.equals(""))
+    		    sql.append(pd.getFunction() + "(");
+    		sql.append(Utility.getArrayListAsDelimitedString(pd.getAttributes(),
+    			","));
+    		if (pd.getFunction() != null && !pd.equals(""))
+    		    sql.append(")");
+    		sql.append(")\n ");
+    		
+    		return sql.toString();
+    		
+    }
+    
+    
     @Override
     protected String getRange(PartitionDefinition pd) {
 	StringBuffer sql = new StringBuffer();
 	String name = null;
 	String values = null;
-	sql.append("PARTITION BY RANGE ");
-	sql.append("(");
-	if (pd.getFunction() != null && !pd.equals(""))
-	    sql.append(pd.getFunction() + "(");
-	sql.append(Utility.getArrayListAsDelimitedString(pd.getAttributes(),
-		","));
-	if (pd.getFunction() != null && !pd.equals(""))
-	    sql.append(")");
-	sql.append(") ");
-	sql.append("( \n");
+//	sql.append("PARTITION BY RANGE ");
+//	sql.append("(");
+//	if (pd.getFunction() != null && !pd.equals(""))
+//	    sql.append(pd.getFunction() + "(");
+//	sql.append(Utility.getArrayListAsDelimitedString(pd.getAttributes(),
+//		","));
+//	if (pd.getFunction() != null && !pd.equals(""))
+//	    sql.append(")");
+//	sql.append(") ");
+//	sql.append("( \n");
 
 	SynchronizedMap pts = null;
 	/*
@@ -279,31 +333,38 @@ public class PartitionDefinitionPostgres  extends PartitionDefinition{
 	else{
 	    pts = pd.getPartitions();
 	}
+	    String max="0";
+	    String min="0";
 	    
 	    for(int i =0; i < pts.size(); i++){
 		String key = (String) pts.getKeyasOrderedArray()[i];
 		Partition pt = (Partition) pts.get(key);
 		name = pt.getName();
 		values = pt.getValueDeclaration();
+		max = values;
+		
 		if (i > 0) {
-		    sql.append(",\n ");
+		    sql.append(";\n ");
 		}
-
-		sql.append("PARTITION ");
-		sql.append(name);
-		sql.append(" VALUES LESS THAN ");
+		String partitionTableName= name != null?"_"+name:Integer.toString(i+1);
+		this.getPartitionsName().add(this.getTableName()+"_P"+partitionTableName);
+		sql.append("CREATE TABLE "+ this.getTableName()+"_P"+ partitionTableName +" PARTITION OF "+ this.getTableName());
+//		sql.append(name);
+		sql.append(" FOR VALUES FROM ");
 		sql.append("(");
 		if (pd.getFunction() != null && !pd.equals(""))
 		    sql.append(pd.getFunction() + "(");
-		sql.append( values);
+		sql.append( min);
+		sql.append( ") TO (" + max);
 		if (pd.getFunction() != null && !pd.equals(""))
 		    sql.append(")");
 
 		sql.append(")");
+		min = max; 
 	    }
 		
 
-	sql.append("\n)");
+	sql.append(";\n");
 	return sql.toString();
 
     }
@@ -391,6 +452,14 @@ public class PartitionDefinitionPostgres  extends PartitionDefinition{
 	return partitions;
 
     }
+
+	public ArrayList getPartitionsName() {
+		return partitionsName;
+	}
+
+	private void setPartitionsName(ArrayList partitionsName) {
+		this.partitionsName = partitionsName;
+	}
 
 	
  }

@@ -239,82 +239,166 @@ public class DataType {
     public static int getDataTypeIdentifierByString(String datatypeString){
 	if(datatypeString !=null 
 	   && !datatypeString.equals("")){
-        	switch (datatypeString.toUpperCase()){
-        	case "TINYINT"	: return DataType.TINYINT; 
-        	case "SMALLINT"	: return DataType.SMALLINT; 
-        	case "MEDIUMINT" : return DataType.MEDIUMINT;	
-        	case "INT" : return DataType.INT;
-        	case "INTEGER" : return DataType.INT;
-        	case "BIGINT"	: return DataType.BIGINT; 	
-        	case "FLOAT"	: return DataType.FLOAT; 	
-        	case "DOUBLE" 	: return DataType.DOUBLE;  
-        	case "DECIMAL"	: return DataType.DECIMAL; 
-        	case "BIT"	: return DataType.BIT; 	
-        	case "YEAR"	: return DataType.YEAR; 	
-        	case "DATE"	: return DataType.DATE; 
-        	case "TIME"	: return DataType.TIME; 	
-        	case "DATETIME" : return DataType.DATETIME; 
-        	case "TIMESTAMP" : return DataType.TIMESTAMP; 	
-        	case "CHAR" : return DataType.CHAR; 
-        	case "BINARY"    : return DataType.BINARY; 
-        	case "VARCHAR"   : return DataType.VARCHAR;
-        	case "VARBINARY" : return DataType.VARBINARY;
-        	case "TINYBLOB"	: return DataType.TINYBLOB; 
-        	case "TINYTEXT" : return DataType.TINYTEXT; 
-        	case "BLOB"	: return DataType.BLOB; 
-        	case "TEXT"	: return DataType.TEXT; 
-        	case "MEDIUMBLOB" : return DataType.MEDIUMBLOB; 
-        	case "MEDIUMTEXT" : return DataType.MEDIUMTEXT; 
-        	case "LONGBLOB" : return DataType.LONGBLOB; 
-        	case "LONGTEXT" : return DataType.LONGTEXT; 
-        	case "ENUM" : return DataType.ENUM; 
-        	case "SET"	: return DataType.SET; 
-        	default: throw new IllegalArgumentException("Invalid data type: " + datatypeString.toUpperCase());
-        	
-        	}
+		 return DataType.getDataTypeIdentifierByString(datatypeString, ConnectionInformation.MYSQL);
+		
         	
 	}
-	
-	
 	return 6666;
     }
-
-    public static String getDataTypeStringByIdentifier(int dataTypeIdentifier){
-	switch (dataTypeIdentifier){
-    	case DataType.TINYINT: return "TINYINT";
-	case DataType.SMALLINT:return "SMALLINT";
-	case DataType.MEDIUMINT:return "MEDIUMINT";
-	case DataType.INT: return "INT";
-	case DataType.BIGINT:return "BIGINT";
-	case DataType.FLOAT: return "FLOAT";
-	case DataType.DOUBLE: return "DOUBLE";
-	case DataType.DECIMAL: return "DECIMAL";
-	case DataType.BIT: return "BIT";
-	case DataType.YEAR: return "YEAR";
-	case DataType.DATE: return "DATE";
-	case DataType.TIME: return "TIME";
-	case DataType.DATETIME: return "DATETIME";
-	case DataType.TIMESTAMP: return "TIMESTAMP";
-	case DataType.CHAR: return "CHAR";
-	case DataType.BINARY: return "BINARY";	    
-	case DataType.VARCHAR: return "VARCHAR";
-	case DataType.VARBINARY: return "VARBINARY";
-	case DataType.TINYBLOB: return "TINYBLOB";
-	case DataType.TINYTEXT: return "TINYTEXT";
-	case DataType.BLOB: return "BLOB"; 
-	case DataType.TEXT: return "TEXT"; 
-	case DataType.MEDIUMBLOB: return "MEDIUMBLOB"; 
-	case DataType.MEDIUMTEXT: return "MEDIUMTEXT";
-	case DataType.LONGBLOB: return "LONGBLOB";
-	case DataType.LONGTEXT: return "LONGTEXT";
-	case DataType.ENUM: return "ENUM";
-	case DataType.SET: return "SET";
-	default: throw new IllegalArgumentException("Invalid data type index: " + dataTypeIdentifier);
+    
+    public static int getDataTypeIdentifierByString(String datatypeString, String dbType){
+	if(datatypeString !=null 
+	   && !datatypeString.equals("")){
+		
+		if(dbType.equals(ConnectionInformation.MYSQL)){
+	        	switch (datatypeString.toUpperCase()){
+	        	case "TINYINT"	: return DataType.TINYINT; 
+	        	case "SMALLINT"	: return DataType.SMALLINT; 
+	        	case "MEDIUMINT" : return DataType.MEDIUMINT;	
+	        	case "INT" : return DataType.INT;
+	        	case "INTEGER" : return DataType.INT;
+	        	case "BIGINT"	: return DataType.BIGINT; 	
+	        	case "FLOAT"	: return DataType.FLOAT; 	
+	        	case "DOUBLE" 	: return DataType.DOUBLE;  
+	        	case "DECIMAL"	: return DataType.DECIMAL; 
+	        	case "BIT"	: return DataType.BIT; 	
+	        	case "YEAR"	: return DataType.YEAR; 	
+	        	case "DATE"	: return DataType.DATE; 
+	        	case "TIME"	: return DataType.TIME; 	
+	        	case "DATETIME" : return DataType.DATETIME; 
+	        	case "TIMESTAMP" : return DataType.TIMESTAMP; 	
+	        	case "CHAR" : return DataType.CHAR; 
+	        	case "BINARY"    : return DataType.BINARY; 
+	        	case "VARCHAR"   : return DataType.VARCHAR;
+	        	case "VARBINARY" : return DataType.VARBINARY;
+	        	case "TINYBLOB"	: return DataType.TINYBLOB; 
+	        	case "TINYTEXT" : return DataType.TINYTEXT; 
+	        	case "BLOB"	: return DataType.BLOB; 
+	        	case "TEXT"	: return DataType.TEXT; 
+	        	case "MEDIUMBLOB" : return DataType.MEDIUMBLOB; 
+	        	case "MEDIUMTEXT" : return DataType.MEDIUMTEXT; 
+	        	case "LONGBLOB" : return DataType.LONGBLOB; 
+	        	case "LONGTEXT" : return DataType.LONGTEXT; 
+	        	case "ENUM" : return DataType.ENUM; 
+	        	case "SET"	: return DataType.SET; 
+	        	default: throw new IllegalArgumentException("Invalid data type: " + datatypeString.toUpperCase());
+        	}
+		}
+		else if(dbType.equals(ConnectionInformation.POSTGRES)){
+	        	switch (datatypeString.toUpperCase()){
+	        	case "TINYINT"	: return DataType.SMALLINT; 
+	        	case "SMALLINT"	: return DataType.SMALLINT; 
+	        	case "MEDIUMINT" : return DataType.MEDIUMINT;	
+	        	case "INT" : return DataType.INT;
+	        	case "INTEGER" : return DataType.INT;
+	        	case "BIGINT"	: return DataType.BIGINT; 	
+	        	case "FLOAT"	: return DataType.FLOAT; 	
+	        	case "DOUBLE" 	: return DataType.DOUBLE;  
+	        	case "DECIMAL"	: return DataType.DECIMAL; 
+	        	case "BIT"	: return DataType.BIT; 	
+	        	case "YEAR"	: return DataType.YEAR; 	
+	        	case "DATE"	: return DataType.DATE; 
+	        	case "TIME"	: return DataType.TIME; 	
+	        	case "DATETIME" : return DataType.DATETIME; 
+	        	case "TIMESTAMP" : return DataType.TIMESTAMP; 	
+	        	case "CHAR" : return DataType.CHAR; 
+	        	case "BINARY"    : return DataType.BINARY; 
+	        	case "VARCHAR"   : return DataType.VARCHAR;
+	        	case "VARBINARY" : return DataType.VARBINARY;
+	        	case "TINYBLOB"	: return DataType.TINYBLOB; 
+	        	case "TINYTEXT" : return DataType.TINYTEXT; 
+	        	case "BLOB"	: return DataType.BLOB; 
+	        	case "TEXT"	: return DataType.TEXT; 
+	        	case "MEDIUMBLOB" : return DataType.MEDIUMBLOB; 
+	        	case "MEDIUMTEXT" : return DataType.MEDIUMTEXT; 
+	        	case "LONGBLOB" : return DataType.LONGBLOB; 
+	        	case "LONGTEXT" : return DataType.LONGTEXT; 
+	        	case "ENUM" : return DataType.ENUM; 
+	        	case "SET"	: return DataType.SET; 
+	        	default: throw new IllegalArgumentException("Invalid data type: " + datatypeString.toUpperCase());
+	        }
+			
+		}
         	
-        }
+	}
+	return 6666;
+    }
+    
+    public static String getDataTypeStringByIdentifier(int dataTypeIdentifier){
+		 return DataType.getDataTypeStringByIdentifier(dataTypeIdentifier, ConnectionInformation.MYSQL);
+		    	
     }
 
-        
+    public static String getDataTypeStringByIdentifier(int dataTypeIdentifier, String dbType){
+		if(dbType.equals(ConnectionInformation.MYSQL)){
+			switch (dataTypeIdentifier){
+		    case DataType.TINYINT: return "TINYINT";
+			case DataType.SMALLINT:return "SMALLINT";
+			case DataType.MEDIUMINT:return "MEDIUMINT";
+			case DataType.INT: return "INT";
+			case DataType.BIGINT:return "BIGINT";
+			case DataType.FLOAT: return "FLOAT";
+			case DataType.DOUBLE: return "DOUBLE";
+			case DataType.DECIMAL: return "DECIMAL";
+			case DataType.BIT: return "BIT";
+			case DataType.YEAR: return "YEAR";
+			case DataType.DATE: return "DATE";
+			case DataType.TIME: return "TIME";
+			case DataType.DATETIME: return "DATETIME";
+			case DataType.TIMESTAMP: return "TIMESTAMP";
+			case DataType.CHAR: return "CHAR";
+			case DataType.BINARY: return "BINARY";	    
+			case DataType.VARCHAR: return "VARCHAR";
+			case DataType.VARBINARY: return "VARBINARY";
+			case DataType.TINYBLOB: return "TINYBLOB";
+			case DataType.TINYTEXT: return "TINYTEXT";
+			case DataType.BLOB: return "BLOB"; 
+			case DataType.TEXT: return "TEXT"; 
+			case DataType.MEDIUMBLOB: return "MEDIUMBLOB"; 
+			case DataType.MEDIUMTEXT: return "MEDIUMTEXT";
+			case DataType.LONGBLOB: return "LONGBLOB";
+			case DataType.LONGTEXT: return "LONGTEXT";
+			case DataType.ENUM: return "ENUM";
+			case DataType.SET: return "SET";
+			default: throw new IllegalArgumentException("Invalid data type index: " + dataTypeIdentifier);
+            }
+		}
+		else if(dbType.equals(ConnectionInformation.POSTGRES)){
+			switch (dataTypeIdentifier){
+		    case DataType.TINYINT: return "TINYINT";
+			case DataType.SMALLINT:return "SMALLINT";
+			case DataType.MEDIUMINT:return "MEDIUMINT";
+			case DataType.INT: return "INT";
+			case DataType.BIGINT:return "BIGINT";
+			case DataType.FLOAT: return "FLOAT";
+			case DataType.DOUBLE: return "DOUBLE";
+			case DataType.DECIMAL: return "DECIMAL";
+			case DataType.BIT: return "BIT";
+			case DataType.YEAR: return "YEAR";
+			case DataType.DATE: return "DATE";
+			case DataType.TIME: return "TIME";
+			case DataType.DATETIME: return "DATETIME";
+			case DataType.TIMESTAMP: return "TIMESTAMP";
+			case DataType.CHAR: return "CHAR";
+			case DataType.BINARY: return "BINARY";	    
+			case DataType.VARCHAR: return "VARCHAR";
+			case DataType.VARBINARY: return "VARBINARY";
+			case DataType.TINYBLOB: return "TINYBLOB";
+			case DataType.TINYTEXT: return "TINYTEXT";
+			case DataType.BLOB: return "BLOB"; 
+			case DataType.TEXT: return "TEXT"; 
+			case DataType.MEDIUMBLOB: return "MEDIUMBLOB"; 
+			case DataType.MEDIUMTEXT: return "MEDIUMTEXT";
+			case DataType.LONGBLOB: return "LONGBLOB";
+			case DataType.LONGTEXT: return "LONGTEXT";
+			case DataType.ENUM: return "ENUM";
+			case DataType.SET: return "SET";
+			default: throw new IllegalArgumentException("Invalid data type index: " + dataTypeIdentifier);
+            }
+
+		}
+		return null;
+    }       
     
     /**
      * @return the dataTypeId

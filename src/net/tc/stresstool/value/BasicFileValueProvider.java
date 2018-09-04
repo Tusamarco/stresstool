@@ -101,12 +101,17 @@ public class BasicFileValueProvider extends BasicValueProvider implements ValueP
 	txtFile = ((FileHandler)sr.get()).getTextFileAsStringArray();
 	 Pattern p = Pattern.compile("\\s\\s");
 	 Pattern p2 = Pattern.compile("\"");
+	 Pattern p3 = Pattern.compile("'");
 	wordsMap = new SynchronizedMap(0); 
 	for(int i = 0 ; i < txtFile.length; i++){
 	  if(txtFile[i] != null){
 		Matcher m = p.matcher(txtFile[i]); 
     	String toClean =  m.replaceAll("");
     	m = p.matcher(toClean);
+    	toClean =  m.replaceAll("");
+    	m = p2.matcher(toClean);
+    	toClean =  m.replaceAll("");
+    	m = p3.matcher(toClean);
     	toClean =  m.replaceAll("");
 //    	addWords(toClean);    	
     	txtFile[i] = toClean;

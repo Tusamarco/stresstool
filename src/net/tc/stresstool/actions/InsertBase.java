@@ -7,6 +7,7 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -61,7 +62,7 @@ public class InsertBase extends StressActionBase implements WriteAction,
 		
 	}
 	@Override
-	public void TruncateTables(String[] tables) {
+	public void TruncateTables(Table[] tables) {
 	    Map connectionMap = super.getConnectionInformation();
 	    StringBuffer sbTableDrop = new StringBuffer();
 	    
@@ -78,8 +79,8 @@ public class InsertBase extends StressActionBase implements WriteAction,
 			
 
         		try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).info(" ==== TRUNCATE Tables, Please wait it may takes time ===="  );}catch(StressToolConfigurationException e){}
-        		for(String tb : tables){
-        		    String drop = "TRUNCATE TABLE  " + tb + " ;" ;
+        		for(Table tb : tables){
+        		    String drop = "TRUNCATE TABLE  "+tb.getSchemaName() +"." + tb.getName() + " ;" ;
         		    try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).info(drop);}catch(StressToolConfigurationException e){}
         		    stmt.execute(drop);
         		}
@@ -192,9 +193,14 @@ public class InsertBase extends StressActionBase implements WriteAction,
 				if (conn != null && !conn.isClosed()) {
 				    stmt = conn.createStatement();
 				    try {StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).info(" ==== Creating schema ====");} catch (StressToolConfigurationException e) {}
+//				    stmt.executeQuery(sbCreate.toString());
 				    String[] sqlAr = sbCreate.toString().replaceAll("\n", "").split(";");
 				    for (String sql : sqlAr){
-					stmt.addBatch(sql);
+				    if(sql.length() >2){
+				    		sql=sql.replace('@', ';');
+				    		stmt.addBatch(sql);
+				    		
+				    	}
 				    }
 				    try {StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).debug( sbCreate.toString());} catch (StressToolConfigurationException e) {}
 				    stmt.executeBatch();
@@ -233,7 +239,7 @@ public class InsertBase extends StressActionBase implements WriteAction,
 		
 	}
 	@Override
-	public boolean  DropSchema(String[] tables) {
+	public boolean  DropSchema(Table[] tables) {
 	    Map connectionMap = super.getConnectionInformation();
 	    StringBuffer sbTableDrop = new StringBuffer();
 	    
@@ -249,8 +255,8 @@ public class InsertBase extends StressActionBase implements WriteAction,
 			stmt =conn.createStatement();
 
         		try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).info(" ==== Dropping Tables, Please wait it may takes time ===="  );}catch(StressToolConfigurationException e){}
-        		for(String tb : tables){
-        		    String drop = "DROP TABLE IF EXISTS " + tb + " ;" ;
+        		for(Table tb : tables){
+        		    String drop = "DROP TABLE IF EXISTS "+ tb.getSchemaName()+"." + tb.getName() + " ;" ;
         		    try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).info(drop);}catch(StressToolConfigurationException e){}
         		    stmt.execute(drop);
         		}
@@ -467,6 +473,7 @@ public class InsertBase extends StressActionBase implements WriteAction,
 	String sqlTemplate = DataObject.SQL_INSERT_TEMPLATE;
 	SynchronizedMap SQLObjectContainer = new SynchronizedMap();
 
+
 	/**
 	 * navigate the schema object for tables then use each table to retrieve
 	 * the list of attributes if a filter exists then it is apply and only
@@ -505,10 +512,11 @@ public class InsertBase extends StressActionBase implements WriteAction,
 	    thisSQLObject.setAttribs(getAttribs((Table) table, filter));
 
 	    for (int iAttrib = 0; iAttrib < thisSQLObject.getAttribs().length; iAttrib++) {
-		if (iAttrib > 0)
+		if (iAttrib > 0 && sbAttribs.length() >2)
 		    sbAttribs.append(",");
+		if(!((Attribute) thisSQLObject.getAttribs()[iAttrib]).isAutoIncrement())
+			sbAttribs.append(((Attribute) thisSQLObject.getAttribs()[iAttrib]).getName());
 		
-		sbAttribs.append(((Attribute) thisSQLObject.getAttribs()[iAttrib]).getName());
 	    }
 
 	    if (((Table) table).getParentTable() == null) {
@@ -561,7 +569,7 @@ public class InsertBase extends StressActionBase implements WriteAction,
 	// StressToolActionException("INSERT SQL SYNTAX ISSUE values not valid or Null");
 	// }
 
-	thisSQLObject.setSQL(SQLObjectContainer);
+	thisSQLObject.setSQL((SynchronizedMap) SQLObjectContainer);
 	thisSQLObject.setInizialized(true);
 	return thisSQLObject;
     }
