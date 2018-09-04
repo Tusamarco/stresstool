@@ -35,7 +35,7 @@ public class StatsGroups {
      * @uml.property  name="eventCollectionMap"
      * @uml.associationEnd  qualifier="eventName:java.lang.String net.tc.stresstool.statistics.EventCollection"
      */
-    Map<String, EventCollection> eventCollectionMap;
+    Map eventCollectionMap;
     /**
      * @uml.property  name="parseaverage"
      */
@@ -56,7 +56,7 @@ public class StatsGroups {
 		&& !eventName.equals("")
 		&& eventCollectionMap != null 
 		&& eventCollectionMap.get(eventName) != null){
-	    return eventCollectionMap.get(eventName);
+	    return (EventCollection) eventCollectionMap.get(eventName);
 	}
 	else{
 	    ConfigValue cfv = null;

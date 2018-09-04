@@ -33,7 +33,7 @@ public class BasicFileValueProvider extends BasicValueProvider implements ValueP
     String path = null;
     String[] txtFile = null;
     int position = 0;
-    Map <String,Integer> wordsMap =null; 
+    Map wordsMap =null; 
     /*Return a random entry from the array limited by the Length 
      */
     
@@ -125,7 +125,7 @@ public class BasicFileValueProvider extends BasicValueProvider implements ValueP
   		String[] words = toClean.split(" ");
   		for(String word:words){
   		  if(wordsMap.containsKey(word.trim())){
-  			wordsMap.put(word.trim(),wordsMap.get(word.trim()).intValue()+1);
+  			wordsMap.put(word.trim(),((Long) wordsMap.get(word.trim())).intValue()+1);
   		  }
   		  else
   			wordsMap.put(word.trim(),1);

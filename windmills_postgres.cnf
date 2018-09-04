@@ -5,27 +5,27 @@
 #==========
 #DBTYPE is mandatory from this version of StressTool 
 #possible options are mysql|postgres
-#dbTypeName=postgres
-dbTypeName=mysql
+dbTypeName=postgres
+#dbTypeName=mysql
 
 #==========
 # Connection section
 #==========
 #connUrl=jdbc:mysql://192.168.1.11:6033
-connUrl=jdbc:mysql://192.168.1.55:3306
-#connUrl=jdbc:postgres://192.168.1.83:5432
+#connUrl=jdbc:mysql://192.168.1.55:3306
+connUrl=jdbc:postgres://192.168.1.83:5432
 #connUrl=jdbc:mysql://127.0.0.1:3306
-#database=test
+database=test
 schema=windmills
-database=windmills
+
 user=app1
 password=test
 connParameters=autoReconnect=true  
 connectionPool=false
 connectionPoolClass= 
 selectForceAutocommitOff=true
-stickyconnection=false
-useConnectionPool=true
+stickyconnection=true
+useConnectionPool=false
 connectionPoolType=1
 #at the moment we only support hikari
 skipPermissionTest=true
@@ -137,9 +137,9 @@ maximumPoolSize = 50
 useServerPrepStmts=true
 useLocalSessionState=true
 useLocalTransactionState=true
-rewriteBatchedStatements=true
-cacheResultSetMetadata=true
-cacheServerConfiguration=true
+rewriteBatchedStatements=false
+cacheResultSetMetadata=false
+cacheServerConfiguration=false
 autoCommits=false
 maintainTimeStats=false
 useSSL=false
@@ -195,7 +195,7 @@ sleepWrite=10
 lazyCreation=true
 lazyInterval=5
 batchSize=20
-jsonFile=wind_mill_example2.json
+jsonFile=wind_mill_example.json
 
 #deprecated
 joinField=millid

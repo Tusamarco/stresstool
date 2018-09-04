@@ -29,12 +29,12 @@ public class StatsCollection {
      * @uml.property  name="actionGroups"
      * @uml.associationEnd  qualifier="actionName:java.lang.String net.tc.stresstool.statistics.ActionGroups"
      */
-    Map<String,ActionGroups> actionGroups;
+    Map actionGroups;
     /**
      * @uml.property  name="statGroups"
      * @uml.associationEnd  qualifier="statGroupName:java.lang.String net.tc.stresstool.statistics.StatsGroups"
      */
-    Map<String,StatsGroups> statGroups;
+    Map statGroups;
     public StatsCollection() {
 	
 	statGroups = new SynchronizedMap(0);
@@ -53,7 +53,7 @@ public class StatsCollection {
         	    statsGroupsElement = createStatsGroup(providerName,providerStatsEvents);	  
         	}
         	else{
-        	    statsGroupsElement = statGroups.get(providerName);
+        	    statsGroupsElement = (StatsGroups) statGroups.get(providerName);
         	}
         	
         	statsGroupsElement = feedGroup(statsGroupsElement,providerStatsEvents);
@@ -161,7 +161,7 @@ public class StatsCollection {
      */
     public final ActionGroups getActionGroups(String actionName) {
         if(actionName != null && !actionName.equals(""))
-            return actionGroups.get(actionName);
+            return (ActionGroups) actionGroups.get(actionName);
         return null;
     }
     /**
@@ -169,7 +169,7 @@ public class StatsCollection {
      */
     public final StatsGroups getStatGroups(String statGroupName) {
         if(statGroupName != null && !statGroupName.equals(""))
-            return statGroups.get(statGroupName);
+            return (StatsGroups) statGroups.get(statGroupName);
         return null;
     }
     

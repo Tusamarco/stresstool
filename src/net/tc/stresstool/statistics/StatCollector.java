@@ -41,7 +41,7 @@ public class StatCollector {
      * @uml.property  name="providers"
      * @uml.associationEnd  qualifier="sectionName:java.lang.String net.tc.stresstool.statistics.providers.StatsProvider"
      */
-    Map<String,StatsProvider> providers ;
+    Map providers ;
     public static String PROVIDER_PARAMETER_NAME="providerclass";
     /**
      * @uml.property  name="statColl"

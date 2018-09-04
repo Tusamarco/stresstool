@@ -15,7 +15,7 @@ public class EventCollection {
      * @uml.property  name="collection"
      * @uml.associationEnd  qualifier="new:java.lang.Long net.tc.stresstool.statistics.StatEvent"
      */
-    Map<Long,StatEvent> collection;
+    Map collection;
     /**
      * @uml.property  name="minValue"
      */
@@ -51,7 +51,7 @@ public class EventCollection {
 
     public StatEvent getEvent(Long id){
 	if(collection.get(id) != null){
-	    return collection.get(id);
+	    return (StatEvent) collection.get(id);
 	}
 	else
 	    return null;

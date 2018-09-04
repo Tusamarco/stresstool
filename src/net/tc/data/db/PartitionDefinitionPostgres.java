@@ -289,12 +289,12 @@ public class PartitionDefinitionPostgres  extends PartitionDefinition{
     		String values = null;
     		sql.append("PARTITION BY RANGE ");
     		sql.append("(");
-    		if (pd.getFunction() != null && !pd.equals(""))
-    		    sql.append(pd.getFunction() + "(");
+//    		if (pd.getFunction() != null && !pd.equals(""))
+//    		    sql.append(pd.getFunction() + "(");
     		sql.append(Utility.getArrayListAsDelimitedString(pd.getAttributes(),
     			","));
-    		if (pd.getFunction() != null && !pd.equals(""))
-    		    sql.append(")");
+//    		if (pd.getFunction() != null && !pd.equals(""))
+//    		    sql.append(")");
     		sql.append(")\n ");
     		
     		return sql.toString();
@@ -324,43 +324,57 @@ public class PartitionDefinitionPostgres  extends PartitionDefinition{
 	 * in the object and date is present (start|end) then i
 	 * Partitions will be calculate
 	 */
+    String max="0";
+    String min="0";
+    boolean calculated = false;
+    
 	if (pd.getPartitions() == null
 		&& pd.getStartDate() != null 
 		&& pd.getEndDate() != null) {
 		
 		pts =(SynchronizedMap) partitionRangeCalculation(pd); 
+		calculated = true;
+
 	}
 	else{
 	    pts = pd.getPartitions();
 	}
-	    String max="0";
-	    String min="0";
+
 	    
 	    for(int i =0; i < pts.size(); i++){
-		String key = (String) pts.getKeyasOrderedArray()[i];
-		Partition pt = (Partition) pts.get(key);
-		name = pt.getName();
-		values = pt.getValueDeclaration();
-		max = values;
-		
-		if (i > 0) {
-		    sql.append(";\n ");
-		}
-		String partitionTableName= name != null?"_"+name:Integer.toString(i+1);
-		this.getPartitionsName().add(this.getTableName()+"_P"+partitionTableName);
-		sql.append("CREATE TABLE "+ this.getTableName()+"_P"+ partitionTableName +" PARTITION OF "+ this.getTableName());
-//		sql.append(name);
-		sql.append(" FOR VALUES FROM ");
-		sql.append("(");
-		if (pd.getFunction() != null && !pd.equals(""))
-		    sql.append(pd.getFunction() + "(");
-		sql.append( min);
-		sql.append( ") TO (" + max);
-		if (pd.getFunction() != null && !pd.equals(""))
-		    sql.append(")");
-
-		sql.append(")");
-		min = max; 
+			if(i == 0 && calculated ) {
+		    	String key = (String) pts.getKeyasOrderedArray()[i];
+				Partition pt = (Partition) pts.get(key);
+				name = pt.getName();
+				min = pt.getValueDeclaration();
+				
+				i++;
+			} 
+	    	
+	    	String key = (String) pts.getKeyasOrderedArray()[i];
+			Partition pt = (Partition) pts.get(key);
+			name = pt.getName();
+			values = pt.getValueDeclaration();
+			max = values;
+			
+			if (i > 0) {
+			    sql.append(";\n ");
+			}
+			String partitionTableName= name != null?"_"+name:Integer.toString(i+1);
+			this.getPartitionsName().add(this.getTableName()+"_P"+partitionTableName);
+			sql.append("CREATE TABLE "+ this.getTableName()+"_P"+ partitionTableName +" PARTITION OF "+ this.getTableName());
+	//		sql.append(name);
+			sql.append(" FOR VALUES FROM ");
+			sql.append("(");
+	//		if (pd.getFunction() != null && !pd.equals(""))
+	//		    sql.append(pd.getFunction() + "(");
+			sql.append( min);
+			sql.append( ") TO (" + max);
+	//		if (pd.getFunction() != null && !pd.equals(""))
+	//		    sql.append(")");
+	
+			sql.append(")");
+			min = max; 
 	    }
 		
 
@@ -436,6 +450,7 @@ public class PartitionDefinitionPostgres  extends PartitionDefinition{
 	    interval = Calendar.YEAR;
 	    break;
 	}
+	calCurr.add(interval, -1);
 	Partition part = null;
 	while (calCurr.before(cal2)) {
 	    calCurr.add(interval, 1);
@@ -444,7 +459,7 @@ public class PartitionDefinitionPostgres  extends PartitionDefinition{
 		    + Utility.getMonthNumber(calCurr) + "-"
 		    + Utility.getDayNumber(calCurr);
 	    part = new Partition();
-	    part.setValueDeclaration("\"" + newDate + "\"");
+	    part.setValueDeclaration("'" + newDate + "'");
 	    part.setName("PT" + newDate.replace("-", ""));
 	    partitions.put(part.getName(), part);
 	}

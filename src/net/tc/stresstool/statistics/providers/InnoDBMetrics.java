@@ -31,7 +31,7 @@ public class InnoDBMetrics extends MySQLSuper implements StatsProvider, Reporter
 //    @Override
     Map getStatus(Connection conn)  {
 	int internalOrder =0;
-        Map<String, StatEvent> statusReport = new SynchronizedMap(0);
+        Map statusReport = new SynchronizedMap(0);
 //      Map statusReport = new HashMap(0);
       
       Statement stmt = null;
