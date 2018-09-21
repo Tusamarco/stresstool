@@ -22,7 +22,7 @@ import net.tc.utils.SynchronizedMap;
 import net.tc.utils.Utility;
 import net.tc.utils.file.FileDataWriter;
 
-public class InnoDBMetrics extends MySQLSuper implements StatsProvider, Reporter {
+public class InnoDBMetrics extends BaseStatCollector implements StatsProvider, Reporter {
     public InnoDBMetrics() {
 	 super();
 	 this.setStatGroupName("INNODB_METRICS");  

@@ -237,6 +237,9 @@ public class StatCollector {
 	/*Performance evaluation section [tail] start*/
 	long performanceTimeStart = 0;
 	long performanceTimeEnd = 0;
+	Map temporaryValueMap = new SynchronizedMap(0);
+	
+	
 	try {
 	    if (StressTool.getLogProvider()
 		    .getLogger(LogProvider.LOG_PERFORMANCE).isDebugEnabled())
@@ -256,37 +259,53 @@ public class StatCollector {
 	for(int iCstat = 0 ; iCstat < providers.size(); iCstat++){
 	    sp = (StatsProvider)((SynchronizedMap)providers).getValueByPosition(iCstat);
 	    Map values =  sp.collectStatistics(conn);
-	    
-	    /* try to load information on the Stat Collection
-	     * if it failed for any reason will try 3 times then give up 
-	     */
-	    if(values != null && !statColl.processCollectedEvents(sp.getProviderName(),values)){
-		int errorRepeat = 0;
-		
-		for(int ic =0 ; ic <= 3 ;ic++){
-		  try {
-			StressTool.getLogProvider().getLogger(LogProvider.LOG_STATS).warn(ExceptionMessages.ERROR_PORCESSING_STATS 
-				+ " Provider " + sp.getProviderName() + " sent event to StatCollection but the process dicard the information \n" 
-				+ " this is the " + ic + " attempt, try again \n");
-		  } catch (StressToolException e) {
-			e.printStackTrace();
-
-		  }
-
-		  if(statColl.processCollectedEvents(sp.getProviderName(),values)){
-			ic=5;
-		  }
-
-		  throw new StressToolGenericException(ExceptionMessages.ERROR_PORCESSING_STATS 
-			  + " Provider " + sp.getProviderName() + " sent event to StatCollection but the process dicard the information ");
-
-		}
-        	
-	        
-		
+	    if(values != null) {
+	    	statColl.processCollectedEvents(sp.getProviderName(),values);
+	    	temporaryValueMap.put(sp.getProviderName(), values);
 	    }
+	    	
 	    
 	}
+	
+    /* try to load information on the Stat Collection
+     * if it failed for any reason will try 3 times then give up 
+     */
+	if(temporaryValueMap !=null 
+			&& temporaryValueMap.keySet() != null) {
+		Iterator it =temporaryValueMap.keySet().iterator();
+		
+		while (it.hasNext()) {
+			String spName = (String) it.next();
+			if(statColl != null && temporaryValueMap.get(spName) !=null){
+				Map values = (Map) temporaryValueMap.get(spName);
+				int errorRepeat = 0;
+				
+				for(int ic =0 ; ic <= 3 ;ic++){
+				  try {
+					StressTool.getLogProvider().getLogger(LogProvider.LOG_STATS).warn(ExceptionMessages.ERROR_PORCESSING_STATS 
+						+ " Provider " + sp.getProviderName() + " sent event to StatCollection but the process dicard the information \n" 
+						+ " this is the " + ic + " attempt, try again \n");
+				  } catch (StressToolException e) {
+					//e.printStackTrace();
+			
+				  }
+			
+				  try {
+				  if(statColl.processCollectedEvents(sp.getProviderName(),values)){
+					ic=5;
+				  }
+				  }catch (Throwable th) {th.printStackTrace();}
+			
+//				  throw new StressToolGenericException(ExceptionMessages.ERROR_PORCESSING_STATS 
+//					  + " Provider " + sp.getProviderName() + " sent event to StatCollection but the process dicard the information ");
+			
+				}
+			 }
+	    }
+	}
+	
+	
+	
 	/*Performance evaluation section [header] start*/
 	try {
 	    if (StressTool.getLogProvider()

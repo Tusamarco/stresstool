@@ -173,5 +173,12 @@ public class StatsCollection {
         return null;
     }
     
-    
+    public final int  getStatsGroupsSize() {
+		return this.statGroups.size();
+   
+    }
+    public final Map  getStatsGroups() {
+		return this.statGroups;
+   
+    }
 }

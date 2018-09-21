@@ -123,7 +123,7 @@ public class ConnectionProvider {
 			    	 config.addDataSourceProperty("user",connInfo.getUser());
 			    	 config.addDataSourceProperty("password",connInfo.getPassword());
 			    	 config.addDataSourceProperty("databaseName",connInfo.getDatabase());
-			    	 config.addDataSourceProperty("currentSchema",connInfo.getDatabase());
+			    	 config.addDataSourceProperty("currentSchema",connInfo.getSchema());
 			    	 
 			    	 
 			    	 config.addDataSourceProperty("PreparedStatementCacheQueries",(String)hikariConf.getParameter("prepStmtCacheSqlLimit").getValue());
@@ -257,6 +257,7 @@ public class ConnectionProvider {
     				source.setUser(connInfo.getUser());
     				source.setPassword(connInfo.getPassword());
     				source.setCurrentSchema(connInfo.getSchema());
+    				source.setPrepareThreshold(0);
     			    this.setDataSource(source);
     			    
     			    sf = new SoftReference<Connection>((Connection) this.getDataSource().getConnection());

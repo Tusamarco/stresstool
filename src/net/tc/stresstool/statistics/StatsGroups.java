@@ -196,6 +196,10 @@ public class StatsGroups {
     	
     	//return null;
     }
+
+	public Map getEventCollectionMap() {
+		return eventCollectionMap;
+	}
     
     
 

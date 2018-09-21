@@ -11,10 +11,8 @@ dbTypeName=postgres
 #==========
 # Connection section
 #==========
-#connUrl=jdbc:mysql://192.168.1.11:6033
-#connUrl=jdbc:mysql://192.168.1.55:3306
 connUrl=jdbc:postgres://192.168.1.83:5432
-#connUrl=jdbc:mysql://127.0.0.1:3306
+#connUrl=jdbc:postgres://192.168.1.118:5432
 database=test
 schema=windmills
 
@@ -35,9 +33,9 @@ skipPermissionTest=true
 # Global options
 #==========
 FKEnable=false
-createTable=true 
+createTable=false 
 
-droptable=true
+droptable=false
 truncate=false
 ignoreBinlog=false
 
@@ -62,11 +60,11 @@ doSimple=false
 #==========
 poolNumber=1
 pctInsert=100
-pctUpdate=00 
-pctSelect=000 
-pctDelete=000
+pctUpdate=100 
+pctSelect=100 
+pctDelete=50
 #repeatNumber=1
-repeatNumber=5000
+repeatNumber=2000
 
 #==========
 # console display settings
@@ -113,7 +111,7 @@ monitorlog=MONITORS
 rootdirectory=/tmp/stats
 #this parameter says to write a CSV file for each provider (in root dir)
 flushrowonfile=true
-providerclass=net.tc.stresstool.statistics.providers.ActionsReporter
+providerclass=net.tc.stresstool.statistics.providers.ActionsReporter,net.tc.stresstool.statistics.providers.PostgresStatsDBInfo,net.tc.stresstool.statistics.providers.PostgresStatsWalCeckpoints,net.tc.stresstool.statistics.providers.PostgresStatsWaits
 #,net.tc.stresstool.statistics.providers.MySQLStatus
 
 #,net.tc.stresstool.statistics.providers.InnoDBMetrics
@@ -134,10 +132,10 @@ prepStmtCacheSize=250
 prepStmtCacheSqlLimit=2048
 leakDetectionThreshold=10000
 maximumPoolSize = 50
-useServerPrepStmts=true
+useServerPrepStmts=false
 useLocalSessionState=true
 useLocalTransactionState=true
-rewriteBatchedStatements=false
+rewriteBatchedStatements=true
 cacheResultSetMetadata=false
 cacheServerConfiguration=false
 autoCommits=false
