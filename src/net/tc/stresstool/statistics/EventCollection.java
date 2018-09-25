@@ -11,42 +11,15 @@ import net.tc.utils.SynchronizedMap;
  * @author  tusa
  */
 public class EventCollection {
-    /**
-     * @uml.property  name="collection"
-     * @uml.associationEnd  qualifier="new:java.lang.Long net.tc.stresstool.statistics.StatEvent"
-     */
     Map collection;
-    /**
-     * @uml.property  name="minValue"
-     */
     long minValue = 0;
-    /**
-     * @uml.property  name="maxValue"
-     */
     long maxValue = 0 ;
-    /**
-     * @uml.property  name="averageValue"
-     */
+    long sumValue = 0 ;
     Double averageValue = new Double(0);
-    /**
-     * @uml.property  name="lastValue"
-     */
     long lastValue = 0;
-    /**
-     * @uml.property  name="historyList"
-     */
     int historyList = 350;
-    /**
-     * @uml.property  name="lastPurge"
-     */
     int lastPurge = 2;
-    /**
-     * @uml.property  name="eventName"
-     */
     String eventName;
-    /**
-     * @uml.property  name="processAverage"
-     */
     boolean processAverage = false;
 
     public StatEvent getEvent(Long id){
@@ -228,5 +201,13 @@ public class EventCollection {
 	collection = new SynchronizedMap(0);
 	
     }
+
+	public long getSumValue() {
+		return sumValue;
+	}
+
+	public void setSumValue(long sumValue) {
+		this.sumValue = sumValue;
+	}
 
 }

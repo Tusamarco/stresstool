@@ -33,34 +33,138 @@ import net.tc.utils.Utility;
 import net.tc.utils.file.FileDataWriter;
 
 public class PostgresStatsWaits extends BaseStatCollector implements StatsProvider, Reporter {
-//	 WAL set and flushes
-	 String walAndFlush="SELECT * FROM   pg_stat_archiver";
 
-//	 Check pointing info
-	 String checkPointInfo="SELECT * FROM   pg_stat_bgwriter"; 
-	  
-//	 Global info by Database
-	 String dbGlobalInfo="select * from pg_stat_database where datname='<db>'";
+	
+	
+	/* arrays to handle all the wait status currently recognized
+*/
 
-//	 CONFLICT INFO 
-	 String dbConflictInfo="select * from pg_stat_database_conflicts where datname='<db>'"; 
-	  
-//	 Sum of wait events by main event
+	
+	static private String[] LWLOCK= new String[] {"LWLock|AddinShmemInitLock","LWLock|async","LWLock|AsyncCtlLock","LWLock|AsyncQueueLock","LWLock|AutoFileLock","LWLock|AutovacuumLock","LWLock|AutovacuumScheduleLock","LWLock|BackendRandomLock","LWLock|BackgroundWorkerLock","LWLock|BtreeVacuumLock","LWLock|buffer_content","LWLock|buffer_io","LWLock|buffer_mapping","LWLock|CheckpointerCommLock","LWLock|CheckpointLock","LWLock|clog","LWLock|CLogControlLock","LWLock|CLogTruncationLock","LWLock|commit_timestamp","LWLock|CommitTsControlLock","LWLock|CommitTsLock","LWLock|ControlFileLock","LWLock|DynamicSharedMemoryControlLock","LWLock|lock_manager","LWLock|LogicalRepWorkerLock","LWLock|multixact_member","LWLock|multixact_offset","LWLock|MultiXactGenLock","LWLock|MultiXactMemberControlLock","LWLock|MultiXactOffsetControlLock","LWLock|MultiXactTruncationLock","LWLock|OidGenLock","LWLock|oldserxid","LWLock|OldSerXidLock","LWLock|OldSnapshotTimeMapLock","LWLock|parallel_query_dsa","LWLock|predicate_lock_manager","LWLock|proc","LWLock|ProcArrayLock","LWLock|RelationMappingLock","LWLock|RelCacheInitLock","LWLock|replication_origin","LWLock|replication_slot_io","LWLock|ReplicationOriginLock","LWLock|ReplicationSlotAllocationLock","LWLock|ReplicationSlotControlLock","LWLock|SerializableFinishedListLock","LWLock|SerializablePredicateLockListLock","LWLock|SerializableXactHashLock","LWLock|ShmemIndexLock","LWLock|SInvalReadLock","LWLock|SInvalWriteLock","LWLock|subtrans","LWLock|SubtransControlLock","LWLock|SyncRepLock","LWLock|SyncScanLock","LWLock|TablespaceCreateLock","LWLock|tbm","LWLock|TwoPhaseStateLock","LWLock|wal_insert","LWLock|WALBufMappingLock","LWLock|WALWriteLock","LWLock|XidGenLock"};
+	static private String[] LOCK= new String[] {"Lock|advisory","Lock|extend","Lock|object","Lock|page","Lock|relation","Lock|speculative token","Lock|transactionid","Lock|tuple","Lock|userlock","Lock|virtualxid"};
+
+	static private String[] BUFFERPIN= new String[] {"BufferPin|BufferPin"};
+
+	static private String[] ACTIVITY= new String[] {"Activity|ArchiverMain","Activity|AutoVacuumMain","Activity|BgWriterHibernate","Activity|BgWriterMain","Activity|CheckpointerMain","Activity|LogicalApplyMain","Activity|LogicalLauncherMain","Activity|PgStatMain","Activity|RecoveryWalAll","Activity|RecoveryWalStream","Activity|SysLoggerMain","Activity|WalReceiverMain","Activity|WalSenderMain","Activity|WalWriterMain"};
+
+
+	static private String[] CLIENT= new String[] {"Client|ClientRead","Client|ClientWrite","Client|LibPQWalReceiverConnect","Client|LibPQWalReceiverReceive","Client|SSLOpenServer","Client|WalReceiverWaitStart","Client|WalSenderWaitForWAL","Client|WalSenderWriteData"};
+
+	static private String[] EXTENSION= new String[] {"Extension|Extension"};
+
+	static private String[] IPC= new String[] {"IPC|BgWorkerShutdown","IPC|BgWorkerStartup","IPC|BtreePage","IPC|ExecuteGather","IPC|LogicalSyncData","IPC|LogicalSyncStateChange","IPC|MessageQueueInternal","IPC|MessageQueuePutMessage","IPC|MessageQueueReceive","IPC|MessageQueueSend","IPC|ParallelBitmapScan","IPC|ParallelFinish","IPC|ProcArrayGroupUpdate","IPC|ReplicationOriginDrop","IPC|ReplicationSlotDrop","IPC|SafeSnapshot","IPC|SyncRep"};
+
+	static private String[] TIMEOUT= new String[] {"Timeout|BaseBackupThrottle","Timeout|PgSleep","Timeout|RecoveryApplyDelay"};
+
+	static private String[] IO= new String[] {"IO|BufFileRead","IO|BufFileWrite","IO|ControlFileRead","IO|ControlFileSync","IO|ControlFileSyncUpdate","IO|ControlFileWrite","IO|ControlFileWriteUpdate","IO|CopyFileRead","IO|CopyFileWrite","IO|DataFileExtend","IO|DataFileFlush","IO|DataFileImmediateSync","IO|DataFilePrefetch","IO|DataFileRead","IO|DataFileSync","IO|DataFileTruncate","IO|DataFileWrite","IO|DSMFillZeroWrite","IO|LockFileAddToDataDirRead","IO|LockFileAddToDataDirSync","IO|LockFileAddToDataDirWrite","IO|LockFileCreateRead","IO|LockFileCreateSync","IO|LockFileCreateWrite","IO|LockFileReCheckDataDirRead","IO|LogicalRewriteCheckpointSync","IO|LogicalRewriteMappingSync","IO|LogicalRewriteMappingWrite","IO|LogicalRewriteSync","IO|LogicalRewriteWrite","IO|RelationMapRead","IO|RelationMapSync","IO|RelationMapWrite","IO|ReorderBufferRead","IO|ReorderBufferWrite","IO|ReorderLogicalMappingRead","IO|ReplicationSlotRead","IO|ReplicationSlotRestoreSync","IO|ReplicationSlotSync","IO|ReplicationSlotWrite","IO|SLRUFlushSync","IO|SLRURead","IO|SLRUSync","IO|SLRUWrite","IO|SnapbuildRead","IO|SnapbuildSync","IO|SnapbuildWrite","IO|TimelineHistoryFileSync","IO|TimelineHistoryFileWrite","IO|TimelineHistoryRead","IO|TimelineHistorySync","IO|TimelineHistoryWrite","IO|TwophaseFileRead","IO|TwophaseFileSync","IO|TwophaseFileWrite","IO|WALBootstrapSync","IO|WALBootstrapWrite","IO|WALCopyRead","IO|WALCopySync","IO|WALCopyWrite","IO|WALInitSync","IO|WALInitWrite","IO|WALRead","IO|WALSenderTimelineHistoryRead","IO|WALSyncMethodAssign","IO|WALWrite"};
+
+	private ArrayList allWAITS = new ArrayList();
+	private Map fakeStatus = new SynchronizedMap(0);
+	
+	
+
+	//	 Sum of wait events by main event
 	 String waitEventsSummary="SELECT concat(wait_event_type,'_', wait_event) wait_event,count (wait_event)  FROM pg_stat_activity WHERE wait_event is NOT NULL  group by wait_event_type,wait_event order by wait_event_type,wait_event asc"; 
-
+	 String dbGlobalInfo="";
 	 
 	 
 	 String[] statsToProcess = {waitEventsSummary};
 	 
-	 
+	 private Map eventsNamesInternal = new SynchronizedMap(0);
 	 
 	 
 	public PostgresStatsWaits() {
 	 super();
 	 this.setStatGroupName("PGSTATS_waits");
+	 allWAITS.addAll(Arrays.asList(LWLOCK));
+	 allWAITS.addAll(Arrays.asList(LOCK));
+	 allWAITS.addAll(Arrays.asList(BUFFERPIN));
+	 allWAITS.addAll(Arrays.asList(ACTIVITY));
+	 allWAITS.addAll(Arrays.asList(CLIENT));
+	 allWAITS.addAll(Arrays.asList(EXTENSION));
+	 allWAITS.addAll(Arrays.asList(IPC));
+	 allWAITS.addAll(Arrays.asList(TIMEOUT));
+	 allWAITS.addAll(Arrays.asList(IO));
+	 fillFakeStatus(allWAITS);
+	 
     }
 
-//    @Override
+	private void fillFakeStatus(ArrayList allWAITSIn) {
+		
+		Iterator it = allWAITSIn.iterator();
+		int internalOrder = 0;
+		long time = System.currentTimeMillis();
+		
+		while(it.hasNext()) {
+		
+	  	  StatEvent event = new StatEvent();
+	      
+	      String name = "";
+	      String value = "";
+	      name = (String) it.next();
+	      name = name.replace("|", "_");
+//	    		  name.substring(name.indexOf("|")+1);
+	      value = "0";
+	
+	      
+	      event.setCollection(this.statGroupName);
+	      event.setTime(time);
+	      event.setProvider(this.getClass().getCanonicalName());
+	      event.setEvent(name);
+	      event.setValue(value);
+	      event.setId(loopNumber);
+	      event.setOrder(internalOrder);
+	      
+//	      System.out.println(name + " : " + value);
+	      
+	
+	      fakeStatus.put(name,event);
+	      internalOrder++;
+		}
+		
+		
+	}
+
+	@Override
+    public Map collectStatistics(Connection conn) {
+        loopNumber++;
+        status = new SynchronizedMap(0);
+        lastSampleTime = Utility.getHour()+":"+Utility.getMinute()+":"+Utility.getSecond();
+        status = getStatus(conn);
+        
+    
+        if(status != null && status.size() >0 && eventsName == null) {
+            eventsName = ((SynchronizedMap)status).getKeyasOrderedStringArray();
+        }
+        else if(status != null && status.size() >0  && eventsName !=null) {
+            this.populateEventsNames(status);
+        }
+
+        	
+        
+        if(flushrowonfile && status !=null){
+            writeStatsOnFile(status);
+        }
+            
+        return status;
+    }	
+	
+	
+	
+    private void populateEventsNames(Map status) {
+    	String[] eventNameTemp = ((SynchronizedMap)status).getKeyasOrderedStringArray();
+    	
+    	for(String s : eventNameTemp) {
+    		if(!eventsNamesInternal.containsKey(s)) {
+//    			eventNameTemp.add(eventsName[i]);
+    			eventsNamesInternal.put(s, null);
+    		}
+    	}
+    	eventsName = ((SynchronizedMap)eventsNamesInternal).getKeyasOrderedStringArray();
+		
+	}
+
+	@Override
     Map getStatus(Connection conn)  {
 		int internalOrder =0;
 	    Map statusReport = new SynchronizedMap(0);
@@ -78,6 +182,15 @@ public class PostgresStatsWaits extends BaseStatCollector implements StatsProvid
 //    	  stmt.execute("BEGIN");
 
           long time = System.currentTimeMillis();
+          
+          statusReport.putAll(fakeStatus);
+          Iterator ifake = statusReport.keySet().iterator();
+          while(ifake.hasNext()) {
+        	  StatEvent event = new StatEvent();
+        	  String key = (String) ifake.next();
+        	  ((StatEvent)statusReport.get(key)).setTime(time);
+          }
+          
           try{
         	  stmt.execute("/* this commit is only because otherwise tPG will not refresh stats */ commit");
 
@@ -85,7 +198,7 @@ public class PostgresStatsWaits extends BaseStatCollector implements StatsProvid
         		  dbGlobalInfo = statsToProcess[sqlint];
 	        	  dbGlobalInfo=dbGlobalInfo.replaceAll("<db>", dbName);
 	        	  
-	
+	        	  
 	        	  
 	        	  
 	        	  rs = stmt.executeQuery(dbGlobalInfo);
@@ -113,14 +226,17 @@ public class PostgresStatsWaits extends BaseStatCollector implements StatsProvid
 			              event.setEvent(name);
 			              event.setValue(value);
 			              event.setId(loopNumber);
-			              event.setOrder(internalOrder);
+//			              event.setOrder(internalOrder);
 			              
-			              System.out.println(name + " : " + value);
+
 			              
-	
-			              statusReport.put(name,event);
-			              internalOrder++;
+			              if(statusReport.containsKey(name)) {
+			            	  statusReport.put(name,event);
+				              System.out.println(name + " : " + value);			            	  
+//			              internalOrder++;
+			              }
 		          }
+		          
         	  }
 	          
           }
@@ -229,7 +345,10 @@ public class PostgresStatsWaits extends BaseStatCollector implements StatsProvid
             Arrays.sort(headers);
             for(int printi=0 ; printi < headers.length;printi++) {
             	String current = headers[printi];
-            	pw.println(current + " = " + this.getResultByName(current,false) + " xsec = " + (((Long)this.getResultByName(current,false)).longValue()/(totalExecutionTime/1000)));
+            	long value = ((Long)this.getSumResultByName(current,false)).longValue();
+            	if(value > 0) {
+            		pw.println(current + " = " + value + " xsec = " + (value/(totalExecutionTime/1000)));
+            	}
             	
             }
        }

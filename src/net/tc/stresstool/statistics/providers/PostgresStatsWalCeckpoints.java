@@ -225,11 +225,18 @@ public class PostgresStatsWalCeckpoints extends BaseStatCollector implements Sta
             
             String[] headers = this.getHeadersArray(this.getProviderName());
             Arrays.sort(headers);
+//            for(int printi=0 ; printi < headers.length;printi++) {
+//            	String current = headers[printi];
+//            	pw.println(current + " = " + this.getResultByName(current,false) + " xsec = " + (((Long)this.getResultByName(current,false)).longValue()/(totalExecutionTime/1000)));
+//            	
+//            }
             for(int printi=0 ; printi < headers.length;printi++) {
             	String current = headers[printi];
-            	pw.println(current + " = " + this.getResultByName(current,false) + " xsec = " + (((Long)this.getResultByName(current,false)).longValue()/(totalExecutionTime/1000)));
+            	long value = ((Long)this.getSumResultByName(current,false)).longValue();
+            		pw.println(current + " = " + value + " xsec = " + (value/(totalExecutionTime/1000)));
             	
             }
+
        }
        catch(Throwable th){
     	   th.printStackTrace();

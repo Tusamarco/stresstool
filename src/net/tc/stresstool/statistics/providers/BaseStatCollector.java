@@ -62,8 +62,7 @@ public class BaseStatCollector implements StatsProvider, Reporter {
         lastSampleTime = Utility.getHour()+":"+Utility.getMinute()+":"+Utility.getSecond();
         status = getStatus(conn);
     
-//        if(status != null && eventsName == null)
-        if(status != null)	
+        if(status != null && eventsName == null)
             eventsName = ((SynchronizedMap)status).getKeyasOrderedStringArray();
         
         if(flushrowonfile && status !=null){
@@ -296,6 +295,28 @@ public class BaseStatCollector implements StatsProvider, Reporter {
             return "";
         }
 
+
+    protected Object getSumResultByName(String varName, boolean isString) {
+    	Long endValue = null;
+    	Long startValue = null;
+    	EventCollection eventColl = reporterGroup.getEventCollection(varName);
+    	if(!Utility.checkEntryInArray(eventsName,varName))
+    		return new Long(0);
+    	
+    	
+    	if (eventColl != null && eventColl.getCollection().size() > 0) {
+        	 
+             endValue = new Long(eventColl.getSumValue() );
+             return endValue;
+        }
+        else
+        {
+            return "Not yet implemented";
+        }
+
+     }
+
+    
     protected long getMaxResultByName(String varName, boolean isString) {
     
        	EventCollection eventColl = reporterGroup.getEventCollection(varName);
