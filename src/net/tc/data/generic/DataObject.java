@@ -302,7 +302,8 @@ public class DataObject extends MultiLanguage
 			int[] lines = new int[commands.size()];
 			
 			try{
-			 Statement stmt = (Statement) conn.createStatement();
+			 Statement stmt = (Statement) conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
+			 
 			for(int ac = 0 ; ac < commands.size(); ac++){
 				try{StressTool.getLogProvider().getLogger(LogProvider.LOG_SQL).info(commands.get(ac)  );}catch(StressToolConfigurationException e){}	
 			  ResultSet rs = null;
@@ -376,6 +377,7 @@ public class DataObject extends MultiLanguage
 		    	}
 		      }
 		    }
+//		    stmt.execute("COMMIT");
 		    stmt.addBatch("COMMIT");
 		    rows = executeSQL(stmt);
 //		    stmt.execute("COMMIT");

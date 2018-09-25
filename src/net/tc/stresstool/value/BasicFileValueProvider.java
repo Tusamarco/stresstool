@@ -33,7 +33,7 @@ public class BasicFileValueProvider extends BasicValueProvider implements ValueP
     String path = null;
     String[] txtFile = null;
     int position = 0;
-    Map <String,Integer> wordsMap =null; 
+    Map wordsMap =null; 
     /*Return a random entry from the array limited by the Length 
      */
     
@@ -101,12 +101,17 @@ public class BasicFileValueProvider extends BasicValueProvider implements ValueP
 	txtFile = ((FileHandler)sr.get()).getTextFileAsStringArray();
 	 Pattern p = Pattern.compile("\\s\\s");
 	 Pattern p2 = Pattern.compile("\"");
+	 Pattern p3 = Pattern.compile("'");
 	wordsMap = new SynchronizedMap(0); 
 	for(int i = 0 ; i < txtFile.length; i++){
 	  if(txtFile[i] != null){
 		Matcher m = p.matcher(txtFile[i]); 
     	String toClean =  m.replaceAll("");
     	m = p.matcher(toClean);
+    	toClean =  m.replaceAll("");
+    	m = p2.matcher(toClean);
+    	toClean =  m.replaceAll("");
+    	m = p3.matcher(toClean);
     	toClean =  m.replaceAll("");
 //    	addWords(toClean);    	
     	txtFile[i] = toClean;
@@ -120,7 +125,7 @@ public class BasicFileValueProvider extends BasicValueProvider implements ValueP
   		String[] words = toClean.split(" ");
   		for(String word:words){
   		  if(wordsMap.containsKey(word.trim())){
-  			wordsMap.put(word.trim(),wordsMap.get(word.trim()).intValue()+1);
+  			wordsMap.put(word.trim(),((Long) wordsMap.get(word.trim())).intValue()+1);
   		  }
   		  else
   			wordsMap.put(word.trim(),1);

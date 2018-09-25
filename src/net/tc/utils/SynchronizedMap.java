@@ -5,7 +5,7 @@ import java.io.ObjectOutputStream;
 import java.io.ObjectInputStream;
 import java.io.IOException;
 
-import net.tc.comparators.OrderByOrderProperty;
+
 /**
  * This class exist because the "normal" implementation of the Map interface has a serious BUG
  * It return as Hash code the sum of the hash code that the map itself contains that means that
@@ -13,55 +13,68 @@ import net.tc.comparators.OrderByOrderProperty;
  * load a map inside another map the new Map could  replace an existing object also if the keys
  * are different.
  *
- * More: this map implementation is using vectors internally that are automatically syncronized
+ * More: this map implementation is using vectors internally that are automatically synchronized
  */
-public class SynchronizedMap  implements Map 
+public class SynchronizedMap extends TreeMap<Object, Object>
 {
   /**
-   */
-  private Vector keys = null;
-  /**
-   */
-  private Vector values = null;
+	 * 
+	 */
+  private static final long serialVersionUID = 1L;
 
+  private Vector<Object> keys = null;
+  private Vector<Object> values = null;
+
+  
   public SynchronizedMap()
   {
-	keys = new Vector(0,1);
-	values = new Vector(0,1);
+	super();
+	keys = new Vector<Object>(0,1);
+	values = new Vector<Object>(0,1);
 
   }
+  
   public SynchronizedMap(int initialCapacity)
   {
-	keys = new Vector(initialCapacity,1);
-	values = new Vector(initialCapacity,1);
+	 super();
+	keys = new Vector<Object>(initialCapacity,1);
+	values = new Vector<Object>(initialCapacity,1);
   }
   public SynchronizedMap(int initialCapacity, int loadFactor)
   {
-	keys = new Vector(initialCapacity,loadFactor);
-	values = new Vector(initialCapacity,loadFactor);
+	  super();
+	keys = new Vector<Object>(initialCapacity,loadFactor);
+	values = new Vector<Object>(initialCapacity,loadFactor);
   }
-  public SynchronizedMap(Map m)
+  public SynchronizedMap(Map<?, ?> m)
   {
-	keys = new Vector(0,1);
-	values = new Vector(0,1);
+	  super();
+	keys = new Vector<Object>(0,1);
+	values = new Vector<Object>(0,1);
 	putAll(m);
   }
 
 
   //private Map internalValues = new HashMap();
   public static Boolean isMap = null;
-
-
-  //MAP methods
-
-  public int hashCode()
-  {
-	if( keys == null && values == null )
-	  return 0;
-
-	return keys.hashCode();
+  
+  @Override
+  public Collection values() {
+	return values;
+	  
   }
 
+  //MAP methods
+//@Override
+//  public int hashCode()
+//  {
+//	if( keys == null && values == null )
+//	  return 0;
+//
+//	return 0;
+//	//keys.hashCode();
+//  }
+@Override
   public int size()
   {
 	if( keys == null && values == null  )
@@ -70,6 +83,7 @@ public class SynchronizedMap  implements Map
 	return keys.size();
   }
 
+@Override
   public void clear()
   {
 	if( keys == null && values == null)
@@ -79,6 +93,7 @@ public class SynchronizedMap  implements Map
 	values.clear();
   }
 
+@Override
   public boolean isEmpty()
   {
 	if( keys == null && values == null  )
@@ -86,6 +101,7 @@ public class SynchronizedMap  implements Map
 	return keys.isEmpty();
   }
 
+@Override
   public boolean containsKey( Object key )
   {
 	if( keys == null )
@@ -93,6 +109,8 @@ public class SynchronizedMap  implements Map
 
 	return keys.contains( key );
   }
+
+
   public boolean containsSubKey( Object value, int pos )
   {
 	if( keys == null || keys.size() <= 0)
@@ -103,7 +121,7 @@ public class SynchronizedMap  implements Map
 	  {
 		for( int i = 0; i < keys.size(); i++ )
 		{
-		  SynchronizedMap k = ( SynchronizedMap ) keys.get( i );
+			SynchronizedMap k = ( SynchronizedMap ) keys.get( i );
 		  for(int ik = 0 ; ik < k.size() ; ik++)
 		  {
 			if( k.values.get( ik ) != null && k.values.get( ik ).equals( value ) )
@@ -117,6 +135,7 @@ public class SynchronizedMap  implements Map
 	return false;
   }
 
+  @Override
   public boolean containsValue( Object value )
   {
 	if( values == null )
@@ -124,81 +143,14 @@ public class SynchronizedMap  implements Map
 
 	return values.contains( value );
   }
-  public boolean containsInternalValue( Object value )
-  {
-	if( values == null )
-	  return false;
-
-	for(int i =0 ; i < values.size(); i++)
-	{
-	  if(value instanceof SynchronizedMap)
-	  {
-		if(((SynchronizedMap)values.get(i)).values.equals((SynchronizedMap)value))
-		  return true;
-	  }
-	  else
-	  {
-		if(values.get(i).equals(value))
-		  return true;
-	  }
-	}
-	return false;
-  }
-  public boolean containsInternalKey( Object key )
-  {
-	if( keys == null )
-	  return false;
-
-	for(int i =0 ; i < values.size(); i++)
-	{
-	  if(key instanceof SynchronizedMap)
-	  {
-		if(((SynchronizedMap)keys.get(i)).values.equals(((SynchronizedMap)key).values))
-		  return true;
-	  }
-	  else
-	  {
-		if(keys.get(i).equals(key))
-		  return true;
-	  }
-	}
-	return false;
-  }
-  public Object getInternalKey( Object key )
-  {
-	if( keys == null )
-	  return null;
-
-	for(int i =0 ; i < values.size(); i++)
-	{
-	  if(key instanceof SynchronizedMap)
-	  {
-		if(((SynchronizedMap)keys.get(i)).values.equals(((SynchronizedMap)key).values))
-		  return values.get(i);
-	  }
-	  else
-	  {
-		if(keys.get(i).equals(key))
-		  return values.get(i);
-	  }
-	}
-	return null;
-  }
-
-  public Collection values()
-  {
-	if( keys == null && values == null  )
-	  return null;
-
-	return values;
-  }
-
-  public void putAll( Map t )
+ 
+@Override
+public void putAll( Map t )
   {
 	if( t == null )
 	  return;
 	try{
-	  Iterator it = t.keySet().iterator();
+	  Iterator<?> it = t.keySet().iterator();
 	  while( it.hasNext() )
 	  {
 		Object tk = it.next();
@@ -209,48 +161,24 @@ public class SynchronizedMap  implements Map
 	{ex.printStackTrace();}
 
   }
-  public void putAll(Object key, Map t )
-  {
-	if( t == null )
-	  return;
-	try{
-	  Map tMap = new SynchronizedMap(t.size());
-	  Iterator it = t.keySet().iterator();
-	  while( it.hasNext() )
-	  {
-		Object tk = it.next();
-		Object tv = t.get( tk );
-		tMap.put(tk, tv);
-	  }
-	  put( key, tMap );
-
-	}catch(Exception ex)
-	{ex.printStackTrace();}
-
-  }
-
-
-  public Iterator iterator()
-  {
-	if(keys == null)
-	  return null;
-
-	return keys.iterator();
-  }
+ 
+@Override
   public Set keySet()
   {
 	if(keys != null)
-	  return new HashSet((Collection)keys.subList(0,keys.size()));
+	  return new HashSet<Object>((Collection<Object>)keys.subList(0,keys.size()));
 	return null;
   }
 
-
+@Override
   public Set entrySet()
   {
+	if(keys != null)
+		return new HashSet<Object>((Collection<Object>)values.subList(0,values.size()));
 	return null;
   }
 
-
+@Override
   public Object get( Object key )
   {
 	if( key == null || keys == null || values == null)
@@ -264,72 +192,8 @@ public class SynchronizedMap  implements Map
 	return null;
   }
 
-  public List get(Object inkey, int pos)
-  {
-	List l = null;
-	if( keys == null || keys.size() <= 0)
-	  return null;
-	if(keys.get(0) instanceof SynchronizedMap)
-	{
-	  if(((SynchronizedMap)keys.get(0)).keys.size() >= pos)
-	  {
-		l = new ArrayList(0);
-		for( int i = 0; i < keys.size(); i++ )
-		{
-		  SynchronizedMap k = ( SynchronizedMap ) keys.get( i );
-		  if(k.size() >= pos)
-		  {
-			if(k.values.get(pos) != null && k.values.get(pos).equals(inkey))
-			{
-			  Object o = values.get(i);
-			  l.add(o);
-			}
-
-		  }
-		}
-	  }
-	}
-	return l;
-  }
-
-  public int getAsInt( Object key )
-  {
-	if( key == null || keys == null || values == null)
-	  return 0;
-
-	try
-	{
-	  if( get( key ) instanceof Integer )
-		return( ( Integer ) get( key ) ).intValue();
-
-	  int i = Integer.parseInt( get( key ).toString() );
-	  return i;
-	}
-	catch( Exception ex )
-	{
-	  ex.printStackTrace();
-	}
-	return 0;
-
-  }
-
-
-  public String getAsString( Object key )
-  {
-	if(  key == null || keys == null || values == null)
-	  return null;
-
-	try
-	{
-	  return get( key ).toString();
-	}
-	catch( Exception ex )
-	{
-	  ex.printStackTrace();
-	}
-	return null;
-  }
-
+ 
+@Override
   public synchronized Object remove( Object key )
   {
 	if(  key == null || keys == null || values == null )
@@ -355,6 +219,8 @@ public class SynchronizedMap  implements Map
   /**
    * Insert an object into the collection
    */
+
+@Override
    public synchronized Object  put( Object tk, Object tv )
   {
 	if(  tk == null || keys == null || values == null )
@@ -370,32 +236,109 @@ public class SynchronizedMap  implements Map
 	return new Integer(index);
   }
 
-   public Object getKeyByPosition(int pos){
-	 return keys.get(pos);
-   }
-
-   public synchronized Object getValueByPosition(int pos){
-//	if(pos < this.size()){
-//		return values.get(pos);
-//	} 
-//	else{
-//		System.out.println("Error " + this.size() + values.get(values.size() -1));
-//		return values.get(pos);
-//	}
-	 return values.get(pos);
-   }
 
 
-   //*************************** COMMON Methods
-   private void writeObject( ObjectOutputStream oos ) throws IOException
+   //*************************** NOT MAP Methods
+   
+	public Object getKeyByPosition(int pos){
+		 return keys.get(pos);
+	   }
+
+
+	public synchronized Object getValueByPosition(int pos){
+		 return values.get(pos);
+	   }
+   
+   
+   public List<Object> get(Object inkey, int pos)
    {
-	 oos.defaultWriteObject();
+ 	List<Object> l = null;
+ 	if( keys == null || keys.size() <= 0)
+ 	  return null;
+ 	if(keys.get(0) instanceof SynchronizedMap)
+ 	{
+ 	  if(((SynchronizedMap)keys.get(0)).keys.size() >= pos)
+ 	  {
+ 		l = new ArrayList<Object>(0);
+ 		for( int i = 0; i < keys.size(); i++ )
+ 		{
+ 		  SynchronizedMap k = ( SynchronizedMap ) keys.get( i );
+ 		  if(k.size() >= pos)
+ 		  {
+ 			if(k.values.get(pos) != null && k.values.get(pos).equals(inkey))
+ 			{
+ 			  Object o = values.get(i);
+ 			  l.add(o);
+ 			}
+
+ 		  }
+ 		}
+ 	  }
+ 	}
+ 	return l;
    }
 
-   private void readObject( ObjectInputStream ois ) throws ClassNotFoundException, IOException
+   
+   public int getAsInt( Object key )
    {
-	 ois.defaultReadObject();
+ 	if( key == null || keys == null || values == null)
+ 	  return 0;
+
+ 	try
+ 	{
+ 	  if( get( key ) instanceof Integer )
+ 		return( ( Integer ) get( key ) ).intValue();
+
+ 	  int i = Integer.parseInt( get( key ).toString() );
+ 	  return i;
+ 	}
+ 	catch( Exception ex )
+ 	{
+ 	  ex.printStackTrace();
+ 	}
+ 	return 0;
+
    }
+
+
+   public String getAsString( Object key )
+   {
+ 	if(  key == null || keys == null || values == null)
+ 	  return null;
+
+ 	try
+ 	{
+ 	  return get( key ).toString();
+ 	}
+ 	catch( Exception ex )
+ 	{
+ 	  ex.printStackTrace();
+ 	}
+ 	return null;
+   }
+   
+   
+   private void writeObject( ObjectOutputStream oos ) 
+   {
+	 try {
+		oos.defaultWriteObject();
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+   }
+
+
+   private void readObject( ObjectInputStream ois )
+   {
+	 try {
+		ois.defaultReadObject();
+	} catch (ClassNotFoundException | IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+   }
+
 
    public synchronized Object[] getValuesAsArrayOrderByKey(){
 	 if(keys !=null && keys.size()>0){
@@ -410,6 +353,7 @@ public class SynchronizedMap  implements Map
 	 return null;
    }
 
+   
    public Object[] getValuesAsArrayOrderByKey(Object[] keys){
 	 if(keys !=null && keys.length>0){
 	   Object[] values = new Object[keys.length];
@@ -436,6 +380,7 @@ public class SynchronizedMap  implements Map
 	 }
 	 return oA;
    }
+
    public String[] getKeyasOrderedStringArray()
    {
 	 if(keys == null)
@@ -463,6 +408,7 @@ public class SynchronizedMap  implements Map
 	 return sb.toString();
    }
 
+   
    public static <K, V extends Comparable<? super V>> SortedSet<Map.Entry<K, V>> entriesSortedByValues(Map<K, V> map) {
 	 SortedSet<Map.Entry<K, V>> sortedEntries = new TreeSet<Map.Entry<K, V>>(
 		 new Comparator<Map.Entry<K, V>>() {
@@ -475,5 +421,115 @@ public class SynchronizedMap  implements Map
 	 return sortedEntries;
    }
 
+   
+   public Iterator<Object> iterator()
+   {
+ 	if(keys == null)
+ 	  return null;
 
+ 	return keys.iterator();
+   }
+
+   public void putAll(Object key, Map<?, ?> t )
+   {
+ 	if( t == null )
+ 	  return;
+ 	try{
+ 	  Map<Object, Object> tMap = new SynchronizedMap(t.size());
+ 	  Iterator<?> it = t.keySet().iterator();
+ 	  while( it.hasNext() )
+ 	  {
+ 		Object tk = it.next();
+ 		Object tv = t.get( tk );
+ 		tMap.put(tk, tv);
+ 	  }
+ 	  put( key, tMap );
+
+ 	}catch(Exception ex)
+ 	{ex.printStackTrace();}
+
+   }
+   
+   public boolean containsInternalValue( Object value )
+   {
+ 	if( values == null )
+ 	  return false;
+
+ 	for(int i =0 ; i < values.size(); i++)
+ 	{
+ 	  if(value instanceof SynchronizedMap)
+ 	  {
+ 		if(((SynchronizedMap)values.get(i)).values.equals((SynchronizedMap)value))
+ 		  return true;
+ 	  }
+ 	  else
+ 	  {
+ 		if(values.get(i).equals(value))
+ 		  return true;
+ 	  }
+ 	}
+ 	return false;
+   }
+
+   
+   public boolean containsInternalKey( Object key )
+   {
+ 	if( keys == null )
+ 	  return false;
+
+ 	for(int i =0 ; i < values.size(); i++)
+ 	{
+ 	  if(key instanceof SynchronizedMap)
+ 	  {
+ 		if(((SynchronizedMap)keys.get(i)).values.equals(((SynchronizedMap)key).values))
+ 		  return true;
+ 	  }
+ 	  else
+ 	  {
+ 		if(keys.get(i).equals(key))
+ 		  return true;
+ 	  }
+ 	}
+ 	return false;
+   }
+   
+   
+   public Object getInternalKey( Object key )
+   {
+ 	if( keys == null )
+ 	  return null;
+
+ 	for(int i =0 ; i < values.size(); i++)
+ 	{
+ 	  if(key instanceof SynchronizedMap)
+ 	  {
+ 		if(((SynchronizedMap)keys.get(i)).values.equals(((SynchronizedMap)key).values))
+ 		  return values.get(i);
+ 	  }
+ 	  else
+ 	  {
+ 		if(keys.get(i).equals(key))
+ 		  return values.get(i);
+ 	  }
+ 	}
+ 	return null;
+   }
+   
+   @Override
+   public String toString() {
+	  return  this.getClass().getName();	   
+	   
+//	   StringBuffer sb = new StringBuffer();
+//	   
+//	   Iterator it = this.keySet().iterator();
+//	   while(it.hasNext()) {
+//		   sb.append(it.toString() + ":");
+//		   
+//		   
+//	   }
+//	   return sb.toString();
+	   
+	   
+   }
+   
 }

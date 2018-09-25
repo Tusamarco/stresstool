@@ -29,12 +29,12 @@ public class StatsCollection {
      * @uml.property  name="actionGroups"
      * @uml.associationEnd  qualifier="actionName:java.lang.String net.tc.stresstool.statistics.ActionGroups"
      */
-    Map<String,ActionGroups> actionGroups;
+    Map actionGroups;
     /**
      * @uml.property  name="statGroups"
      * @uml.associationEnd  qualifier="statGroupName:java.lang.String net.tc.stresstool.statistics.StatsGroups"
      */
-    Map<String,StatsGroups> statGroups;
+    Map statGroups;
     public StatsCollection() {
 	
 	statGroups = new SynchronizedMap(0);
@@ -53,7 +53,7 @@ public class StatsCollection {
         	    statsGroupsElement = createStatsGroup(providerName,providerStatsEvents);	  
         	}
         	else{
-        	    statsGroupsElement = statGroups.get(providerName);
+        	    statsGroupsElement = (StatsGroups) statGroups.get(providerName);
         	}
         	
         	statsGroupsElement = feedGroup(statsGroupsElement,providerStatsEvents);
@@ -119,16 +119,25 @@ public class StatsCollection {
         	    	    eventCollection = group.getEventCollection(eventCollectionName);
         //	    	    Object value = event.getValue();
         	    	    if(Text.isNumeric(event.getValue())){
-        	    		Long value = Text.toLong(event.getValue(),new Long(0));
-        	    		eventCollection.setAverageValue(value);
-        	    		eventCollection.setMaxValue(value.longValue());
-        	    		eventCollection.setMinValue(value.longValue());
-        	    		if(eventCollection.getCollection().size() >=1 ){
-        	    		    event.setDeltaValue(value.longValue() -  eventCollection.lastValue);
-        	    		}
-        	    		else{
-        	    		    event.setDeltaValue(0);
-        	    		}
+	        	    		Long value = Text.toLong(event.getValue(),new Long(0));
+	        	    		eventCollection.setAverageValue(value);
+	        	    		eventCollection.setMaxValue(value.longValue());
+	        	    		eventCollection.setMinValue(value.longValue());
+	        	    		
+	        	    		if(eventCollection.getCollection().size() >=1 ){
+	        	    			if(value.longValue() >  eventCollection.lastValue ) {
+	        	    				event.setDeltaValue(value.longValue() -  eventCollection.lastValue);
+	        	    			}
+	        	    			else {
+	        	    				event.setDeltaValue(value.longValue());
+	        	    			}
+	        	    		}
+	        	    		else{
+	        	    		    event.setDeltaValue(0);
+	        	    		}
+	        	    		eventCollection.setLastValue(value.longValue());
+//	        	    		System.out.println(eventCollectionName + " = " + eventCollection.lastValue);
+	        	    		eventCollection.setSumValue(eventCollection.getSumValue() + (long)event.getDeltaValue());
         	    	    }
         	    	    eventCollection.setEvent(event);
         	    	    group.setEventCollection(eventCollectionName, eventCollection);
@@ -161,7 +170,7 @@ public class StatsCollection {
      */
     public final ActionGroups getActionGroups(String actionName) {
         if(actionName != null && !actionName.equals(""))
-            return actionGroups.get(actionName);
+            return (ActionGroups) actionGroups.get(actionName);
         return null;
     }
     /**
@@ -169,9 +178,16 @@ public class StatsCollection {
      */
     public final StatsGroups getStatGroups(String statGroupName) {
         if(statGroupName != null && !statGroupName.equals(""))
-            return statGroups.get(statGroupName);
+            return (StatsGroups) statGroups.get(statGroupName);
         return null;
     }
     
-    
+    public final int  getStatsGroupsSize() {
+		return this.statGroups.size();
+   
+    }
+    public final Map  getStatsGroups() {
+		return this.statGroups;
+   
+    }
 }

@@ -15,6 +15,7 @@ import java.util.Vector;
 import org.apache.log4j.Logger;
 
 import com.mysql.cj.jdbc.exceptions.CommunicationsException;
+import org.postgresql.jdbc.PgResultSetMetaData;
 
 import net.tc.data.db.ConnectionProvider;
 import net.tc.stresstool.PerformanceEvaluator;
@@ -30,16 +31,38 @@ import net.tc.utils.SynchronizedMap;
 import net.tc.utils.Utility;
 import net.tc.utils.file.FileDataWriter;
 
-public class MySQLStatus extends BaseStatCollector implements StatsProvider, Reporter {
-    public MySQLStatus() {
+public class PostgresStatsBasic extends BaseStatCollector implements StatsProvider, Reporter {
+//	 WAL set and flushes
+	 String walAndFlush="SELECT * FROM   pg_stat_archiver";
+
+//	 Check pointing info
+	 String checkPointInfo="SELECT * FROM   pg_stat_bgwriter"; 
+	  
+//	 Global info by Database
+	 String dbGlobalInfo="select * from pg_stat_database where datname='<db>'";
+
+//	 CONFLICT INFO 
+	 String dbConflictInfo="select * from pg_stat_database_conflicts where datname='<db>'"; 
+	  
+//	 Sum of wait events by main event
+	 String waitEventsSummary="SELECT wait_event_type, wait_event,count (wait_event)  FROM pg_stat_activity WHERE wait_event is NOT NULL  group by wait_event_type,wait_event order by wait_event_type,wait_event asc"; 
+
+	 
+	 
+	 String[] statsToProcess = {dbGlobalInfo, dbConflictInfo};
+	 
+	 
+	 
+	 
+	public PostgresStatsBasic() {
 	 super();
-	 this.setStatGroupName("STATUS");
+	 this.setStatGroupName("PGSTATS_DB");
     }
 
 //    @Override
     Map getStatus(Connection conn)  {
-	int internalOrder =0;
-        Map statusReport = new SynchronizedMap(0);
+		int internalOrder =0;
+	    Map statusReport = new SynchronizedMap(0);
 //      Map statusReport = new HashMap(0);
       
       Statement stmt = null;
@@ -47,109 +70,89 @@ public class MySQLStatus extends BaseStatCollector implements StatsProvider, Rep
       if(conn == null)
           return null;
       try{
-          stmt = conn.createStatement();
+    	  String dbName = null;
+    	  dbName= conn.getMetaData().getURL().substring(0,conn.getMetaData().getURL().indexOf('?')).substring(conn.getMetaData().getURL().lastIndexOf('/')+1);
+    	  
+    	  stmt = conn.createStatement();
+//    	  stmt.execute("BEGIN");
 
           long time = System.currentTimeMillis();
           try{
-              rs = stmt.executeQuery("SHOW GLOBAL STATUS");
-              /* TIME must be present in any collected stats
-               * Filling the base Event entity
-               */
-	          while(rs.next())
-	          {
-	              StatEvent event = new StatEvent();
-	              
-	              String name = "";
-	              String value = "";
-	              name = rs.getString("Variable_name");
-	              value = rs.getString("Value");
-	              event.setCollection(this.statGroupName);
-	              event.setTime(time);
-	              event.setProvider(this.getClass().getCanonicalName());
-	              event.setEvent(name);
-	              event.setValue(value);
-	              event.setId(loopNumber);
-	              event.setOrder(internalOrder);
-	              
-	              statusReport.put(name,event);
-	              internalOrder++;
-	          }
+        	  stmt.execute("/* this commit is only because otherwise tPG will not refresh stats */ commit");
+
+        	  for(int sqlint = 0 ;sqlint < statsToProcess.length; sqlint++) {
+        		  dbGlobalInfo = statsToProcess[sqlint];
+	        	  dbGlobalInfo=dbGlobalInfo.replaceAll("<db>", dbName);
+	        	  
+	
+	        	  
+	        	  
+	        	  rs = stmt.executeQuery(dbGlobalInfo);
+	              /* TIME must be present in any collected stats
+	               * Filling the base Event entity
+	               */
+	              org.postgresql.jdbc.PgResultSetMetaData rsm = (org.postgresql.jdbc.PgResultSetMetaData) rs.getMetaData();
+		          while(rs.next())
+		          {
+		              
+		        	  for(int ifid =1 ; ifid <= rs.getMetaData().getColumnCount(); ifid++) { 
+		        	  
+			        	  StatEvent event = new StatEvent();
+			              
+			              String name = "";
+			              String value = "";
+			              name = rsm.getColumnLabel(ifid);
+			              value = rs.getObject(name)!=null?(String) rs.getObject(name).toString():"0";
+			              event.setCollection(this.statGroupName);
+			              event.setTime(time);
+			              event.setProvider(this.getClass().getCanonicalName());
+			              event.setEvent(name);
+			              event.setValue(value);
+			              event.setId(loopNumber);
+			              event.setOrder(internalOrder);
+			              
+			              System.out.println(name + " : " + value);
+			              
+	
+			              statusReport.put(name,event);
+			              internalOrder++;
+		        	  }
+		          }
+        	  }
+	          
           }
           catch(Exception sqlx){
         	 // sqlx.printStackTrace();
               try{
+            	  sqlx.printStackTrace();
             	  rs.close();
             	  rs = null;
             	  stmt.close();
             	  stmt = null;
+            	  
 //              return statusReport;
             	  return null;
               }catch(Throwable th ){return null;}
+        }finally {
+        	rs.close();
+        	stmt.close();
+        	rs=null;
+        	stmt=null;
         }
          
- /*         
-          rs = stmt.executeQuery("SELECT * from ndbinfo.counters");
-          while(rs.next())
-          {
-              StatEvent event = new StatEvent();
-              String name = "";
-              String value = "";
-              String id = "" ;
-              String block="";
-              String instance="";
-              name = rs.getString("counter_name");
-              value = rs.getString("val");
-              id = rs.getString("node_id"); 
-              block=rs.getString("block_name");
-              instance=rs.getString("block_instance");
-              name = name + "_" + block + "_" + id + "_" + instance;
-              event.setCollection(this.statGroupName);
-              event.setTime(time);
-              event.setProvider(this.getClass().getCanonicalName());
-              event.setEvent(name);
-              event.setValue(value);
-              event.setId(loopNumber);
-              event.setOrder(internalOrder);
-              
-              statusReport.put(name,event);
-              internalOrder++;
-          }
-   */       
+
           	
       }
       catch (Exception eex)
       {
           try {
         	  	throw new StressToolGenericException(eex);
+//        	  	eex.printStackTrace();
           	  } catch (StressToolGenericException e) {
           		  	e.printStackTrace();
           	  	}
       }
-//      finally
-//      {
-//          try {
-//              rs.close();
-//              rs = null;
-//              stmt.close();
-//              stmt = null;
-//              return statusReport;
-//              
-//          } catch (SQLException ex) {
-//  			ex.printStackTrace();
-//          }
-//
-//      }
-      try {
-    	  rs.close();
-	      rs = null;
-	      stmt.close();
-	      stmt = null;
 	      return statusReport;
-      } catch (SQLException e) {
-			e.printStackTrace();
-      }
-
-      return null;
     }
 
     @Override

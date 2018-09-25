@@ -1,8 +1,8 @@
 [main]
 #connection oriented settings
-#connUrl=jdbc:mysql://192.168.0.5:3306
-connUrl=jdbc:mysql://127.0.0.1:3307
-database=test3
+connUrl=jdbc:mysql://192.168.0.5:3306
+#connUrl=jdbc:mysql://127.0.0.1:3306
+database=asterisk
 user=stress	
 password=test
 connParameters=autoReconnect=true  
@@ -19,21 +19,21 @@ doDelete=false
 doReport=true 
 doSimple=false 
 doSimplePk=false 
-droptable=false
+droptable=true
 ignoreBinlog=false
 operationShort=true  
-poolNumber=10
+poolNumber=20
 pctInsert=50
 pctUpdate=100 
-pctSelect=0 
+pctSelect=00 
 pctDelete=100 
 #repeatNumber=1
-repeatNumber=5000
+repeatNumber=20000
 HardStopLimit=1000
 UseHardStop=false
-StatIntervalMs=100
+StatIntervalMs=1000
 StatLoops = 100
-SemaphoreCountdownTime = 2
+SemaphoreCountdownTime = 3
 # table engine comma separated with % value; 
 TableEngine=InnoDB|90,MyISAM|10
 truncate=false
@@ -50,21 +50,21 @@ ValueProvider=net.tc.stresstool.value.BasicFileValueProvider
 
 
 
-logPathStats=/tmp/stats.csv
-logPathStatReport=/tmp/reportstat.txt
-logPathReport=/tmp/report.txt
+#logPathStats=/tmp/stats.csv
+#logPathStatReport=/tmp/reportstat.txt
+#logPathReport=/tmp/report.txt
 appendLogStat=true
 insertStatHeaders=true
 appendLogReport=true
 
-datafilepath=/opt/shakespere.txt
+datafilepath=shakespere.txt
 
 
 #manage the calendar options
 # YYYY-MM-DD HH:MM:SS
 # daysdiffernce is the target/final date of the period 
-calendardate=2016-11-25 05:01:06 
-daysdiffernce=200
+calendardate=2017-03-31 00:00:01 
+daysdiffernce=90
 
 
 [logs]
@@ -79,6 +79,7 @@ rootdirectory=/tmp/stats
 #this parameter says to write a CSV file for each provider (in root dir)
 flushrowonfile=true
 providerclass=net.tc.stresstool.statistics.providers.MySQLStatus
+#,net.tc.stresstool.statistics.providers.InnoDBMetrics
 #,net.tc.stresstool.statistics.providers.InnoDB
 #,net.tc.stresstool.statistics.providers.MySQLPerfSchema,net.tc.stresstool.statistics.providers.MySQLSProclist
 eventhistory=350
@@ -88,9 +89,9 @@ processaverage=true
 
 
 [net.tc.stresstool.actions.DeleteBase] 
-sleepDelete=100 
+sleepDelete=0 
 usePrepareStatement=false
-deleteRange = 100
+deleteRange = 1
 batchSize=1
 lazyInterval=0
 lazyDelete=false
@@ -121,26 +122,12 @@ usePrepareStatement=false
 numberOfprimaryTables=1
 numberOfSecondaryTables=0
 useAutoIncrement=true
-joinField=a
-sleepWrite=500
+joinField=millid
+sleepWrite=10000
 lazyCreation=true
-lazyInterval=10
+lazyInterval=1
 batchSize=1
-#jsonFile=/Users/marcotusa/programs/JBuilder/workspace/stresstool/json_definition_long.json
-#jsonFile=/Users/marcotusa/programs/JBuilder/workspace/stresstool/json_definition.json
-#jsonFile=/Users/marcotusa/programs/JBuilder/workspace/stresstool/json_simplePk.json
-jsonFile=/Users/marcotusa/programs/JBuilder/workspace/stresstool/json_simplePk_test_for_Page.json
-
-#[net.tc.stresstool.actions.InsertEmployeesTest]
-#usePrepareStatement=false
-#numberOfprimaryTables=1
-#numberOfSecondaryTables=1
-#useAutoIncrement=true
-#joinField=a
-#sleepWrite=100
-#lazyCreation=true
-#lazyInterval=200
-#batchSize=50
+jsonFile=astrisk.json
 
 
 
@@ -153,7 +140,7 @@ numberOfprimaryTables=1
 numberOfSecondaryTables=0
 useAutoIncrement=true
 joinField=a
-sleepUpdate=500
+sleepUpdate=0
 lazyUpdate=false
-lazyInterval=10
-batchSize=10
+lazyInterval=1
+batchSize=1

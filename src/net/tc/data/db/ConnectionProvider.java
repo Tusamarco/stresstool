@@ -4,8 +4,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.lang.ref.SoftReference;
 import java.sql.SQLException;
+import java.util.Properties;
 
 import javax.sql.DataSource;
+
+import org.postgresql.ds.PGPoolingDataSource;
+import org.postgresql.ds.PGSimpleDataSource;
 
 import com.zaxxer.hikari.*;
 
@@ -16,6 +20,7 @@ import net.tc.stresstool.exceptions.StressToolException;
 import net.tc.stresstool.logs.LogProvider;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 
 public class ConnectionProvider {
     private ConnectionInformation connInfo = null;
@@ -30,13 +35,16 @@ public class ConnectionProvider {
 		
 		connInfo.setConnUrl((String) configuration.getParameter("connUrl").getValue());
 		connInfo.setDatabase((String)configuration.getParameter("database").getValue());
+		connInfo.setSchema((String)configuration.getParameter("schema").getValue());
 	    connInfo.setUser((String) configuration.getParameter("user").getValue());
 	    connInfo.setPassword(configuration.getParameter("password")!=null?(String) configuration.getParameter("password").getValue():null);
-	    connInfo.setDbType((String) configuration.getParameter("dbType").getValue());
+	    connInfo.setDbType((String) configuration.getParameter("dbTypeName").getValue());
 	    connInfo.setConnParameters((String) configuration.getParameter("connParameters").getValue());
 	    connInfo.setSelectForceAutocommitOff((Boolean)Boolean.parseBoolean((String)configuration.getParameter("selectForceAutocommitOff").getValue()));
 	    if(configuration.getParameter("useConnectionPool").getValue()!=null)connInfo.setConnectionPool((Boolean)Boolean.parseBoolean((String)configuration.getParameter("useConnectionPool").getValue()));
 	    if(configuration.getParameter("connectionPoolType").getValue()!=null)connInfo.setConnectionPoolType((Integer)Integer.parseInt((String)configuration.getParameter("connectionPoolType").getValue()));
+	    if(connInfo.getDbType().toUpperCase().equals(ConnectionInformation.MYSQL) && !connInfo.getSchema().equals("") ){connInfo.setDatabase(connInfo.getSchema());}
+	    
 
     }
 
@@ -79,12 +87,10 @@ public class ConnectionProvider {
 
     public Connection getHikariConnection()throws SQLException {
 	if(this.connInfo != null){
-		    Connection conn;
-		    
-		    SoftReference sf = null;
+		    SoftReference<Connection> sf = null;
 			if (this.getDataSource() !=null 
 					&& (this.getDataSource() instanceof HikariDataSource)){
-				sf = new SoftReference<Connection>( conn= (Connection) this.getDataSource().getConnection());
+				sf = new SoftReference<Connection>( (Connection) this.getDataSource().getConnection());
 			}
 			else{
 				DataSource datasource;
@@ -110,20 +116,45 @@ public class ConnectionProvider {
 //			     config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
 //			     config.addDataSourceProperty("useSSL", "false");
 //			     config.setIdleTimeout(1000);
-
+			     
+			     if(connInfo.getDbType().toUpperCase().equals(connInfo.POSTGRES)) {	
+			    	 config.setDataSourceClassName("org.postgresql.ds.PGSimpleDataSource");
+			    	 config.addDataSourceProperty("serverName",connInfo.getConnUrl().replaceAll("jdbc:postgres://", ""));
+			    	 config.addDataSourceProperty("user",connInfo.getUser());
+			    	 config.addDataSourceProperty("password",connInfo.getPassword());
+			    	 config.addDataSourceProperty("databaseName",connInfo.getDatabase());
+			    	 config.addDataSourceProperty("currentSchema",connInfo.getSchema());
+			    	 
+			    	 
+			    	 config.addDataSourceProperty("PreparedStatementCacheQueries",(String)hikariConf.getParameter("prepStmtCacheSqlLimit").getValue());
+			    	 config.addDataSourceProperty("PreparedStatementCacheSizeMiB",(String)hikariConf.getParameter("prepStmtCacheSize").getValue()  );
+//				     config.addDataSourceProperty("useServerPrepStmts",(String) hikariConf.getParameter("useServerPrepStmts").getValue());
+//				     config.addDataSourceProperty("cachePrepStmts", (String) hikariConf.getParameter("cachePrepStmts").getValue());
+				     config.addDataSourceProperty("ReWriteBatchedInserts",(String) hikariConf.getParameter("rewriteBatchedStatements").getValue());
+				     config.addDataSourceProperty("ssl",(String) hikariConf.getParameter("useSSL").getValue());
+//				     config.addDataSourceProperty("cacheServerConfiguration",(String) hikariConf.getParameter("cacheServerConfiguration").getValue());
+//				     config.addDataSourceProperty("cacheResultSetMetadata",(String) hikariConf.getParameter("cacheResultSetMetadata").getValue());
+//				     config.addDataSourceProperty("maintainTimeStats",(String) hikariConf.getParameter("maintainTimeStats").getValue());
+			    	 
+			    	 
+			     }
+			    	 
 			     config.setMaximumPoolSize(Integer.parseInt((String) hikariConf.getParameter("maximumPoolSize").getValue()));
 			     config.setAutoCommit(Boolean.parseBoolean((String) hikariConf.getParameter("autoCommits").getValue()));
 			     config.setLeakDetectionThreshold(Long.parseLong((String) hikariConf.getParameter("leakDetectionThreshold").getValue()));
-			     config.addDataSourceProperty("useServerPrepStmts",(String) hikariConf.getParameter("useServerPrepStmts").getValue());
-			     config.addDataSourceProperty("cachePrepStmts", (String) hikariConf.getParameter("cachePrepStmts").getValue());
-			     config.addDataSourceProperty("prepStmtCacheSize",(String)hikariConf.getParameter("prepStmtCacheSize").getValue()  );
-			     config.addDataSourceProperty("prepStmtCacheSqlLimit",(String)hikariConf.getParameter("prepStmtCacheSqlLimit").getValue());
-			     config.addDataSourceProperty("useSSL",(String) hikariConf.getParameter("useSSL").getValue());
 			     
-			     config.addDataSourceProperty("rewriteBatchedStatements",(String) hikariConf.getParameter("rewriteBatchedStatements").getValue());
-			     config.addDataSourceProperty("cacheResultSetMetadata",(String) hikariConf.getParameter("cacheResultSetMetadata").getValue());
-			     config.addDataSourceProperty("cacheServerConfiguration",(String) hikariConf.getParameter("cacheServerConfiguration").getValue());
-			     config.addDataSourceProperty("maintainTimeStats",(String) hikariConf.getParameter("maintainTimeStats").getValue());
+			     if(!connInfo.getDbType().toUpperCase().equals(connInfo.POSTGRES)) {
+			    	 config.addDataSourceProperty("prepStmtCacheSqlLimit",(String)hikariConf.getParameter("prepStmtCacheSqlLimit").getValue());
+			    	 config.addDataSourceProperty("prepStmtCacheSize",(String)hikariConf.getParameter("prepStmtCacheSize").getValue()  );
+				     config.addDataSourceProperty("useServerPrepStmts",(String) hikariConf.getParameter("useServerPrepStmts").getValue());
+				     config.addDataSourceProperty("cachePrepStmts", (String) hikariConf.getParameter("cachePrepStmts").getValue());
+				     config.addDataSourceProperty("rewriteBatchedStatements",(String) hikariConf.getParameter("rewriteBatchedStatements").getValue());
+				     config.addDataSourceProperty("useSSL",(String) hikariConf.getParameter("useSSL").getValue());
+				     config.addDataSourceProperty("cacheServerConfiguration",(String) hikariConf.getParameter("cacheServerConfiguration").getValue());
+				     config.addDataSourceProperty("cacheResultSetMetadata",(String) hikariConf.getParameter("cacheResultSetMetadata").getValue());
+				     config.addDataSourceProperty("maintainTimeStats",(String) hikariConf.getParameter("maintainTimeStats").getValue());
+			    	 
+ 			     }
 			     config.setIdleTimeout(Integer.parseInt((String) hikariConf.getParameter("idleTimeout").getValue()));
 		     
 			     
@@ -149,12 +180,11 @@ public class ConnectionProvider {
 			     
 			     
 			     datasource = new HikariDataSource(config);
-			    
-
+			     
 			     this.setDataSource(datasource);
 			    
 //			    sf = new SoftReference<Connection>(conn= (Connection) DriverManager.getConnection(connectionString)); 
-			    sf = new SoftReference<Connection>(conn= (Connection) datasource.getConnection());
+			    sf = new SoftReference<Connection>((Connection) datasource.getConnection());
 			}
 //		    conn= (Connection) DriverManager.getConnection(connectionString);
 		    
@@ -165,12 +195,11 @@ public class ConnectionProvider {
 	return null;
     }
     
-    public Connection getSimpleConnection()throws SQLException {
+    public Connection getSimpleMySQLConnection()throws SQLException {
 	if(this.connInfo != null){
-		SoftReference sf = null;
-		Connection conn;
+		SoftReference<Connection> sf = null;
 		if (this.getDataSource() !=null ){
-			sf = new SoftReference<Connection>( conn= (Connection) this.getDataSource().getConnection());
+			sf = new SoftReference<Connection>( (Connection) this.getDataSource().getConnection());
 //			if(connInfo.isSelectForceAutocommitOff()){
 //				((Connection) sf.get()).setAutoCommit(false);
 //			}
@@ -193,7 +222,7 @@ public class ConnectionProvider {
 			    myDataSource.setUrl(connectionString);
 			    this.setDataSource(myDataSource);
 			    
-			    sf = new SoftReference<Connection>(conn= (Connection) this.getDataSource().getConnection());
+			    sf = new SoftReference<Connection>((Connection) this.getDataSource().getConnection());
 			}catch(Exception ex){ex.printStackTrace();}
 			finally{
 				if(connInfo.isSelectForceAutocommitOff()){
@@ -207,38 +236,67 @@ public class ConnectionProvider {
 		return null;
 		   
 	 }
+    
+    public Connection getSimplePGConnection()throws SQLException {
+    	if(this.connInfo != null){
+    		SoftReference<Connection> sf = null;
+    		if (this.getDataSource() !=null ){
+    			sf = new SoftReference<Connection>( (Connection) this.getDataSource().getConnection());
+//    			if(connInfo.isSelectForceAutocommitOff()){
+//    				((Connection) sf.get()).setAutoCommit(false);
+//    			}
 
-//    public Connection getSimpleConnection()throws SQLException {
-//	if(this.connInfo != null){
-//		
-//		    Connection conn;
-//		    SoftReference sf = null;
-//		    if(connInfo.getDbType()!= null &&  !connInfo.getDbType().toLowerCase().equals("MySQL".toLowerCase()))
-//		    {
-//		    	
-//		    	conn=(Connection) DriverManager.getConnection((String)connInfo.getDbType(),"test", "test");
-//		    }
-//		    else{
-//		    String connectionString = connInfo.getConnUrl()
-//		        	    +"/"+ connInfo.getDatabase()
-//		        	    +"?user="+connInfo.getUser()
-//		        	    +"&password="+ connInfo.getPassword()
-//		        	    +"&"+ connInfo.getConnParameters();
-//		    
-//		    sf = new SoftReference<Connection>(conn= (Connection) DriverManager.getConnection(connectionString));
-////		    conn= (Connection) DriverManager.getConnection(connectionString);
-//		    }
-//		    return (Connection) sf.get();
-//	 }
-//
-//	
-//	return null;
-//    }
+    		}
+    		else{
+    		
+    			try{
+    				
+    				PGSimpleDataSource source = new PGSimpleDataSource(); 
+    				source.setServerName(connInfo.getConnUrl().replaceAll("jdbc:postgres://", ""));
+    				source.setDatabaseName(connInfo.getDatabase());
+    				source.setUser(connInfo.getUser());
+    				source.setPassword(connInfo.getPassword());
+    				source.setCurrentSchema(connInfo.getSchema());
+    				source.setPrepareThreshold(0);
+    			    this.setDataSource(source);
+    			    
+    			    sf = new SoftReference<Connection>((Connection) this.getDataSource().getConnection());
+    			}catch(Exception ex){ex.printStackTrace();}
+    			finally{
+    				if(connInfo.isSelectForceAutocommitOff()){
+    					((Connection) sf.get()).setAutoCommit(false);
+    				}
+    			}
+    		 }
+    		 return (Connection) sf.get();
+    	   }
+    		
+    		return null;
+    		   
+    	 }
+    @Deprecated
+    public Connection getSimpleConnection()throws SQLException {
+    	if(this.connInfo != null){
+			 switch (connInfo.getDbType().toUpperCase()) { 
+			 case ConnectionInformation.MYSQL: 		return this.getSimpleMySQLConnection();
+			 case ConnectionInformation.POSTGRES:	return this.getSimplePGConnection();
+    			
+    		}
+    	 }
+    	
+    	
+    	return null;
+        }
 
     public Connection getConnection()throws SQLException {
     	if(this.connInfo != null){
     		if (!this.connInfo.isConnectionPool())
-    			return this.getSimpleConnection();
+    			 switch (connInfo.getDbType().toUpperCase()) { 
+    			 case ConnectionInformation.MYSQL: 		return this.getSimpleMySQLConnection();
+    			 case ConnectionInformation.POSTGRES:	return this.getSimplePGConnection();
+    			 }
+    			
+    			
     		else{
     			
     			 switch (connInfo.getConnectionPoolType()) {

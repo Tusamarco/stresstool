@@ -7,12 +7,12 @@ import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.Map;
 
-import net.tc.stresstool.statistics.providers.MySQLSuper;
+import net.tc.stresstool.statistics.providers.BaseStatCollector;
 import net.tc.utils.SynchronizedMap;
 import net.tc.utils.Utility;
 
-
-public class MySQLParitionHandler extends MySQLSuper{
+@Deprecated
+public class MySQLParitionHandler extends BaseStatCollector{
     PartitionDefinition partitionDefinition = null;
     
     public MySQLParitionHandler(PartitionDefinition partitionDefinition){

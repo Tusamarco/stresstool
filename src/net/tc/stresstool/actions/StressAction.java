@@ -2,8 +2,8 @@ package net.tc.stresstool.actions;
 
 import java.util.Map;
 
+import net.tc.data.db.DbType;
 import net.tc.data.db.Schema;
-import net.tc.stresstool.DbType;
 import net.tc.stresstool.config.ConfigurationImplementation;
 import net.tc.stresstool.exceptions.StressToolActionException;
 import net.tc.stresstool.statistics.ActionTHElement;
@@ -329,7 +329,7 @@ public interface StressAction {
 	/* (non-Javadoc)
 	 * @see net.tc.stresstool.actions.StressAction#setDBType(net.tc.stresstool.DbType)
 	 */
-	public abstract void setDBType(DbType dbTypeIn);
+	public abstract void setdbType(String dbTypeIn);
 
 	/* (non-Javadoc)
 	 * @see net.tc.stresstool.actions.StressAction#setId(long)
@@ -355,5 +355,7 @@ public interface StressAction {
 	public abstract ActionTHElement getTHInfo();
 	public abstract Schema getSchema();
 	public abstract void setSchema (Schema currentScema);
+
+	void setDbTypeName(String dbTypeName);
 
 }

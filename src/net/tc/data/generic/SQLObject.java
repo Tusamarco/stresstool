@@ -178,7 +178,7 @@ public class SQLObject {
 		    			  else{
 		
 		    				  if(((Attribute)attrib).isAutoIncrement()){
-		    					  ((Attribute) attrib).setValue("NULL");
+//		    					  ((Attribute) attrib).setValue("NULL");
 		    				  }
 		    				  else{
 		    					  ((Attribute) attrib).setValue(((Attribute) attrib).getSpecialFunction());

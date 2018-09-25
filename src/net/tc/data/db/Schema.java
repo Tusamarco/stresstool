@@ -19,6 +19,10 @@ public class Schema {
 	private String defaultCollation = null;
 	private int size = 0;
 	private SynchronizedMap tables = null;
+	public Schema() {
+		
+	}
+	
 	public String getName() {
 		return name;
 	}
@@ -179,7 +183,7 @@ public class Schema {
 	return this;
     }
     
-    private void setLazyFields(){
+    protected void setLazyFields(){
 	Iterator tablesIt = this.getTables().iterator();
 	while (tablesIt.hasNext()) {
 	    Table table = this.getTable((String) tablesIt.next());
@@ -207,8 +211,8 @@ public class Schema {
 	
     }
     
-    public String[] deployDropTable(Map tablesInstances){
-	ArrayList<String> tables = new ArrayList();
+    public Table[] deployDropTable(Map tablesInstances){
+	ArrayList<Table> tables = new ArrayList();
 	
 	Iterator tablesIt = this.getTables().iterator();
 	/*
@@ -239,11 +243,11 @@ public class Schema {
 //    		else{
 //    		    	tables.add(table.getName());
 //    		}
-	      tables.add(table.getName());
+	      tables.add(table);
 	    }
 	}
 	if(tables != null  & tables.size() > 0 )
-	    return (String[])  tables.toArray(new String[tables.size()]);
+	    return (Table[])  tables.toArray(new Table[tables.size()]);
 	
 	return null;
     }

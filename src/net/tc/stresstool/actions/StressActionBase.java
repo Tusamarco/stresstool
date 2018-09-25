@@ -10,8 +10,8 @@ import java.util.concurrent.CountDownLatch;
 import java.sql.Connection;
 
 import net.tc.data.db.ConnectionProvider;
+import net.tc.data.db.DbType;
 import net.tc.data.db.Schema;
-import net.tc.stresstool.DbType;
 import net.tc.stresstool.PerformanceEvaluator;
 import net.tc.stresstool.StressTool;
 import net.tc.stresstool.config.ConfigurationImplementation;
@@ -30,6 +30,7 @@ public class StressActionBase implements StressAction, Runnable {
     private ConfigurationImplementation configuration = null;
     private Map connectionInformation = null;
     private DbType dbType = null; 
+    private String dbTypeName = ""; 
     private long id = 0;
     private int currentLoop = 0;
     
@@ -819,7 +820,7 @@ public class StressActionBase implements StressAction, Runnable {
 	 * @see net.tc.stresstool.actions.StressAction#getDbType()
 	 */
 	@Override
-	public final DbType getDbType() {
+	public  DbType getDbType() {
         return dbType;
     }
 
@@ -830,8 +831,9 @@ public class StressActionBase implements StressAction, Runnable {
 	 * @see net.tc.stresstool.actions.StressAction#setDBType(net.tc.stresstool.DbType)
 	 */
     @Override
-	public void setDBType(DbType dbTypeIn) {
-	dbType = dbTypeIn;
+	public void setdbType(String dbTypeIn) {
+    	
+    	dbType = new DbType(dbTypeIn);
 
     }
 
@@ -1030,6 +1032,15 @@ public class StressActionBase implements StressAction, Runnable {
 
 	public void setBatchSize(int batchSize) {
 		this.batchSize = batchSize;
+	}
+
+	public String getDbTypeName() {
+		return dbTypeName;
+	}
+	 @Override
+	public void setDbTypeName(String dbTypeName) {
+		this.dbTypeName = dbTypeName;
+		this.setdbType(dbTypeName);
 	}
 	
 

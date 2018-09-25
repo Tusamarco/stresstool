@@ -25,6 +25,7 @@ import net.tc.stresstool.StressTool;
 import net.tc.stresstool.config.Configuration;
 import net.tc.stresstool.exceptions.ExceptionMessages;
 import net.tc.stresstool.exceptions.StressToolConfigurationException;
+import net.tc.stresstool.exceptions.StressToolException;
 import net.tc.stresstool.exceptions.StressToolGenericException;
 import net.tc.stresstool.logs.LogProvider;
 import net.tc.stresstool.statistics.EventCollection;
@@ -38,51 +39,20 @@ import net.tc.data.db.*;
  * @author  tusa
  * V4
  */
-public class MySQLSuper implements StatsProvider, Reporter {
+public class BaseStatCollector implements StatsProvider, Reporter {
 
-    /**
-     * @uml.property  name="loopNumber"
-     */
     protected int loopNumber = 0;
-    /**
-     * @uml.property  name="statGroupName"
-     */
     protected String statGroupName = "";
-    /**
-     * @uml.property  name="statsFile"
-     * @uml.associationEnd  
-     */
     protected FileHandler statsFile = null;
-    /**
-     * @uml.property  name="csvFile"
-     * @uml.associationEnd  
-     */
     protected FileHandler csvFile = null;
-    /**
-     * @uml.property  name="flushrowonfile"
-     */
     protected boolean flushrowonfile = false;
-    /**
-     * @uml.property  name="eventsName"
-     */
     protected String[] eventsName = null;
-    /**
-     * @uml.property  name="lastSampleTime"
-     */
     protected String lastSampleTime = null;
-    /**
-     * @uml.property  name="status"
-     * @uml.associationEnd  multiplicity="(0 -1)" ordering="true" elementType="java.lang.Object" qualifier="s:java.lang.String java.lang.Object"
-     */
     protected Map status = null;
-    /**
-     * @uml.property  name="reporterGroup"
-     * @uml.associationEnd  
-     */
     protected  StatsGroups reporterGroup = null;
     protected String DefaultSchema = null;
 
-    public MySQLSuper() {
+    public BaseStatCollector() {
 	super();
     }
 
@@ -301,13 +271,20 @@ public class MySQLSuper implements StatsProvider, Reporter {
                 		return "WARNING - NULL VALUE";
                 	}
                 	finally{
-        			try{
-        			    return (Long)(endValue - startValue);
-        			}
-        			catch(final NullPointerException en){
-                				System.out.println("WARNING -- RETURNING NULL VALUE FOR STATUS KEY NAME =" + varName);
-        				return new Long(0);
-        			}
+	        			try{
+	        			    return (Long)(endValue - startValue);
+	        			}
+	        			catch(final NullPointerException en){
+	      				  try {
+	      					StressTool.getLogProvider().getLogger(LogProvider.LOG_STATS).warn(ExceptionMessages.ERROR_PORCESSING_STATS 
+	      						+ "WARNING -- RETURNING NULL VALUE FOR STATUS KEY NAME =" + varName);
+	      				  } catch (StressToolException e) {
+	      					//e.printStackTrace();
+	      			
+	      				  }
+	
+	        				return new Long(0);
+	        			}
                 	}
                 }
             }
@@ -318,6 +295,28 @@ public class MySQLSuper implements StatsProvider, Reporter {
             return "";
         }
 
+
+    protected Object getSumResultByName(String varName, boolean isString) {
+    	Long endValue = null;
+    	Long startValue = null;
+    	EventCollection eventColl = reporterGroup.getEventCollection(varName);
+    	if(!Utility.checkEntryInArray(eventsName,varName))
+    		return new Long(0);
+    	
+    	
+    	if (eventColl != null && eventColl.getCollection().size() > 0) {
+        	 
+             endValue = new Long(eventColl.getSumValue() );
+             return endValue;
+        }
+        else
+        {
+            return "Not yet implemented";
+        }
+
+     }
+
+    
     protected long getMaxResultByName(String varName, boolean isString) {
     
        	EventCollection eventColl = reporterGroup.getEventCollection(varName);
@@ -337,239 +336,7 @@ public class MySQLSuper implements StatsProvider, Reporter {
 	return null;
     }
 
-    @Override
-    public boolean validatePermissions(ConnectionProvider connProvider) {
-	Logger applicationLogger = null;
-	try {
-	    applicationLogger = StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION);
-	} catch (StressToolConfigurationException e1) {
-	    // TODO Auto-generated catch block
-	    e1.printStackTrace();
-	}
-	if(connProvider == null)
-	    return false;
-	
-    	/*Performance evaluation section [tail] start*/
-	long performanceTimeStart = 0;
-	long performanceTimeEnd = 0;
-	try {
-	    if (StressTool.getLogProvider()
-		    .getLogger(LogProvider.LOG_PERFORMANCE)
-		    .isDebugEnabled())
-		performanceTimeStart = System.nanoTime();
-	} catch (Throwable th) {
-	}
-	/*Performance evaluation section [tail] END*/
-    
-        Connection conn = null;
-        Statement stmt = null;
-        ResultSet rs = null;
-        boolean valid = false;
-        String userName="";
-        
-        
-        try {
-            conn = connProvider.getSimpleConnection();
-//TODO check if needed             conn.setAutoCommit(false);
-            stmt = conn.createStatement();
 
-            
-            /* checking general privileges
-             * 
-             */
-            try {
-		StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION);
-	    } catch (StressToolConfigurationException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	    }
-	    
-            applicationLogger.info("Checking Generic permissions on:" + connProvider.getConnInfo().getDatabase());
-            //CREATE TABLESPACE,FILE, PROCESS,REPLICATION CLIENT,SHOW DATABASES
-            rs = stmt.executeQuery("select Process_priv, Repl_client_priv,Show_db_priv,File_priv,Create_tablespace_priv, CURRENT_USER() from mysql.user where user=substring(CURRENT_USER(),1,locate('@',CURRENT_USER())-1) and host=substring(CURRENT_USER(),locate('@',CURRENT_USER())+1)");
-            while(rs.next()){
-            	userName = rs.getNString(6);
-            	for(int irs = 1 ; irs <= 5; irs++ ){
-	            	if(rs.getNString(irs).toLowerCase().equals("y") ){
-	            		valid = true;
-	            	}
-	            	else{
-	            	    	valid =  false;
-	            	}
-            	    
-            	}
-            }
-            rs.close();
-            if(valid){
-        	applicationLogger.info("Permissions on global seems ok found : CREATE TABLESPACE,FILE, PROCESS,REPLICATION CLIENT,SHOW DATABASES");
-            }
-            else
-            {
-        	applicationLogger.error("Permissions on global FAILED expected : CREATE TABLESPACE,FILE, PROCESS,REPLICATION CLIENT,SHOW DATABASES");
-            }
-            applicationLogger.info("Checking DB permissions at global level");
-            /* checking GLOBAL DB privileges
-             * 
-             */
-            String sql = "select Select_priv, " +
-            		"Insert_priv," +
-            		"Update_priv," +
-            		"Delete_priv," +
-            		"Create_priv," +
-            		"Drop_priv," +
-            		"Index_priv," +
-            		"Alter_priv," +
-            		"Create_tmp_table_priv," +
-            		"Lock_tables_priv," +
-            		"Create_view_priv," +
-            		"Show_view_priv," +
-            		"Create_routine_priv," +
-            		"Execute_priv," +
-            		"Event_priv," +
-            		"Trigger_priv " +
-            		"from mysql.user " +
-            		"where user=substring(CURRENT_USER(),1,locate('@',CURRENT_USER())-1) " +
-            		"and host=substring(CURRENT_USER(),locate('@',CURRENT_USER())+1)";
-            applicationLogger.debug("SQL for privileges General:" + sql);
-            
-            rs = stmt.executeQuery(sql);
-            while(rs.next()){
-        	int iAttribs = rs.getMetaData().getColumnCount();
-            	for(int irs = 1 ; irs <= iAttribs; irs++ ){
-	            	if(rs.getNString(irs).toLowerCase().equals("y") ){
-	            		valid = true;
-	            	}
-	            	else{
-	            	    	valid =  false;
-	            	}
-            	    
-            	}
-            }
-            rs.close();
-            
-            if(!valid){
-	            /* checking DB privileges
-	             * 
-	             */
-        	applicationLogger.info("Permissions on global failed checking if I can write on the DB");
-        	sql= "select Select_priv, " +
-            		"Insert_priv," +
-            		"Update_priv," +
-            		"Delete_priv," +
-            		"Create_priv," +
-            		"Drop_priv," +
-            		"Index_priv," +
-            		"Alter_priv," +
-            		"Create_tmp_table_priv," +
-            		"Lock_tables_priv," +
-            		"Create_view_priv," +
-            		"Show_view_priv," +
-            		"Create_routine_priv," +
-            		"Execute_priv," +
-            		"Event_priv," +
-            		"Trigger_priv " +
-            		"from mysql.db " +
-            		"where user=substring(CURRENT_USER(),1,locate('@',CURRENT_USER())-1) " +
-            		"and host=substring(CURRENT_USER(),locate('@',CURRENT_USER())+1)" +
-            		" and db='" + this.getDefaultSchema() + "'";
-        	
-        	applicationLogger.debug("SQL for privileges General:" + sql);
-        	rs = stmt.executeQuery(sql);
-	            
-	            while(rs.next()){
-	        	int iAttribs = rs.getMetaData().getColumnCount();
-	            	for(int irs = 1 ; irs <= iAttribs; irs++ ){
-		            	if(rs.getNString(irs).toLowerCase().equals("y") ){
-		            		valid = true;
-		            	}
-		            	else{
-		            	    	valid =  false;
-		            	}
-	            	    
-	            	}
-	            }
-	            rs.close();
-            }
-        
-        
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-        finally 
-        {
-        	try {
-        		rs.close();
-        		stmt.close();
-        		if(!conn.getAutoCommit())
-        			conn.commit();
-				conn.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-        }
-        
-        if(!valid){
-            applicationLogger.info("Permissions on global AND DB failed I cannot write on the DB");
-            applicationLogger.error("NOT sufficient  permissions on:" + connProvider.getConnInfo().getDatabase()+ " for user:" + userName );
-            applicationLogger.error("The following are expected ensure the user has them:");
-            applicationLogger.error("Select_priv,\n" +
-	            		"Insert_priv,\n" +
-	            		"Update_priv,\n" +
-	            		"Delete_priv,\n" +
-	            		"Create_priv,\n" +
-	            		"Drop_priv,\n" +
-	            		"Index_priv,\n" +
-	            		"Alter_priv,v" +
-	            		"Create_tmp_table_priv,\n" +
-	            		"Lock_tables_priv,\n" +
-	            		"Create_view_priv,\n" +
-	            		"Show_view_priv,\n" +
-	            		"Create_routine_priv,\n" +
-	            		"Execute_priv\n," +
-	            		"Event_priv,\n" +
-	            		"Trigger_priv \n" );
-            applicationLogger.error("Try to issue: Grant ALTER,ALTER ROUTINE,CREATE,CREATE ROUTINE," +
-            		"CREATE TEMPORARY TABLES,CREATE VIEW,DELETE,DROP,EVENT," +
-            "EXECUTE,INDEX,INSERT,LOCK TABLES,SELECT,TRIGGER,UPDATE on " + connProvider.getConnInfo().getDatabase()+ ".* to " + connProvider.getConnInfo().getUser() 
-            + "@'<host>' identified by '<secret>'");
-            
-            applicationLogger.error("Try to issue: Grant CREATE TABLESPACE,FILE, PROCESS,REPLICATION CLIENT,SHOW DATABASES on *.* to " + connProvider.getConnInfo().getUser() 
-	            + "@'<host>' identified by '<secret>'");
-            
-            ExceptionMessages.setCurrentError(ExceptionMessages.ERROR_FATAL);
-            try {
-		throw new StressToolConfigurationException(ExceptionMessages.INVALID_PERMISSIONS);
-	    } catch (StressToolConfigurationException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	    }
-            return false;
-        }
-        
-    /*Performance evaluation section [header] start*/
-	try {
-	    if (StressTool.getLogProvider()
-		    .getLogger(LogProvider.LOG_PERFORMANCE)
-		    .isDebugEnabled()) {
-		performanceTimeEnd = System.nanoTime();
-		StressTool
-			.getLogProvider()
-			.getLogger(LogProvider.LOG_PERFORMANCE)
-			.debug(StressTool.getLogProvider().LOG_EXEC_TIME
-				+ ":"
-				+ PerformanceEvaluator
-					.getTimeEvaluationNs(performanceTimeStart));
-	    }
-	} catch (Throwable th) {
-	}
-	/*Performance evaluation section [header] END*/
-
-        applicationLogger.info("Permissions seems OK going ahead");
-        return true;
-
-
-    }
 //    @Deprecated
 //    /*
 //     * Do not use this, use ConnectionProvider instead from Launcher
@@ -602,15 +369,21 @@ public class MySQLSuper implements StatsProvider, Reporter {
 		statGroupName=gName;
 	}
 
-	@Override
+
 	public void setDefaultSchema(String defaultSchema) {
 		DefaultSchema=defaultSchema;
 		
 	}
 
-	@Override
+
 	public String getDefaultSchema() {
 		return DefaultSchema;
+	}
+
+	
+	public boolean validatePermissions(ConnectionProvider connProvider) {
+
+		return true;
 	}
 
 	

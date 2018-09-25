@@ -1,0 +1,83 @@
+{
+	"database":"asterisk",
+	"characterSet":"utf8",
+	"tables":{
+		"table":[
+				{
+					"database":"asterisk",
+					"tablename":"call_channels",
+					"engine":"innodb",
+					"primarykey":["id"],
+					"autoincrementvalue":0,
+					"defaultcharset":"utf8",
+					"defaultcollation":"utf8_bin",
+					"haspartition":false,
+					"tablespace":"",
+					"datadir":"",
+					"rowformat":"compact",
+					"multiple":false,
+					"selectcondition":"id,caller_type,caller_id,callee_type,callee_channel,caller_channel,time ",
+					"updatesetattributes":"#origin#",
+					"wherecondition_s":{
+							"condition":[
+								{"weight":100,"condition_string":" #caller_channel#=#?caller_channel?caller_channel# and #callee_channel#=#?callee_channel?callee_channel#"},
+								{"weight":10,"condition_string":" #id#=#?id?id#"}
+							]
+					},
+					"wherecondition_u":{
+							"condition":[
+								{"weight":1,"condition_string":" #caller_channel#=#?caller_channel?caller_channel#"},
+								{"weight":1,"condition_string":" #callee_channel#=#?callee_channel?callee_channel#"}
+							]
+					},
+					"wherecondition_d":{
+							"condition":[
+								{"weight":1,"condition_string":" #caller_channel#=#?caller_channel?caller_channel#"},
+								{"weight":1,"condition_string":" #callee_channel#=#?callee_channel?callee_channel#"}
+							]
+					},					
+					
+					"wherecondition":" #a# = #?a?# and #date# #?date_RANGE_OPTION_BETWEEN?# and #b# like #?b?# ", 
+					"keys":
+							{
+							"key":
+								[ 
+									{"name":"ix_unique_identifier","unique":true,"attributes":["unique_identifier"]},
+									{"name":"ix_caller_channel_callee_channel","unique":true,"attributes":["caller_channel","callee_channel"]},
+									{"name":"ix_callee_id","unique":false,"attributes":["callee_id"]},
+									{"name":"ix_caller_id_callee_id","unique":false,"attributes":["caller_id","callee_id"]},
+									{"name":"ix_time","unique":false,"attributes":["time"]},
+									{"name":"ix_callee_type_callee_id","unique":false,"attributes":["callee_type","callee_id"]},
+									{"name":"fk_call_channels_tenants2_idx","unique":false,"attributes":["callee_tenants_id"]},
+									{"name":"ix_caller_tenants_id_callee_tenants_id","unique":false,"attributes":["caller_tenants_id","callee_tenants_id"]},
+									{"name":"ix_callee_channel","unique":false,"attributes":["callee_channel"]}			
+								]
+							},	
+					"attributes":{
+						"attribute":
+							[
+								{"name":"id","datatype":"int","datadimension":"11","default":"","null":false,"autoincrement":true},
+								{"name":"caller_tenants_id","datatype":"int","datadimension":"11","default":"","null":false},				
+								{"name":"caller_type","datatype":"varchar","datadimension":"40","default":"","null":false},
+								{"name":"caller_id","datatype":"varchar","datadimension":"40","default":"","null":false},				
+								{"name":"caller_channel","datatype":"int","datadimension":"11","upperlimit":"100","default":"0","null":false},
+								{"name":"caller_server","datatype":"varchar","datadimension":"40","default":"","null":false},
+								{"name":"caller_identifier","datatype":"varchar","datadimension":"255","default":"","null":true},								
+								{"name":"callee_tenants_id","datatype":"int","datadimension":"11","null":false},
+								{"name":"callee_type","datatype":"varchar","datadimension":"40","default":"","null":false},								
+								{"name":"callee_id","datatype":"varchar","datadimension":"40","default":"","null":false},
+								{"name":"callee_channel","datatype":"int","datadimension":"11","upperlimit":"100","default":"0","null":false},
+								{"name":"callee_server","datatype":"varchar","datadimension":"40","default":"","null":false},
+								{"name":"callee_identifier","datatype":"varchar","datadimension":"255","default":"","null":true},								
+								{"name":"time","datatype":"timestamp","default":"CURRENT_TIMESTAMP","onUpdate":"CURRENT_TIMESTAMP","null":false,"specialFunction":"NOW()"},
+								{"name":"unique_identifier","datatype":"char","datadimension":"36","default":"","null":false,"specialFunction":"UUID()"},
+								{"name":"origin","datatype":"varchar","datadimension":"40","default":"","null":true}
+							]
+					},
+					"partitionDefinition":{
+	
+					}
+				}
+			]
+		}
+}

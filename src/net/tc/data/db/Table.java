@@ -15,44 +15,48 @@ import net.tc.utils.SynchronizedMap;
 import net.tc.utils.Utility;
 
 public class Table {
+	/**
+	 * NOTE
+	 * Table class is a superclass implementing common methods cross DBType
+	 */
     	public static final Integer TABLE_PARENT=0;
     	public static final Integer TABLE_CHILD=1;
-	private String name = null;
-	private int rowsNumber = 0;
-	private int fillFactor = 0;
-	private String defaultCharacterSet = null;
-	private String defaultCollation = null;
-	private String storageEngine = null;
-	private int rowDimension = 0; //dimension in bytes
-	private SynchronizedMap rows = null;
-	private int attributesNumber = 0 ;
-	private PrimaryKey primaryKey = null;
-	private SynchronizedMap indexes = null;
-	private PartitionDefinition partitionDefinition = null;
-	private boolean hasPartition = false;
-	private boolean multiple = false; 
-	private boolean hasSubPartition = false;
-	private boolean autoincrement = false;
-	private String schemaName = null;
-	private long autoincrementValue = 0 ;
-	private SynchronizedMap metaAttributes = null;
-	private String parentTable = null;
-	private int instances = 1;
-	private int instanceNumber = 0;
-	private String tableSpace = null;
-	private int  rowFormatInt = 0;
-	private String dataDirectory = null;
-	private ConditionCollection whereCondition_s = new ConditionCollection();
-	private ConditionCollection whereCondition_u = new ConditionCollection();
-	private ConditionCollection whereCondition_d = new ConditionCollection();
-	private ConditionCollection selectCondition_S = new ConditionCollection();
-	private ArrayList<Attribute> attribsWhereS = new ArrayList();
-	private ArrayList<Attribute> attribsWhereU = new ArrayList();
-	private ArrayList<Attribute> attribsWhereD = new ArrayList();
-	private int rangeLength = 50;
-	private ArrayList<Table> joinTables = new ArrayList(); 
-	private String updateSetAttributes = null;
-	private String insertAttributes = null;
+	protected String name = null;
+	protected int rowsNumber = 0;
+	protected int fillFactor = 0;
+	protected String defaultCharacterSet = null;
+	protected String defaultCollation = null;
+	protected String storageEngine = null;
+	protected int rowDimension = 0; //dimension in bytes
+	protected SynchronizedMap rows = null;
+	protected int attributesNumber = 0 ;
+	protected PrimaryKey primaryKey = null;
+	protected SynchronizedMap indexes = null;
+	protected PartitionDefinition partitionDefinition = null;
+	protected boolean hasPartition = false;
+	protected boolean multiple = false; 
+	protected boolean hasSubPartition = false;
+	protected boolean autoincrement = false;
+	protected String schemaName = null;
+	protected long autoincrementValue = 0 ;
+	protected SynchronizedMap metaAttributes = null;
+	protected String parentTable = null;
+	protected int instances = 1;
+	protected int instanceNumber = 0;
+	protected String tableSpace = null;
+	protected int  rowFormatInt = 0;
+	protected String dataDirectory = null;
+	protected ConditionCollection whereCondition_s = new ConditionCollection();
+	protected ConditionCollection whereCondition_u = new ConditionCollection();
+	protected ConditionCollection whereCondition_d = new ConditionCollection();
+	protected ConditionCollection selectCondition_S = new ConditionCollection();
+	protected ArrayList<Attribute> attribsWhereS = new ArrayList();
+	protected ArrayList<Attribute> attribsWhereU = new ArrayList();
+	protected ArrayList<Attribute> attribsWhereD = new ArrayList();
+	protected int rangeLength = 50;
+	protected ArrayList<Table> joinTables = new ArrayList(); 
+	protected String updateSetAttributes = null;
+	protected String insertAttributes = null;
 	
 	public Table() {
 	    rows = new SynchronizedMap(0);

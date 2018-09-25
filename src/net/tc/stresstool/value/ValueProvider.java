@@ -52,7 +52,8 @@ public interface ValueProvider {
 	public Integer getInt(int length);
 //	public Calendar getTestCalendar();
 //	public void setTestCalendar(Calendar testCalendar);
-	public Calendar resetCalendar(int timeDays);
+	public Calendar resetCalendar(int timeDays,String testDate);
+	public Calendar getCalendar();
 	public Object getValueForRangeOption(Table table,Attribute attrib, String rangeCondition,int rangeLength);
 	public Date getRandomDate(int rangeLength) ;
 }

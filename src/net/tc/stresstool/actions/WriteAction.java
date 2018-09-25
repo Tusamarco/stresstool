@@ -24,5 +24,5 @@ public interface WriteAction {
 	public int getBatchSize();
 	public ActionTHElement getTHInfo();
 	public void setTHInfo(ActionTHElement thInfo);
-	
+		
 }

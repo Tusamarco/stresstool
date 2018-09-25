@@ -16,7 +16,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-public class StructureDefinitionParserMySQL implements
+public class StructureDefinitionParserPostgres implements
 		StructureDefinitionParser {
 
 	/* (non-Javadoc)
@@ -57,7 +57,7 @@ public class StructureDefinitionParserMySQL implements
 				 * Parse Schema as object
 				 */
 
-				schema = new SchemaMySQL();
+				schema = new SchemaPostgres();
 				schema.setName(dbName);
 				schema.setDefaultCharacterSet((String)objectDefinition.get("defaultCharacterSet")!=null?(String)objectDefinition.get("defaultCharacterSet"):null);
 				schema.setTables(new SynchronizedMap(0));
@@ -78,7 +78,7 @@ public class StructureDefinitionParserMySQL implements
 				    	ArrayList attribsWIthIndex = new ArrayList(); 
 				    	
 					JSONObject oTable = (JSONObject) o;
-					Table table = new TableMySQL();
+					Table table = new TablePostgres();
 					table.setName((String)oTable.get("tablename"));
 
 					table.setSchemaName((String)oTable.get("database"));
@@ -246,7 +246,7 @@ public class StructureDefinitionParserMySQL implements
 						+ attribute.getName());
 						if(attribsWIthIndex.contains(attribute.getName()))
 						    attribute.setHasIndex(true);
-						attribute.setDataType(new DataType(DataType.getDataTypeIdentifierByString((String)oAttribute.get("datatype"))));
+						attribute.setDataType(new DataType(DataType.getDataTypeIdentifierByString((String)oAttribute.get("datatype"),ConnectionInformation.POSTGRES)));
 						attribute.setDataDimension((String)oAttribute.get("datadimension")!= null?Integer.parseInt((String)oAttribute.get("datadimension")):0);
 						attribute.setAutoIncrement(oAttribute.get("autoincrement")!= null?true:false);
 						attribute.setSpecialFunction(oAttribute.get("specialFunction")!= null?(String)oAttribute.get("specialFunction"):null);
@@ -292,7 +292,7 @@ public class StructureDefinitionParserMySQL implements
 					if(table.isHasPartition()){
 					    if(oTable.get("partitionDefinition") != null){
 						JSONObject oPartDef = (JSONObject)oTable.get("partitionDefinition");
-						PartitionDefinition partDef = new PartitionDefinitionMySQL();
+						PartitionDefinition partDef = new PartitionDefinitionPostgres();
 						partDef.setTableName(table.getName());
 						partDef.setPartitionType((String)oPartDef.get("partitionBy")!=null?(String)oPartDef.get("partitionBy"):null);
 

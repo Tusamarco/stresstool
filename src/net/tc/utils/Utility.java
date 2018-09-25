@@ -3,6 +3,7 @@ package net.tc.utils;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Date;
+import java.util.concurrent.ThreadLocalRandom;
 import java.beans.*;
 import java.lang.reflect.*;
 
@@ -514,10 +515,16 @@ import javax.imageio.ImageIO;
   public static Long getUnsignNumberFromRandomMinMax(long min,long max)
   {
 	
-  	if(min >= max) return new Long(max);
-  	
-  	Long maxL = (new java.util.Random().nextLong() % (max - min)) + min;
+//  	if(min >= max) return new Long(max);
+	Long maxL = null;
+	if(max > min)  
+		maxL =ThreadLocalRandom.current().nextLong(min, max);
+	else
+		maxL =ThreadLocalRandom.current().nextLong(max, min);
+//  	Long maxL = (new java.util.Random().nextLong() % (max - min)) + min;
   	maxL=maxL<min?min:maxL; 
+  	
+  	
 //  	if()
 //  	
 //      if(min == 0 && max == 0){

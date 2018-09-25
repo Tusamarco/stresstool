@@ -23,7 +23,12 @@ import net.tc.utils.Utility;
  * v1
  */
 
-public class PartitionDefinition {
+public class PartitionDefinitionPostgres  extends PartitionDefinition{
+	
+	/** 
+	 * Specific for Postgres object
+	 */
+	private ArrayList<String> partitionsName = new ArrayList<String>();
 	
 	public static final String PARTITION_TYPE_RANGE = "RANGE";
 	public static final String PARTITION_TYPE_LIST = "LIST";
@@ -64,31 +69,11 @@ public class PartitionDefinition {
 	public static final String INTERVAL_PARTITION_MONTH = "MONTH";
 	public static final String INTERVAL_PARTITION_YEAR = "YEAR";
 	
-	protected String tableName = null;
-	protected String partitionType = null;
-	protected String partitionsSize = null;
-	protected ArrayList attributes = null;
-	protected String partitionDeclaration = null;
-	protected SynchronizedMap partitions = null;
-	protected Date startDate = null;
-	protected Date endDate = null;
-	protected String function = null;
-	protected String interval = INTERVAL_PARTITION_DAY;
-	
+	public PartitionDefinitionPostgres(){
+		super();
 		
-//	"lists":{"list":[]}
-//	"ranges":{"range":[]}
-	
-	
-	public String getTableName() {
-		return tableName;
 	}
-	public void setTableName(String tableName) {
-		this.tableName = tableName;
-	}
-	public String getPartitionType() {
-		return partitionType;
-	}
+
 	public void setPartitionType(String partitionTypeIn) throws StressToolGenericException {
 	    if(partitionTypeIn == null)
 		return;
@@ -105,67 +90,11 @@ public class PartitionDefinition {
 	
 	    
 	}
-	public String getPartitionsSize() {
-		return partitionsSize;
-	}
-	public void setPartitionsSize(String partitionsSize) {
-		this.partitionsSize = partitionsSize;
-	}
-	public ArrayList getAttributes() {
-		return attributes;
-	}
-	public void setAttributes(ArrayList arColPart) {
-		this.attributes = arColPart;
-	}
-	public String getPartitionDeclaration() {
-		return partitionDeclaration;
-	}
-	public void setPartitionDeclaration(String partitionDeclaration) {
-		this.partitionDeclaration = partitionDeclaration;
-	}
-	public SynchronizedMap getPartitions() {
-		return partitions;
-	}
-	public void setPartitions(SynchronizedMap partitions) {
-		this.partitions = partitions;
-	}
-	/**
-	 * @return the startDate
-	 */
-	public Date getStartDate() {
-	    return startDate;
-	}
-	/**
-	 * @param startDate the startDate to set
-	 */
-	public void setStartDate(String startDate) {
-	    if(startDate == null) return;
-	    String format = "yyyy-MM-dd";
-	    this.startDate = TimeTools.getDate(startDate, format);
-	}
-	/**
-	 * @return the endDate
-	 */
-	public Date getEndDate() {
-	    return endDate;
-	}
-	/**
-	 * @param endDate the endDate to set
-	 */
-	public void setEndDate(String endDate) {
-	    if(endDate == null) return;
-	    String format = "yyyy-MM-dd";
-	    this.endDate = TimeTools.getDate(endDate, format);
-	}
-	/**
-	 * @return the function
-	 */
-	public String getFunction() {
-	    return function;
-	}
+
 	/**
 	 * @param function the function to set
 	 */
+	@Override
 	public void setFunction(String functionIn) {
 	    if(functionIn == null) return;
 	    
@@ -244,15 +173,11 @@ public class PartitionDefinition {
 	    }
 		
 	}
-	/**
-	 * @return the interval
-	 */
-	public String getInterval() {
-	    return interval;
-	}
+
 	/**
 	 * @param interval the interval to set
 	 */
+	@Override
 	public void setInterval(String intervalIn) {
 	    if(intervalIn == null) return;
 	    
@@ -266,18 +191,45 @@ public class PartitionDefinition {
 	    
 	    
 	}
+	
 	/**
 	 * this method is used to calculate the 
 	 * partitions and to return a string buffer containing the SQL
 	 * @return
 	 */
+    public StringBuffer getSQLMainTablePartitionDefinition() {
+	if (this == null)
+	    return null;
 
+	StringBuffer sbPartition = new StringBuffer();
+	String partitionType = this.getPartitionType();
 
-	/**
-	 * this method is used to calculate the 
-	 * partitions and to return a string buffer containing the SQL
-	 * @return
-	 */
+	switch (partitionType) {
+	case PartitionDefinition.PARTITION_TYPE_COLUMNS:
+	   //TODO still to do 
+//		sbPartition.append(getColumns(this));
+	    break;
+	case PartitionDefinition.PARTITION_TYPE_LIST:
+		//TODO still to do
+//		sbPartition.append(getList(this));
+	    break;
+	case PartitionDefinition.PARTITION_TYPE_RANGE:
+	    sbPartition.append(this.getRangeTableDefinition(this));
+	    break;
+	case PartitionDefinition.PARTITION_TYPE_HASH:
+		//TODO still to do
+//	    sbPartition.append(getHash(this));
+	    break;
+	case PartitionDefinition.PARTITION_TYPE_KEY:
+		//TODO still to do
+//	    sbPartition.append(getKey(this));
+	    break;
+
+	}
+	return sbPartition;
+
+    }
+	@Override
     public StringBuffer getSQLPartitionDefinition() {
 	if (this == null)
 	    return null;
@@ -306,7 +258,8 @@ public class PartitionDefinition {
 	return sbPartition;
 
     }
-    
+
+    @Override
     protected String getKey(PartitionDefinition partitionDefinition) {
 	String sql = "PARTITION BY KEY ("
 		+ Utility.getArrayListAsDelimitedString(
@@ -314,7 +267,8 @@ public class PartitionDefinition {
 		+ ") \n PARTITIONS " + partitionDefinition.getPartitionsSize();
 	return sql;
     }
-
+    
+    @Override
     protected String getHash(PartitionDefinition pd) {
 	StringBuffer sql = new StringBuffer();
 	sql.append("PARTITION BY HASH (");
@@ -329,20 +283,40 @@ public class PartitionDefinition {
 	return sql.toString();
     }
 
+    public String getRangeTableDefinition(PartitionDefinition pd){
+    		StringBuffer sql = new StringBuffer();
+    		String name = null;
+    		String values = null;
+    		sql.append("PARTITION BY RANGE ");
+    		sql.append("(");
+//    		if (pd.getFunction() != null && !pd.equals(""))
+//    		    sql.append(pd.getFunction() + "(");
+    		sql.append(Utility.getArrayListAsDelimitedString(pd.getAttributes(),
+    			","));
+//    		if (pd.getFunction() != null && !pd.equals(""))
+//    		    sql.append(")");
+    		sql.append(")\n ");
+    		
+    		return sql.toString();
+    		
+    }
+    
+    
+    @Override
     protected String getRange(PartitionDefinition pd) {
 	StringBuffer sql = new StringBuffer();
 	String name = null;
 	String values = null;
-	sql.append("PARTITION BY RANGE ");
-	sql.append("(");
-	if (pd.getFunction() != null && !pd.equals(""))
-	    sql.append(pd.getFunction() + "(");
-	sql.append(Utility.getArrayListAsDelimitedString(pd.getAttributes(),
-		","));
-	if (pd.getFunction() != null && !pd.equals(""))
-	    sql.append(")");
-	sql.append(") ");
-	sql.append("( \n");
+//	sql.append("PARTITION BY RANGE ");
+//	sql.append("(");
+//	if (pd.getFunction() != null && !pd.equals(""))
+//	    sql.append(pd.getFunction() + "(");
+//	sql.append(Utility.getArrayListAsDelimitedString(pd.getAttributes(),
+//		","));
+//	if (pd.getFunction() != null && !pd.equals(""))
+//	    sql.append(")");
+//	sql.append(") ");
+//	sql.append("( \n");
 
 	SynchronizedMap pts = null;
 	/*
@@ -350,45 +324,66 @@ public class PartitionDefinition {
 	 * in the object and date is present (start|end) then i
 	 * Partitions will be calculate
 	 */
+    String max="0";
+    String min="0";
+    boolean calculated = false;
+    
 	if (pd.getPartitions() == null
 		&& pd.getStartDate() != null 
 		&& pd.getEndDate() != null) {
 		
 		pts =(SynchronizedMap) partitionRangeCalculation(pd); 
+		calculated = true;
+
 	}
 	else{
 	    pts = pd.getPartitions();
 	}
+
 	    
-//	    int i = 0;
 	    for(int i =0; i < pts.size(); i++){
-		String key = (String) pts.getKeyasOrderedArray()[i];
-		Partition pt = (Partition) pts.get(key);
-		name = pt.getName();
-		values = pt.getValueDeclaration();
-		if (i > 0) {
-		    sql.append(",\n ");
-		}
-
-		sql.append("PARTITION ");
-		sql.append(name);
-		sql.append(" VALUES LESS THAN ");
-		sql.append("(");
-		if (pd.getFunction() != null && !pd.equals(""))
-		    sql.append(pd.getFunction() + "(");
-		sql.append( values);
-		if (pd.getFunction() != null && !pd.equals(""))
-		    sql.append(")");
-
-		sql.append(")");
+			if(i == 0 && calculated ) {
+		    	String key = (String) pts.getKeyasOrderedArray()[i];
+				Partition pt = (Partition) pts.get(key);
+				name = pt.getName();
+				min = pt.getValueDeclaration();
+				
+				i++;
+			} 
+	    	
+	    	String key = (String) pts.getKeyasOrderedArray()[i];
+			Partition pt = (Partition) pts.get(key);
+			name = pt.getName();
+			values = pt.getValueDeclaration();
+			max = values;
+			
+			if (i > 0) {
+			    sql.append(";\n ");
+			}
+			String partitionTableName= name != null?"_"+name:Integer.toString(i+1);
+			this.getPartitionsName().add(this.getTableName()+"_P"+partitionTableName);
+			sql.append("CREATE TABLE "+ this.getTableName()+"_P"+ partitionTableName +" PARTITION OF "+ this.getTableName());
+	//		sql.append(name);
+			sql.append(" FOR VALUES FROM ");
+			sql.append("(");
+	//		if (pd.getFunction() != null && !pd.equals(""))
+	//		    sql.append(pd.getFunction() + "(");
+			sql.append( min);
+			sql.append( ") TO (" + max);
+	//		if (pd.getFunction() != null && !pd.equals(""))
+	//		    sql.append(")");
+	
+			sql.append(")");
+			min = max; 
 	    }
 		
 
-	sql.append("\n)");
+	sql.append(";\n");
 	return sql.toString();
 
     }
-
+    
+    @Override
     protected String getList(PartitionDefinition pd) {
 	StringBuffer sql = new StringBuffer();
 	String name = null;
@@ -424,11 +419,7 @@ public class PartitionDefinition {
 
     }
 
-    protected String getColumns(PartitionDefinition partitionDefinition) {
-	// TODO Auto-generated method stub
-	return null;
-    }
-
+    @Override
     protected Map partitionRangeCalculation(PartitionDefinition pd){
 	if (pd == null || pd.getStartDate() == null || pd.getEndDate() == null)
 	    return null;
@@ -459,6 +450,7 @@ public class PartitionDefinition {
 	    interval = Calendar.YEAR;
 	    break;
 	}
+	calCurr.add(interval, -1);
 	Partition part = null;
 	while (calCurr.before(cal2)) {
 	    calCurr.add(interval, 1);
@@ -467,7 +459,7 @@ public class PartitionDefinition {
 		    + Utility.getMonthNumber(calCurr) + "-"
 		    + Utility.getDayNumber(calCurr);
 	    part = new Partition();
-	    part.setValueDeclaration("\"" + newDate + "\"");
+	    part.setValueDeclaration("'" + newDate + "'");
 	    part.setName("PT" + newDate.replace("-", ""));
 	    partitions.put(part.getName(), part);
 	}
@@ -476,9 +468,13 @@ public class PartitionDefinition {
 
     }
 
-    protected int daysBetween(java.util.Date date, java.util.Date date2) {
+	public ArrayList getPartitionsName() {
+		return partitionsName;
+	}
 
-	return (int) ((date2.getTime() - date.getTime()) / (1000 * 60 * 60 * 24));
-    }
+	private void setPartitionsName(ArrayList partitionsName) {
+		this.partitionsName = partitionsName;
+	}
+
 	
  }

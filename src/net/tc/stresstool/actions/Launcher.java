@@ -1483,7 +1483,14 @@ public class Launcher {
 	}
 	
 	public void resetValueProviderCalendar(){
-		((BasicValueProvider) StressTool.getValueProvider()).resetCalendar(daysdiffernce);
+		String testDate = null;
+		try {
+			testDate=(String) this.config.getConfiguration(Configurator.MAIN_SECTION_NAME, StressTool.class).getParameter("calendardate").getValue();
+		} catch (StressToolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		((BasicValueProvider) StressTool.getValueProvider()).resetCalendar(daysdiffernce,testDate);
 	}
 
 	public String getExitOn() {
