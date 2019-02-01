@@ -199,7 +199,7 @@
 						"attribute":
 							[
 								{"name":"id","datatype":"bigint","datadimension":"11","default":"","null":false,"autoincrement":true,"where_attribute":true},
-								{"name":"uuid","datatype":"char","datadimension":"36","default":"","null":false,"specialFunction":"UUID()"},
+								{"name":"uuid","datatype":"char","datadimension":"36","default":"","null":false,"specialFunction":"REVERSE(UUID())"},
 								{"name":"millid","datatype":"smallint","datadimension":"6","default":"","null":false,"upperlimit":"400","lazy":"0"},
 								{"name":"kwatts_s","datatype":"int","datadimension":"11","default":"","null":false,"upperlimit":"5000","lazy":"0"},	
 								{"name":"date","datatype":"date","default":"","null":false,"lazy":"0"},			

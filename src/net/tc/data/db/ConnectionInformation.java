@@ -22,6 +22,7 @@ public class ConnectionInformation {
 	
 	public static final String MYSQL = "MYSQL";
 	public static final String POSTGRES = "POSTGRES";
+	public static final String ORACLE = "ORACLE";
 	
 	/**
 	 * @return the connUrl

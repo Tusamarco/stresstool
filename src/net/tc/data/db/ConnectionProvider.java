@@ -11,6 +11,8 @@ import javax.sql.DataSource;
 import org.postgresql.ds.PGPoolingDataSource;
 import org.postgresql.ds.PGSimpleDataSource;
 
+import oracle.jdbc.pool.*;
+
 import com.zaxxer.hikari.*;
 
 import net.tc.stresstool.StressTool;
@@ -294,6 +296,7 @@ public class ConnectionProvider {
     			 switch (connInfo.getDbType().toUpperCase()) { 
     			 case ConnectionInformation.MYSQL: 		return this.getSimpleMySQLConnection();
     			 case ConnectionInformation.POSTGRES:	return this.getSimplePGConnection();
+    			 case ConnectionInformation.ORACLE:	    return this.getSimpleOracleConnection();
     			 }
     			
     			
@@ -312,7 +315,45 @@ public class ConnectionProvider {
     	return null;
         }
     
-    public boolean returnConnection(Connection conn){
+    private Connection getSimpleOracleConnection()throws SQLException {
+    	if(this.connInfo != null){
+    		SoftReference<Connection> sf = null;
+    		if (this.getDataSource() !=null ){
+    			sf = new SoftReference<Connection>( (Connection) this.getDataSource().getConnection());
+//    			if(connInfo.isSelectForceAutocommitOff()){
+//    				((Connection) sf.get()).setAutoCommit(false);
+//    			}
+
+    		}
+    		else{
+    		
+    			try{
+    				
+    				OracleDataSource source = new OracleDataSource(); 
+//    				source.setServerName(connInfo.getConnUrl().replaceAll("jdbc:oracle:thin:@", ""));
+    				source.setURL(connInfo.getConnUrl());
+    				source.setDatabaseName(connInfo.getDatabase());
+    				source.setServiceName(connInfo.getDatabase());
+    				source.setUser(connInfo.getUser());
+    				source.setPassword(connInfo.getPassword());
+//    				source.setCurrentSchema(connInfo.getSchema());
+//    				source.setPrepareThreshold(0);
+    			    this.setDataSource(source);
+    			    
+    			    sf = new SoftReference<Connection>((Connection) this.getDataSource().getConnection());
+    			}catch(Exception ex){ex.printStackTrace();}
+    			finally{
+    				if(connInfo.isSelectForceAutocommitOff()){
+    					((Connection) sf.get()).setAutoCommit(false);
+    				}
+    			}
+    		 }
+    		 return (Connection) sf.get();
+    	   }
+    		
+    		return null;	}
+
+	public boolean returnConnection(Connection conn){
     	try{
     		if(conn!=null && !conn.isClosed()){
     			if(!conn.getAutoCommit())

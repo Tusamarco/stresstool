@@ -395,6 +395,39 @@ public class DataType {
 			case DataType.SET: return "SET";
 			default: throw new IllegalArgumentException("Invalid data type index: " + dataTypeIdentifier);
             }
+		}
+		else if(dbType.equals(ConnectionInformation.ORACLE)){
+			switch (dataTypeIdentifier){
+		    case DataType.TINYINT: return "TINYINT";
+			case DataType.SMALLINT:return "SMALLINT";
+			case DataType.MEDIUMINT:return "MEDIUMINT";
+			case DataType.INT: return "INT";
+			case DataType.BIGINT:return "BIGINT";
+			case DataType.FLOAT: return "FLOAT";
+			case DataType.DOUBLE: return "DOUBLE";
+			case DataType.DECIMAL: return "DECIMAL";
+			case DataType.BIT: return "BIT";
+			case DataType.YEAR: return "YEAR";
+			case DataType.DATE: return "DATE";
+			case DataType.TIME: return "TIME";
+			case DataType.DATETIME: return "DATETIME";
+			case DataType.TIMESTAMP: return "TIMESTAMP";
+			case DataType.CHAR: return "CHAR";
+			case DataType.BINARY: return "BINARY";	    
+			case DataType.VARCHAR: return "VARCHAR";
+			case DataType.VARBINARY: return "VARBINARY";
+			case DataType.TINYBLOB: return "TINYBLOB";
+			case DataType.TINYTEXT: return "TINYTEXT";
+			case DataType.BLOB: return "BLOB"; 
+			case DataType.TEXT: return "TEXT"; 
+			case DataType.MEDIUMBLOB: return "MEDIUMBLOB"; 
+			case DataType.MEDIUMTEXT: return "MEDIUMTEXT";
+			case DataType.LONGBLOB: return "LONGBLOB";
+			case DataType.LONGTEXT: return "LONGTEXT";
+			case DataType.ENUM: return "ENUM";
+			case DataType.SET: return "SET";
+			default: throw new IllegalArgumentException("Invalid data type index: " + dataTypeIdentifier);
+		  }
 
 		}
 		return null;

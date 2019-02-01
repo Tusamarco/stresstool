@@ -364,15 +364,12 @@ public class Launcher {
             ((StressActionBase)sr.get()).setActionCode(StressAction.INSERT_ID_CONST);
 
             boolean createSchema = Boolean.parseBoolean((String) (config.getConfiguration(Configurator.MAIN_SECTION_NAME, StressTool.class).getParameter("createTable").getValue()));
-	    this.currentSchema = ((CreateAction) ((StressActionBase)sr.get())).CreateSchema(createSchema);
-	    sa = null;
-	    sr = null;
-	    StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).debug("Assign  Special CLass for schema creation [end] ");
-	    
-	    return true;
-    
-	    
-	    
+		    this.currentSchema = ((CreateAction) ((StressActionBase)sr.get())).CreateSchema(createSchema);
+		    sa = null;
+		    sr = null;
+		    StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).debug("Assign  Special CLass for schema creation [end] ");
+		    
+		    return true;
         }catch(Exception ex1){
 			try{					
 				ByteArrayOutputStream baos = new ByteArrayOutputStream();

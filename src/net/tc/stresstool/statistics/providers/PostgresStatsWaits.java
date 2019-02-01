@@ -232,7 +232,7 @@ public class PostgresStatsWaits extends BaseStatCollector implements StatsProvid
 			              
 			              if(statusReport.containsKey(name)) {
 			            	  statusReport.put(name,event);
-				              System.out.println(name + " : " + value);			            	  
+//				              System.out.println(name + " : " + value);			            	  
 //			              internalOrder++;
 			              }
 		          }

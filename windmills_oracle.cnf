@@ -4,26 +4,27 @@
 # Mandatory
 #==========
 #DBTYPE is mandatory from this version of StressTool 
-#possible options are mysql|postgres
-dbTypeName=postgres
+#possible options are mysql|postgres|oracle
+#dbTypeName=postgres
 #dbTypeName=mysql
+dbTypeName=oracle
 
 #==========
 # Connection section
 #==========
-connUrl=jdbc:postgres://192.168.1.81:5432
+connUrl=jdbc:oracle:thin:@192.168.1.201:1521/ORCL
 #connUrl=jdbc:postgres://192.168.1.118:5432
-database=test
+database=orcl
 schema=windmills
 
-user=app1
+user=app_test
 password=test
 connParameters=autoReconnect=true  
 connectionPool=false
 connectionPoolClass= 
 selectForceAutocommitOff=true
 stickyconnection=true
-useConnectionPool=true
+useConnectionPool=false
 connectionPoolType=1
 #at the moment we only support hikari
 skipPermissionTest=true
@@ -33,7 +34,7 @@ skipPermissionTest=true
 # Global options
 #==========
 FKEnable=false
-createTable=false 
+createTable=true 
 
 droptable=false
 truncate=false
@@ -60,9 +61,9 @@ doSimple=false
 #==========
 poolNumber=4
 pctInsert=100
-pctUpdate=100 
-pctSelect=100 
-pctDelete=50
+pctUpdate=0 
+pctSelect=0 
+pctDelete=0
 #repeatNumber=1
 repeatNumber=1000
 

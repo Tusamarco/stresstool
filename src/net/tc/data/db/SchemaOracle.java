@@ -13,8 +13,8 @@ import net.tc.stresstool.exceptions.StressToolConfigurationException;
 import net.tc.stresstool.logs.LogProvider;
 import net.tc.utils.SynchronizedMap;
 
-public class SchemaPostgres extends Schema {
-	public SchemaPostgres() {
+public class SchemaOracle extends Schema {
+	public SchemaOracle() {
 		super();
 		
 	}
@@ -103,7 +103,7 @@ public class SchemaPostgres extends Schema {
 			table.setInstanceNumber(i);
 		    
 		    Table newTable = null;
-			newTable = new TablePostgres();
+	    	newTable = new TableOracle();		    
 //		    if(table instanceof TableMySQL){
 //		    	newTable =  new TableMySQL();
 //		    }
