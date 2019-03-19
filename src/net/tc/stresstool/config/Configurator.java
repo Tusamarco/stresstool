@@ -105,7 +105,7 @@ public class Configurator {
 	    	configurationArgs = new SynchronizedMap(0);
 	    String[] inArgs = null; 
 	    if(args.length > 1 && args[1].indexOf(",") > 0){
-	    	inArgs= args[1].split(",");
+	    	inArgs= args[1].replaceAll("\n", "").replaceAll(" ", "").split(",");
 	    }	
 	    else
 	    	inArgs = args;
@@ -114,7 +114,7 @@ public class Configurator {
 	    
 		for(int i = 0; i < inArgs.length; i++){
 //		    args2[i] = args[i + 1];
-		    args2[i] = inArgs[i ];
+		    args2[i] = inArgs[i];
 		}
 		Map argsM = net.tc.utils.Utility.convertArgsToMap(args2);
 		
