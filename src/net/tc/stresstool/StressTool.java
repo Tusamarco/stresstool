@@ -122,6 +122,7 @@ public class StressTool {
 	         * 
 	         */
 	        init();
+	        config.setLog(logProvider.getLogger(LogProvider.LOG_APPLICATION));
 	        
 	        launcher = new Launcher(config);
 	        /*
@@ -133,7 +134,7 @@ public class StressTool {
 	        
 //	        connectionInformation = testConnection(getConfig().getConfiguration(Configurator.MAIN_SECTION_NAME, this.getClass()));
 	        
-	        config.printConfiguration(applicationLogger);
+	        config.printConfiguration();
 	        
 	        StatCollector stats = new StatCollector(config,launcher.getConnProvider());
 
