@@ -40,6 +40,7 @@ public class Configurator {
 	public static String STATS_SECTION_NAME= "statistics";
 	public static String LOGS_SECTION_NAME= "logs";
 	public static String ACTION_SECTION_NAME= "actionClass";
+	private Logger log = null;
 	
 	public Configurator()throws StressToolException {
 	    configurationCollection = new SynchronizedMap(0);
@@ -79,6 +80,7 @@ public class Configurator {
 					    
 					    confI.updateConfigValue((ConfigurationImplementation)configurationArgs.get(sectionName+"@"+imPlementingClass.getName()));
 					}
+//					confI.printAllConfiguration();
 					configurationCollection.put(sectionName+"@"+imPlementingClass.getName(), confI);
 					
 				}
@@ -102,18 +104,24 @@ public class Configurator {
 	 * Read the Args and fill the configuration object
 	 */
 	private SynchronizedMap readArgs(String[] args, Class imPlementingClass) throws StressToolException {
-	    	configurationArgs = new SynchronizedMap(0);
+	    configurationArgs = new SynchronizedMap(0);
 	    String[] inArgs = null; 
+	    String argString= null;
 	    if(args.length > 1 && args[1].indexOf(",") > 0){
+	    	argString= args[1].replaceAll("\n", "").replaceAll(" ", "");
 	    	inArgs= args[1].replaceAll("\n", "").replaceAll(" ", "").split(",");
 	    }	
 	    else
 	    	inArgs = args;
 	    
 	    String[] args2 =new String[inArgs.length  ];
-	    
+//System.out.println(" =========== Dynamic parameter sections (from command line) ======== ");
+//System.out.println("======== Args lenght "+ args.length +"  "+ argString);		
+
+
 		for(int i = 0; i < inArgs.length; i++){
 //		    args2[i] = args[i + 1];
+//System.out.println(" Parameter #" + i +" = " + inArgs[i]);
 		    args2[i] = inArgs[i];
 		}
 		Map argsM = net.tc.utils.Utility.convertArgsToMap(args2);
@@ -183,7 +191,7 @@ public class Configurator {
  * Method used to print the configuration information
  * @param log
  */
-	public void printConfiguration(Logger log){
+	public void printConfiguration(){
 	    
 	    Iterator it = configurationCollection.keySet().iterator();
 	    log.info("============================================================");
@@ -206,5 +214,11 @@ public class Configurator {
 	    
 	    
 	}
+private Logger getLog() {
+	return log;
+}
+public void setLog(Logger logIn) {
+	log = logIn;
+}
 
 }

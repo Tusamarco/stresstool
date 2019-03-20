@@ -11,19 +11,10 @@ import net.tc.utils.SynchronizedMap;
  * @author  tusa
  */
 public class ConfigurationImplementation implements Configuration {
-	/**
-	 * @uml.property  name="sectionName"
-	 */
+
 	private String SectionName;
-	/**
-	 * @uml.property  name="mapValues"
-	 * @uml.associationEnd  qualifier="toLowerCase:java.lang.String net.tc.stresstool.config.ConfigValue"
-	 */
 	private SynchronizedMap mapValues = new SynchronizedMap(0);
 	
-//	public ConfigurationImplementation(String SectionName) {
-//		// TODO Auto-generated constructor stub
-//	}
 
 	public ConfigurationImplementation(String SectionNameIn,java.util.Map values,Class implementingClass) throws StressToolException {
 		try{
@@ -63,10 +54,6 @@ public class ConfigurationImplementation implements Configuration {
 
 	}
 
-	/**
-	 * @param  name
-	 * @uml.property  name="sectionName"
-	 */
 	@Override
 	public void setSectionName(String name) {
 		SectionName = name;
@@ -87,10 +74,6 @@ public class ConfigurationImplementation implements Configuration {
 			return null;
 	}
 
-	/**
-	 * @return
-	 * @uml.property  name="sectionName"
-	 */
 	@Override
 	public String getSectionName() {
 		return SectionName;
@@ -118,7 +101,7 @@ public class ConfigurationImplementation implements Configuration {
 	    if( inConfig != null 
 		    && inConfig.getSectionName() !=null 
 		    && !inConfig.getSectionName().equals("")
-		    ){
+		){
 
 		
 		Iterator it = inConfig.getParametersName();
@@ -130,10 +113,30 @@ public class ConfigurationImplementation implements Configuration {
 		}
 		
 		
-	    }
+	  }
 	    
 	    
 	    return modified;
 	}
+	public void printAllConfiguration() {
+	 
+		if(mapValues != null && mapValues.size() > 0){
+		   Iterator <String>it =mapValues.keySet().iterator();
+		   while(it.hasNext()){
+			   String name=it.next();
+			   String value = (String)this.getParameter(name).getValue();
+			   System.out.println("Conf " + name + " = " + value);
+			   
+		   }
+		   
+		   
+		   
+		   
+	    
+	    
+	    }		
+		
+	}
+	
 
 }
