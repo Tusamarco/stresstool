@@ -13,7 +13,7 @@ dbTypeName=mysql
 #==========
 connUrl=jdbc:mysql://192.168.1.11:6033
 #connUrl=jdbc:mysql://192.168.1.205:3306
-#connUrl=jdbc:mysql://127.0.0.1:3306
+#connUrl=jdbc:mysql://127.0.0.1:3336
 #database=test
 schema=windmills
 database=windmills
@@ -59,13 +59,13 @@ doSimple=false
 #==========
 # scalability / load settings  
 #==========
-poolNumber=6
-pctInsert=100
+poolNumber=1
+pctInsert=00
 pctUpdate=0 
 pctSelect=100 
 pctDelete=0
 #repeatNumber=1
-repeatNumber=100000
+repeatNumber=1000
 
 #==========
 # console display settings
@@ -169,7 +169,7 @@ batchSize=3
 usePrepareStatement=false
 SelectFilterMethod=in
 #range|in|match
-SleepSelect=100 
+SleepSelect=10 
 
 numberOfIntervalKeys=100
 lazySelect=true

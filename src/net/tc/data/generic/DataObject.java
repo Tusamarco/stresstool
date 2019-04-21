@@ -305,12 +305,13 @@ public class DataObject extends MultiLanguage
 			 Statement stmt = (Statement) conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
 			 
 			for(int ac = 0 ; ac < commands.size(); ac++){
-				try{StressTool.getLogProvider().getLogger(LogProvider.LOG_SQL).info(commands.get(ac)  );}catch(StressToolConfigurationException e){}	
+	
 			  ResultSet rs = null;
 			  try{
 				  rs = stmt.executeQuery(commands.get(ac));
 				  rs.last();
 				  lines[ac] = rs.getRow();
+					try{StressTool.getLogProvider().getLogger(LogProvider.LOG_SQL).info("Returned Rows:" + lines[ac] + " | " +commands.get(ac)  );}catch(StressToolConfigurationException e){}
 			  }catch(Exception mx){
 				  System.out.println(commands.get(ac));mx.printStackTrace();
 				  }
@@ -341,10 +342,18 @@ public class DataObject extends MultiLanguage
 	      
 	      try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).debug("******************* RESET? "+ this.getLazyExecCount() + " ***********************" );}catch(StressToolConfigurationException e){}
 	    	
-	    	
+	      conn.setAutoCommit(false);	
 	      Statement stmt = (Statement) conn.createStatement();
+
 //	      stmt.execute("BEGIN");
-	      stmt.addBatch("START TRANSACTION");
+	      if(!(conn.getMetaData().getDatabaseProductName().toLowerCase().indexOf("oracle")>=0)) {
+	    	  stmt.addBatch("START TRANSACTION");
+	      }
+	      else {
+	    	  conn.setAutoCommit(false);
+	    	  
+	      }
+//	      stmt.addBatch("START TRANSACTION");
 		    if(SQLContainer != null ){
 		      for(int ir = 0 ; ir < getSqlObjects().size(); ir++){
 		    	SQLObject mySo = (SQLObject)getSqlObjects().getValueByPosition(ir);
@@ -368,7 +377,7 @@ public class DataObject extends MultiLanguage
 		    	for(int iCo = 0 ; iCo < mySo.getSQLCommands().size(); iCo++){
 		    	  String command = (String)(mySo.getSQLCommands().get(iCo)) ;
 
-//		    	  stmt.execute(command);
+//		    	  ora.execute(command);
 		    	  stmt.addBatch(command);
 		    	  try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).info("Add SQL to batch: " + command  );}catch(StressToolConfigurationException e){}
 //		    	  System.out.println("Add SQL to batch: " + command  );
@@ -378,9 +387,9 @@ public class DataObject extends MultiLanguage
 		      }
 		    }
 //		    stmt.execute("COMMIT");
-		    stmt.addBatch("COMMIT");
+//		    stmt.addBatch("COMMIT");
 		    rows = executeSQL(stmt);
-//		    stmt.execute("COMMIT");
+		    conn.commit();
 		    stmt.clearBatch();
 	        
 	      

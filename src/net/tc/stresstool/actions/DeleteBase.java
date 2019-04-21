@@ -154,9 +154,14 @@ public class DeleteBase extends StressActionBase implements DeleteAction{
 		  lSQLObj.setSourceTables(tables);
 		  
 		  String sqlDeleteCommand = DataObject.SQL_DELETE_TEMPLATE;
-		  loadMaxWhereValues(newTable);
+/* deprecated
+ * 		  loadMaxWhereValues(newTable);
+ */
 		  sqlDeleteCommand = createDelete(sqlDeleteCommand,lSQLObj);
-		  sqlDeleteCommand = createWhere(sqlDeleteCommand,lSQLObj);
+		  sqlDeleteCommand = createWhere(sqlDeleteCommand,newTable);
+		  if(sqlDeleteCommand == null)
+			  return;
+		  
 //		  sqlUpdateCommand = createGroupBy(sqlUpdateCommand);
 		  sqlDeleteCommand = createOrderBy(sqlDeleteCommand);
 		  sqlDeleteCommand = createLimit(sqlDeleteCommand);
@@ -175,15 +180,29 @@ public class DeleteBase extends StressActionBase implements DeleteAction{
 			return sqlDeleteCommand;
 
 	  }	
-	private String createWhere(String sqlUpdateCommand,SQLObject lSQLObj){
+	private String createWhere(String sqlDeleteCommand,Table table){
 			if(this.getLeadingTable()!= null){
 			  StringBuffer  whereConditionString = new StringBuffer();
 
 			  whereConditionString.append(" WHERE ");
-			  whereConditionString.append(getLeadingTable().parseWhere(lSQLObj.getSQLCommandType()));
-			  sqlUpdateCommand = sqlUpdateCommand.replaceAll("#WHERE#", whereConditionString.toString());
+			  
+			  try {
+				Connection conn = this.getConnProvider().getConnection();
+				String conditions = table.parseWhere(this.getMyDataObject().SQL_DELETE,conn);
+				this.getConnProvider().returnConnection((java.sql.Connection) conn);
+				if(conditions == null 
+				   || conditions.indexOf("#") > 0)
+					  	return null;
+				  else
+					  whereConditionString.append(conditions);
+				
+			  } 
+			  catch (SQLException e) {
+				e.printStackTrace();
+			  }
+			  sqlDeleteCommand = sqlDeleteCommand.replaceAll("#WHERE#", whereConditionString.toString());
 
-			  return sqlUpdateCommand;
+			  return sqlDeleteCommand;
 			}
 			return null;
 	}

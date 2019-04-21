@@ -24,6 +24,7 @@ public class Attribute {
 	private String specialFunction = null;
 	private Long upperLimit = new Long(0) ;
 	private Long actionLimit = new Long(0);
+	private String formattingFunction=null;
 	
 	
     private boolean isNull = true;
@@ -199,10 +200,14 @@ public class Attribute {
 			
 		return upperLimit;
 	}
-	/**
-	 * @param upperLimit the upperLimit to set
-	 */
+
 	public void setUpperLimit(Long upperLimit) {
 	  this.upperLimit = upperLimit;
+	}
+	public String getFormattingFunction() {
+		return formattingFunction;
+	}
+	public void setFormattingFunction(String formattingFunction) {
+		this.formattingFunction = formattingFunction;
 	}
 }

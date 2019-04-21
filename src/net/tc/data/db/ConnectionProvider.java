@@ -282,6 +282,7 @@ public class ConnectionProvider {
 			 switch (connInfo.getDbType().toUpperCase()) { 
 			 case ConnectionInformation.MYSQL: 		return this.getSimpleMySQLConnection();
 			 case ConnectionInformation.POSTGRES:	return this.getSimplePGConnection();
+			 case ConnectionInformation.ORACLE:	    return this.getSimpleOracleConnection();
     			
     		}
     	 }
@@ -343,6 +344,7 @@ public class ConnectionProvider {
     			    sf = new SoftReference<Connection>((Connection) this.getDataSource().getConnection());
     			}catch(Exception ex){ex.printStackTrace();}
     			finally{
+    				
     				if(connInfo.isSelectForceAutocommitOff()){
     					((Connection) sf.get()).setAutoCommit(false);
     				}

@@ -78,7 +78,7 @@ public class StructureDefinitionParserOracle implements
 				    	ArrayList attribsWIthIndex = new ArrayList(); 
 				    	
 					JSONObject oTable = (JSONObject) o;
-					Table table = new TablePostgres();
+					Table table = new TableOracle();
 					table.setName((String)oTable.get("tablename"));
 
 					table.setSchemaName((String)oTable.get("database"));
@@ -246,11 +246,12 @@ public class StructureDefinitionParserOracle implements
 						+ attribute.getName());
 						if(attribsWIthIndex.contains(attribute.getName()))
 						    attribute.setHasIndex(true);
-						attribute.setDataType(new DataType(DataType.getDataTypeIdentifierByString((String)oAttribute.get("datatype"),ConnectionInformation.POSTGRES)));
+						attribute.setDataType(new DataType(DataType.getDataTypeIdentifierByString((String)oAttribute.get("datatype"),ConnectionInformation.ORACLE)));
 						attribute.setDataDimension((String)oAttribute.get("datadimension")!= null?Integer.parseInt((String)oAttribute.get("datadimension")):0);
 						attribute.setAutoIncrement(oAttribute.get("autoincrement")!= null?true:false);
 						attribute.setSpecialFunction(oAttribute.get("specialFunction")!= null?(String)oAttribute.get("specialFunction"):null);
 						attribute.setUpperLimit(oAttribute.get("upperlimit")!= null?Long.parseLong((String)oAttribute.get("upperlimit")):0);
+						attribute.setFormattingFunction(oAttribute.get("formattingFunction")!= null?(String)oAttribute.get("formattingFunction"):null);
 												
 						if(attribute.getDataType().getDataTypeCategory() == DataType.STRING_CATEGORY 
 							&& attribute.getUpperLimit() < 1){
@@ -276,8 +277,7 @@ public class StructureDefinitionParserOracle implements
 								&& (oAttribute.get("lazy")).equals("0")){
 							attribute.setLazy(false);
 						}
-						
-						
+
 						table.setMetaAttribute(attribute);
 					}
 
@@ -292,7 +292,7 @@ public class StructureDefinitionParserOracle implements
 					if(table.isHasPartition()){
 					    if(oTable.get("partitionDefinition") != null){
 						JSONObject oPartDef = (JSONObject)oTable.get("partitionDefinition");
-						PartitionDefinition partDef = new PartitionDefinitionPostgres();
+						PartitionDefinition partDef = new PartitionDefinitionOracle();
 						partDef.setTableName(table.getName());
 						partDef.setPartitionType((String)oPartDef.get("partitionBy")!=null?(String)oPartDef.get("partitionBy"):null);
 

@@ -48,7 +48,7 @@ public class SchemaOracle extends Schema {
 	while (tablesIt.hasNext()) {
 	    Table table = this.getTable((String) tablesIt.next());
 	    try {
-		sbTables.append(table.deploy().append(";\n\n"));
+		sbTables.append(table.deploy().append("\n\n"));
 	    } catch (StressToolConfigurationException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();

@@ -12,8 +12,10 @@ dbTypeName=postgres
 # Connection section
 #==========
 connUrl=jdbc:postgres://192.168.1.81:5432
-#connUrl=jdbc:postgres://192.168.1.118:5432
+#connUrl=jdbc:postgres://127.0.0.1:5433
+
 database=test
+#database=postgres
 schema=windmills
 
 user=app1
@@ -21,7 +23,7 @@ password=test
 connParameters=autoReconnect=true  
 connectionPool=false
 connectionPoolClass= 
-selectForceAutocommitOff=true
+selectForceAutocommitOff=false
 stickyconnection=true
 useConnectionPool=true
 connectionPoolType=1
@@ -60,7 +62,7 @@ doSimple=false
 #==========
 poolNumber=4
 pctInsert=100
-pctUpdate=100 
+pctUpdate=50 
 pctSelect=100 
 pctDelete=50
 #repeatNumber=1
@@ -153,21 +155,21 @@ maxLifetime=500000
 # are deprecate because the settings on how to query and delete now are in the Json file that define the tables.
 
 [net.tc.stresstool.actions.DeleteBase] 
-sleepDelete=100 
+sleepDelete=800 
 usePrepareStatement=false
 deleteRange = 100
-batchSize=6
+batchSize=1
 lazyInterval=0
 lazyDelete=false
 numberOfprimaryTables=1
-batchSize=3
+
 
 [net.tc.stresstool.actions.SelectBase]
 #for consistency the number of tables should never be higher than the ones declared in the Insert class
 usePrepareStatement=false
 SelectFilterMethod=in
 #range|in|match
-SleepSelect=100 
+SleepSelect=500 
 
 numberOfIntervalKeys=100
 lazySelect=true
@@ -189,7 +191,7 @@ indexName=IDX_as
 [net.tc.stresstool.actions.InsertBase]
 usePrepareStatement=false
 useAutoIncrement=true
-sleepWrite=10
+sleepWrite=100
 lazyCreation=true
 lazyInterval=5
 batchSize=20
@@ -208,10 +210,10 @@ usePrepareStatement=false
 delayStartRecords = 1000
 useAutoIncrement=true
 joinField=a
-sleepUpdate=500
+sleepUpdate=800
 lazyUpdate=false
 lazyInterval=10
-batchSize=5
+batchSize=1
 
 #deprecated
 numberOfprimaryTables=1

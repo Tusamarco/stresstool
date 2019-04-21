@@ -464,11 +464,26 @@ private String valueLessMoreThen(Table table,Attribute attrib, String operator,i
 		Date date1 = this.getRandomDate();
 		Date date2 = this.getRandomDate();
 		String value = "";
+		String dateS1=TimeTools.getTimeStampFromDate(date1, null);
+		String dateS2=TimeTools.getTimeStampFromDate(date2, null);
+		if (attrib.getFormattingFunction()!=null 
+			&& !attrib.getFormattingFunction().equals("")) {
+			String formatting = attrib.getFormattingFunction();
+			dateS1 =formatting.replaceAll("#VALUE#", dateS1) ;
+			dateS2 =formatting.replaceAll("#VALUE#", dateS2) ;
+		}
+	else {
+			dateS1 = "'" + dateS1 + "'";
+			dateS2 = "'" + dateS2 + "'" ;			
+		}
+	
+		
+		
 		if(date1.getTime() < date2.getTime()){
-			value = " (" + table.getName() +"."+ attrib.getName() + " " + TimeTools.getTimeStampFromDate(date1, null) + " " + operator + " " + TimeTools.getTimeStampFromDate(date2, null) + ") ";
+			value = " (" + table.getName() +"."+ attrib.getName() + " " + dateS1 + " " + operator + " " + dateS2 + ") ";
 		}
 		else if(date1.getTime() > date2.getTime()){
-			value = " ("+ table.getName() + "." + attrib.getName() + " " + TimeTools.getTimeStampFromDate(date2, null) + " " + operator + " " + TimeTools.getTimeStampFromDate(date1, null) + ") ";
+			value = " ("+ table.getName() + "." + attrib.getName() + " " + dateS2 + " " + operator + " " + dateS1 + ") ";
 		}
 		else{
 			return valueLessMoreThen(table, attrib,operator,rangeLength);
@@ -499,7 +514,16 @@ private Object valueForIn(Table table,Attribute attrib,int rangeLength) {
 		for(int ic = 0 ; ic < loop; ic++){
 			if(ic > 0)
 				sb.append(",");
-			sb.append("'" + TimeTools.getTimeStampFromDate(getRandomDate(), null) + "'");
+			Date date1 = this.getRandomDate();
+			String dateS1=TimeTools.getTimeStampFromDate(date1, null);
+			if (attrib.getFormattingFunction()!=null 
+				&& !attrib.getFormattingFunction().equals("")) {
+				String formatting = attrib.getFormattingFunction();
+				dateS1 =formatting.replaceAll("#VALUE#", dateS1) ;
+			}else {
+				dateS1 = "'" + dateS1 + "'";
+			}
+			sb.append(dateS1 );
 		}
 		sb.append(")");
 	}
@@ -552,12 +576,25 @@ private String valueForBetween(Table table, Attribute attrib,int rangeLength) {
 		
 		Date date1 = this.getRandomDate(rangeLength,cal);
 		Date date2 = this.getRandomDate(rangeLength,cal);
+		String dateS1=TimeTools.getTimeStampFromDate(date1, null);
+		String dateS2=TimeTools.getTimeStampFromDate(date2, null);
+		if (attrib.getFormattingFunction()!=null 
+			&& !attrib.getFormattingFunction().equals("")) {
+			String formatting = attrib.getFormattingFunction();
+			dateS1 =formatting.replaceAll("#VALUE#", dateS1) ;
+			dateS2 =formatting.replaceAll("#VALUE#", dateS2) ;
+		}
+		else {
+			dateS1 = "'" + dateS1 + "'";
+			dateS2 = "'" + dateS2 + "'" ;			
+		}
+		
 		
 		if(date1.getTime() < date2.getTime()){
-			value = " ("+ table.getName() + "." + attrib.getName() + " BETWEEN '" + TimeTools.getTimeStampFromDate(date1, null) + "' AND '" + TimeTools.getTimeStampFromDate(date2, null) + "') "; 
+			value = " ("+ table.getName() + "." + attrib.getName() + " BETWEEN " + dateS1 + " AND " + dateS2 + ") "; 
 		}
 		else if(date1.getTime() > date2.getTime()){
-			value = " ("+ table.getName() + "." + attrib.getName() + " BETWEEN '" + TimeTools.getTimeStampFromDate(date2, null) + "' AND '" + TimeTools.getTimeStampFromDate(date1, null) + "') ";
+			value = " ("+ table.getName() + "." + attrib.getName() + " BETWEEN " + dateS2 + " AND " + dateS1 + ") ";
 		}
 		else{
 			return valueForBetween(table,attrib,rangeLength);

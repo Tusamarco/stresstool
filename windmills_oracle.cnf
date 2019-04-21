@@ -22,7 +22,7 @@ password=test
 connParameters=autoReconnect=true  
 connectionPool=false
 connectionPoolClass= 
-selectForceAutocommitOff=true
+selectForceAutocommitOff=false
 stickyconnection=true
 useConnectionPool=false
 connectionPoolType=1
@@ -34,7 +34,7 @@ skipPermissionTest=true
 # Global options
 #==========
 FKEnable=false
-createTable=true 
+createTable=false 
 
 droptable=false
 truncate=false
@@ -59,21 +59,21 @@ doSimple=false
 #==========
 # scalability / load settings  
 #==========
-poolNumber=4
+poolNumber=1
 pctInsert=100
 pctUpdate=0 
-pctSelect=0 
+pctSelect=100 
 pctDelete=0
 #repeatNumber=1
-repeatNumber=1000
+repeatNumber=1000000000
 
 #==========
 # console display settings
 #==========
-HardStopLimit=10
-UseHardStop=false
+HardStopLimit=1000000000000000000
+UseHardStop=true
 StatIntervalMs=1000
-StatLoops = 100
+StatLoops = 100000000
 SemaphoreCountdownTime = 3
 # table engine comma separated with % value; 
 # deprecated ##TableEngine=InnoDB|90,MyISAM|10
@@ -112,7 +112,7 @@ monitorlog=MONITORS
 rootdirectory=/tmp/stats
 #this parameter says to write a CSV file for each provider (in root dir)
 flushrowonfile=true
-providerclass=net.tc.stresstool.statistics.providers.ActionsReporter,net.tc.stresstool.statistics.providers.PostgresStatsDBInfo,net.tc.stresstool.statistics.providers.PostgresStatsWalCeckpoints,net.tc.stresstool.statistics.providers.PostgresStatsWaits
+providerclass=net.tc.stresstool.statistics.providers.ActionsReporter
 #,net.tc.stresstool.statistics.providers.MySQLStatus
 
 #,net.tc.stresstool.statistics.providers.InnoDBMetrics
@@ -193,8 +193,8 @@ useAutoIncrement=true
 sleepWrite=10
 lazyCreation=true
 lazyInterval=5
-batchSize=20
-jsonFile=wind_mill_example.json
+batchSize=1
+jsonFile=wind_mill_example_orac.json
 
 #deprecated
 joinField=millid
@@ -217,3 +217,8 @@ batchSize=5
 #deprecated
 numberOfprimaryTables=1
 numberOfSecondaryTables=0
+
+
+[net.tc.stresstool.actions.ToolsAction]
+collectMax=true
+sleepTools=2000

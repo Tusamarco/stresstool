@@ -191,7 +191,12 @@ public class SQLObject {
 		//			  if(!this.resetLazy && !((Attribute) attrib).isLazy())
 		//				  System.out.println("===========2 Attrib " + ((Attribute) attrib).getName() +" V:  " + ((Attribute) attrib).getValue() );
 		
-		    		  
+		    		  if(((Attribute) attrib).getFormattingFunction() !=null 
+		    				  && !((Attribute) attrib).getFormattingFunction().equals(""))
+		    		  {
+		    			 String formattedValue = ((Attribute) attrib).getFormattingFunction().replaceAll("'#VALUE#'", (String)(((Attribute) attrib).getValue()));
+		    			 ((Attribute) attrib).setValue(formattedValue);
+		    		  }
 		    		  singleSql.append(((Attribute) attrib).getValue());
 		
 		//    		  		  try {StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).debug(

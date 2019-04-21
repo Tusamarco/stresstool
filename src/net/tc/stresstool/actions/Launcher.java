@@ -48,6 +48,7 @@ public class Launcher {
     private String updateClass = null;
     private String selectClass = null;
     private String valueProvider = null;
+    private String toolsClass = "net.tc.stresstool.actions.ToolsAction";
 //    private WriteAction writeImplementation = null;
 //    private WriteAction updateImplementation = null;
 //    private ReadAction readImplementation = null;
@@ -57,6 +58,7 @@ public class Launcher {
     private SynchronizedMap  updateImplementationMap = null;
     private SynchronizedMap readImplementationMap = null;
     private SynchronizedMap deleteImplementationMap = null;
+    private SynchronizedMap toolsImplementationMap = null;
     
     private int poolNumber =10;
     float pctInsert = 100;
@@ -64,7 +66,7 @@ public class Launcher {
     float pctSelect = 100;
     float pctDelete = 100;
     private boolean actionInitialized = false;
-    private int  HardStopLimit=100;
+    private long  HardStopLimit=100;
     private boolean UseHardStop=false;
     private int StatIntervalMs=1000;
     private int StatLoops = 100 ;
@@ -114,7 +116,7 @@ public class Launcher {
     	this.pctInsert = Integer.parseInt((String) configuration.getParameter("pctInsert").getValue());
     	this.pctSelect = Integer.parseInt((String) configuration.getParameter("pctSelect").getValue());
     	this.pctUpdate = Integer.parseInt((String) configuration.getParameter("pctUpdate").getValue());
-    	this.setHardStopLimit( Integer.parseInt((String) configuration.getParameter("HardStopLimit").getValue()));
+    	this.setHardStopLimit( Long.parseLong((String) configuration.getParameter("HardStopLimit").getValue()));
     	this.setStatIntervalMs( Integer.parseInt((String) configuration.getParameter("StatIntervalMs").getValue()) );
     	this.setStatLoops(  Integer.parseInt((String) configuration.getParameter("StatLoops").getValue()) );
     	this.setUseHardStop(Boolean.parseBoolean((String) configuration.getParameter("UseHardStop").getValue()));
@@ -180,6 +182,7 @@ public class Launcher {
     			    this.valueProvider =(String) config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParameter("ValueProvider").getValue();
     			    
     			}
+    			
 
     			else{
     			    ExceptionMessages.setCurrentError(ExceptionMessages.ERROR_FATAL);
@@ -497,6 +500,35 @@ public class Launcher {
 
     }
 
+    /*
+     * Run tools
+     * 
+     */
+    
+    public boolean runTools() {
+	for(Object id:toolsImplementationMap.getKeyasOrderedArray()){
+	    StressActionBase sb = (StressActionBase) toolsImplementationMap.get(id);
+	    ActionTHElement thInfo =  sb.getTHInfo();
+	    if(thInfo.getReady() != ActionTHElement.SEMAPHORE_NOT_INITIALIZED){
+		continue;
+	    }
+	    thInfo.setActive(true);
+	    thInfo.setReady(ActionTHElement.SEMAPHORE_YELLOW);
+	    sb.setTHInfo(thInfo);
+	    Thread ths = new Thread((Runnable) sb);
+	    sb.getTHInfo().setThId(ths.getId());
+            ths.start();
+            toolsImplementationMap.put(id, sb);
+	} 
+	
+	return true;
+
+    }
+    
+    
+    
+    
+    
     /**
 					 */
     public boolean runSelects() {
@@ -538,6 +570,7 @@ public class Launcher {
 	if(updateImplementationMap != null) this.actionInitialized=this.runUpdate();
 	if(readImplementationMap != null) this.actionInitialized=this.runSelects();
 	if(deleteImplementationMap != null)this.actionInitialized=this.runDelete();
+	if(toolsImplementationMap != null)this.actionInitialized=this.runTools();
 	
 	if(!this.actionInitialized)
 	    return false;
@@ -556,7 +589,7 @@ public class Launcher {
 				System.exit(1)  ;
 		}catch(Exception ex){ex.printStackTrace();}
 
-}
+	   }
 	    
 	}
 //	this.LaunchActions();
@@ -595,6 +628,14 @@ public class Launcher {
 	    }
 
 	}
+	if(toolsImplementationMap != null){
+	    for(Object key:toolsImplementationMap.getKeyasOrderedArray()){
+		StressAction sbA = (StressAction)toolsImplementationMap.get(key);
+		sbA = null;
+		toolsImplementationMap.remove(key);
+	    }
+
+	}
 
 	
     }
@@ -609,6 +650,7 @@ public class Launcher {
 	int deleteSemaphore = ActionTHElement.SEMAPHORE_NOT_INITIALIZED;
 	int insertSemaphore = ActionTHElement.SEMAPHORE_NOT_INITIALIZED;
 	int updateSemaphore = ActionTHElement.SEMAPHORE_NOT_INITIALIZED;
+	int toolsSemaphore  = ActionTHElement.SEMAPHORE_NOT_INITIALIZED;
 	
 	if(writeImplementationMap != null){
         	for(Object thInfo:writeImplementationMap.getKeyasOrderedArray()){
@@ -655,6 +697,18 @@ public class Launcher {
         	    }  
         	} 
 	}
+	
+	if(toolsImplementationMap != null){
+    	for(Object thInfo:toolsImplementationMap.getKeyasOrderedArray()){
+    	    if(((StressActionBase)(toolsImplementationMap.get(thInfo))).getTHInfo().getReady() > ActionTHElement.SEMAPHORE_GREEN){	  
+    		if(((StressActionBase)(toolsImplementationMap.get(thInfo))).getTHInfo().getReady() <= toolsSemaphore){
+    			toolsSemaphore = ((StressActionBase)(toolsImplementationMap.get(thInfo))).getTHInfo().getReady();
+    		}
+    	    }  
+    	} 
+    }
+
+	
 	
 //	if(insertSemaphore < ActionTHElement.SEMAPHORE_RED && selectSemaphore == ActionTHElement.SEMAPHORE_RED )
 //	    return ActionTHElement.SEMAPHORE_YELLOW;
@@ -755,7 +809,8 @@ public class Launcher {
         if (aDelete >= 1)
             deleteImplementationMap =new SynchronizedMap(poolNumber);
 
- 
+        // tools map
+        toolsImplementationMap =new SynchronizedMap(0);
         
         
 	/*
@@ -845,6 +900,25 @@ public class Launcher {
         		    }
         		    StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).debug("Assign  Delete class parameters [end] ");
 		    }
+		    
+		    /*
+		     * 
+		     * Tools map
+		     * 
+		     */
+		    if(1==1) {
+    		    StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).debug("Assign  Tools class parameters [start] ");
+    			StressActionBase sa = (StressActionBase)setParametersClassTools();
+    			sa.setLatch(latch);   
+    			sa.setConnProvider(this.connProvider);
+    			sa.setSchema(this.getCurrentSchema());
+    			sa.setActionType(StressAction.ACTION_TYPE_Tools);
+    			sa.setActionCode(StressAction.TOOLS_ID_CONST );
+    			sa.setTHInfo(new ActionTHElement(StressAction.TOOLS_ID_CONST ,false,ActionTHElement.SEMAPHORE_NOT_INITIALIZED));
+    			sa.getTHInfo().setAction(sa.getActionType());
+    			toolsImplementationMap.put(new Integer(StressAction.TOOLS_ID_CONST ), sa);
+		    }
+		    
 		    
 		    return true;
 		} 
@@ -979,7 +1053,7 @@ public class Launcher {
 			
 		    }  	
 		}
-		((StressAction)updateImplementation).setId(4000);
+		((StressAction)updateImplementation).setId(StressActionBase.UPDATE_ID_CONST);
 		((StressAction)updateImplementation).setActionType(StressActionBase.ACTION_TYPE_Update);
 		((StressAction)updateImplementation).setConnectionInformation(connMapcoordinates);
 		
@@ -1124,8 +1198,8 @@ public class Launcher {
 				    	
 				  }  	
 				}
-				((StressAction)readImplementation).setId(2000);
-				((StressAction)readImplementation).setActionType(StressActionBase.ACTION_TYPE_Insert);
+				((StressAction)readImplementation).setId(StressActionBase.SELECT_ID_CONST);
+				((StressAction)readImplementation).setActionType(StressActionBase.ACTION_TYPE_Select);
 				((StressAction)readImplementation).setConnectionInformation(connMapcoordinates);
 				return (StressAction) readImplementation;
 				
@@ -1244,8 +1318,8 @@ public class Launcher {
 				    	}
 				  }  	
 				}
-				((StressAction)deleteImplementation).setId(3000);
-				((StressAction)deleteImplementation).setActionType(StressActionBase.ACTION_TYPE_Insert);
+				((StressAction)deleteImplementation).setId(StressActionBase.DELETE_ID_CONST);
+				((StressAction)deleteImplementation).setActionType(StressActionBase.ACTION_TYPE_Delete);
 				((StressAction)deleteImplementation).setConnectionInformation(connMapcoordinates);
 				return (StressAction) deleteImplementation;
 				
@@ -1253,6 +1327,63 @@ public class Launcher {
 		return null;
 	}
 
+	private StressAction setParametersClassTools() throws InstantiationException,
+			IllegalAccessException, ClassNotFoundException,
+			InvocationTargetException, NoSuchMethodException,
+			StressToolException, StressToolConfigurationException {
+		
+		if(toolsClass != null && !toolsClass.equals("")){
+	    
+			ToolsAction toolsImplementation = (ToolsAction) Class.forName(toolsClass).newInstance();
+			Map beanProperties = BeanUtils.describe(toolsImplementation);
+			Iterator<String> it = config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParametersName();
+	    
+			while (it.hasNext()){
+			String propertyName = it.next();
+			if(beanProperties.containsKey(propertyName)){
+		    	if(BeanUtils.getProperty(((StressAction)toolsImplementation), propertyName) != null){
+    			
+			    BeanUtils.setProperty(((StressAction)toolsImplementation), propertyName, 
+			    	config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParameter(propertyName).getValue());
+			    StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).debug(toolsImplementation.getClass().getName() + " " +
+			    		propertyName + " = " + config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParameter(propertyName).getValue());
+    			
+			}
+		    	else{
+		    	    	StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).debug(toolsImplementation.getClass().getName() + " \"" +
+		    	    	propertyName + "\" method accepting this parameter DO NOT EXIST in this class");
+		    	}
+		    	
+		  } 	
+		}
+		
+		it = config.getConfiguration(toolsClass,StressTool.class).getParametersName();
+		while (it.hasNext()){
+		String propertyName = it.next();
+		if(beanProperties.containsKey(propertyName)){
+		    	if(BeanUtils.getProperty((toolsImplementation), propertyName) != null){
+    			
+			    BeanUtils.setProperty((toolsImplementation), propertyName, 
+			    	config.getConfiguration(toolsClass,StressTool.class).getParameter(propertyName).getValue());
+			    StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).debug(toolsImplementation.getClass().getName() + " " +
+			    		propertyName + " = " + config.getConfiguration(toolsClass,StressTool.class).getParameter(propertyName).getValue());
+    			
+			}
+		    	else{
+		    	    	StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).warn(toolsImplementation.getClass().getName() + " \"" +
+		    		propertyName + "\" method accepting this parameter DO NOT EXIST in this class");
+		    	}
+		  }  	
+		}
+		((StressAction)toolsImplementation).setId(StressActionBase.TOOLS_ID_CONST);
+		((StressAction)toolsImplementation).setActionType(StressActionBase.ACTION_TYPE_Tools);
+		((StressAction)toolsImplementation).setConnectionInformation(connMapcoordinates);
+		return (StressAction) toolsImplementation;
+		
+	  }
+	  return null;
+	}
+	
 	/**
 	 * @return the writeImplementationMap
 	 */
@@ -1286,14 +1417,14 @@ public class Launcher {
 	/**
 	 * @return the hardStopLimit
 	 */
-	public int getHardStopLimit() {
+	public long getHardStopLimit() {
 	    return HardStopLimit;
 	}
 
 	/**
 	 * @param hardStopLimit the hardStopLimit to set
 	 */
-	public void setHardStopLimit(int hardStopLimit) {
+	public void setHardStopLimit(long hardStopLimit) {
 	    HardStopLimit = hardStopLimit;
 	}
 

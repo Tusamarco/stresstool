@@ -198,19 +198,37 @@ public class InsertBase extends StressActionBase implements WriteAction,
 //				    stmt.executeQuery(sbCreate.toString());
 				    String[] sqlAr = sbCreate.toString().replaceAll("\n", "").split(";");
 				    for (String sql : sqlAr){
+				    	
 				    if(sql.length() >2){
 				    		sql=sql.replace('@', ';');
-				    		stmt.addBatch(sql);
+
+				    		if(this.getDbType().getName().toLowerCase().equals("oracle")) {
+				    			try {
+				    				stmt.execute(sql);
+				    			}catch(Throwable tw) {
+									ByteArrayOutputStream baos = new ByteArrayOutputStream();
+									PrintStream ps = new PrintStream(baos);	
+									tw.printStackTrace(ps);
+									String s =new String(baos.toByteArray());
+									StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error(tw.getMessage());
+				    			}
+				    		}
+				    		else {
+					    		stmt.addBatch(sql);
+				    		}
 				    		
 				    	}
 				    }
 				    try {StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).debug( sbCreate.toString());} catch (StressToolConfigurationException e) {}
-				    stmt.executeBatch();
+				    if(!this.getDbType().getName().toLowerCase().equals("oracle")) {
+				    	stmt.executeBatch();
+				    }
 				}
 				conn.close();
 				conn = null;
 			    } catch (SQLException e1) {
-					try{					
+					try{		
+						e1.printStackTrace();
 						ByteArrayOutputStream baos = new ByteArrayOutputStream();
 						PrintStream ps = new PrintStream(baos);				
 						e1.printStackTrace(ps);

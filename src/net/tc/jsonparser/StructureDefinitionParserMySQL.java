@@ -251,6 +251,7 @@ public class StructureDefinitionParserMySQL implements
 						attribute.setAutoIncrement(oAttribute.get("autoincrement")!= null?true:false);
 						attribute.setSpecialFunction(oAttribute.get("specialFunction")!= null?(String)oAttribute.get("specialFunction"):null);
 						attribute.setUpperLimit(oAttribute.get("upperlimit")!= null?Long.parseLong((String)oAttribute.get("upperlimit")):0);
+						attribute.setFormattingFunction(oAttribute.get("formattingFunction")!= null?(String)oAttribute.get("formattingFunction"):null);
 												
 						if(attribute.getDataType().getDataTypeCategory() == DataType.STRING_CATEGORY 
 							&& attribute.getUpperLimit() < 1){

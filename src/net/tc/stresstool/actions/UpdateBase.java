@@ -194,10 +194,16 @@ public class UpdateBase extends StressActionBase implements UpdateAction {
 //		  lSQLObj.setSourceTables(tables);
 		  
 		  String sqlUpdateCommand = DataObject.SQL_UPDATE_TEMPLATE;
-		  loadMaxWhereValues(newTable);
+/*
+ * Dperecated
+ */
+//		  loadMaxWhereValues(newTable);
 		  sqlUpdateCommand = createUpdate(sqlUpdateCommand,newTable);
 		  sqlUpdateCommand = getUpdateSetValues(newTable,sqlUpdateCommand); //lSQLObj.getValuesForDML(newTable,sqlUpdateCommand);
 		  sqlUpdateCommand = createWhere(sqlUpdateCommand,newTable);
+		  if(sqlUpdateCommand == null)
+			  return;
+		  
 		  sqlUpdateCommand = createGroupBy(sqlUpdateCommand,newTable);
 		  sqlUpdateCommand = createOrderBy(sqlUpdateCommand,newTable);
 		  sqlUpdateCommand = createLimit(sqlUpdateCommand,newTable);
@@ -228,7 +234,24 @@ public class UpdateBase extends StressActionBase implements UpdateAction {
 
 			  
 			  whereConditionString.append(" WHERE ");
-			  whereConditionString.append(getLeadingTable().parseWhere(this.getMyDataObject().SQL_UPDATE));
+			  try {
+			  
+			    Connection conn = this.getConnProvider().getConnection();
+				String conditions = table.parseWhere(this.getMyDataObject().SQL_UPDATE,conn);
+				  
+				  this.getConnProvider().returnConnection((java.sql.Connection) conn);
+					if(conditions == null 
+							   || conditions.indexOf("#") > 0)
+					  	return null;
+				  else
+					  whereConditionString.append(conditions);
+
+				
+			  }
+			  catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			  }
 			  sqlUpdateCommand = sqlUpdateCommand.replaceAll("#WHERE#", whereConditionString.toString());
 
 			  return sqlUpdateCommand;

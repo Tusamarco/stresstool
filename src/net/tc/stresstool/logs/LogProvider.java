@@ -41,6 +41,7 @@ public class LogProvider {
     public static String LOG_STATS = "STATS";
     public static String LOG_SQL = "SQL";
     public static String LOG_ACTIONS = "ACTIONS";
+    public static String LOG_TOOLS = "TOOLS";
     public static String LOG_MONITORS = "MONITORS";
     public static String LOG_PERFORMANCE = "PERFORMANCE";
     public static String LOG_PCONNECTION = "PCONNECTION";

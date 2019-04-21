@@ -215,13 +215,19 @@ public class SelectBase extends StressActionBase implements ReadAction{
 	  ArrayList tables = new ArrayList();
 	  Table newTable = getMainTable(lSQLObj);
 	  newTable.setJoinTables(this.filterSubTables(newTable, this.getTables()));
+//	System.out.println("table name "+ newTable.getName()+  " Name " + newTable.getMetaAttributes("id").getName()+ " Value " + newTable.getMetaAttributes("id").getValueAsString(100));
 	  tables.add(newTable);
 	  lSQLObj.setSourceTables(tables);
 	  
+//TODO Must re-think how to get MAX() values for auto increment	  
+	  
 	  String sqlSelectCommand = DataObject.SQL_SELECT_TEMPLATE;
-	  loadMaxWhereValues(newTable);
+//	  loadMaxWhereValues(newTable);
 	  sqlSelectCommand = createSelect(sqlSelectCommand,newTable);
 	  sqlSelectCommand = createWhere(sqlSelectCommand,newTable);
+	  if(sqlSelectCommand == null)
+		  return;
+	  
 	  sqlSelectCommand = createGroupBy(sqlSelectCommand,newTable);
 	  sqlSelectCommand = createOrderBy(sqlSelectCommand,newTable);
 	  sqlSelectCommand = createLimit(sqlSelectCommand,newTable);
@@ -395,7 +401,7 @@ private String getJoinCondition(Table table){
 	if(table == null )
 		return null;
 	sb.append(table.parseSelectCondition());
-	sb.append( " FROM " + table.getName() );
+	sb.append( " FROM " + table.getSchemaName() + "." + table.getName() );
 	if(this.getNumberOfJoinTables() > 0 ){
 	  sb.append(" " + this.getJoinCondition(table));
 	}
@@ -412,7 +418,20 @@ private String getJoinCondition(Table table){
 	  StringBuffer  whereConditionString = new StringBuffer();
  
 	  whereConditionString.append(" WHERE ");
-	  whereConditionString.append(table.parseWhere(DataObject.SQL_READ));
+	  try {
+		  Connection conn = this.getConnProvider().getConnection();
+		  String conditions = table.parseWhere(DataObject.SQL_READ, conn);
+		  
+		  this.getConnProvider().returnConnection((java.sql.Connection) conn);
+		  if(conditions == null 
+			|| conditions.indexOf("#") > 0)
+			  	return null;
+		  else
+			  whereConditionString.append(conditions);
+	  } 
+	  catch (SQLException e) {
+		e.printStackTrace();
+	  }
 	  sqlSelectCommand = sqlSelectCommand.replaceAll("#WHERE#", whereConditionString.toString());
 
 	  return sqlSelectCommand;
@@ -455,8 +474,10 @@ private String getJoinCondition(Table table){
   public void setTextAttributeMaxSearchlength(int textAttributeMaxSearchlength) {
     this.textAttributeMaxSearchlength = textAttributeMaxSearchlength;
   }	
+  
+  @Deprecated 
 	private void loadMaxWhereValues(Table table){
-		// TODO Add method to load values from max value in tables.
+		
 		ArrayList<Attribute> maxAttribute =  new ArrayList();
 		table.parseAttributeWhere(table.getWhereCondition(this.getMyDataObject().SQL_READ), maxAttribute);
 		StringBuffer sb = new StringBuffer();
@@ -479,7 +500,10 @@ private String getJoinCondition(Table table){
 							for(Object attrib : (Object[]) (maxAttribute.toArray())){
 								if(((Attribute)attrib).getValue()== null){
 									((Attribute)attrib).setValue(rs.getObject(((Attribute)attrib).getName()));
+//									System.out.println(((Attribute)attrib).getName() + " | "+ ((Attribute)attrib).getValue() + "Before");
 									table.getMetaAttributes().put(((Attribute)attrib).getName(), ((Attribute)attrib));
+//									System.out.println(((Attribute)table.getMetaAttributes().get(((Attribute)attrib).getName())).getName() + " | "
+//									+ ((Attribute)table.getMetaAttributes().get(((Attribute)attrib).getName())).getValue() + "After");
 								}
 							}
 						}

@@ -1,9 +1,18 @@
 package net.tc.data.db;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+import java.lang.reflect.InvocationTargetException;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Map;
+
+import org.apache.commons.beanutils.BeanUtils;
 
 import net.tc.data.generic.DataObject;
 import net.tc.stresstool.PerformanceEvaluator;
@@ -11,6 +20,7 @@ import net.tc.stresstool.StressTool;
 import net.tc.stresstool.actions.StressAction;
 import net.tc.stresstool.exceptions.StressToolConfigurationException;
 import net.tc.stresstool.logs.LogProvider;
+import net.tc.stresstool.value.MaxValuesProvider;
 import net.tc.utils.SynchronizedMap;
 import net.tc.utils.Utility;
 
@@ -510,7 +520,7 @@ public class Table {
 	  this.whereCondition_s = condCol;
 	}
 	
-	public String parseWhere(int sqlType){
+	public String parseWhere(int sqlType, Connection conn) throws SQLException{
 	    long performanceTimeStart = 0;
 		try {if (StressTool.getLogProvider().getLogger(LogProvider.LOG_PACTIONS).isInfoEnabled()) {performanceTimeStart=System.nanoTime();}} catch (StressToolConfigurationException e1) {e1.printStackTrace();}
 
@@ -523,15 +533,29 @@ public class Table {
 		
 		parseAttributeWhere(whereCondition, attribsWhere);
 		
+		if(sqlType == DataObject.SQL_READ
+				||sqlType == DataObject.SQL_DELETE
+				||sqlType == DataObject.SQL_UPDATE)
+			attribsWhere = MaxValuesProvider.getAttributeMaxValues(this.getName());
 		
-		
-		if(attribsWhere.size() >0){
+		if(attribsWhere!= null 
+				&& attribsWhere.size() >0){
+			
 			for(Object attrib : (Object[]) (attribsWhere.toArray())){
 			  int stringLength = 0 ;
 			  int attribRangeLenght = this.getRangeLength();
 			  String attName = ((Attribute)attrib).getName();
-			  if(((Attribute)attrib).getUpperLimit() ==0){
-//				  ((Attribute)attrib).setUpperLimit(((Long)((Attribute)attrib).getValue())>0?(Long)(((Attribute)attrib).getValue()):0 );
+			  
+			  if(whereCondition.indexOf("#" + attName +"#") <= 0)
+				  continue;
+			  
+			  if(((Attribute)attrib).getUpperLimit() ==0
+				&& ((Attribute)attrib).getDataType().getDataTypeCategory() == DataType.NUMERIC_CATEGORY	
+				){
+				  if(((Attribute)attrib).getValue() ==null)
+					  return null;
+//				  Class clazz = Class.forName(DataType.getClassFromDataType(((Attribute)attrib).getDataType().getDataTypeId()));
+				  ((Attribute)attrib).setUpperLimit(((Long)((Attribute)attrib).getValue())>0?(Long)(((Attribute)attrib).getValue()):0 );
 			  }
 
 			  if(whereCondition.indexOf("#?" + attName + "_RANGE_OPTION_") >0){
@@ -597,9 +621,17 @@ public class Table {
 					  stringLength = Integer.parseInt(nLength);
 					  ((Attribute)attrib).setValue(StressTool.getValueProvider().provideValue(((Attribute)attrib).getDataType(), new Long(stringLength).longValue()));
 				  }
-				  else
+				  else if(((Attribute)attrib).getValue() != null
+						  && Long.parseLong(String.valueOf(((Attribute)attrib).getValue()))>1 
+						  ) {
+//					  System.out.println("BEFORE Name " + ((Attribute)attrib).getName() + " Value " + ((Attribute)attrib).getValue() + " Upper "+ ((Attribute)attrib).getUpperLimit());
+					  ((Attribute)attrib).setValue(StressTool.getValueProvider().provideValue(((Attribute)attrib).getDataType(), new Long(Long.parseLong(String.valueOf(((Attribute)attrib).getValue()))).longValue()));
+//					  System.out.println("AFTER  Name " + ((Attribute)attrib).getName() + " Value " + ((Attribute)attrib).getValue() + " Upper "+ ((Attribute)attrib).getUpperLimit());
+				  }
+				  else {
 					  ((Attribute)attrib).setValue(StressTool.getValueProvider().provideValue(((Attribute)attrib).getDataType(), new Long(((Attribute)attrib).getUpperLimit()).longValue()));
-				  
+//					  System.out.println("AFTER_2  Table name "+ this.getName() +" Name " + ((Attribute)attrib).getName() + " Value " + ((Attribute)attrib).getValue() + " Upper "+ ((Attribute)attrib).getUpperLimit());
+				  }
 //				  if(length.charAt(0) == '|'){
 //					length = length.substring(1,length.indexOf("?"+attName+"#"));
 //					stringLength = Integer.parseInt(length);
@@ -624,6 +656,61 @@ public class Table {
 	}
 
 
+	private void loadMaxWhereValues(ArrayList<Attribute> maxAttribute, Connection conn) throws SQLException {
+		if(conn == null || conn.isClosed())
+			return;
+		
+		StringBuffer sb = new StringBuffer();
+		
+		for(Object attrib : (Object[]) (maxAttribute.toArray())){
+				if (sb.length() > 0)
+					sb.append(",");
+				sb.append("MAX("+ ((Attribute)attrib).getName() +") as " +((Attribute)attrib).getName()+" ");
+		}	
+			String SQL = "Select " + sb.toString() + " FROM "+this.getSchemaName() +"." + this.getName();
+			if(sb.length() > 0){
+//				conn = null;
+
+			  try {
+			
+				Statement stmt = (Statement) conn.createStatement();
+				ResultSet rs = stmt.executeQuery(SQL);
+//				System.out.println("Query " + SQL);
+				if(rs != null ){
+					while (rs.next()){
+						for(Object attrib : (Object[]) (maxAttribute.toArray())){
+							if(((Attribute)attrib).getValue()== null){
+								((Attribute)attrib).setValue(rs.getObject(((Attribute)attrib).getName()));
+//									System.out.println(((Attribute)attrib).getName() + " | "+ ((Attribute)attrib).getValue() + " Before");
+								this.getMetaAttributes().put(((Attribute)attrib).getName(), ((Attribute)attrib));
+//									System.out.println(((Attribute)this.getMetaAttributes().get(((Attribute)attrib).getName())).getName() + " | "
+//									+ ((Attribute)this.getMetaAttributes().get(((Attribute)attrib).getName())).getValue() + " After");
+							}
+						}
+					}
+				}
+				
+				
+			  } catch (SQLException e) {
+					try{					
+						ByteArrayOutputStream baos = new ByteArrayOutputStream();
+						PrintStream ps = new PrintStream(baos);				
+						e.printStackTrace(ps);
+						String s =new String(baos.toByteArray());
+						StringBuffer sb1 = new StringBuffer();
+						sb1.append(s);
+						sb1.append(SQL);
+						StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error(sb1.toString());
+						System.exit(1)  ;
+				}catch(Exception ex){ex.printStackTrace();}
+
+
+			  }
+		}
+		
+	}
+
+
 	public void parseAttributeWhere(String whereCondition, ArrayList<Attribute> attribsWhere) {
 		/*
 		 * get first the list of attribs used in the where
@@ -633,7 +720,18 @@ public class Table {
 			if(whereCondition != null && ((Attribute)attrib) != null &&
 					whereCondition.indexOf("#" + ((Attribute)attrib).getName() + "#") > -1){
 //				System.out.println("---------- 2 " + ((Attribute)attrib).getName());
-				attribsWhere.add((Attribute)attrib) ;
+				try {
+					Attribute clone = new Attribute();
+					BeanUtils.copyProperties(clone,((Attribute)attrib));
+					if(((Attribute)attrib).getUpperLimit() > 0)
+						clone .setUpperLimit(((Attribute)attrib).getUpperLimit());
+					
+					attribsWhere.add(clone) ;
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
 				
 			}
 		}

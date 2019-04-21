@@ -174,7 +174,7 @@ public class StressTool {
 	         * Or force the close if UseHardStop is true  
 	         */
 	    	int timeForLoop =launcher.getStatIntervalMs();
-	    	int loops = launcher.getStatLoops()> launcher.getRepeatNumber()?launcher.getStatLoops():launcher.getRepeatNumber();
+	    	long loops = launcher.getStatLoops()> launcher.getRepeatNumber()?launcher.getStatLoops():launcher.getRepeatNumber();
 	    	if(timeForLoop < 1000){
 	    		loops = loops * (1000/timeForLoop);
 	    	}
@@ -197,7 +197,13 @@ public class StressTool {
 	          float maxPct = loops;
 	          int calendarReset = 10;
 //	          int aInsert =  new Float( maxInsert).intValue();
-
+	          
+	          if(launcher.getHardStopLimit() > 0  
+		         && launcher.isUseHardStop()) {
+	        	 loops = launcher.getHardStopLimit(); 
+	        	  
+	          }
+	          
 	          for(int i = 0 ; i < loops; i++ ){
 	            
 	        	 if(StressTool.isStressToolRunning()) 

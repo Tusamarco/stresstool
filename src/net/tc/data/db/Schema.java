@@ -11,6 +11,7 @@ import org.apache.commons.beanutils.BeanUtils;
 import net.tc.stresstool.StressTool;
 import net.tc.stresstool.exceptions.StressToolConfigurationException;
 import net.tc.stresstool.logs.LogProvider;
+import net.tc.stresstool.value.MaxValuesProvider;
 import net.tc.utils.SynchronizedMap;
 
 public class Schema {
@@ -170,6 +171,17 @@ public class Schema {
 		    } catch (InvocationTargetException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
+		    }
+		    finally {
+		    	if(!MaxValuesProvider.addTable(newTable)) {
+		    		try {
+						StressTool.getLogProvider().getLogger(StressTool.getLogProvider().LOG_APPLICATION).error("Not able to load table" + newTable.getName() + " for Max Values calculation");
+					} catch (StressToolConfigurationException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+		    	}
+		    	
 		    }
 
 		}
