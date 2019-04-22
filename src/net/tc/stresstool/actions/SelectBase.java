@@ -186,7 +186,10 @@ public class SelectBase extends StressActionBase implements ReadAction{
 	if(!this.isStickyconnection()){
 	  getConnProvider().returnConnection((java.sql.Connection)conn);
 	}
-
+	/*
+	 * Sleeping beauty  
+	 */
+	this.setSleepingTimeNs(this.getSleepSelect());
   }
 
 

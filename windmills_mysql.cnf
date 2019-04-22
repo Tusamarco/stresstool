@@ -11,8 +11,8 @@ dbTypeName=mysql
 #==========
 # Connection section
 #==========
-connUrl=jdbc:mysql://192.168.1.11:6033
-#connUrl=jdbc:mysql://192.168.1.205:3306
+#connUrl=jdbc:mysql://192.168.1.11:6033
+connUrl=jdbc:mysql://192.168.1.205:3306
 #connUrl=jdbc:mysql://127.0.0.1:3336
 #database=test
 schema=windmills
@@ -60,10 +60,10 @@ doSimple=false
 # scalability / load settings  
 #==========
 poolNumber=1
-pctInsert=00
-pctUpdate=0 
+pctInsert=100
+pctUpdate=100 
 pctSelect=100 
-pctDelete=0
+pctDelete=100
 #repeatNumber=1
 repeatNumber=1000
 
@@ -169,7 +169,7 @@ batchSize=3
 usePrepareStatement=false
 SelectFilterMethod=in
 #range|in|match
-SleepSelect=10 
+sleepSelect=100
 
 numberOfIntervalKeys=100
 lazySelect=true
@@ -218,3 +218,9 @@ batchSize=5
 #deprecated
 numberOfprimaryTables=1
 numberOfSecondaryTables=0
+
+
+
+[net.tc.stresstool.actions.ToolsAction]
+collectMax=true
+sleepTools=2000

@@ -113,7 +113,10 @@ public class DeleteBase extends StressActionBase implements DeleteAction{
 		if(!this.isStickyconnection()){
 		  getConnProvider().returnConnection((java.sql.Connection)conn);
 		}
-
+		/*
+		 * Sleeping beauty
+		 */
+		this.setSleepingTimeNs(this.getSleepDelete());
 	  }
 
 

@@ -567,10 +567,11 @@ public class Launcher {
 	}
 	
 	if(writeImplementationMap != null) this.actionInitialized=this.runInsert();
+	if(toolsImplementationMap != null)this.actionInitialized=this.runTools();
 	if(updateImplementationMap != null) this.actionInitialized=this.runUpdate();
 	if(readImplementationMap != null) this.actionInitialized=this.runSelects();
 	if(deleteImplementationMap != null)this.actionInitialized=this.runDelete();
-	if(toolsImplementationMap != null)this.actionInitialized=this.runTools();
+	
 	
 	if(!this.actionInitialized)
 	    return false;

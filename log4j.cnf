@@ -3,19 +3,24 @@ stresstool.root.logger=INFO
 stresstool.log.dir=/tmp/statlogs
 stresstool.log.file=stresstool.log
 
-#log4j.logger.APPLICATION=debug,console,APPLICATION
-log4j.logger.APPLICATION=ERROR,console,APPLICATION
+log4j.logger.APPLICATION=ERROR,console
+#,APPLICATION
 log4j.logger.ACTIONS=error,console
 #,ACTIONS
-log4j.logger.MONITORS=ERROR,MONITORS
-log4j.logger.STATS=ERROR,STATS
+log4j.logger.MONITORS=ERROR,console
+#,MONITORS
+log4j.logger.STATS=ERROR,console
+#,STATS
 log4j.logger.SQL=error,console 
 #,SQL
-log4j.logger.PERFORMANCE=error,console,PERFORMANCE
+log4j.logger.PERFORMANCE=error,console
+#,PERFORMANCE
 log4j.logger.PCONNECTION=error,console
 #,PCONNECTION
-log4j.logger.PACTIONS=error,console,PACTIONS
-log4j.logger.TOOLS=debug,console,TOOLS
+log4j.logger.PACTIONS=error,console
+#,PACTIONS
+log4j.logger.TOOLS=error,console
+#,TOOLS
 
 
 #HIKARI

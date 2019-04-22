@@ -50,10 +50,10 @@ public class StressActionBase implements StressAction, Runnable {
     private int pctSelect=0; 
     private int pctDelete=0; 
     private int repeatNumber=100;
-    private int sleepFor=0;
-    private int sleepWrite=0;
-    private int sleepSelect=0; 
-    private int sleepDelete=0;
+//    private int sleepFor=0;
+//    private int sleepWrite=0;
+//    private int sleepSelect=0; 
+//    private int sleepDelete=0;
 // table engine comma separated with % value; InnoDB|60,MyISAM|40 
     private String tableEngine= null;
     private boolean truncate=false;
@@ -73,6 +73,7 @@ public class StressActionBase implements StressAction, Runnable {
     private Connection ActiveConnection = null;
     private boolean stickyconnection = true;
     private boolean FKEnable = false;
+    private int sleepingTimeNs =0 ;
     
 //    public static String ACTION_TYPE_Select = "Select";
 //    public static String ACTION_TYPE_Insert = "Insert";
@@ -335,69 +336,69 @@ public class StressActionBase implements StressAction, Runnable {
         this.repeatNumber = repeatNumber;
     }
 
-    /* (non-Javadoc)
-	 * @see net.tc.stresstool.actions.StressAction#getSleepFor()
-	 */
-    @Override
-	public int getSleepFor() {
-        return sleepFor;
-    }
-
-    /* (non-Javadoc)
-	 * @see net.tc.stresstool.actions.StressAction#setSleepFor(int)
-	 */
-    @Override
-	public void setSleepFor(int sleepFor) {
-        this.sleepFor = sleepFor;
-    }
-
-    /* (non-Javadoc)
-	 * @see net.tc.stresstool.actions.StressAction#getSleepWrite()
-	 */
-    @Override
-	public int getSleepWrite() {
-        return sleepWrite;
-    }
-
-    /* (non-Javadoc)
-	 * @see net.tc.stresstool.actions.StressAction#setSleepWrite(int)
-	 */
-    @Override
-	public void setSleepWrite(int sleepWrite) {
-        this.sleepWrite = sleepWrite;
-    }
-
-    /* (non-Javadoc)
-	 * @see net.tc.stresstool.actions.StressAction#getSleepSelect()
-	 */
-    @Override
-	public int getSleepSelect() {
-        return sleepSelect;
-    }
-
-    /* (non-Javadoc)
-	 * @see net.tc.stresstool.actions.StressAction#setSleepSelect(int)
-	 */
-    @Override
-	public void setSleepSelect(int sleepSelect) {
-        this.sleepSelect = sleepSelect;
-    }
-
-    /* (non-Javadoc)
-	 * @see net.tc.stresstool.actions.StressAction#getSleepDelete()
-	 */
-    @Override
-	public int getSleepDelete() {
-        return sleepDelete;
-    }
-
-    /* (non-Javadoc)
-	 * @see net.tc.stresstool.actions.StressAction#setSleepDelete(int)
-	 */
-    @Override
-	public void setSleepDelete(int sleepDelete) {
-        this.sleepDelete = sleepDelete;
-    }
+//    /* (non-Javadoc)
+//	 * @see net.tc.stresstool.actions.StressAction#getSleepFor()
+//	 */
+//    @Override
+//	public int getSleepFor() {
+//        return sleepFor;
+//    }
+//
+//    /* (non-Javadoc)
+//	 * @see net.tc.stresstool.actions.StressAction#setSleepFor(int)
+//	 */
+//    @Override
+//	public void setSleepFor(int sleepFor) {
+//        this.sleepFor = sleepFor;
+//    }
+//
+//    /* (non-Javadoc)
+//	 * @see net.tc.stresstool.actions.StressAction#getSleepWrite()
+//	 */
+//    @Override
+//	public int getSleepWrite() {
+//        return sleepWrite;
+//    }
+//
+//    /* (non-Javadoc)
+//	 * @see net.tc.stresstool.actions.StressAction#setSleepWrite(int)
+//	 */
+//    @Override
+//	public void setSleepWrite(int sleepWrite) {
+//        this.sleepWrite = sleepWrite;
+//    }
+//
+//    /* (non-Javadoc)
+//	 * @see net.tc.stresstool.actions.StressAction#getSleepSelect()
+//	 */
+//    @Override
+//	public int getSleepSelect() {
+//        return sleepSelect;
+//    }
+//
+//    /* (non-Javadoc)
+//	 * @see net.tc.stresstool.actions.StressAction#setSleepSelect(int)
+//	 */
+//    @Override
+//	public void setSleepSelect(int sleepSelect) {
+//        this.sleepSelect = sleepSelect;
+//    }
+//
+//    /* (non-Javadoc)
+//	 * @see net.tc.stresstool.actions.StressAction#getSleepDelete()
+//	 */
+//    @Override
+//	public int getSleepDelete() {
+//        return sleepDelete;
+//    }
+//
+//    /* (non-Javadoc)
+//	 * @see net.tc.stresstool.actions.StressAction#setSleepDelete(int)
+//	 */
+//    @Override
+//	public void setSleepDelete(int sleepDelete) {
+//        this.sleepDelete = sleepDelete;
+//    }
 
     /* (non-Javadoc)
 	 * @see net.tc.stresstool.actions.StressAction#getTableEngine()
@@ -526,13 +527,13 @@ public class StressActionBase implements StressAction, Runnable {
     /* (non-Javadoc)
 	 * @see net.tc.stresstool.actions.StressAction#getSleepTime()
 	 */
-    /* (non-Javadoc)
-	 * @see net.tc.stresstool.actions.StressAction#getSleepTime()
-	 */
-    @Override
-	public int getSleepTime() {
-    	return sleepFor;
-    }
+//    /* (non-Javadoc)
+//	 * @see net.tc.stresstool.actions.StressAction#getSleepTime()
+//	 */
+//    @Override
+//	public int getSleepTime() {
+//    	return sleepFor;
+//    }
 
     /* (non-Javadoc)
 	 * @see net.tc.stresstool.actions.StressAction#isActive()
@@ -586,10 +587,11 @@ public class StressActionBase implements StressAction, Runnable {
 //	
 //					}
 //				}
-        	    
+
         	    long startTime = System.nanoTime();
         	    try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).debug(" ==== ACTION "+ this.getTHInfo().getAction() +" Thread internal Id "+ this.getTHInfo().getId() +" Sys Thread Id "+ this.getTHInfo().getThId()+" started ===="  );}catch(StressToolConfigurationException e){}
         	    for(int i = 0 ; i  < this.getLoops(); i++){
+            	    setSleepingTimeNs(0);
         	    	long startLatency = System.nanoTime();
         	    	long startRunTime=0;
         	    	long endRunTime = 0;
@@ -712,9 +714,17 @@ public class StressActionBase implements StressAction, Runnable {
     				}
     				/*Performance evaluation section [header] END*/
 
+            	    /*
+            	     * sleeping beauty time
+            	     */
+            	    
+            	    if(this.getSleepingTimeNs() > 0 )
+            	    	goToSleep(this.getSleepingTimeNs());
 
     			    
         	    }
+        	    
+        	    
         	    this.getTHInfo().setBatchSize(this.getBatchSize());
         	    this.getTHInfo().setTotalEcecutionTime(PerformanceEvaluator.getTimeEvaluationSec(startTime));
         	    this.getTHInfo().setReady(ActionTHElement.SEMAPHORE_RED);
@@ -752,7 +762,24 @@ public class StressActionBase implements StressAction, Runnable {
 	
     }
 
-    /* (non-Javadoc)
+    void goToSleep(int seepingNs) {
+		/*
+		 * 
+		 *     Sleeping beauty time
+		 *     	
+		 */
+    	
+	  	try {
+			Thread.sleep(seepingNs);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		
+	}
+
+	/* (non-Javadoc)
 	 * @see net.tc.stresstool.actions.StressAction#setActionTablePrimary(java.lang.String)
 	 */
     /* (non-Javadoc)
@@ -867,11 +894,11 @@ public class StressActionBase implements StressAction, Runnable {
     /* (non-Javadoc)
 	 * @see net.tc.stresstool.actions.StressAction#setSleepTime(int)
 	 */
-    @Override
-	public void setSleepTime(int setSleepTime) {
-    	sleepFor = setSleepTime;
-	
-    }
+//    @Override
+//	public void setSleepTime(int setSleepTime) {
+//    	sleepFor = setSleepTime;
+//	
+//    }
 
     /* (non-Javadoc)
 	 * @see net.tc.stresstool.actions.StressAction#setActionType(java.lang.String)
@@ -1041,6 +1068,14 @@ public class StressActionBase implements StressAction, Runnable {
 	public void setDbTypeName(String dbTypeName) {
 		this.dbTypeName = dbTypeName;
 		this.setdbType(dbTypeName);
+	}
+
+	int getSleepingTimeNs() {
+		return sleepingTimeNs;
+	}
+
+	void setSleepingTimeNs(int sleepingTimeNs) {
+		this.sleepingTimeNs = sleepingTimeNs;
 	}
 	
 

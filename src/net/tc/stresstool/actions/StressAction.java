@@ -182,45 +182,45 @@ public interface StressAction {
 	 */
 	public abstract void setRepeatNumber(int repeatNumber);
 
-	/**
-	 * @return the sleepFor
-	 */
-	public abstract int getSleepFor();
+//	/**
+//	 * @return the sleepFor
+//	 */
+//	public abstract int getSleepFor();
+//
+//	/**
+//	 * @param sleepFor the sleepFor to set
+//	 */
+//	public abstract void setSleepFor(int sleepFor);
 
-	/**
-	 * @param sleepFor the sleepFor to set
-	 */
-	public abstract void setSleepFor(int sleepFor);
-
-	/**
-	 * @return the sleepWrite
-	 */
-	public abstract int getSleepWrite();
-
-	/**
-	 * @param sleepWrite the sleepWrite to set
-	 */
-	public abstract void setSleepWrite(int sleepWrite);
-
-	/**
-	 * @return the sleepSelect
-	 */
-	public abstract int getSleepSelect();
-
-	/**
-	 * @param sleepSelect the sleepSelect to set
-	 */
-	public abstract void setSleepSelect(int sleepSelect);
-
-	/**
-	 * @return the sleepDelete
-	 */
-	public abstract int getSleepDelete();
-
-	/**
-	 * @param sleepDelete the sleepDelete to set
-	 */
-	public abstract void setSleepDelete(int sleepDelete);
+//	/**
+//	 * @return the sleepWrite
+//	 */
+//	public abstract int getSleepWrite();
+//
+//	/**
+//	 * @param sleepWrite the sleepWrite to set
+//	 */
+//	public abstract void setSleepWrite(int sleepWrite);
+//
+//	/**
+//	 * @return the sleepSelect
+//	 */
+//	public abstract int getSleepSelect();
+//
+//	/**
+//	 * @param sleepSelect the sleepSelect to set
+//	 */
+//	public abstract void setSleepSelect(int sleepSelect);
+//
+//	/**
+//	 * @return the sleepDelete
+//	 */
+//	public abstract int getSleepDelete();
+//
+//	/**
+//	 * @param sleepDelete the sleepDelete to set
+//	 */
+//	public abstract void setSleepDelete(int sleepDelete);
 
 	/**
 	 * @return the tableEngine
@@ -282,10 +282,10 @@ public interface StressAction {
 	 */
 	public abstract int getLoops();
 
-	/* (non-Javadoc)
-	 * @see net.tc.stresstool.actions.StressAction#getSleepTime()
-	 */
-	public abstract int getSleepTime();
+//	/* (non-Javadoc)
+//	 * @see net.tc.stresstool.actions.StressAction#getSleepTime()
+//	 */
+//	public abstract int getSleepTime();
 
 	/* (non-Javadoc)
 	 * @see net.tc.stresstool.actions.StressAction#isActive()
@@ -346,7 +346,7 @@ public interface StressAction {
 	/* (non-Javadoc)
 	 * @see net.tc.stresstool.actions.StressAction#setSleepTime(int)
 	 */
-	public abstract void setSleepTime(int setSleepTime);
+//	public abstract void setSleepTime(int setSleepTime);
 
 	/* (non-Javadoc)
 	 * @see net.tc.stresstool.actions.StressAction#setActionType(java.lang.String)

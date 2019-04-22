@@ -26,7 +26,7 @@ public class UpdateBase extends StressActionBase implements UpdateAction {
     
     private boolean useAutoIncrement=true;
     
-	private int sleepWrite=0;
+	private int sleepUpdate=0;
     private boolean lazyUpdate=true;
     private int lazyInterval=5000;
     private int batchSize = 0; 
@@ -110,13 +110,7 @@ public class UpdateBase extends StressActionBase implements UpdateAction {
 		return this.numberOfSecondaryTables;
 	} 
 	    
-    public int getSleepWrite() {
-		return sleepWrite;
-	}
-	public void setSleepWrite(int sleepWrite) {
-		this.sleepWrite = sleepWrite;
-	}
-
+    
 	/**
 	 * this is actually executing what the action is suppose to do
 	 */
@@ -157,7 +151,10 @@ public class UpdateBase extends StressActionBase implements UpdateAction {
 		if(!this.isStickyconnection()){
 		  getConnProvider().returnConnection((java.sql.Connection)conn);
 		}
-
+		/*
+		 * Sleeping beauty
+		 */
+		this.setSleepingTimeNs(this.getSleepUpdate());
 	  }
 
 
@@ -467,5 +464,11 @@ private boolean checkIfTableExists(Table tableIn,SQLObject lSQL){
 	}
 	public void setCurrentLazyLoop(int currentLazyLoop) {
 		this.currentLazyLoop = currentLazyLoop;
+	}
+	public int getSleepUpdate() {
+		return sleepUpdate;
+	}
+	public void setSleepUpdate(int sleepUpdate) {
+		this.sleepUpdate = sleepUpdate;
 	}
 }

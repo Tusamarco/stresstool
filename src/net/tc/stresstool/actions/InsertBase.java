@@ -436,7 +436,10 @@ public class InsertBase extends StressActionBase implements WriteAction,
 		
 		getConnProvider().returnConnection((java.sql.Connection)conn);
 	  }
-	  
+		/*
+		 * Sleeping beauty
+		 */
+		this.setSleepingTimeNs(this.getSleepWrite());
 	}
 	
 	/**

@@ -28,7 +28,63 @@ public class ToolsAction extends StressActionBase {
 		this.collectMax = collectMax;
 	}
 	
-	
+	@Override
+	public boolean ExecutePreliminaryAction() throws StressToolActionException {
+    	if (!isStickyconnection() || getActiveConnection() == null) {
+			try {
+				
+				setActiveConnection(getConnProvider().getConnection());
+				
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				try {
+					ByteArrayOutputStream baos = new ByteArrayOutputStream();
+					PrintStream ps = new PrintStream(baos);
+					e.printStackTrace(ps);
+					String s = new String(baos.toByteArray());
+					StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error(s);
+					System.exit(1);
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+
+			}
+		}
+		
+		
+	   	try {
+				if(this.getActiveConnection().isClosed())
+					this.setActiveConnection(this.getConnProvider().getConnection());
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+	    	
+	    	
+	    	if(this.isCollectMax()) {
+	    		
+	    		if(MaxValuesProvider.isTablesEmpty()) {
+	        		Schema thisschema =this.getSchema();
+	        		Iterator it = thisschema.getTables().iterator();
+	        		while (it.hasNext()) {
+	        			Table table = thisschema.getTable((String) it.next());
+	        			MaxValuesProvider.addTable(table);
+	        		}
+	        		MaxValuesProvider.prepareTables();
+	    			try {
+	    				Connection conn = MaxValuesProvider.setAttributeMaxValues(this.getActiveConnection());
+		    			if(conn != null)
+		    				this.getConnProvider().returnConnection(conn);
+	    			}
+	    			catch(SQLException ex) {
+	    				ex.printStackTrace();
+	    			}
+
+	    		}
+	    	}
+
+	    	return false;
+	}
 	
     @Override
 	public void run() {
@@ -250,18 +306,9 @@ public class ToolsAction extends StressActionBase {
     	}
     	
 		/*
-		 * 
 		 *     Sleeping beauty time
-		 *     	
 		 */
-    	
-	  	try {
-			Thread.sleep(this.getSleepTools());
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
+    	this.goToSleep(this.getSleepTools());
     	
     }
 	

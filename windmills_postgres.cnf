@@ -62,9 +62,9 @@ doSimple=false
 #==========
 poolNumber=4
 pctInsert=100
-pctUpdate=50 
+pctUpdate=100 
 pctSelect=100 
-pctDelete=50
+pctDelete=100
 #repeatNumber=1
 repeatNumber=1000
 
@@ -169,7 +169,7 @@ numberOfprimaryTables=1
 usePrepareStatement=false
 SelectFilterMethod=in
 #range|in|match
-SleepSelect=500 
+sleepSelect=500 
 
 numberOfIntervalKeys=100
 lazySelect=true

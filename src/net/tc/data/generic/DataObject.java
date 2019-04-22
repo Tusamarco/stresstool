@@ -279,6 +279,7 @@ public class DataObject extends MultiLanguage
 				    	}
 				    }
 				    stmt.clearBatch();
+				    stmt.close();
 			  }catch(Exception ex)
 				{	System.out.println(sqlu.getSQLCommands().get(0));
 					ex.printStackTrace();
@@ -320,7 +321,7 @@ public class DataObject extends MultiLanguage
 			  rs.close();
 			  rs = null;
 			}
-			
+			stmt.close();
 			executionPerformance(performanceTimeStart,this.getMethodText(SQL_READ));
             return lines;
 			
@@ -391,6 +392,7 @@ public class DataObject extends MultiLanguage
 		    rows = executeSQL(stmt);
 		    conn.commit();
 		    stmt.clearBatch();
+		    stmt.close();
 	        
 	      
         } catch (Exception e) {

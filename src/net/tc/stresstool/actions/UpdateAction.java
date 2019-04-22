@@ -11,8 +11,8 @@ public interface UpdateAction {
     public abstract boolean islazyCreation();
     public abstract void setLazyInterval(int interval);
     public abstract int getLazyInterval();
-	public int getSleepWrite();
-	public void setSleepWrite(int sleepWrite);
+	public int getSleepUpdate();
+	public void setSleepUpdate(int sleepWrite);
 	
 	public void setNumberOfprimaryTables(int tableNumbers);
 	public int getNumberOfprimaryTables();
