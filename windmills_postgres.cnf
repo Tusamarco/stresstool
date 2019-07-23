@@ -11,7 +11,7 @@ dbTypeName=postgres
 #==========
 # Connection section
 #==========
-connUrl=jdbc:postgres://192.168.1.81:5432
+connUrl=jdbc:postgres://192.168.4.81:5433
 #connUrl=jdbc:postgres://127.0.0.1:5433
 
 database=test
@@ -35,9 +35,9 @@ skipPermissionTest=true
 # Global options
 #==========
 FKEnable=false
-createTable=false 
+createTable=true 
 
-droptable=false
+droptable=true
 truncate=false
 ignoreBinlog=false
 
@@ -60,11 +60,11 @@ doSimple=false
 #==========
 # scalability / load settings  
 #==========
-poolNumber=4
+poolNumber=8
 pctInsert=100
-pctUpdate=100 
-pctSelect=100 
-pctDelete=100
+pctUpdate=00 
+pctSelect=00 
+pctDelete=00
 #repeatNumber=1
 repeatNumber=1000
 
@@ -218,3 +218,8 @@ batchSize=1
 #deprecated
 numberOfprimaryTables=1
 numberOfSecondaryTables=0
+
+[net.tc.stresstool.actions.ToolsAction]
+collectMax=true
+sleepTools=2000
+
