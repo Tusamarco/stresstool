@@ -18,6 +18,7 @@ import com.zaxxer.hikari.*;
 import net.tc.stresstool.StressTool;
 import net.tc.stresstool.config.Configuration;
 import net.tc.stresstool.config.Configurator;
+import net.tc.stresstool.exceptions.StressToolConfigurationException;
 import net.tc.stresstool.exceptions.StressToolException;
 import net.tc.stresstool.logs.LogProvider;
 
@@ -200,8 +201,22 @@ public class ConnectionProvider {
     public Connection getSimpleMySQLConnection()throws SQLException {
 	if(this.connInfo != null){
 		SoftReference<Connection> sf = null;
+		
 		if (this.getDataSource() !=null ){
-			sf = new SoftReference<Connection>( (Connection) this.getDataSource().getConnection());
+			try {
+				sf = new SoftReference<Connection>( (Connection) this.getDataSource().getConnection());
+				
+			}
+			catch (Throwable th) {
+				try {
+					StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error("##### Connection was closed at server side unexpectly. I will try to recover it");
+				} catch (StressToolConfigurationException e) {
+				}
+			
+				this.setDataSource(null);
+				return this.getSimpleMySQLConnection();
+				
+			}
 //			if(connInfo.isSelectForceAutocommitOff()){
 //				((Connection) sf.get()).setAutoCommit(false);
 //			}
@@ -227,7 +242,8 @@ public class ConnectionProvider {
 			    sf = new SoftReference<Connection>((Connection) this.getDataSource().getConnection());
 			}catch(Exception ex){ex.printStackTrace();}
 			finally{
-				if(connInfo.isSelectForceAutocommitOff()){
+				if(sf.get() !=null 
+				 && connInfo.isSelectForceAutocommitOff()){
 					((Connection) sf.get()).setAutoCommit(false);
 				}
 			}

@@ -11,13 +11,13 @@ dbTypeName=mysql
 #==========
 # Connection section
 #==========
-connUrl=jdbc:mysql://192.168.4.11:6033
-#connUrl=jdbc:mysql://192.168.4.205:3306
+connUrl=jdbc:mysql://192.168.4.108:6033
+#connUrl=jdbc:mysql://192.168.4.107:3306
 #connUrl=jdbc:mysql://127.0.0.205:3316
 #database=test
-schema=windmills
-database=windmills
-user=app_gr
+schema=windmills_ndb
+database=windmills_ndb
+user=app_ndb
 password=test
 connParameters=autoReconnect=true  
 connectionPool=false
@@ -40,8 +40,8 @@ droptable=false
 truncate=false
 ignoreBinlog=false
 
-#datafilepath=shakespere.txt
-datafilepath=thai.txt
+datafilepath=shakespere.txt
+#datafilepath=thai.txt
 
 #manage the calendar options
 # YYYY-MM-DD HH:MM:SS
@@ -60,19 +60,19 @@ doSimple=false
 #==========
 # scalability / load settings  
 #==========
-poolNumber=10
+poolNumber=4
 pctInsert=100
 pctUpdate=100 
 pctSelect=100 
-pctDelete=50
+pctDelete=100
 #repeatNumber=1
-repeatNumber=10000
+repeatNumber=1000000
 
 #==========
 # console display settings
 #==========
-HardStopLimit=1200
-UseHardStop=true
+HardStopLimit=5400
+UseHardStop=false
 StatIntervalMs=1000
 StatLoops = 100
 SemaphoreCountdownTime = 3
@@ -133,7 +133,7 @@ idleTimeout=100000
 cachePrepStmts=true
 prepStmtCacheSize=250
 prepStmtCacheSqlLimit=2048
-leakDetectionThreshold=100000
+leakDetectionThreshold=10000
 maximumPoolSize = 50
 useServerPrepStmts=true
 useLocalSessionState=true
@@ -158,7 +158,7 @@ maxLifetime=300000
 [net.tc.stresstool.actions.DeleteBase] 
 sleepDelete=100 
 usePrepareStatement=false
-deleteRange = 100
+deleteRange = 500
 batchSize=6
 lazyInterval=0
 lazyDelete=false
@@ -170,7 +170,7 @@ batchSize=3
 usePrepareStatement=false
 SelectFilterMethod=in
 #range|in|match
-sleepSelect=100
+sleepSelect=500
 
 numberOfIntervalKeys=100
 lazySelect=true
@@ -192,11 +192,11 @@ indexName=IDX_as
 [net.tc.stresstool.actions.InsertBase]
 usePrepareStatement=false
 useAutoIncrement=true
-sleepWrite=100
+sleepWrite=500
 lazyCreation=true
 lazyInterval=5
-batchSize=30
-jsonFile=wind_mill_example.json
+batchSize=20
+jsonFile=wind_mill_ndb_example.json
 
 #deprecated
 joinField=millid
@@ -211,7 +211,7 @@ usePrepareStatement=false
 delayStartRecords = 1000
 useAutoIncrement=true
 joinField=a
-sleepUpdate=100
+sleepUpdate=500
 lazyUpdate=false
 lazyInterval=10
 batchSize=5
