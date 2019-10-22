@@ -66,12 +66,12 @@ pctUpdate=100
 pctSelect=100 
 pctDelete=50
 #repeatNumber=1
-repeatNumber=10000
+repeatNumber=100000
 
 #==========
 # console display settings
 #==========
-HardStopLimit=1200
+HardStopLimit=86400
 UseHardStop=true
 StatIntervalMs=1000
 StatLoops = 100
@@ -156,7 +156,7 @@ maxLifetime=300000
 # are deprecate because the settings on how to query and delete now are in the Json file that define the tables.
 
 [net.tc.stresstool.actions.DeleteBase] 
-sleepDelete=100 
+sleepDelete=800 
 usePrepareStatement=false
 deleteRange = 100
 batchSize=6
@@ -170,7 +170,7 @@ batchSize=3
 usePrepareStatement=false
 SelectFilterMethod=in
 #range|in|match
-sleepSelect=100
+sleepSelect=500
 
 numberOfIntervalKeys=100
 lazySelect=true
@@ -192,7 +192,7 @@ indexName=IDX_as
 [net.tc.stresstool.actions.InsertBase]
 usePrepareStatement=false
 useAutoIncrement=true
-sleepWrite=100
+sleepWrite=500
 lazyCreation=true
 lazyInterval=5
 batchSize=30
@@ -211,7 +211,7 @@ usePrepareStatement=false
 delayStartRecords = 1000
 useAutoIncrement=true
 joinField=a
-sleepUpdate=100
+sleepUpdate=800
 lazyUpdate=false
 lazyInterval=10
 batchSize=5
