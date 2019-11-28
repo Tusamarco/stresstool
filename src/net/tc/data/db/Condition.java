@@ -10,6 +10,7 @@ public class Condition {
 	public Long weight = null;
 	public int type = 0;
 	public String condition = null;
+	public String joinoption = null;
 	
 	public Long getWeight() {
 		return weight;
@@ -28,6 +29,12 @@ public class Condition {
 	}
 	public void setCondition(String condition) {
 		this.condition = condition;
+	}
+	public String getJoinoption() {
+		return joinoption;
+	}
+	public void setJoinoption(String joinoption) {
+		this.joinoption = joinoption;
 	}
 	
 	

@@ -135,19 +135,19 @@ public class Schema {
 	while (tablesIt.hasNext()) {
 	    Table table = this.getTable((String) tablesIt.next());
 	    if (table != null) {
-		int numberOfTables = 0;
-		if(table.getParentTable()==null 
-			&& table.isMultiple()
-			){
-		    numberOfTables=(Integer) tableInstances.get(Table.TABLE_PARENT);  	
-		}
-		else if(table.getParentTable() != null 
-			&& table.isMultiple()){
-		    numberOfTables=(Integer) tableInstances.get(Table.TABLE_CHILD);
-		}
-		else{
-		    numberOfTables = 1;
-		}
+		Long numberOfTables = table.getNumberOfTables();
+//		if(table.getParentTable()==null 
+//			&& table.isMultiple()
+//			){
+//		    numberOfTables=(Integer) tableInstances.get(Table.TABLE_PARENT);  	
+//		}
+//		else if(table.getParentTable() != null 
+//			&& table.isMultiple()){
+//		    numberOfTables=(Integer) tableInstances.get(Table.TABLE_CHILD);
+//		}
+//		else{
+//		    numberOfTables = 1;
+//		}
 		
 		for (int i = 1; i <= numberOfTables; i++) {
 		    if(numberOfTables > 1)

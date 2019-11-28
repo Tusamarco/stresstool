@@ -1,13 +1,11 @@
 {
-	"database":"windmills",
+	"database":"tpccw",
 	"characterSet":"utf8",
 	"tables":{
 		"table":[
 				{
-					"database":"windmills",
+					"database":"tpccw",
 					"tablename":"wmillAUTOINC",
-					"numberOfTables":5,
-					"multiple":true,
 					"engine":"innodb",
 					"primarykey":["id"],
 					"autoincrementvalue":0,
@@ -17,12 +15,13 @@
 					"tablespace":"",
 					"datadir":"",
 					"rowformat":"dynamic",
+					"multiple":true,
 					"rangeLength":"100",
 					"aselectcondition":"millid,id, kwatts_s,date,time,active",
 					"selectcondition":{
 							"condition":[
 								{"weight":100,"condition_string":"millid,id, kwatts_s,date,time,active"},
-								{"weight":100,"condition_string":"millid,id, #wmillMID.millid, #wmillMIDUUID.uuid","joinoption":" LEFT JOIN wmillMID on #table1#.millid=wmillMID.millid join wmillMIDUUID ON #table1#.millid=wmillMIDUUID.millid"},
+								{"weight":100,"condition_string":"millid,id"},
 								{"weight":100,"condition_string":"uuid,date,kwatts_s"},
 								{"weight":100,"condition_string":"id,millid,location"},
 								{"weight":100,"condition_string":"millid,active,date"}
@@ -75,7 +74,7 @@
 					}
 				},
 				{
-					"database":"windmills",
+					"database":"tpccw",
 					"tablename":"wmillMID",
 					"engine":"innodb",
 					"primarykey":["millid","id"],
@@ -145,7 +144,7 @@
 					}
 				},
 				{
-					"database":"windmills",
+					"database":"tpccw",
 					"tablename":"wmillMIDUUID",
 					"engine":"innodb",
 					"primarykey":["millid","uuid"],
@@ -215,7 +214,7 @@
 					}
 				},
 				{
-					"database":"windmills",
+					"database":"tpccw",
 					"tablename":"wmillMIDPart",
 					"engine":"innodb",
 					"primarykey":["millid","id"],
@@ -302,7 +301,7 @@
 					}
 				},
 				{
-					"database":"windmills",
+					"database":"tpccw",
 					"tablename":"wmillAUTOINCPART",
 					"engine":"innodb",
 					"primarykey":["date","id"],

@@ -1,15 +1,13 @@
 {
-	"database":"windmills",
+	"database":"tpcc",
 	"characterSet":"utf8",
 	"tables":{
 		"table":[
 				{
-					"database":"windmills",
-					"tablename":"wmillAUTOINC",
-					"numberOfTables":5,
-					"multiple":true,
+					"database":"tpcc",
+					"tablename":"customer",
 					"engine":"innodb",
-					"primarykey":["id"],
+					"primarykey":["c_custkey"],
 					"autoincrementvalue":0,
 					"defaultcharset":"utf8",
 					"defaultcollation":"utf8_bin",
@@ -17,34 +15,33 @@
 					"tablespace":"",
 					"datadir":"",
 					"rowformat":"dynamic",
+					"multiple":true,
 					"rangeLength":"100",
-					"aselectcondition":"millid,id, kwatts_s,date,time,active",
 					"selectcondition":{
 							"condition":[
-								{"weight":100,"condition_string":"millid,id, kwatts_s,date,time,active"},
-								{"weight":100,"condition_string":"millid,id, #wmillMID.millid, #wmillMIDUUID.uuid","joinoption":" LEFT JOIN wmillMID on #table1#.millid=wmillMID.millid join wmillMIDUUID ON #table1#.millid=wmillMIDUUID.millid"},
-								{"weight":100,"condition_string":"uuid,date,kwatts_s"},
-								{"weight":100,"condition_string":"id,millid,location"},
-								{"weight":100,"condition_string":"millid,active,date"}
+								{"weight":100,"condition_string":"c_name,c_custkey, c_acctbal,c_date,c_nationkey,c_active"},
+								{"weight":100,"condition_string":"c_name,c_custkey"},
+								{"weight":100,"condition_string":"c_custkey,c_acctbal"},
+								{"weight":100,"condition_string":"c_custkey,c_nationkey,c_active"}
 							]
 					},
 					"example_selectcondition":"autoinc,uuid,serverid,a,b,c,counter,time,partitionid,date,strrecordtype",
-					"updatesetattributes":"#active#",
+					"updatesetattributes":"#c_acctbal#",
 					"wherecondition_s":{
 							"condition":[
-								{"weight":100,"condition_string":" #millid#=#?millid?millid# and #active#=#?active?active#"},
-								{"weight":10,"condition_string":" #id#=#?id?id#"}
+								{"weight":100,"condition_string":" #c_nationkey#=#?c_nationkey?c_nationkey# and #c_active#=#?c_active?c_active#"},
+								{"weight":10,"condition_string":" #c_custkey#=#?c_custkey?c_custkey#"}
 							]
 					},
 					"wherecondition_u":{
 							"condition":[
-								{"weight":1,"condition_string":" #id#=#?id?id#"}
+								{"weight":1,"condition_string":" #c_custkey#=#?c_custkey?c_custkey#"}
 							]
 					},
 					"wherecondition_d":{
 							"condition":[
-								{"weight":1,"condition_string":" #millid#=#?millid?millid# and #active#=0"},
-								{"weight":10,"condition_string":" #id#=#?id?id#"}
+								{"weight":1,"condition_string":"  #c_nationkey#=#?c_nationkey?c_nationkey# and #c_active#=0"},
+								{"weight":10,"condition_string":" #c_custkey#=#?c_custkey?c_custkey#"}
 							]
 					},
 				    "example_where":" #autoinc# = #?autoinc?autoinc#  and #date# #?date_RANGE_OPTION_BETWEEN?date#  and #b# like #?b|20?b# " ,
@@ -52,22 +49,23 @@
 							{
 							"key":
 								[
-									{"name":"IDX_millid","unique":false,"attributes":["millid","active"]},
-									{"name":"IDX_active","unique":false,"attributes":["id","active"]}
+									{"name":"i_c_nationkey","unique":false,"attributes":["c_nationkey","c_active"]},
+									{"name":"i_c_active","unique":false,"attributes":["c_custkey","c_active"]}
 								]
 							},	
 					"attributes":{
 						"attribute":
 							[
-								{"name":"id","datatype":"bigint","datadimension":"11","default":"","null":false,"autoincrement":true,"where_attribute":true},
-								{"name":"uuid","datatype":"char","datadimension":"36","default":"","null":false,"specialFunction":"UUID()"},
-								{"name":"millid","datatype":"smallint","datadimension":"6","default":"","null":false,"upperlimit":"400","lazy":"0"},
-								{"name":"kwatts_s","datatype":"int","datadimension":"11","default":"","null":false,"upperlimit":"5000","lazy":"0"},	
-								{"name":"date","datatype":"date","default":"","null":false,"lazy":"0"},			
-								{"name":"location","datatype":"varchar","datadimension":"50","default":"","null":false},
-								{"name":"active","datatype":"tinyint","datadimension":"2","default":"1","null":false,"upperlimit":"2","lazy":"0"},								
-								{"name":"time","datatype":"timestamp","default":"CURRENT_TIMESTAMP","onUpdate":"CURRENT_TIMESTAMP","null":false,"specialFunction":"NOW()","where_attribute":true},
-								{"name":"strrecordtype","datatype":"char","datadimension":"3","default":"","null":true}				
+								{"name":"c_custkey","datatype":"bigint","datadimension":"11","default":"","null":false,"autoincrement":true,"where_attribute":true},
+								{"name":"c_name","datatype":"varchar","datadimension":"25","default":"","null":false,"where_attribute":true},
+								{"name":"c_address","datatype":"varchar","datadimension":"40","default":"","null":false,"lazy":"1"},
+								{"name":"c_nationkey","datatype":"int","datadimension":"11","default":"1","null":false,"upperlimit":"50","lazy":"0"},	
+								{"name":"c_phone","datatype":"char","datadimension":"15","default":"","null":false,"lazy":"0"},			
+								{"name":"c_acctbal","datatype":"decimal","datadimension":"10,2","default":"0","null":false},
+								{"name":"c_active","datatype":"tinyint","datadimension":"2","default":"1","null":false,"upperlimit":"2","lazy":"0"},								
+								{"name":"c_time","datatype":"timestamp","default":"CURRENT_TIMESTAMP","onUpdate":"CURRENT_TIMESTAMP","null":false,"specialFunction":"NOW()","where_attribute":true},
+								{"name":"c_mktsegment","datatype":"char","datadimension":"10","default":"","null":true},
+								{"name":"c_comment","datatype":"varchar","datadimension":"117","default":"","null":false}				
 							]
 					},
 					"partitionDefinition":{

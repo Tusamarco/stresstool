@@ -29,8 +29,8 @@ public class Table {
 	 * NOTE
 	 * Table class is a superclass implementing common methods cross DBType
 	 */
-    	public static final Integer TABLE_PARENT=0;
-    	public static final Integer TABLE_CHILD=1;
+    public static final Integer TABLE_PARENT=1;
+    public static final Integer TABLE_CHILD=1;
 	protected String name = null;
 	protected int rowsNumber = 0;
 	protected int fillFactor = 0;
@@ -67,6 +67,8 @@ public class Table {
 	protected ArrayList<Table> joinTables = new ArrayList(); 
 	protected String updateSetAttributes = null;
 	protected String insertAttributes = null;
+	protected long numberOfTables= 1;
+	
 	
 	public Table() {
 	    rows = new SynchronizedMap(0);
@@ -654,8 +656,10 @@ public class Table {
 		executionPerformance(performanceTimeStart," PARSE WHERE ");
 		return whereCondition;
 	}
-
-
+/** 
+ * TODO redesign this method 
+ * **/
+@Deprecated 
 	private void loadMaxWhereValues(ArrayList<Attribute> maxAttribute, Connection conn) throws SQLException {
 		if(conn == null || conn.isClosed())
 			return;
@@ -738,11 +742,11 @@ public class Table {
 	}
 
 
-	public String getSelectCondition() {
-		return selectCondition_S.getCondition().getCondition();
+	public Condition getSelectCondition() {
+		return selectCondition_S.getCondition();
 	}
 
-
+	@Deprecated
 	public void setSelectCondition_S(ConditionCollection condCol) {
 		this.selectCondition_S = condCol;
 	}
@@ -792,18 +796,34 @@ public class Table {
 		this.rangeLength = rangeLength;
 	}
 	
-	public String parseSelectCondition(){
-		if(selectCondition_S == null || selectCondition_S.getCondition().equals(""))
+	public String[] parseSelectCondition(){
+		if(selectCondition_S == null 
+			||selectCondition_S.size() <1   )
 			return null;
-		String[] selects=this.getSelectCondition().split(",");
+		String[] values =null;
+		Condition condition =this.getSelectCondition() ; 
+		String[] selects=condition.getCondition().split(",");
 		StringBuffer sb = new StringBuffer();
 		for(String select:selects ){
 			if(sb.length() > 0)
 				sb.append(",");
-			sb.append(this.getName() + "."+ select);
+			if(select.indexOf("#") <0)
+				sb.append(this.getName() + "."+ select);
+			else
+				sb.append(select.replace("#", ""));
 			
 		}
-		return sb.toString();
+		if(condition.getJoinoption() == null
+		    || condition.getJoinoption().equals("")) {
+			values = new String[1];
+			values[0]=sb.toString();
+		}
+		else {
+			values = new String[2];
+			values[0]=sb.toString();
+			values[1]=condition.getJoinoption();
+		}
+		return values;
 	}
 
 
@@ -884,6 +904,26 @@ public class Table {
 		} catch (Throwable th) {
 		}
 		/*Performance evaluation section [header] END*/
+	}
+
+
+	public int getRowFormatInt() {
+		return rowFormatInt;
+	}
+
+
+	public void setRowFormatInt(int rowFormatInt) {
+		this.rowFormatInt = rowFormatInt;
+	}
+
+
+	public long getNumberOfTables() {
+		return numberOfTables;
+	}
+
+
+	public void setNumberOfTables(long numberOfTables) {
+		this.numberOfTables = numberOfTables;
 	}
 
 }

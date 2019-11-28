@@ -1,0 +1,82 @@
+{
+	"database":"ingestsimple",
+	"characterSet":"utf8",
+	"tables":{
+		"table":[
+				{
+					"database":"ingestsimple",
+					"tablename":"simplesingle",
+					"engine":"innodb",
+					"primarykey":["id"],
+					"autoincrementvalue":0,
+					"defaultcharset":"utf8mb4",
+					"defaultcollation":"utf8mb4_bin",
+					"haspartition":false,
+					"tablespace":"",
+					"datadir":"",
+					"rowformat":"dynamic",
+					"multiple":true,
+					"rangeLength":"100",
+					"selectcondition":{
+							"condition":[
+								{"weight":100,"condition_string":"id,name, lastname,age,time,active, groupid"},
+								{"weight":100,"condition_string":"name,lastname"},
+								{"weight":100,"condition_string":"uuid,groupid,active"},
+								{"weight":100,"condition_string":"id,groupid,location"},
+								{"weight":100,"condition_string":"age,country3,groupid"}
+							]
+					},
+					"example_selectcondition":"autoinc,uuid,serverid,a,b,c,counter,time,partitionid,date,strrecordtype",
+					"updatesetattributes":"#active#",
+					"wherecondition_s":{
+							"condition":[
+								{"weight":100,"condition_string":" #groupid#=#?groupid?groupid# and #active#=#?active?active#"},
+								{"weight":10,"condition_string":" #id#=#?id?id#"}
+							]
+					},
+					"wherecondition_u":{
+							"condition":[
+								{"weight":1,"condition_string":" #id#=#?id?id#"}
+							]
+					},
+					"wherecondition_d":{
+							"condition":[
+								{"weight":1,"condition_string":" #groupid#=#?groupid?groupid# and #groupid#=0"},
+								{"weight":10,"condition_string":" #id#=#?id?id#"}
+							]
+					},
+				    "example_where":" #autoinc# = #?autoinc?autoinc#  and #date# #?date_RANGE_OPTION_BETWEEN?date#  and #b# like #?b|20?b# " ,
+					"keys":
+							{
+							"key":
+								[
+									{"name":"IDX_millid","unique":false,"attributes":["id","groupid"]},
+									{"name":"IDX_active","unique":false,"attributes":["id","active"]},
+									{"name":"IDX_groupid","unique":false,"attributes":["age","country3","groupid"]}
+								]
+							},	
+					"attributes":{
+						"attribute":
+							[
+								{"name":"id","datatype":"bigint","datadimension":"11","default":"","null":false,"autoincrement":true,"where_attribute":true},
+								{"name":"uuid","datatype":"char","datadimension":"36","default":"","null":false,"specialFunction":"UUID()"},
+								{"name":"name","datatype":"varchar","datadimension":"50","default":"","null":false,"upperlimit":"400","lazy":"0"},
+								{"name":"lastname","datatype":"varchar","datadimension":"50","default":"","null":false,"lazy":"0"},
+								{"name":"groupid","datatype":"smallint","datadimension":"6","default":"","null":false,"upperlimit":"100","lazy":"0"},
+								{"name":"age","datatype":"smallint","datadimension":"11","default":"","null":false,"upperlimit":"90","lazy":"0"},	
+								{"name":"date","datatype":"date","default":"","null":false,"lazy":"0"},			
+								{"name":"location","datatype":"varchar","datadimension":"50","default":"","null":false},
+								{"name":"country3","datatype":"char","datadimension":"3","default":"","null":false},
+								{"name":"postcode","datatype":"int","datadimension":"10","upperlimit":"9999999999","default":"","null":false},
+								{"name":"active","datatype":"tinyint","datadimension":"2","default":"1","null":false,"upperlimit":"2","lazy":"0"},								
+								{"name":"time","datatype":"timestamp","default":"CURRENT_TIMESTAMP","onUpdate":"CURRENT_TIMESTAMP","null":false,"specialFunction":"NOW()","where_attribute":true},
+								{"name":"strrecordtype","datatype":"char","datadimension":"3","default":"","null":true}				
+							]
+					},
+					"partitionDefinition":{
+	
+					}
+				}
+			]
+		}
+}

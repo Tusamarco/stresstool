@@ -102,6 +102,7 @@ public class StructureDefinitionParserOracle implements
 //					table.setWhereConditionD(oTable.get("wherecondition_d")!=null?(String)oTable.get("wherecondition_d"):"");
 //					table.setSelectCondition(oTable.get("selectcondition")!=null?(String)oTable.get("selectcondition"):"");
 					table.setUpdateSetAttributes(oTable.get("updatesetattributes")!=null?(String)oTable.get("updatesetattributes"):""); 
+					table.setNumberOfTables(oTable.get("numberOfTables")!=null?(long)oTable.get("numberOfTables"):1);
 					/*
 					 * Parse select conditions
 					 * 
@@ -121,6 +122,7 @@ public class StructureDefinitionParserOracle implements
 								Condition condition = new Condition();
 								condition.setWeight((Long) aCondition.get("weight"));
 								condition.setCondition((String) aCondition.get("condition_string"));
+								condition.setJoinoption((String) aCondition.get("joinoption"));
 								condition.setType(Condition.SELECT_CONDITION);
 								condCol.setCondition(id++, condition);
 							}

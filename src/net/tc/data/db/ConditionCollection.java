@@ -20,5 +20,13 @@ public class ConditionCollection {
 		//#TODO implement weight not there yet
 		return (Map)Conditions;	
 	}
+	public int size() {
+		if(Conditions != null) {
+			return Conditions.size();
+		}
+		else {
+			return 0;
+		}
+	}
 
 }

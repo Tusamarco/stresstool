@@ -11,8 +11,8 @@ dbTypeName=mysql
 #==========
 # Connection section
 #==========
-connUrl=jdbc:mysql://192.168.4.11:6033
-#connUrl=jdbc:mysql://192.168.4.205:3306
+#connUrl=jdbc:mysql://192.168.4.11:6033
+connUrl=jdbc:mysql://192.168.4.205:3306
 #connUrl=jdbc:mysql://127.0.0.205:3316
 #database=test
 schema=windmills
@@ -36,12 +36,12 @@ skipPermissionTest=true
 FKEnable=false
 createTable=true 
 
-droptable=true
+droptable=false
 truncate=false
 ignoreBinlog=false
 
-#datafilepath=shakespere.txt
-datafilepath=thai.txt
+datafilepath=shakespere.txt
+#datafilepath=thai.txt
 
 #manage the calendar options
 # YYYY-MM-DD HH:MM:SS
@@ -60,11 +60,11 @@ doSimple=false
 #==========
 # scalability / load settings  
 #==========
-poolNumber=10
-pctInsert=100
-pctUpdate=100 
-pctSelect=100 
-pctDelete=50
+poolNumber=1
+pctInsert=00
+pctUpdate=00 
+pctSelect=1000 
+pctDelete=0
 #repeatNumber=1
 repeatNumber=10000
 

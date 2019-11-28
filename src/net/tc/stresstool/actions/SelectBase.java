@@ -346,6 +346,7 @@ public class SelectBase extends StressActionBase implements ReadAction{
 	  // TODO Auto-generated method stub
 	return subTables;
 }
+  @Deprecated
 private String getJoinCondition(Table table){
 	String condition = "";
 	int tablesToJoin = this.getNumberOfJoinTables();
@@ -373,24 +374,28 @@ private String getJoinCondition(Table table){
   /**
    * @return the selectLeadingTable
    */
+  @Deprecated
   private Table getSelectLeadingTable() {
 	return selectLeadingTable;
   }
   /**
    * @param selectLeadingTable the selectLeadingTable to set
    */
+  @Deprecated
   private void setSelectLeadingTable(Table selectLeadingTable) {
 	this.selectLeadingTable = selectLeadingTable;
   }
   /**
    * @return the selectJoinTables
    */
+  @Deprecated
   private Table[] getSelectJoinTables() {
 	return selectJoinTables;
   }
   /**
    * @param selectJoinTables the selectJoinTables to set
    */
+  @Deprecated
   private void setSelectJoinTables(Table[] selectJoinTables) {
 	this.selectJoinTables = selectJoinTables;
   }
@@ -403,11 +408,13 @@ private String getJoinCondition(Table table){
 	//getMainTable();
 	if(table == null )
 		return null;
-	sb.append(table.parseSelectCondition());
+	String[] conditionValues= table.parseSelectCondition(); 
+	sb.append(conditionValues[0]);
 	sb.append( " FROM " + table.getSchemaName() + "." + table.getName() );
-	if(this.getNumberOfJoinTables() > 0 ){
-	  sb.append(" " + this.getJoinCondition(table));
-	}
+	if(conditionValues.length >1) {
+		sb.append( " " + conditionValues[1].replace("#table1#", table.getName())  );
+	} 
+
 
 	sqlSelectCommand = sqlSelectCommand.replaceAll("#TABLE_CONDITION#", sb.toString());
 
