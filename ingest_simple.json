@@ -1,11 +1,12 @@
 {
 	"database":"ingestsimple",
-	"characterSet":"utf8",
+	"characterSet":"utf8mb4",
 	"tables":{
 		"table":[
 				{
 					"database":"ingestsimple",
 					"tablename":"simplesingle",
+					"numberOfTables":1,
 					"engine":"innodb",
 					"primarykey":["id"],
 					"autoincrementvalue":0,

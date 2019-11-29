@@ -15,8 +15,8 @@ dbTypeName=mysql
 connUrl=jdbc:mysql://192.168.4.205:3306
 #connUrl=jdbc:mysql://127.0.0.205:3316
 #database=test
-schema=windmills
-database=windmills
+schema=tpccw
+database=tpccw
 user=app_test
 password=test
 connParameters=autoReconnect=true  

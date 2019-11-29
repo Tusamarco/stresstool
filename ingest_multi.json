@@ -1,11 +1,12 @@
 {
 	"database":"ingestmulti",
-	"characterSet":"utf8",
+	"characterSet":"utf8mb4",
 	"tables":{
 		"table":[
 				{
 					"database":"ingestmulti",
 					"tablename":"simplemulti",
+					"numberOfTables":10,
 					"engine":"innodb",
 					"primarykey":["id"],
 					"autoincrementvalue":0,
@@ -248,8 +249,8 @@
 						"attributes":["date"],
 						"function":"TO_DAYS",
 						"interval":"MONTH",
-						"starttime":"2017-01-01",
-						"endtime":"2019-12-31",
+						"starttime":"2019-01-01",
+						"endtime":"2020-12-31",
 						"partitions":"",
 						"lists":{"list":[]},
 						"ranges":{"range":[]}

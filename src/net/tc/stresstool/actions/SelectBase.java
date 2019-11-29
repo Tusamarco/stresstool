@@ -79,9 +79,11 @@ public class SelectBase extends StressActionBase implements ReadAction{
   public void setIndexName(String indexName) {
 	this.indexName = indexName;
   }
+  @Deprecated
   public int getNumberOfIntervalKeys() {
 	return numberOfIntervalKeys;
   }
+  @Deprecated
   public void setNumberOfIntervalKeys(int numberOfIntervalKeys) {
 	this.numberOfIntervalKeys = numberOfIntervalKeys;
   }
@@ -475,12 +477,14 @@ private String getJoinCondition(Table table){
   /**
    * @return the textAttributeMaxSearchlength
    */
+  @Deprecated
   public int getTextAttributeMaxSearchlength() {
     return textAttributeMaxSearchlength;
   }
   /**
    * @param textAttributeMaxSearchlength the textAttributeMaxSearchlength to set
    */
+  @Deprecated
   public void setTextAttributeMaxSearchlength(int textAttributeMaxSearchlength) {
     this.textAttributeMaxSearchlength = textAttributeMaxSearchlength;
   }	

@@ -15,8 +15,8 @@ dbTypeName=mysql
 connUrl=jdbc:mysql://192.168.4.205:3306
 #connUrl=jdbc:mysql://127.0.0.205:3316
 #database=test
-schema=windmills
-database=windmills
+schema=ingestmulti
+database=ingestmulti
 user=app_test
 password=test
 connParameters=autoReconnect=true  
@@ -149,21 +149,23 @@ maxLifetime=300000
 
 
 [net.tc.stresstool.actions.DeleteBase] 
-sleepDelete=200 
+sleepDelete=500 
 usePrepareStatement=false
 deleteRange = 100
-batchSize=5
+batchSize=1
 lazyInterval=0
 lazyDelete=false
+#numberOfprimaryTables=1
 
 
 [net.tc.stresstool.actions.SelectBase]
 #for consistency the number of tables should never be higher than the ones declared in the Insert class
 usePrepareStatement=false
 sleepSelect=100
+
 lazySelect=true
 lazyInterval=1
-batchSize = 5
+batchSize = 4
 
 
 [net.tc.stresstool.actions.InsertBase]
@@ -178,7 +180,9 @@ jsonFile=ingest_multi.json
 
 [net.tc.stresstool.actions.UpdateBase]
 usePrepareStatement=false
+delayStartRecords = 1000
 useAutoIncrement=true
+
 sleepUpdate=100
 lazyUpdate=false
 lazyInterval=10
