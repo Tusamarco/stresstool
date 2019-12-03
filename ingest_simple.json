@@ -61,7 +61,7 @@
 							[
 								{"name":"id","datatype":"bigint","datadimension":"11","default":"","null":false,"autoincrement":true,"where_attribute":true},
 								{"name":"uuid","datatype":"char","datadimension":"36","default":"","null":false,"specialFunction":"UUID()"},
-								{"name":"name","datatype":"varchar","datadimension":"50","default":"","null":false,"upperlimit":"400","lazy":"0"},
+								{"name":"name","datatype":"varchar","datadimension":"50","default":"","null":false,"upperlimit":"50","lazy":"0"},
 								{"name":"lastname","datatype":"varchar","datadimension":"50","default":"","null":false,"lazy":"0"},
 								{"name":"groupid","datatype":"smallint","datadimension":"6","default":"","null":false,"upperlimit":"100","lazy":"0"},
 								{"name":"age","datatype":"smallint","datadimension":"11","default":"","null":false,"upperlimit":"90","lazy":"0"},	

@@ -66,7 +66,7 @@ pctUpdate=0
 pctSelect=0 
 pctDelete=0
 #repeatNumber=1
-repeatNumber=10000
+repeatNumber=10
 
 #==========
 # console display settings
@@ -75,7 +75,7 @@ repeatNumber=10000
 #if you do not want to run by time but by TRX then set USEHARDSTOP false
 # and set the repeatNumber to the number of TRX you want to execute
 HardStopLimit=1200
-UseHardStop=true
+UseHardStop=false
 StatIntervalMs=1000
 StatLoops = 100
 SemaphoreCountdownTime = 3
@@ -171,10 +171,10 @@ batchSize = 4
 [net.tc.stresstool.actions.InsertBase]
 usePrepareStatement=false
 useAutoIncrement=true
-sleepWrite=100
+sleepWrite=10
 lazyCreation=true
 lazyInterval=5
-batchSize=50
+batchSize=1
 jsonFile=ingest_simple.json
 
 
