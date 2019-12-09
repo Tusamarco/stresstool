@@ -60,13 +60,13 @@ daysdiffernce=360
 #==========
 # scalability / load settings  
 #==========
-poolNumber=16
+poolNumber=1
 pctInsert=100
 pctUpdate=0 
 pctSelect=0 
 pctDelete=0
 #repeatNumber=1
-repeatNumber=10000
+repeatNumber=10
 
 #==========
 # console display settings
@@ -75,7 +75,7 @@ repeatNumber=10000
 #if you do not want to run by time but by TRX then set USEHARDSTOP false
 # and set the repeatNumber to the number of TRX you want to execute
 HardStopLimit=1200
-UseHardStop=true
+UseHardStop=false
 StatIntervalMs=1000
 StatLoops = 100
 SemaphoreCountdownTime = 3
@@ -173,7 +173,7 @@ sleepWrite=100
 lazyCreation=true
 lazyInterval=5
 batchSize=50
-jsonFile=ingest_multi.json
+jsonFile=tpcc.json
 
 
 [net.tc.stresstool.actions.UpdateBase]
