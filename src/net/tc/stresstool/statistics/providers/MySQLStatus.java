@@ -63,16 +63,19 @@ public class MySQLStatus extends BaseStatCollector implements StatsProvider, Rep
 	              String value = "";
 	              name = rs.getString("Variable_name");
 	              value = rs.getString("Value");
-	              event.setCollection(this.statGroupName);
-	              event.setTime(time);
-	              event.setProvider(this.getClass().getCanonicalName());
-	              event.setEvent(name);
-	              event.setValue(value);
-	              event.setId(loopNumber);
-	              event.setOrder(internalOrder);
-	              
-	              statusReport.put(name,event);
-	              internalOrder++;
+	              if(Utility.isNumeric(value)) {
+		              event.setCollection(this.statGroupName);
+		              event.setTime(time);
+		              event.setProvider(this.getClass().getCanonicalName());
+		              event.setEvent(name);
+		              event.setValue(value);
+		              event.setId(loopNumber);
+		              event.setOrder(internalOrder);
+		              
+		              statusReport.put(name,event);
+		              internalOrder++;
+	              }
+
 	          }
           }
           catch(Exception sqlx){

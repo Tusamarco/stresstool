@@ -114,9 +114,7 @@ rootdirectory=/tmp/stats
 
 #this parameter says to write a CSV file for each provider (in root dir)
 flushrowonfile=true
-providerclass=net.tc.stresstool.statistics.providers.ActionsReporter
-
-#,net.tc.stresstool.statistics.providers.MySQLStatus
+providerclass=net.tc.stresstool.statistics.providers.ActionsReporter,net.tc.stresstool.statistics.providers.MySQLStatus
 
 #,net.tc.stresstool.statistics.providers.InnoDBMetrics
 #,net.tc.stresstool.statistics.providers.InnoDB
