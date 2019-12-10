@@ -1,3 +1,4 @@
+aaa
 #!/bin/bash
 
 engine=${1}
@@ -36,10 +37,10 @@ if [ $test == "ingest" ] ;
 	    mkdir -p $MAINDIR/sysbench_results
 	fi
   
-	for threads in 1 32 64 96 128 256;do
+	for threads in 2 8 16 32 64 128;do
 		echo "RUNNING Test $test READ ONLY Thread=$threads [START] $(print_date_time) " >> "${LOGFILE}" 
 		echo "======================================" >>  "${LOGFILE}"
-		sysbench /opt/tools/sysbench/src/lua/windmills/oltp_read.lua  --mysql-host=192.168.1.50 --mysql-port=$port --mysql-user=m8_test --mysql-password=test --mysql-db=sbenchw --db-driver=mysql --tables=300 --table_size=20000000  --time=$time  --rand-type=zipfian --rand-zipfian-exp=0 --skip-trx=on  --report-interval=1 --mysql-ignore-errors=all  --auto_inc=off --histogram --table_name=windmills  --stats_format=csv --db-ps-mode=disable --threads=$threads run >> "${LOGFILE}"
+		./run.sh ingest.cnf "main@connUrl=jdbc:mysql://${host}:${port},main@droptable=false, main@createTable=false, main@pctInsert=100, main@pctUpdate=0, main@pctDelete=0, main@pctSelect=0,main@UseHardStop=false,net.tc.stresstool.actions.DeleteBase@deleteRange=1, net.tc.stresstool.actions.DeleteBase@batchSize=1, net.tc.stresstool.actions.InsertBase@batchSize=20, connectionPool=false, stickyconnection=true, useConnectionPool=false,main@interactive=0,main@poolNumber=${threads},main@repeatNumber=$loops" >> "${LOGFILE}"
 		echo "======================================" >> "${LOGFILE}" 
 		echo "RUNNING Test $test Thread=$threads [END] $(print_date_time) " >> "${LOGFILE}"
 	done;
@@ -57,10 +58,10 @@ if [ $test == "tpcc" ] ;
 	    mkdir -p $MAINDIR/sysbench_results
 	fi
   
-	for threads in 1 32 64 96 128 256;do
+	for threads in 2 8 16 32 64 128;do
 		echo "RUNNING Test $test OLTP Thread=$threads [START] $(print_date_time) " >> "${LOGFILE}" 
 		echo "======================================" >>  "${LOGFILE}"
-		sysbench /opt/tools/sysbench/src/lua/windmills/oltp_read_write.lua  --mysql-host=192.168.1.50 --mysql-port=$port --mysql-user=m8_test --mysql-password=test --mysql-db=sbenchw --db-driver=mysql --tables=300 --table_size=20000000  --time=$time  --rand-type=zipfian --rand-zipfian-exp=0 --skip-trx=on  --report-interval=1 --mysql-ignore-errors=all  --auto_inc=off --histogram --table_name=windmills  --stats_format=csv --db-ps-mode=disable --threads=$threads run >> "${LOGFILE}"
+		./run.sh tpcc.cnf "main@connUrl=jdbc:mysql://${host}:${port},main@droptable=false, main@createTable=false, main@pctInsert=100, main@pctUpdate=50, main@pctDelete=50, main@pctSelect=0,main@UseHardStop=false,  net.tc.stresstool.actions.DeleteBase@deleteRange=5, net.tc.stresstool.actions.DeleteBase@batchSize=10, net.tc.stresstool.actions.InsertBase@batchSize=20, connectionPool=false, stickyconnection=true, useConnectionPool=false,main@interactive=0,main@poolNumber=${threads},main@repeatNumber=${loops}" >> "${LOGFILE}"
 		echo "======================================" >> "${LOGFILE}" 
 		echo "RUNNING Test $test Thread=$threads [END] $(print_date_time) " >> "${LOGFILE}"
 	done;
@@ -68,21 +69,21 @@ if [ $test == "tpcc" ] ;
 	echo "Testing  $test $(date +'%Y-%m-%d_%H_%M_%S') [END]" >> "${LOGFILE}";
 fi
 
-if [ $test == "windmills" ] ;
- then 
-    cd /opt/tools/sysbench-tpcc
-	echo "     Testing  $test $(print_date_time) [START]">> "${LOGFILE}" 
-	if [ ! -d "$MAINDIR/sysbench_results" ]; then
-	    mkdir -p $MAINDIR/sysbench_results
-	fi
-  
-	for threads in 1 32 64 96 128 256;do
-		echo "RUNNING Test $test Thread=$threads [START] $(print_date_time) " >>  "${LOGFILE}" 
-		echo "======================================" >>  "${LOGFILE}" 
-		sysbench /opt/tools/sysbench-tpcc/tpcc.lua --mysql-host=192.168.1.50 --mysql-port=$port --mysql-user=m8_test --mysql-password=test --mysql-db=tpcc --db-driver=mysql --tables=10 --scale=100 --time=$time  --rand-type=zipfian --rand-zipfian-exp=0 --report-interval=1 --mysql-ignore-errors=all --histogram  --stats_format=csv --db-ps-mode=disable --threads=$threads run  >>  "${LOGFILE}"  
-		echo "======================================" >>  "${LOGFILE}" 
-		echo "RUNNING Test $test Thread=$threads [END] $(print_date_time) " >>  "${LOGFILE}" 
-	done;
-	echo "Testing  $test $(date +'%Y-%m-%d_%H_%M_%S') [END]" >>  "${LOGFILE}" ; 
-    cd /opt/tools
-fi
+# if [ $test == "windmills" ] ;
+#  then 
+#     cd /opt/tools/sysbench-tpcc
+# 	echo "     Testing  $test $(print_date_time) [START]">> "${LOGFILE}" 
+# 	if [ ! -d "$MAINDIR/sysbench_results" ]; then
+# 	    mkdir -p $MAINDIR/sysbench_results
+# 	fi
+#   
+# 	for threads in 1 32 64 96 128 256;do
+# 		echo "RUNNING Test $test Thread=$threads [START] $(print_date_time) " >>  "${LOGFILE}" 
+# 		echo "======================================" >>  "${LOGFILE}" 
+# 		./run.sh windmills_mysql.cnf "main@connUrl=jdbc:mysql://${host}:${port},main@droptable=false, main@createTable=false, main@pctInsert=100, main@pctUpdate=50, main@pctDelete=50, main@pctSelect=0,main@UseHardStop=false,  net.tc.stresstool.actions.DeleteBase@deleteRange=5, net.tc.stresstool.actions.DeleteBase@batchSize=10, net.tc.stresstool.actions.InsertBase@batchSize=20, connectionPool=false, stickyconnection=true, useConnectionPool=false,main@interactive=0,main@poolNumber=${threads},main@repeatNumber=${loops}" >> "${LOGFILE}"
+# 		echo "======================================" >>  "${LOGFILE}" 
+# 		echo "RUNNING Test $test Thread=$threads [END] $(print_date_time) " >>  "${LOGFILE}" 
+# 	done;
+# 	echo "Testing  $test $(date +'%Y-%m-%d_%H_%M_%S') [END]" >>  "${LOGFILE}" ; 
+#     cd /opt/tools
+# fi
