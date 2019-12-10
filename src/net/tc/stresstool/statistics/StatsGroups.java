@@ -71,7 +71,7 @@ public class StatsGroups {
 		}
 		cfv = config.getConfiguration(Configurator.STATS_SECTION_NAME, StressTool.class).getParameter("eventhistory");
 		tmpConf = cfv!=null?(String)cfv.getValue():null;
-		if(tmpConf !=null && Boolean.parseBoolean(tmpConf)){
+		if(tmpConf !=null && !Boolean.parseBoolean(tmpConf)){
 		    historylength = Integer.parseInt(tmpConf);
 		    historylength = historylength<2?2:historylength;
 		    cfv = null;

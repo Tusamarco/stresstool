@@ -213,13 +213,13 @@ public class BaseStatCollector implements StatsProvider, Reporter {
         if(stats != null){
             reporterGroup = stats;
         }
-        else{
-            try {
-        	throw new StressToolGenericException(" StatsGroup for reporter " + getProviderName() + " Cannot be null");
-            } catch (StressToolGenericException e) {
-        	e.printStackTrace();
-            }
-        }
+//        else{
+//            try {
+//        	throw new StressToolGenericException(" StatsGroup for reporter " + getProviderName() + " Cannot be null");
+//            } catch (StressToolGenericException e) {
+//        	e.printStackTrace();
+//            }
+//        }
             
         
     }
@@ -227,6 +227,7 @@ public class BaseStatCollector implements StatsProvider, Reporter {
     @Override
     public void setStatsOutFile(String rootPath) {
         if(rootPath != null && !rootPath.equals("")){
+        	
             try{
         	statsFile = new FileHandler(rootPath + "/" +getStatGroup()+"_"+Utility.getTimestamp()+".txt", FileHandler.FILE_FOR_WRITE );
         	
@@ -250,49 +251,53 @@ public class BaseStatCollector implements StatsProvider, Reporter {
     }
 
     @SuppressWarnings("finally")
-    protected Object getResultByName(String varName, boolean isString) {
+    protected EventCollection getResultByName(String varName, boolean isString) {
             if(!isString)
             {
-            	Long endValue = null;
-            	Long startValue = null;
             	EventCollection eventColl = reporterGroup.getEventCollection(varName);
             	if(!Utility.checkEntryInArray(eventsName,varName))
-            		return new Long(0);
+//            		return new Long(0);
+            		return null;
             	
             	
             	if (eventColl != null && eventColl.getCollection().size() > 0) {
-                	try{
-                	 StatEvent eventMin =  (StatEvent)eventColl.getCollection().get(new Long(1));
-                	 StatEvent eventMax =  (StatEvent)((SynchronizedMap)eventColl.getCollection()).getValueByPosition(eventColl.getCollection().size()-1);
-                	 startValue = Long.parseLong((String)eventMin.getValue());
-                     endValue = Long.parseLong((String) eventMax.getValue() );
-                	}
-                	catch(NullPointerException e){
-                		return "WARNING - NULL VALUE";
-                	}
-                	finally{
-	        			try{
-	        			    return (Long)(endValue - startValue);
-	        			}
-	        			catch(final NullPointerException en){
-	      				  try {
-	      					StressTool.getLogProvider().getLogger(LogProvider.LOG_STATS).warn(ExceptionMessages.ERROR_PORCESSING_STATS 
-	      						+ "WARNING -- RETURNING NULL VALUE FOR STATUS KEY NAME =" + varName);
-	      				  } catch (StressToolException e) {
-	      					//e.printStackTrace();
-	      			
-	      				  }
-	
-	        				return new Long(0);
-	        			}
-                	}
+            		return eventColl;
+//            		values[0]=Long.toString(eventColl.getMaxValue());
+//            		values[1]=Long.toString(eventColl.getMinValue());
+//            		values[2]=Double.toString(eventColl.getAverageValue());
+            		
+//                	try{
+//                	 StatEvent eventMin =  (StatEvent)eventColl.getCollection().get(new Long(1));
+//                	 StatEvent eventMax =  (StatEvent)((SynchronizedMap)eventColl.getCollection()).getValueByPosition(eventColl.getCollection().size()-1);
+//                	 startValue = Long.parseLong((String)eventMin.getValue());
+//                     endValue = Long.parseLong((String) eventMax.getValue() );
+//                	}
+//                	catch(NullPointerException e){
+//                		return "WARNING - NULL VALUE";
+//                	}
+//                	finally{
+//	        			try{
+//	        			    return (Long)(endValue - startValue);
+//	        			}
+//	        			catch(final NullPointerException en){
+//	      				  try {
+//	      					StressTool.getLogProvider().getLogger(LogProvider.LOG_STATS).warn(ExceptionMessages.ERROR_PORCESSING_STATS 
+//	      						+ "WARNING -- RETURNING NULL VALUE FOR STATUS KEY NAME =" + varName);
+//	      				  } catch (StressToolException e) {
+//	      					//e.printStackTrace();
+//	      			
+//	      				  }
+//	
+//	        				return new Long(0);
+//	        			}
+//                	}
                 }
             }
             else
             {
-                return "Not yet implemented";
+                return null; //"Not yet implemented";
             }
-            return "";
+            return null;//"";
         }
 
 
@@ -336,30 +341,6 @@ public class BaseStatCollector implements StatsProvider, Reporter {
 	return null;
     }
 
-
-//    @Deprecated
-//    /*
-//     * Do not use this, use ConnectionProvider instead from Launcher
-//     */
-//    public synchronized static Connection initConnection(Map connMapcoordinates)
-//	throws SQLException {
-//	    Connection conn;
-//	    if(connMapcoordinates.get("dbtype") != null &&  !((String)connMapcoordinates.get("dbtype")).toLowerCase().equals("MySQL".toLowerCase()))
-//	    {
-//	    	conn=DriverManager.getConnection((String)connMapcoordinates.get("dbtype"),"test", "test");
-//	    }
-//	    else{
-//	    String connectionString = (String)connMapcoordinates.get("jdbcUrl")
-//	        	    +"/"+(String)connMapcoordinates.get("database")
-//	        	    +"?user="+(String)connMapcoordinates.get("user")
-//	        	    +"&password="+(String)connMapcoordinates.get("password")
-//	        	    +"&"+(String)connMapcoordinates.get("connparameters");
-//	    
-//	    
-//	    conn= DriverManager.getConnection(connectionString);
-//	    }
-//	    return conn;
-//    }
 
 	public String getStatGroupName() {
 		return statGroupName;

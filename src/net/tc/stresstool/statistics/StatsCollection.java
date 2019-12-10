@@ -120,24 +120,27 @@ public class StatsCollection {
         //	    	    Object value = event.getValue();
         	    	    if(Text.isNumeric(event.getValue())){
 	        	    		Long value = Text.toLong(event.getValue(),new Long(0));
-	        	    		eventCollection.setAverageValue(value);
-	        	    		eventCollection.setMaxValue(value.longValue());
-	        	    		eventCollection.setMinValue(value.longValue());
+//	        	    		eventCollection.setAverageValue(value);
 	        	    		
 	        	    		if(eventCollection.getCollection().size() >=1 ){
-	        	    			if(value.longValue() >  eventCollection.lastValue ) {
+	        	    			if((value.longValue() -  eventCollection.lastValue) >= 0) {
 	        	    				event.setDeltaValue(value.longValue() -  eventCollection.lastValue);
-	        	    			}
+	        	    			}	
 	        	    			else {
 	        	    				event.setDeltaValue(value.longValue());
+	        	    				
 	        	    			}
+		        	    		eventCollection.setMaxValue(event.getDeltaValue());
+		        	    		eventCollection.setMinValue(event.getDeltaValue());
+		        	    		eventCollection.setSumValue(eventCollection.getSumValue() + event.getDeltaValue());
 	        	    		}
 	        	    		else{
 	        	    		    event.setDeltaValue(0);
 	        	    		}
+
+	        	    		
 	        	    		eventCollection.setLastValue(value.longValue());
 //	        	    		System.out.println(eventCollectionName + " = " + eventCollection.lastValue);
-	        	    		eventCollection.setSumValue(eventCollection.getSumValue() + (long)event.getDeltaValue());
         	    	    }
         	    	    eventCollection.setEvent(event);
         	    	    group.setEventCollection(eventCollectionName, eventCollection);

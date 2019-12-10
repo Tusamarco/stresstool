@@ -1,5 +1,6 @@
 package net.tc.utils;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 public class MathU {
@@ -46,5 +47,18 @@ public class MathU {
 	
 	return null;
     }
+	public static Double getAverage(ArrayList<Long> values) {
+		if(values != null && values.size() !=0){
+			long sum = 0;
+			for(Long i : values){
+			    sum += i.longValue();
+			}
+			if(sum > 0)
+			    return new Double(sum/values.size());
+		}
+		
+		return 0.0;
+		
+	}
     
 }

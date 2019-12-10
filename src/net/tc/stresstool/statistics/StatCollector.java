@@ -176,14 +176,14 @@ public class StatCollector {
 		    String[] providerNames = cfv.split(",");
 		    StatsProvider sp = null;
 		    for(int isp =0 ; isp < providerNames.length;isp++){
-			if(providerNames[isp] != null && !providerNames[isp].equals("") ){
-			    currentProviderClassName = providerNames[isp];
-        		    	sp = (StatsProvider)Class.forName(providerNames[isp].trim()).newInstance();
-        		    	sp.setFlushDataOnfile(flushrowonfile);
-        		    	sp.setStatsOutFile(rootPath);
-           		    	
-			}
-        		    providers.put(sectionName+'.'+sp.getStatGroup(), sp);
+				if(providerNames[isp] != null && !providerNames[isp].equals("") ){
+				    currentProviderClassName = providerNames[isp];
+	        		    	sp = (StatsProvider)Class.forName(providerNames[isp].trim()).newInstance();
+	        		    	sp.setFlushDataOnfile(flushrowonfile);
+	        		    	sp.setStatsOutFile(rootPath);
+	           		    	
+				}
+        		providers.put(sectionName+'.'+sp.getStatGroup(), sp);
 		    }
 		}
 
@@ -338,9 +338,9 @@ public class StatCollector {
        
        ArrayList<Reporter> reporters = getReporter();
        for (Reporter i : reporters){
-	   i.setStats(statColl.getStatGroups(i.getStatGroup()));
-//	   i.printDataOnFile(i.getStatGroup());
-	   i.printReport(i.getStatGroup(), sb);
+		   i.setStats(statColl.getStatGroups(i.getStatGroup()));
+	//	   i.printDataOnFile(i.getStatGroup());
+		   i.printReport(i.getStatGroup(), sb);
        }
        System.out.println(sb.toString());
    }

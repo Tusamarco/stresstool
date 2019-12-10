@@ -1,11 +1,13 @@
 package net.tc.stresstool.statistics;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
 
 import jdk.internal.org.objectweb.asm.tree.analysis.Value;
 import net.tc.utils.MathU;
 import net.tc.utils.SynchronizedMap;
+import net.tc.utils.Text;
 
 /**
  * @author  tusa
@@ -16,8 +18,9 @@ public class EventCollection {
     long maxValue = 0 ;
     long sumValue = 0 ;
     Double averageValue = new Double(0);
+    ArrayList averageValueList = new ArrayList(0);
     long lastValue = 0;
-    int historyList = 350;
+    int historyList = 10;
     int lastPurge = 2;
     String eventName;
     boolean processAverage = false;
@@ -31,19 +34,25 @@ public class EventCollection {
 	
     }
     
-    public void setEvent(StatEvent event){
-	if(collection.size() >= getHistoryList()){
-	    if(getHistoryList() <= 2)
-		lastPurge = 2;
-		
-	    collection.remove(new Long(lastPurge + 1));
-	    lastPurge++; 
+	public void setEvent(StatEvent event) {
+		if (collection.size() >= getHistoryList()) {
+
+			if (event.getValue() != null && Text.isNumeric(event.getValue())) {
+				this.setAverageValue(Text.toLong(event.getValue(), new Long(0)));
+			}
+
+//	    if(getHistoryList() <= 2)
+//		lastPurge = 2;
+
+			collection.clear();
+//	    collection.remove(new Long(lastPurge + 1));
+//	    lastPurge++; 
+		}
+		if (event != null) {
+			collection.put(new Long(event.getId()), event);
+		}
+
 	}
-	if(event != null ){
-	    collection.put(new Long(event.getId()), event);
-	}
-	
-    }
     
     /**
      * @return    the collection
@@ -74,7 +83,7 @@ public class EventCollection {
      * @uml.property  name="minValue"
      */
     public final void setMinValue(long minValueIn) {
-	if(minValueIn < minValue)
+	if(minValueIn < minValue || minValue == 0)
 	    this.minValue = minValueIn;
     }
 
@@ -99,8 +108,8 @@ public class EventCollection {
      * @return    the averageValue
      * @uml.property  name="averageValue"
      */
-    public final Double getAverageValue() {
-        return averageValue;
+    public Double getAverageValue() {
+         return MathU.getAverage(this.averageValueList);
     }
 
     /**
@@ -131,6 +140,7 @@ public class EventCollection {
    
 		valuesL[valuesL.length -1] = averageValueIn;
 		averageValue = MathU.getAverage(valuesL);
+		averageValueList.add(averageValue);
     }
 
     /**

@@ -22,7 +22,7 @@
 							"condition":[
 								{"weight":100,"condition_string":"millid,id, kwatts_s,date,time,active"},
 								{"weight":100,"condition_string":"millid,id"},
-								{"weight":100,"condition_string":"millid,id, #wmillMID.millid, #wmillMIDUUID.uuid","joinoption":" LEFT JOIN wmillMID on #table1#.millid=wmillMID.millid join wmillMIDUUID ON #table1#.millid=wmillMIDUUID.millid"},
+								{"weight":100,"condition_string":"millid,id, #wmillMID.millid","joinoption":" LEFT JOIN wmillMID on #table1#.millid=wmillMID.millid"},
 								{"weight":100,"condition_string":"uuid,date,kwatts_s"},
 								{"weight":100,"condition_string":"id,millid,location"},
 								{"weight":100,"condition_string":"millid,active,date"}
@@ -93,7 +93,7 @@
 							"condition":[
 								{"weight":100,"condition_string":"millid,id, kwatts_s,date,time,active"},
 								{"weight":100,"condition_string":"millid,id"},
-								{"weight":100,"condition_string":"millid, #wmillAUTOINC.millid, #wmillMIDUUID.uuid","joinoption":" LEFT JOIN wmillAUTOINC on #table1#.millid=wmillAUTOINC.millid join wmillMIDUUID ON #table1#.millid=wmillMIDUUID.millid"},
+								{"weight":100,"condition_string":"millid, #wmillAUTOINC.millid","joinoption":" LEFT JOIN wmillAUTOINC on #table1#.millid=wmillAUTOINC.millid"},
 								{"weight":100,"condition_string":"uuid,date,kwatts_s"},
 								{"weight":100,"condition_string":"id,millid,location"},
 								{"weight":100,"condition_string":"millid,active,date"}
@@ -323,7 +323,7 @@
 								{"weight":100,"condition_string":"millid,id, kwatts_s,date,time,active"},
 								{"weight":100,"condition_string":"date,millid,id"},
 								{"weight":100,"condition_string":"uuid,date,kwatts_s"},
-								{"weight":100,"condition_string":"date,id,millid,location,#wmillAUTOINC.id,#wmillAUTOINC.millid","joinoption":" LEFT JOIN wmillMID on #table1#.millid=wmillMID.millid"},
+								{"weight":100,"condition_string":"date,id,millid,location,#wmillMID.id,#wmillMID.millid","joinoption":" LEFT JOIN wmillMID on #table1#.millid=wmillMID.millid"},
 								{"weight":100,"condition_string":"millid,active,date"}
 							]
 					},

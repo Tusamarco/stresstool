@@ -2,6 +2,8 @@ package net.tc.stresstool.statistics;
 
 import java.util.ArrayList;
 
+import net.tc.utils.MathU;
+
 /*
  * This class contain information about the status of the thread
  * the information is reported at EACH action thread loop,
@@ -29,18 +31,20 @@ public class ActionTHElement {
     long executionTime =0;
     long minExectime =0;
     long maxExectime = 0;
-    long avgExecTime=0;
+//    long avgExecTime=0;
     long latency = 0;
     long minLatency = 0;
     long maxLatency = 0;
-    long avgLatency =0 ;
+//    long avgLatency =0 ;
     long totalEcecutionTime =0;
     long maxConnectionTime=0;
     long minConnectionTime=0;
-    long avgConnectionTime=0;
+//    long avgConnectionTime=0;
     int batchSize=1;
     
-    ArrayList <Long> getConnectionTime= new ArrayList();
+    ArrayList <Long> avgConnectionTime= new ArrayList();
+    ArrayList <Long> avgExecutionTime= new ArrayList();
+    ArrayList <Long> avgLatency= new ArrayList();
     
     int rowsProcessed=0;
     boolean isActive = false;
@@ -174,7 +178,7 @@ public class ActionTHElement {
     			||(this.getMinExectime() == 0 && executionTime > 0)){
     			this.minExectime = executionTime;
     	}
-    	this.avgExecTime = (executionTime/this.getCurrentLoop());
+    	avgExecutionTime.add(executionTime);
 //        this.executionTime = executionTime;
     }
 
@@ -273,7 +277,7 @@ public class ActionTHElement {
     			this.minLatency = latency;
     	}
     	
-    	this.avgLatency = (latency/this.getCurrentLoop());
+    	avgLatency.add(latency);
 
 	}
 
@@ -300,9 +304,7 @@ public class ActionTHElement {
     			this.minConnectionTime = connectionTime;
     	}
     	
-    	this.avgConnectionTime = (connectionTime/this.getCurrentLoop());
-
-		
+    	avgConnectionTime.add(connectionTime);
 		
 	}
 	
@@ -316,26 +318,21 @@ public class ActionTHElement {
 	}
 
 
-	public long getAvgConnectionTime() {
-		return avgConnectionTime;
-	}
+//	public long getAvgConnectionTime() {
+//		return avgConnectionTime;
+//	}
+//
 
-
-	public ArrayList<Long> getConnectionTime() {
-		return getConnectionTime;
+	
+	public Double getAvgExecTime() {
+		return MathU.getAverage(this.avgExecutionTime);
 	}
-
-	public void setConnectionTimeAR(ArrayList<Long> getConnectionTime) {
-		this.getConnectionTime = getConnectionTime;
+	public Double getAvgLatency() {
+		return MathU.getAverage(this.avgLatency);
 	}
-
-	public long getAvgExecTime() {
-		return avgExecTime;
-	}
-
-	public long getAvgLatency() {
-		return avgLatency;
-	}
+//	public long getAvgLatency() {
+//		return avgLatency;
+//	}
 
 	public int getBatchSize() {
 		return batchSize;
@@ -344,6 +341,9 @@ public class ActionTHElement {
 	public void setBatchSize(int batchSize) {
 		this.batchSize = batchSize;
 	}
-
+	public Double getAvgConnectionTime() {
+		return MathU.getAverage(this.avgConnectionTime);
+		
+	}
 
 }

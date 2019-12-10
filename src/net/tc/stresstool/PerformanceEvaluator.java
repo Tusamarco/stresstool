@@ -55,7 +55,10 @@ public class PerformanceEvaluator {
 		return (performanceTimeStart / 1000000);
 
 	}
+	public double getIMSFromNano(double performanceTimeStart) {
+		return (performanceTimeStart / 1000000);
 
+	}
 	public long getISecFromNano(long performanceTimeStart) {
 		return (performanceTimeStart / 1000000000);
 

@@ -186,7 +186,7 @@ public class InnoDBMetrics extends BaseStatCollector implements StatsProvider, R
             pw.println("End time  = " + Utility.getTimeStamp(reporterGroup.getLastSampleTime(),"yy/MM/dd hh:mm:ss:SSSS a"));
             String[] names = reporterGroup.getEventsCollactionNames();
             
-            pw.println("Total Kbyte IN  = " + getResultByName("Bytes_sent",false) + " xsec = " + (((Long)this.getResultByName("Bytes_sent",false)).longValue()/(totalExecutionTime/1000)));
+            pw.println("Total Kbyte IN  = " + getResultByName("Bytes_sent",false).getSumValue() + " xsec = " + this.getResultByName("Bytes_sent",false).getSumValue()/(totalExecutionTime/1000));
        }
        catch(Throwable th){
     	   th.printStackTrace();

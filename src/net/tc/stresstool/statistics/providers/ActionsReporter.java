@@ -12,65 +12,33 @@ import net.tc.stresstool.statistics.ActionTHElement;
 import net.tc.stresstool.statistics.StatsGroups;
 import net.tc.stresstool.PerformanceEvaluator;
 
-public class ActionsReporter implements Reporter, StatsProvider {
+public class ActionsReporter extends BaseStatCollector implements Reporter, StatsProvider {
     private String statGroupName;
 
 	public ActionsReporter() {
-	 
+	 super();
 	 this.setStatGroupName("ActionReporter");
     } 
-    
-	void setStatGroupName(String gName) {
-		statGroupName=gName;
-	}
-    
-	@Override
-	public Map collectStatistics(Connection conn) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	 Map getStatus(Connection conn)  {
+		 return null;
+	 }
+//	void setStatGroupName(String gName) {
+//		statGroupName=gName;
+//	}
+//    
+//	@Override
+//	public Map collectStatistics(Connection conn) {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
+//
+//	@Override
+//	public Map getMetrics() {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
 
-	@Override
-	public Map getMetrics() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
-	@Override
-	public File getStatsOutFile() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String[] getEventsName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void writeStatsOnFile(Map valuesToWrite) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public String getProviderName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setStatsOutFile(String rootPath) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void setFlushDataOnfile(boolean flushrowonfile) {
-		// TODO Auto-generated method stub
-
-	}
 
 	@Override
 	public boolean validatePermissions(ConnectionProvider connProvider) {
@@ -78,47 +46,35 @@ public class ActionsReporter implements Reporter, StatsProvider {
 		return false;
 	}
 
-	@Override
-	public void setDefaultSchema(String defaultSchema) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public String getDefaultSchema() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getReporterName() {
-		
-		return statGroupName;
-	}
-
-	@Override
-	public String[] getHeadersArray(String StatsGroupName) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String[] getRowDataArray(String[] headersArray) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public StringBuffer getHeaders(StringBuffer sb) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public StringBuffer getRowData(StringBuffer sb) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+//	@Override
+//	public String getReporterName() {
+//		
+//		return statGroupName;
+//	}
+//
+//	@Override
+//	public String[] getHeadersArray(String StatsGroupName) {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
+//
+//	@Override
+//	public String[] getRowDataArray(String[] headersArray) {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
+//
+//	@Override
+//	public StringBuffer getHeaders(StringBuffer sb) {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
+//
+//	@Override
+//	public StringBuffer getRowData(StringBuffer sb) {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
 
 	@Override
     public StringBuffer printReport(String StatsGroupName,
@@ -161,15 +117,19 @@ public class ActionsReporter implements Reporter, StatsProvider {
 		    		  if(((ActionTHElement)thInfo).getAction().toUpperCase().equals(action.toUpperCase())){
 			    		   pw.println("ThreadID = " +  ((ActionTHElement)thInfo).getId() 
 			    				   + " Tot Execution time (Sec) = " + ((ActionTHElement)thInfo).getTotalEcecutionTime()
-			    				   + "; Max Th Exec time ms = " + per.getIMSFromNano(((ActionTHElement)thInfo).getMaxExectime()) 
-			    				   + "; Min Th Exec time ms= " + per.getIMSFromNano(((ActionTHElement)thInfo).getMinExectime())
-			    				   //+ "; AVG Th Exec time ms= " + per.getIMSFromNano(((ActionTHElement)thInfo).getAvgExecTime())
-			    				   + "; AVG Th Exec time ms= " + per.getIMSFromNano(((((ActionTHElement)thInfo).getMaxExectime() + ((ActionTHElement)thInfo).getMinExectime())/2))
+			    				   + "; MAX|MIN|AVG ms = " + per.getIMSFromNano(((ActionTHElement)thInfo).getMaxExectime()) 
+			    				   + "|" + per.getIMSFromNano(((ActionTHElement)thInfo).getMinExectime())
+			    				   + "|" + per.getIMSFromNano(((ActionTHElement)thInfo).getAvgExecTime())
+//			    				   + "; AVG Th Exec time ms= " + per.getIMSFromNano(((((ActionTHElement)thInfo).getMaxExectime() + ((ActionTHElement)thInfo).getMinExectime())/2))
 			    				   
-			    				   + "; Conn lat MAX|MIN ns = "
+			    				   + "; Conn lat MAX|MIN|AVG ns = "
 			    				   		+ ((ActionTHElement)thInfo).getMaxConnectionTime() 
 			    				   		+ "|" + ((ActionTHElement)thInfo).getMinConnectionTime()	
-//			    				   		+ "|" + (((ActionTHElement)thInfo).getMaxConnectionTime() + ((ActionTHElement)thInfo).getMinConnectionTime())/2
+			    				   		+ "|" + ((ActionTHElement)thInfo).getAvgConnectionTime() 
+			    				   + "; Latency(exec time + Conn + more delay)MAX|MIN|AVG ms "
+			    				   		+ per.getIMSFromNano(((ActionTHElement)thInfo).getMaxLatency()) 
+			    				   		+ "|" + per.getIMSFromNano(((ActionTHElement)thInfo).getMinLatency())
+			    				   		+ "|" + per.getIMSFromNano(((ActionTHElement)thInfo).getAvgLatency())
 			    				   + "; Events = " + ((ActionTHElement)thInfo).getCurrentLoop()
 		    				     );
 			    		   switch (action.toLowerCase()){
@@ -210,27 +170,14 @@ public class ActionsReporter implements Reporter, StatsProvider {
 	    	th.printStackTrace();
 	    }
  	   
- 	   	 
+        if(flushrowonfile){
+            writeReportOnFile(sw.toString());
+        } 
     	 
 		return sb.append(sw.toString());
 	}
 
-	@Override
-	public void setStats(StatsGroups stats) {
-		// TODO Auto-generated method stub
 
-	}
 
-	@Override
-	public String getStatGroup() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void writeReportOnFile(String outString) {
-		// TODO Auto-generated method stub
-
-	}
 
 }
