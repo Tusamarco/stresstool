@@ -12,7 +12,7 @@ dbTypeName=mysql
 # Connection section
 #==========
 #connUrl=jdbc:mysql://192.168.4.11:6033
-connUrl=jdbc:mysql://192.168.4.205:3306
+connUrl=jdbc:mysql://192.168.4.55:3306
 #connUrl=jdbc:mysql://127.0.0.205:3316
 #database=test
 schema=windmills
@@ -60,13 +60,13 @@ daysdiffernce=360
 #==========
 # scalability / load settings  
 #==========
-poolNumber=16
+poolNumber=1
 pctInsert=100
 pctUpdate=0 
 pctSelect=0 
 pctDelete=0
 #repeatNumber=1
-repeatNumber=10000
+repeatNumber=10
 
 #==========
 # console display settings
@@ -173,7 +173,7 @@ sleepWrite=100
 lazyCreation=true
 lazyInterval=5
 batchSize=50
-jsonFile=ingest_multi.json
+jsonFile=wind_mill_example.json
 
 
 [net.tc.stresstool.actions.UpdateBase]
