@@ -18,6 +18,7 @@ import net.tc.stresstool.StressTool;
 import net.tc.stresstool.exceptions.ExceptionMessages;
 import net.tc.stresstool.exceptions.StressToolConfigurationException;
 import net.tc.stresstool.exceptions.StressToolException;
+import net.tc.stresstool.logs.LogProvider;
 import net.tc.utils.SynchronizedMap;
 import net.tc.utils.file.FileHandler;
 
@@ -104,7 +105,8 @@ public class Configurator {
 	 * Read the Args and fill the configuration object
 	 */
 	private SynchronizedMap readArgs(String[] args, Class imPlementingClass) throws StressToolException {
-	    configurationArgs = new SynchronizedMap(0);
+
+		configurationArgs = new SynchronizedMap(0);
 	    String[] inArgs = null; 
 	    String argString= null;
 	    if(args.length > 1 && args[1].indexOf(",") > 0){
@@ -115,13 +117,11 @@ public class Configurator {
 	    	inArgs = args;
 	    
 	    String[] args2 =new String[inArgs.length  ];
-//System.out.println(" =========== Dynamic parameter sections (from command line) ======== ");
-//System.out.println("======== Args lenght "+ args.length +"  "+ argString);		
-
+System.out.println("======== Dynamic parameter sections (from command line) ======== ");
+System.out.println("======== Args lenght "+ args.length +"  "+ argString);		
 
 		for(int i = 0; i < inArgs.length; i++){
-//		    args2[i] = args[i + 1];
-//System.out.println(" Parameter #" + i +" = " + inArgs[i]);
+System.out.println(" Parameter #" + i +" = " + inArgs[i]);
 		    args2[i] = inArgs[i];
 		}
 		Map argsM = net.tc.utils.Utility.convertArgsToMap(args2);
