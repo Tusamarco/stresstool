@@ -11,8 +11,8 @@ dbTypeName=mysql
 #==========
 # Connection section
 #==========
-connUrl=jdbc:mysql://192.168.4.108:6033
-#connUrl=jdbc:mysql://192.168.4.107:3306
+#connUrl=jdbc:mysql://192.168.4.108:6033
+connUrl=jdbc:mysql://192.168.4.107:3306
 #connUrl=jdbc:mysql://127.0.0.205:3316
 #database=test
 schema=windmills_ndb
@@ -36,7 +36,7 @@ skipPermissionTest=true
 FKEnable=false
 createTable=true 
 
-droptable=false
+droptable=true
 truncate=false
 ignoreBinlog=false
 
@@ -46,8 +46,8 @@ datafilepath=shakespere.txt
 #manage the calendar options
 # YYYY-MM-DD HH:MM:SS
 # daysdiffernce is the target/final date of the period 
-calendardate=2018-12-31 00:00:01 
-daysdiffernce=360
+calendardate=2019-12-31 00:00:01 
+daysdiffernce=740
 
 
 #deprecated
@@ -60,13 +60,13 @@ doSimple=false
 #==========
 # scalability / load settings  
 #==========
-poolNumber=4
+poolNumber=16
 pctInsert=100
 pctUpdate=100 
 pctSelect=100 
 pctDelete=100
 #repeatNumber=1
-repeatNumber=1000000
+repeatNumber=1000
 
 #==========
 # console display settings

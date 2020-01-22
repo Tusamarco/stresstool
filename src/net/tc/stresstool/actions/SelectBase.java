@@ -287,8 +287,9 @@ public class SelectBase extends StressActionBase implements ReadAction{
 
   private Table getMainTable(SQLObject lSQl){
 	Table table = (Table) getTables()[Utility.getNumberFromRandomMinMax(new Long(0), new Long(getTables().length) ).intValue()];
+	int readFactor = Utility.getNumberFromRandomMinMax(new Long(0), 100).intValue();
 
-	if(checkIfTableExists(table,lSQl))
+	if(checkIfTableExists(table,lSQl,readFactor))
 		return getMainTable(lSQl);
 	
 	if(table.getParentTable() != null)
@@ -311,7 +312,7 @@ public class SelectBase extends StressActionBase implements ReadAction{
 //
 //
 //  }
-  private boolean checkIfTableExists(Table tableIn,SQLObject lSQL){
+  private boolean checkIfTableExists(Table tableIn,SQLObject lSQL, int readFactor){
 	  if(lSQL != null
 			  && lSQL.getSourceTables() != null){
 	  
@@ -320,6 +321,12 @@ public class SelectBase extends StressActionBase implements ReadAction{
 		  	return false;
 	  int found = 0;
 	  for(Table table:tables){
+//		  if(table.getName().equals(tableIn.getName())){
+//			  if(readFactor > tableIn.getReadFactor()) {
+//				  this.getSelectObject();
+//			  }
+//		  }
+		  
 		  if(table.getName().equals(tableIn.getName())  && getTables().length >= this.getBatchSize())
 			  return true;
 		  else if(table.getName().equals(tableIn.getName())  && getTables().length < this.getBatchSize() && getTables().length > 1){

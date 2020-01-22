@@ -69,6 +69,11 @@ public class Table {
 	protected String insertAttributes = null;
 	protected long numberOfTables= 1;
 	
+	protected boolean initializeValues = true;
+	protected boolean readOnly = false;
+	protected long writeFactor = 100;
+	protected long readFactor = 100;
+
 	
 	public Table() {
 	    rows = new SynchronizedMap(0);
@@ -924,6 +929,46 @@ public class Table {
 
 	public void setNumberOfTables(long numberOfTables) {
 		this.numberOfTables = numberOfTables;
+	}
+
+
+	public boolean isInitializeValues() {
+		return initializeValues;
+	}
+
+
+	public void setInitializeValues(boolean initializeValues) {
+		this.initializeValues = initializeValues;
+	}
+
+
+	public boolean isReadOnly() {
+		return readOnly;
+	}
+
+
+	public void setReadOnly(boolean readOnly) {
+		this.readOnly = readOnly;
+	}
+
+
+	public long getWriteFactor() {
+		return writeFactor;
+	}
+
+
+	public void setWriteFactor(long writeFactor) {
+		this.writeFactor = writeFactor;
+	}
+
+
+	public long getReadFactor() {
+		return readFactor;
+	}
+
+
+	public void setReadFactor(long readFactor) {
+		this.readFactor = readFactor;
 	}
 
 }

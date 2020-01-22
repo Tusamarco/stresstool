@@ -103,6 +103,13 @@ public class StructureDefinitionParserOracle implements
 //					table.setSelectCondition(oTable.get("selectcondition")!=null?(String)oTable.get("selectcondition"):"");
 					table.setUpdateSetAttributes(oTable.get("updatesetattributes")!=null?(String)oTable.get("updatesetattributes"):""); 
 					table.setNumberOfTables(oTable.get("numberOfTables")!=null?(long)oTable.get("numberOfTables"):1);
+					
+					table.setInitializeValues((Boolean)(oTable.get("initializeValues")!=null?oTable.get("initializeValues"):false));
+					table.setReadOnly((Boolean)(oTable.get("readOnly")!=null?oTable.get("readOnly"):false));
+					table.setWriteFactor(oTable.get("writeFactor")!=null?(Long)oTable.get("writeFactor"):100);
+					table.setReadFactor(oTable.get("readFactor")!=null?(Long)oTable.get("readFactor"):100);
+
+					
 					/*
 					 * Parse select conditions
 					 * 

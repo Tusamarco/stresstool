@@ -99,6 +99,12 @@ public class StructureDefinitionParserMySQL implements
 					table.setTableSpace(oTable.get("tablespace")!=null?(String)oTable.get("tablespace"):"");
 					table.setNumberOfTables(oTable.get("numberOfTables")!=null?(Long)oTable.get("numberOfTables"):1);
 					
+					table.setInitializeValues((Boolean)(oTable.get("initializeValues")!=null?oTable.get("initializeValues"):false));
+					table.setReadOnly((Boolean)(oTable.get("readOnly")!=null?oTable.get("readOnly"):false));
+					table.setWriteFactor(oTable.get("writeFactor")!=null?(Long)oTable.get("writeFactor"):100);
+					table.setReadFactor(oTable.get("readFactor")!=null?(Long)oTable.get("readFactor"):100);
+
+					
 					table.setUpdateSetAttributes(oTable.get("updatesetattributes")!=null?(String)oTable.get("updatesetattributes"):""); 
 					/*
 					 * Parse select conditions

@@ -8,6 +8,7 @@ import net.tc.stresstool.actions.StressAction;
 import net.tc.stresstool.exceptions.StressToolConfigurationException;
 import net.tc.stresstool.logs.LogProvider;
 import net.tc.utils.SynchronizedMap;
+import net.tc.utils.Utility;
 
 import java.io.PrintStream;
 import java.io.PrintWriter;
@@ -254,6 +255,16 @@ public class DataObject extends MultiLanguage
 			  try {if (StressTool.getLogProvider().getLogger(LogProvider.LOG_PACTIONS).isInfoEnabled()) {performanceTimeStart=System.nanoTime();}} catch (StressToolConfigurationException e1) {e1.printStackTrace();}
 
 			  SQLObject sqlu = (SQLObject) this.getSqlObjects().getValueByPosition(0);
+		      int writeFactor = Utility.getNumberFromRandomMinMax(new Long(0), 100).intValue();	
+		      if(writeFactor > ((Table)(sqlu.getSourceTables().get(0))).getWriteFactor()) {
+		    	  try{StressTool.getLogProvider().getLogger(LogProvider.LOG_SQL).info("Skip table by write factor TABLE " +
+		    			  ((Table)(sqlu.getSourceTables().get(0))).getName() 
+		    			  + " factor = "
+		    			  + ((Table)(sqlu.getSourceTables().get(0))).getWriteFactor()
+		    			  + "Filter write factor = " + writeFactor);}catch(StressToolConfigurationException e){}
+		    		return new int[]{0};
+		    }
+			  
 			  int[] lines = new int[sqlu.getSQLCommands().size()];
 			  String[] commands = new String[sqlu.getSQLCommands().size()];
 			  try{
@@ -297,7 +308,18 @@ public class DataObject extends MultiLanguage
 		  	long performanceTimeStart = 0;
 		  	try {if (StressTool.getLogProvider().getLogger(LogProvider.LOG_PACTIONS).isInfoEnabled()) {performanceTimeStart=System.nanoTime();}} catch (StressToolConfigurationException e1) {e1.printStackTrace();}
 			
+		  	int readFactor = Utility.getNumberFromRandomMinMax(new Long(0), 100).intValue();	
 		  	SQLObject sqlo = (SQLObject) this.getSqlObjects().getValueByPosition(0);
+		  	if(readFactor > ((Table)sqlo.getSourceTables().get(0)).getReadFactor()) {
+		  		 try{StressTool.getLogProvider().getLogger(LogProvider.LOG_SQL).info("Skip table by read factor TABLE " +
+		    			  ((Table)(sqlo.getSourceTables().get(0))).getName() 
+		    			  + " factor = "
+		    			  + ((Table)(sqlo.getSourceTables().get(0))).getReadFactor()
+		    			  + "Filter read factor = " + readFactor);}catch(StressToolConfigurationException e){}
+		  		
+		  		return new int[]{0};
+		  	}
+		  	
 			sqlo.setSQLCommandType(SQL_READ);
 			ArrayList<String> commands = sqlo.getSQLCommands();
 			int[] lines = new int[commands.size()];
@@ -356,8 +378,17 @@ public class DataObject extends MultiLanguage
 	      }
 //	      stmt.addBatch("START TRANSACTION");
 		    if(SQLContainer != null ){
+		      int writeFactor = Utility.getNumberFromRandomMinMax(new Long(0), 100).intValue();	
 		      for(int ir = 0 ; ir < getSqlObjects().size(); ir++){
 		    	SQLObject mySo = (SQLObject)getSqlObjects().getValueByPosition(ir);
+		    	if(writeFactor > ((Table)(mySo.getSourceTables().get(0))).getWriteFactor()) {
+		    		  try{StressTool.getLogProvider().getLogger(LogProvider.LOG_SQL).info("Skip table by write factor TABLE " +
+			    			  ((Table)(mySo.getSourceTables().get(0))).getName() 
+			    			  + " factor = "
+			    			  + ((Table)(mySo.getSourceTables().get(0))).getWriteFactor()
+			    			  + "Filter write factor = " + writeFactor);}catch(StressToolConfigurationException e){}
+		    		continue;
+		    	}
 		    	mySo.setSQLCommandType(SQL_INSERT);
 
 		    	/*

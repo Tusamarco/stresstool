@@ -528,6 +528,9 @@ public class InsertBase extends StressActionBase implements WriteAction,
 	for (Object inTable : thisSQLObject.getTables()) {
 	    if(sbAttribs.length() > 0) sbAttribs.delete(0, sbAttribs.length());
 
+	    if(((Table)inTable).isReadOnly())
+	    	continue;
+	     
 	    Table table = ((Table) inTable);
 	    
 	    int iNumTables = 0;
@@ -542,12 +545,14 @@ public class InsertBase extends StressActionBase implements WriteAction,
 		
 	    }
 
+//TODO this section is not used anymore [START]
 	    if (((Table) table).getParentTable() == null) {
 		iNumTables = this.getNumberOfprimaryTables();
 	    } else {
 		iNumTables = this.getNumberOfSecondaryTables();
 	    }
-
+//TODO  [END]
+	    
 		SQLObject lSQLObj = new SQLObject();
 		lSQLObj.setBatched(this.getBatchSize() > 1 ? true : false);
 		lSQLObj.setPreparedStatment(false);

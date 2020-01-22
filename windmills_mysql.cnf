@@ -12,8 +12,8 @@ dbTypeName=mysql
 # Connection section
 #==========
 #connUrl=jdbc:mysql://192.168.4.11:6033
-connUrl=jdbc:mysql://192.168.4.55:3306
-#connUrl=jdbc:mysql://127.0.0.205:3316
+i#connUrl=jdbc:mysql://192.168.4.55:3306
+connUrl=jdbc:mysql://127.0.0.1:3306
 #database=test
 schema=windmills
 database=windmills
@@ -36,7 +36,7 @@ skipPermissionTest=true
 FKEnable=false
 createTable=true 
 
-droptable=false
+droptable=true
 truncate=false
 ignoreBinlog=false
 
@@ -62,11 +62,11 @@ daysdiffernce=360
 #==========
 poolNumber=1
 pctInsert=100
-pctUpdate=0 
-pctSelect=0 
+pctUpdate=00 
+pctSelect=100 
 pctDelete=0
 #repeatNumber=1
-repeatNumber=10
+repeatNumber=100
 
 #==========
 # console display settings

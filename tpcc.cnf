@@ -60,13 +60,13 @@ daysdiffernce=360
 #==========
 # scalability / load settings  
 #==========
-poolNumber=1
+poolNumber=4
 pctInsert=100
-pctUpdate=0 
-pctSelect=0 
-pctDelete=0
+pctUpdate=50 
+pctSelect=50 
+pctDelete=50
 #repeatNumber=1
-repeatNumber=10
+repeatNumber=20
 
 #==========
 # console display settings

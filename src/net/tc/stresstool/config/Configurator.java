@@ -107,22 +107,39 @@ public class Configurator {
 	private SynchronizedMap readArgs(String[] args, Class imPlementingClass) throws StressToolException {
 
 		configurationArgs = new SynchronizedMap(0);
-	    String[] inArgs = null; 
-	    String argString= null;
-	    if(args.length > 1 && args[1].indexOf(",") > 0){
-	    	argString= args[1].replaceAll("\n", "").replaceAll(" ", "");
-	    	inArgs= args[1].replaceAll("\n", "").replaceAll(" ", "").split(",");
-	    }	
-	    else
-	    	inArgs = args;
+//	    String[] inArgs = null; 
+//	    String argString= null;
+	    String[] args2 = null; 
 	    
-	    String[] args2 =new String[inArgs.length  ];
-System.out.println("======== Dynamic parameter sections (from command line) ======== ");
-System.out.println("======== Args lenght "+ args.length +"  "+ argString);		
-
-		for(int i = 0; i < inArgs.length; i++){
-System.out.println(" Parameter #" + i +" = " + inArgs[i]);
-		    args2[i] = inArgs[i];
+		if(args !=null && args.length >1) {
+		  String allArgs ="";
+		  for(int i = 1; i<args.length; i++  ) {
+			  allArgs = allArgs + args[i];
+		  }
+		  allArgs = allArgs.replaceAll("\n", "").replaceAll(" ", "");
+		  System.out.println("===========================");
+		  System.out.println("ARGS lenght " + args.length);
+		  System.out.println(allArgs);
+		  args2 = allArgs.split(",");
+		  System.out.println("===========================");
+		 }
+	    
+	    
+	    
+//	    if(args.length > 1 && args[1].indexOf(",") > 0){
+//	    	argString= args[1].replaceAll("\n", "").replaceAll(" ", "");
+//	    	inArgs= args[1].replaceAll("\n", "").replaceAll(" ", "").split(",");
+//	    }	
+//	    else
+//	    	inArgs = args;
+//	    
+//	    String[] args2 =new String[inArgs.length  ];
+//System.out.println("======== Dynamic parameter sections (from command line) ======== ");
+//System.out.println("======== Args lenght "+ args.length +"  "+ argString);		
+//
+		for(int i = 0; i < args2.length; i++){
+System.out.println(" Parameter #" + i +" = " + args2[i]);
+//		    args2[i] = inArgs[i];
 		}
 		Map argsM = net.tc.utils.Utility.convertArgsToMap(args2);
 		
