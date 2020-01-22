@@ -39,7 +39,7 @@ public class ActionTHElement {
     long totalEcecutionTime =0;
     long maxConnectionTime=0;
     long minConnectionTime=0;
-//    long avgConnectionTime=0;
+    long ConnectionTime=0;
     int batchSize=1;
     
     ArrayList <Long> avgConnectionTime= new ArrayList();
@@ -179,7 +179,7 @@ public class ActionTHElement {
     			this.minExectime = executionTime;
     	}
     	avgExecutionTime.add(executionTime);
-//        this.executionTime = executionTime;
+        this.executionTime = executionTime;
     }
 
     /**
@@ -303,7 +303,7 @@ public class ActionTHElement {
     			|| (this.getMinConnectionTime() == 0 && connectionTime > 0)){
     			this.minConnectionTime = connectionTime;
     	}
-    	
+    	this.ConnectionTime = connectionTime;
     	avgConnectionTime.add(connectionTime);
 		
 	}
@@ -344,6 +344,10 @@ public class ActionTHElement {
 	public Double getAvgConnectionTime() {
 		return MathU.getAverage(this.avgConnectionTime);
 		
+	}
+
+	public long getConnectionTime() {
+		return ConnectionTime;
 	}
 
 }

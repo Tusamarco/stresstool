@@ -111,15 +111,21 @@ public class BaseStatCollector implements StatsProvider, Reporter {
     public void writeStatsOnFile(Map toWrite) {
         if(csvFile != null ){
             StringBuffer sb = new StringBuffer();
-            if(this.loopNumber == 1){
+            if(this.loopNumber == 1
+            	|| !csvFile.isHasHeaders()){
         	sb.append("time");
         	csvFile.appendToFile(getHeaders(sb).toString()+"\n");
+        	csvFile.setHasHeaders(true);
             }
             if(lastSampleTime != null){
         	    sb.delete(0, sb.length());
         	    sb.append(this.lastSampleTime);
         	    for(String s : eventsName){
-        		sb.append("," + ((StatEvent)toWrite.get(s)).getValue().toString());
+        	    try {	
+        	    	sb.append("," + ((StatEvent)toWrite.get(s)).getValue().toString());
+        	    }catch(NullPointerException exnull) {
+        	    	    exnull.printStackTrace();
+        	           }
         	    }
         	    csvFile.appendToFile(sb.toString()+"\n");
             }

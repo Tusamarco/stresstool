@@ -9,7 +9,10 @@ import java.util.Map;
 import net.tc.data.db.ConnectionProvider;
 import net.tc.stresstool.StressTool;
 import net.tc.stresstool.statistics.ActionTHElement;
+import net.tc.stresstool.statistics.StatEvent;
 import net.tc.stresstool.statistics.StatsGroups;
+import net.tc.utils.SynchronizedMap;
+import net.tc.utils.Utility;
 import net.tc.stresstool.PerformanceEvaluator;
 
 public class ActionsReporter extends BaseStatCollector implements Reporter, StatsProvider {
@@ -19,7 +22,90 @@ public class ActionsReporter extends BaseStatCollector implements Reporter, Stat
 	 super();
 	 this.setStatGroupName("ActionReporter");
     } 
+	
 	 Map getStatus(Connection conn)  {
+		 Map statusReport = new SynchronizedMap(0);
+		 long time = System.currentTimeMillis();
+		 int internalOrder = 0;
+		 
+		    try{
+			 	  Object[] threads = (Object[]) StressTool.getThreadsInfo().values().toArray();
+			 	  String[] actions = new String[]{"Insert","Update","Delete","Select"};
+
+		 		   for(String action:actions){
+		 			   if(threads.length <= 0 )
+		 				   return null;
+		 			   
+			    	   for(Object thInfo:threads){
+			    		   if(thInfo == null)
+			    			   return null;
+			    		   if(((ActionTHElement)thInfo).getAction().toUpperCase().equals(action.toUpperCase())){
+	
+			    			  StatEvent event1 = new StatEvent();
+				              String name1 = "thread_ID_"+((ActionTHElement)thInfo).getId();
+				              long value1 = ((ActionTHElement)thInfo).getId() ;
+				              event1.setCollection(this.statGroupName);
+				              event1.setTime(time);
+				              event1.setProvider(this.getClass().getCanonicalName());
+				              event1.setEvent(name1);
+				              event1.setValue(value1);
+				              event1.setId(loopNumber);
+				              event1.setOrder(internalOrder);
+				              statusReport.put(name1,event1);
+				              internalOrder++;
+
+				              StatEvent event2 = new StatEvent();
+				              String name2 = "Execution_time_" +((ActionTHElement)thInfo).getId();
+				              long value2 = ((ActionTHElement)thInfo).getExecutionTime() ;
+//				              System.out.println("Execution time "+ ((ActionTHElement)thInfo).getId() + "  " + value2);
+				              event2.setCollection(this.statGroupName);
+				              event2.setTime(time);
+				              event2.setProvider(this.getClass().getCanonicalName());
+				              event2.setEvent(name2);
+				              event2.setValue(value2);
+				              event2.setId(loopNumber);
+				              event2.setOrder(internalOrder);
+				              statusReport.put(name2,event2);
+				              internalOrder++;
+				              
+				              StatEvent event3 = new StatEvent();
+				              String name3 = "Connection_latency_" + ((ActionTHElement)thInfo).getId();
+				              long value3 = ((ActionTHElement)thInfo).getConnectionTime();
+				              event3.setCollection(this.statGroupName);
+				              event3.setTime(time);
+				              event3.setProvider(this.getClass().getCanonicalName());
+				              event3.setEvent(name3);
+				              event3.setValue(value3);
+				              event3.setId(loopNumber);
+				              event3.setOrder(internalOrder);
+				              statusReport.put(name3,event3);
+				              internalOrder++;
+
+				              StatEvent event4 = new StatEvent();
+				              String name4 = "Latency_" + ((ActionTHElement)thInfo).getId();
+				              long value4 = ((ActionTHElement)thInfo).getLatency();
+				              event4.setCollection(this.statGroupName);
+				              event4.setTime(time);
+				              event4.setProvider(this.getClass().getCanonicalName());
+				              event4.setEvent(name4);
+				              event4.setValue(value4);
+				              event4.setId(loopNumber);
+				              event4.setOrder(internalOrder);
+				              statusReport.put(name4,event4);
+				              internalOrder++;
+				              
+				              //Currentloop
+				              //Action name
+				    		  }
+				    	 }
+		 		   		}
+		 		   		return statusReport;
+		    		}
+		 		    catch(Throwable th){
+		 		    	th.printStackTrace();
+		 		 }
+		 
+		 
 		 return null;
 	 }
 //	void setStatGroupName(String gName) {

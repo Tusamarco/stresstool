@@ -336,7 +336,13 @@ public class DataObject extends MultiLanguage
 				  lines[ac] = rs.getRow();
 					try{StressTool.getLogProvider().getLogger(LogProvider.LOG_SQL).info("Returned Rows:" + lines[ac] + " | " +commands.get(ac)  );}catch(StressToolConfigurationException e){}
 			  }catch(Exception mx){
-				  System.out.println(commands.get(ac));mx.printStackTrace();
+				  String errorStackTrace= new String();
+				  PrintStream ps =new PrintStream(errorStackTrace);
+				  mx.printStackTrace(ps);
+				  ps.flush();
+				  try{StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).error(commands.get(ac));}catch(StressToolConfigurationException e){}
+				  try{StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).error(errorStackTrace);}catch(StressToolConfigurationException e){}
+				  
 				  }
 			  
 			  try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).info("Execute SQL command(s) Retrived Rows:"+lines[ac] +  "  : " + commands.get(ac)  );}catch(StressToolConfigurationException e){}	

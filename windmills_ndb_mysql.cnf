@@ -60,7 +60,7 @@ doSimple=false
 #==========
 # scalability / load settings  
 #==========
-poolNumber=16
+poolNumber=1
 pctInsert=100
 pctUpdate=100 
 pctSelect=100 
