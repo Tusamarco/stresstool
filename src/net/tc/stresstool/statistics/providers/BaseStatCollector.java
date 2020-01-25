@@ -51,6 +51,8 @@ public class BaseStatCollector implements StatsProvider, Reporter {
     protected Map status = null;
     protected  StatsGroups reporterGroup = null;
     protected String DefaultSchema = null;
+    protected String logName = null;
+    protected boolean csvProgressive = true;
 
     public BaseStatCollector() {
 	super();
@@ -237,9 +239,11 @@ public class BaseStatCollector implements StatsProvider, Reporter {
             try{
         	statsFile = new FileHandler(rootPath + "/" +getStatGroup()+"_"+Utility.getTimestamp()+".txt", FileHandler.FILE_FOR_WRITE );
         	
-        	if(flushrowonfile){
-        	    csvFile = new FileHandler(rootPath + "/" +getStatGroup()+"_"+Utility.getTimestamp()+".csv", FileHandler.FILE_FOR_WRITE);
-        	    
+        	if(flushrowonfile && this.isCsvProgressive()){
+        		if(getLogName() != null)
+        			csvFile = new FileHandler(rootPath + "/" +this.getLogName() +"_"+Utility.getTimestamp()+".csv", FileHandler.FILE_FOR_WRITE);
+        		else
+        			csvFile = new FileHandler(rootPath + "/" +getStatGroup()+"_"+Utility.getTimestamp()+".csv", FileHandler.FILE_FOR_WRITE);
         	}
             }
             catch(Throwable ex){
@@ -371,6 +375,22 @@ public class BaseStatCollector implements StatsProvider, Reporter {
 	public boolean validatePermissions(ConnectionProvider connProvider) {
 
 		return true;
+	}
+
+	public String getLogName() {
+		return logName;
+	}
+
+	public void setLogName(String logName) {
+		this.logName = logName;
+	}
+
+	public boolean isCsvProgressive() {
+		return csvProgressive;
+	}
+
+	public void setCsvProgressive(boolean csvProgressive) {
+		this.csvProgressive = csvProgressive;
 	}
 
 	

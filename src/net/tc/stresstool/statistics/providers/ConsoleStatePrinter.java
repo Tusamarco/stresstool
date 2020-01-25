@@ -36,6 +36,8 @@ public class ConsoleStatePrinter implements StatsProvider,Reporter,Runnable {
     float maxPct = (float) 0.0;
     Launcher launcher = null;
     int timeForLoop = 1000;
+    String logName =null;
+    protected boolean csvProgressive = true;
     
     public ConsoleStatePrinter(Launcher launcher){
     	this.launcher = launcher;
@@ -445,6 +447,18 @@ public class ConsoleStatePrinter implements StatsProvider,Reporter,Runnable {
 	public String getDefaultSchema() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	public String getLogName() {
+		return logName;
+	}
+	public void setLogName(String logName) {
+		this.logName = logName;
+	}
+	public boolean isCsvProgressive() {
+		return csvProgressive;
+	}
+	public void setCsvProgressive(boolean csvProgressive) {
+		this.csvProgressive = csvProgressive;
 	}
 
 }

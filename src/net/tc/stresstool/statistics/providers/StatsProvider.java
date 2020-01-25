@@ -37,5 +37,10 @@ public interface StatsProvider {
     	public boolean validatePermissions(ConnectionProvider connProvider);
     	public void setDefaultSchema(String defaultSchema);
     	public String getDefaultSchema();
+    	public void setLogName(String logName);
+    	public String getLogName();
+    	public void setCsvProgressive(boolean value);
+    	public boolean isCsvProgressive();
+    	
 //	Map getStatus(Connection conn);
 }

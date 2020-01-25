@@ -66,13 +66,13 @@ pctUpdate=100
 pctSelect=100 
 pctDelete=100
 #repeatNumber=1
-repeatNumber=1000
+repeatNumber=100000
 
 #==========
 # console display settings
 #==========
-HardStopLimit=5400
-UseHardStop=false
+HardStopLimit=30
+UseHardStop=true
 StatIntervalMs=1000
 StatLoops = 100
 SemaphoreCountdownTime = 3
@@ -123,6 +123,10 @@ providerclass=net.tc.stresstool.statistics.providers.ActionsReporter
 eventhistory=350
 actionhistory=120
 processaverage=true
+
+[net.tc.stresstool.statistics.providers.ActionsReporter]
+logName=threadsFlush
+csvProgressive=false
 
 [com.zaxxer.hikari]
 #dataSource properties

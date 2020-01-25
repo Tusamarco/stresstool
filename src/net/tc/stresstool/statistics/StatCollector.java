@@ -43,6 +43,7 @@ public class StatCollector {
      */
     Map providers ;
     public static String PROVIDER_PARAMETER_NAME="providerclass";
+    public static String CONFIGURATOR_TAIL_NAME="@net.tc.stresstool.StressTool";
     /**
      * @uml.property  name="statColl"
      * @uml.associationEnd  multiplicity="(1 1)"
@@ -168,7 +169,7 @@ public class StatCollector {
 	    Configuration conf = null;
 	    try {
 		conf = configs.getConfiguration(sectionName);
-
+		int error =0 ;
 		if(conf != null 
 			&& conf.getParameter(StatCollector.PROVIDER_PARAMETER_NAME) != null){
 
@@ -178,10 +179,15 @@ public class StatCollector {
 		    for(int isp =0 ; isp < providerNames.length;isp++){
 				if(providerNames[isp] != null && !providerNames[isp].equals("") ){
 				    currentProviderClassName = providerNames[isp];
-	        		    	sp = (StatsProvider)Class.forName(providerNames[isp].trim()).newInstance();
-	        		    	sp.setFlushDataOnfile(flushrowonfile);
-	        		    	sp.setStatsOutFile(rootPath);
-	           		    	
+	        		sp = (StatsProvider)Class.forName(providerNames[isp].trim()).newInstance();
+	        		sp.setFlushDataOnfile(flushrowonfile);
+	        		//If exists a specific section for this provider, load the info     	
+	        		Configuration confStats = configs.getConfiguration(currentProviderClassName+this.CONFIGURATOR_TAIL_NAME);
+	        		if(confStats != null) {
+	        			if(confStats.getParameter("logName")!=null)sp.setLogName((String) confStats.getParameter("logName").getValue());
+	        			if(confStats.getParameter("csvProgressive") !=null)sp.setCsvProgressive((boolean) Boolean.getBoolean((String) confStats.getParameter("csvProgressive").getValue()));
+	        		}
+	        		sp.setStatsOutFile(rootPath);	           		    	
 				}
         		providers.put(sectionName+'.'+sp.getStatGroup(), sp);
 		    }

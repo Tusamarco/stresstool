@@ -181,6 +181,27 @@ public class ActionsReporter extends BaseStatCollector implements Reporter, Stat
 	 	  String[] actions = new String[]{"Insert","Update","Delete","Select"};
 		   	  pw.println("------------------------------ "+ this.getReporterName()  +" Threads EXECUTION INFORMATION -----------------------------------------");
 
+		   long avgExecI = 0;	  
+		   long avgExecU = 0;
+		   long avgExecS = 0;
+		   long avgExecD = 0;
+		   
+		   long avgConnLatI = 0;
+		   long avgConnLatU = 0;
+		   long avgConnLatS = 0;
+		   long avgConnLatD = 0;
+		   
+		   long avgExcLatI = 0;
+		   long avgExcLatU = 0;
+		   long avgExcLatS = 0;
+		   long avgExcLatD = 0;
+		   
+		   long sumEventsI = 0;
+		   long sumEventsU = 0;
+		   long sumEventsS = 0;
+		   long sumEventsD = 0;
+		   
+		   	  
 		   long tSelects = 0;
  		   long tInserts = 0;
  		   long tUpdates = 0;
@@ -220,21 +241,41 @@ public class ActionsReporter extends BaseStatCollector implements Reporter, Stat
 		    				     );
 			    		   switch (action.toLowerCase()){
 			    		   	case "insert":
+			    		   		avgExecI = (long) (avgExecI + per.getIMSFromNano(((ActionTHElement)thInfo).getAvgExecTime()));
+			    		   		avgConnLatI = (long)(avgConnLatI + ((ActionTHElement)thInfo).getAvgConnectionTime() );
+			    		   		avgExcLatI = (long) (avgExcLatI + per.getIMSFromNano(((ActionTHElement)thInfo).getAvgLatency()) );
+			    		   		sumEventsI = (long) (sumEventsI + ((ActionTHElement)thInfo).getCurrentLoop());
+			    		   		
 			    		   		tInserts = tInserts + (((ActionTHElement)thInfo).getCurrentLoop());
 			    		   		maxExecI = (((ActionTHElement)thInfo).getTotalEcecutionTime() > maxExecI)?((ActionTHElement)thInfo).getTotalEcecutionTime():maxExecI;  
 			    		   		batchI=((ActionTHElement)thInfo).getBatchSize();
 			    		   		break;
 			    		   	case "select":
+			    		   		avgExecS = (long) (avgExecS + per.getIMSFromNano(((ActionTHElement)thInfo).getAvgExecTime()));
+			    		   		avgConnLatS = (long)(avgConnLatS + ((ActionTHElement)thInfo).getAvgConnectionTime() );
+			    		   		avgExcLatS = (long) (avgExcLatS + per.getIMSFromNano(((ActionTHElement)thInfo).getAvgLatency()) );
+			    		   		sumEventsS = (long) (sumEventsS + ((ActionTHElement)thInfo).getCurrentLoop());
+			    		   		
 			    		   		tSelects = tSelects + (((ActionTHElement)thInfo).getCurrentLoop() ); 
 			    		   		maxExecS = (((ActionTHElement)thInfo).getTotalEcecutionTime() > maxExecS)?((ActionTHElement)thInfo).getTotalEcecutionTime():maxExecS;
 			    		   		batchS=((ActionTHElement)thInfo).getBatchSize();
 			    		   		break;
 			    		   	case "update":
+			    		   		avgExecU = (long) (avgExecU + per.getIMSFromNano(((ActionTHElement)thInfo).getAvgExecTime()));
+			    		   		avgConnLatU = (long)(avgConnLatU + ((ActionTHElement)thInfo).getAvgConnectionTime() );
+			    		   		avgExcLatU = (long) (avgExcLatU + per.getIMSFromNano(((ActionTHElement)thInfo).getAvgLatency()) );
+			    		   		sumEventsU = (long) (sumEventsU + ((ActionTHElement)thInfo).getCurrentLoop());
+			    		   		
 			    		   		tUpdates = tUpdates + (((ActionTHElement)thInfo).getCurrentLoop()); 
 			    		   		maxExecU = (((ActionTHElement)thInfo).getTotalEcecutionTime() > maxExecU)?((ActionTHElement)thInfo).getTotalEcecutionTime():maxExecU;
 			    		   		batchU=((ActionTHElement)thInfo).getBatchSize();
 			    		   		break;
 			    		   	case "delete":
+			    		   		avgExecD = (long) (avgExecD + per.getIMSFromNano(((ActionTHElement)thInfo).getAvgExecTime()));
+			    		   		avgConnLatD = (long)(avgConnLatD + ((ActionTHElement)thInfo).getAvgConnectionTime() );
+			    		   		avgExcLatD = (long) (avgExcLatD + per.getIMSFromNano(((ActionTHElement)thInfo).getAvgLatency()) );
+			    		   		sumEventsD = (long) (sumEventsD + ((ActionTHElement)thInfo).getCurrentLoop());
+			    		   		
 			    		   		tDeletes = tDeletes + (((ActionTHElement)thInfo).getCurrentLoop() ); 
 			    		   		maxExecD = (((ActionTHElement)thInfo).getTotalEcecutionTime() > maxExecD)?((ActionTHElement)thInfo).getTotalEcecutionTime():maxExecD;
 			    		   		batchD=((ActionTHElement)thInfo).getBatchSize();
@@ -250,6 +291,33 @@ public class ActionsReporter extends BaseStatCollector implements Reporter, Stat
  		   if(maxExecI > 0 )pw.println("insert tot " + (tInserts * batchI) + " Ins/S " + (tInserts/maxExecI) *batchI );
  		   if(maxExecU > 0 )pw.println("update tot " + (tUpdates * batchU) + " Up/S " + (tUpdates/maxExecU) * batchU);
  		   if(maxExecD > 0 )pw.println("delete tot " + (tDeletes * batchD) + " Del/S " + (tDeletes/maxExecD)*batchD );
+ 		   pw.println("------------------------------  Threads csv info AVG  -----------------------------------------");
+ 		   pw.println("avgExecI,avgExecU,avgExecS,avgExecID,"
+ 		   		+ "avgConnLatI(ns),avgConnLatU(ns),avgConnLatS(ns),avgConnLatD(ns),"
+ 		   		+ "avgExcLatI,avgExcLatU,avgExcLatS,avgExcLatD,"
+ 		   		+ "sumEventsI,sumEventsU,sumEventsS,sumEventsD");
+ 		   
+ 		   pw.append(avgExecI + ",");	  
+ 		   pw.append(avgExecU + ",");
+ 		   pw.append(avgExecS + ",");
+ 		   pw.append(avgExecD + ",");
+		   
+ 		   pw.append(avgConnLatI + ",");
+ 		   pw.append(avgConnLatU + ",");
+ 		   pw.append(avgConnLatS + ",");
+ 		   pw.append(avgConnLatD + ",");
+		   
+ 		   pw.append(avgExcLatI + ",");
+ 		   pw.append(avgExcLatU + ",");
+ 		   pw.append(avgExcLatS + ",");
+ 		   pw.append(avgExcLatD + ",");
+		   
+ 		   pw.append(sumEventsI + ",");
+ 		   pw.append(sumEventsU + ",");
+ 		   pw.append(sumEventsS + ",");
+ 		   pw.append(sumEventsD+"\n");
+ 		   
+ 		   
  		   pw.println("------------------------------  Threads EXECUTION INFORMATION END -----------------------------------------");
 	    }   
 	    catch(Throwable th){
