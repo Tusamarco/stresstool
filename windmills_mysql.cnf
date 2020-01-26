@@ -125,6 +125,11 @@ eventhistory=350
 actionhistory=120
 processaverage=true
 
+[net.tc.stresstool.statistics.providers.ActionsReporter]
+logname=threadsFlush
+
+
+
 [com.zaxxer.hikari]
 #dataSource properties
 #dataSourceClassName=org.postgresql.ds.PGSimpleDataSource

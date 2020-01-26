@@ -292,10 +292,12 @@ public class ActionsReporter extends BaseStatCollector implements Reporter, Stat
  		   if(maxExecU > 0 )pw.println("update tot " + (tUpdates * batchU) + " Up/S " + (tUpdates/maxExecU) * batchU);
  		   if(maxExecD > 0 )pw.println("delete tot " + (tDeletes * batchD) + " Del/S " + (tDeletes/maxExecD)*batchD );
  		   pw.println("------------------------------  Threads csv info AVG  -----------------------------------------");
- 		   pw.println("avgExecI,avgExecU,avgExecS,avgExecID,"
+ 		   pw.println("avgExecI,avgExecU,avgExecS,avgExecD,"
  		   		+ "avgConnLatI(ns),avgConnLatU(ns),avgConnLatS(ns),avgConnLatD(ns),"
  		   		+ "avgExcLatI,avgExcLatU,avgExcLatS,avgExcLatD,"
- 		   		+ "sumEventsI,sumEventsU,sumEventsS,sumEventsD");
+ 		   		+ "sumEventsI,sumEventsU,sumEventsS,sumEventsD,"
+ 		   		+ "Insert_total,Update_total,Select_total,Delete_total,"
+ 		   		+ "Insert_sec,Update_sec,Select_sec,Delete_sec");
  		   
  		   pw.append(avgExecI + ",");	  
  		   pw.append(avgExecU + ",");
@@ -315,7 +317,19 @@ public class ActionsReporter extends BaseStatCollector implements Reporter, Stat
  		   pw.append(sumEventsI + ",");
  		   pw.append(sumEventsU + ",");
  		   pw.append(sumEventsS + ",");
- 		   pw.append(sumEventsD+"\n");
+ 		   pw.append(sumEventsD + ",");
+ 		   
+ 		   pw.append(tInserts * batchI +",");
+ 		   pw.append(tUpdates * batchU +",");
+ 		   pw.append(tSelects * batchS +",");
+ 		   pw.append(tDeletes * batchD +",");
+ 		   
+ 		   if(tInserts > 0 && maxExecI > 0){pw.append((tInserts/maxExecI) *batchI  +",");}else {pw.append("0,");}
+ 		   if(tUpdates > 0 && maxExecU > 0){pw.append((tUpdates/maxExecU) *batchU  +",");}else {pw.append("0,");}
+ 		   if(tSelects > 0 && maxExecS > 0){pw.append((tSelects/maxExecS) *batchS  +",");}else {pw.append("0,");}
+ 		   if(tDeletes > 0 && maxExecD > 0){pw.append((tDeletes/maxExecD) *batchD  +"");}else {pw.append("0");}
+ 		   pw.append("\n");
+ 		   
  		   
  		   
  		   pw.println("------------------------------  Threads EXECUTION INFORMATION END -----------------------------------------");
