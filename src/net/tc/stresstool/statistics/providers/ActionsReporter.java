@@ -215,6 +215,11 @@ public class ActionsReporter extends BaseStatCollector implements Reporter, Stat
 		   long batchU=1;
 		   long batchS=1;
 		   long batchD=1;
+		   
+ 		   long threadsI=0;
+		   long threadsU=0;
+		   long threadsS=0;
+		   long threadsD=0;
 
  		   for(String action:actions){
 	 		   pw.println("------------------------------ " + action);
@@ -241,6 +246,7 @@ public class ActionsReporter extends BaseStatCollector implements Reporter, Stat
 		    				     );
 			    		   switch (action.toLowerCase()){
 			    		   	case "insert":
+			    		   		threadsI = threadsI +1;
 			    		   		avgExecI = (long) (avgExecI + per.getIMSFromNano(((ActionTHElement)thInfo).getAvgExecTime()));
 			    		   		avgConnLatI = (long)(avgConnLatI + ((ActionTHElement)thInfo).getAvgConnectionTime() );
 			    		   		avgExcLatI = (long) (avgExcLatI + per.getIMSFromNano(((ActionTHElement)thInfo).getAvgLatency()) );
@@ -251,6 +257,7 @@ public class ActionsReporter extends BaseStatCollector implements Reporter, Stat
 			    		   		batchI=((ActionTHElement)thInfo).getBatchSize();
 			    		   		break;
 			    		   	case "select":
+			    		   		threadsS = threadsS +1;
 			    		   		avgExecS = (long) (avgExecS + per.getIMSFromNano(((ActionTHElement)thInfo).getAvgExecTime()));
 			    		   		avgConnLatS = (long)(avgConnLatS + ((ActionTHElement)thInfo).getAvgConnectionTime() );
 			    		   		avgExcLatS = (long) (avgExcLatS + per.getIMSFromNano(((ActionTHElement)thInfo).getAvgLatency()) );
@@ -261,6 +268,7 @@ public class ActionsReporter extends BaseStatCollector implements Reporter, Stat
 			    		   		batchS=((ActionTHElement)thInfo).getBatchSize();
 			    		   		break;
 			    		   	case "update":
+			    		   		threadsU = threadsU +1;
 			    		   		avgExecU = (long) (avgExecU + per.getIMSFromNano(((ActionTHElement)thInfo).getAvgExecTime()));
 			    		   		avgConnLatU = (long)(avgConnLatU + ((ActionTHElement)thInfo).getAvgConnectionTime() );
 			    		   		avgExcLatU = (long) (avgExcLatU + per.getIMSFromNano(((ActionTHElement)thInfo).getAvgLatency()) );
@@ -271,6 +279,7 @@ public class ActionsReporter extends BaseStatCollector implements Reporter, Stat
 			    		   		batchU=((ActionTHElement)thInfo).getBatchSize();
 			    		   		break;
 			    		   	case "delete":
+			    		   		threadsD = threadsD +1;
 			    		   		avgExecD = (long) (avgExecD + per.getIMSFromNano(((ActionTHElement)thInfo).getAvgExecTime()));
 			    		   		avgConnLatD = (long)(avgConnLatD + ((ActionTHElement)thInfo).getAvgConnectionTime() );
 			    		   		avgExcLatD = (long) (avgExcLatD + per.getIMSFromNano(((ActionTHElement)thInfo).getAvgLatency()) );
@@ -299,20 +308,20 @@ public class ActionsReporter extends BaseStatCollector implements Reporter, Stat
  		   		+ "Insert_total,Update_total,Select_total,Delete_total,"
  		   		+ "Insert_sec,Update_sec,Select_sec,Delete_sec");
  		   
- 		   pw.append(avgExecI + ",");	  
- 		   pw.append(avgExecU + ",");
- 		   pw.append(avgExecS + ",");
- 		   pw.append(avgExecD + ",");
+ 		   if(threadsI > 0){pw.append(avgExecI/threadsI + ",");}else{pw.append( "0,");};	  
+ 		   if(threadsU > 0){pw.append(avgExecU/threadsU + ",");}else{pw.append( "0,");};
+ 		   if(threadsS > 0){pw.append(avgExecS/threadsS + ",");}else{pw.append( "0,");};
+ 		   if(threadsD > 0){pw.append(avgExecD/threadsD + ",");}else{pw.append( "0,");};
 		   
- 		   pw.append(avgConnLatI + ",");
- 		   pw.append(avgConnLatU + ",");
- 		   pw.append(avgConnLatS + ",");
- 		   pw.append(avgConnLatD + ",");
+ 		   if(threadsI > 0){pw.append(avgConnLatI/threadsI + ",");}else{pw.append( "0,");};
+ 		   if(threadsU > 0){pw.append(avgConnLatU/threadsU + ",");}else{pw.append( "0,");};
+ 		   if(threadsS > 0){pw.append(avgConnLatS/threadsS + ",");}else{pw.append( "0,");};
+ 		   if(threadsD > 0){pw.append(avgConnLatD/threadsD + ",");}else{pw.append( "0,");};
 		   
- 		   pw.append(avgExcLatI + ",");
- 		   pw.append(avgExcLatU + ",");
- 		   pw.append(avgExcLatS + ",");
- 		   pw.append(avgExcLatD + ",");
+ 		   if(threadsI > 0){pw.append(avgExcLatI/threadsI + ",");}else{pw.append( "0,");};
+ 		   if(threadsU > 0){pw.append(avgExcLatU/threadsU + ",");}else{pw.append( "0,");};
+ 		   if(threadsS > 0){pw.append(avgExcLatS/threadsS + ",");}else{pw.append( "0,");};
+ 		   if(threadsD > 0){pw.append(avgExcLatD/threadsD + ",");}else{pw.append( "0,");};
 		   
  		   pw.append(sumEventsI + ",");
  		   pw.append(sumEventsU + ",");
