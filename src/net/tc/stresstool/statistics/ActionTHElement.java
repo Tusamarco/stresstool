@@ -41,6 +41,7 @@ public class ActionTHElement {
     long minConnectionTime=0;
     long ConnectionTime=0;
     int batchSize=1;
+    int runningThreads =0; 
     
     ArrayList <Long> avgConnectionTime= new ArrayList();
     ArrayList <Long> avgExecutionTime= new ArrayList();
@@ -348,6 +349,15 @@ public class ActionTHElement {
 
 	public long getConnectionTime() {
 		return ConnectionTime;
+	}
+
+	
+	public int getRunningThreads() {
+		return runningThreads;
+	}
+
+	public void setRunningThreads(int runningThreads) {
+		this.runningThreads = runningThreads;
 	}
 
 }

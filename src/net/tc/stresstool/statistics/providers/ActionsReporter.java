@@ -179,8 +179,50 @@ public class ActionsReporter extends BaseStatCollector implements Reporter, Stat
 		   
 	 	  Object[] threads = (Object[]) StressTool.getThreadsInfo().values().toArray();
 	 	  String[] actions = new String[]{"Insert","Update","Delete","Select"};
+	 	  long totalExecutionTime = (reporterGroup.getLastSampleTime() - reporterGroup.getStartTime()); 
+	 	  long runningThI = 0;	  
+		  long runningThU = 0;
+		  long runningThS = 0;
+		  long runningThD = 0;
+	 	  
 		   	  pw.println("------------------------------ "+ this.getReporterName()  +" Threads EXECUTION INFORMATION -----------------------------------------");
-
+	          pw.println("Provider  = " + getProviderName());
+	          pw.println("Start time  = " + Utility.getTimeStamp(reporterGroup.getStartTime(),"yy/MM/dd hh:mm:ss:SSSS a"));
+	          pw.println("End time  = " + Utility.getTimeStamp(reporterGroup.getLastSampleTime(),"yy/MM/dd hh:mm:ss:SSSS a"));
+	            
+	          pw.println("Total Execution time = " + totalExecutionTime/1000);
+		   	  
+	          for(String action:actions){
+	        	  for(Object thInfo:threads){
+	        		  if(thInfo == null)
+			    		   continue;
+			    	  if(((ActionTHElement)thInfo).getAction().toUpperCase().equals(action.toUpperCase())){
+			    		  
+			    		   switch (action.toLowerCase()){
+			    		   	case "insert":
+			    		   		runningThI = ((ActionTHElement)thInfo).getRunningThreads()>runningThI?((ActionTHElement)thInfo).getRunningThreads():runningThI;
+			    		   		break;
+			    		   	case "select":
+			    		   		runningThS = ((ActionTHElement)thInfo).getRunningThreads()>runningThS?((ActionTHElement)thInfo).getRunningThreads():runningThS;
+			    		   		break;
+			    		   	case "update":
+			    		   		runningThU = ((ActionTHElement)thInfo).getRunningThreads()>runningThU?((ActionTHElement)thInfo).getRunningThreads():runningThU;
+			    		   		break;
+			    		   	case "delete":
+			    		   		runningThD = ((ActionTHElement)thInfo).getRunningThreads()>runningThD?((ActionTHElement)thInfo).getRunningThreads():runningThD;
+			    		   		break;
+			    		   }
+			    		  
+			    		  }
+			    	  }
+	          }
+	       pw.println("Running threads for Inserts = " + runningThI);
+	       pw.println("Running threads for Updates = " + runningThU);
+	       pw.println("Running threads for Selects = " + runningThS);
+	       pw.println("Running threads for Deletes = " + runningThD);
+	       
+	          
+		   	  
 		   long avgExecI = 0;	  
 		   long avgExecU = 0;
 		   long avgExecS = 0;
@@ -216,12 +258,9 @@ public class ActionsReporter extends BaseStatCollector implements Reporter, Stat
 		   long batchS=1;
 		   long batchD=1;
 		   
- 		   long threadsI=0;
-		   long threadsU=0;
-		   long threadsS=0;
-		   long threadsD=0;
 
  		   for(String action:actions){
+ 			   
 	 		   pw.println("------------------------------ " + action);
 		    	   for(Object thInfo:threads){
 		    		   if(thInfo == null)
@@ -246,7 +285,6 @@ public class ActionsReporter extends BaseStatCollector implements Reporter, Stat
 		    				     );
 			    		   switch (action.toLowerCase()){
 			    		   	case "insert":
-			    		   		threadsI = threadsI +1;
 			    		   		avgExecI = (long) (avgExecI + per.getIMSFromNano(((ActionTHElement)thInfo).getAvgExecTime()));
 			    		   		avgConnLatI = (long)(avgConnLatI + ((ActionTHElement)thInfo).getAvgConnectionTime() );
 			    		   		avgExcLatI = (long) (avgExcLatI + per.getIMSFromNano(((ActionTHElement)thInfo).getAvgLatency()) );
@@ -257,7 +295,6 @@ public class ActionsReporter extends BaseStatCollector implements Reporter, Stat
 			    		   		batchI=((ActionTHElement)thInfo).getBatchSize();
 			    		   		break;
 			    		   	case "select":
-			    		   		threadsS = threadsS +1;
 			    		   		avgExecS = (long) (avgExecS + per.getIMSFromNano(((ActionTHElement)thInfo).getAvgExecTime()));
 			    		   		avgConnLatS = (long)(avgConnLatS + ((ActionTHElement)thInfo).getAvgConnectionTime() );
 			    		   		avgExcLatS = (long) (avgExcLatS + per.getIMSFromNano(((ActionTHElement)thInfo).getAvgLatency()) );
@@ -268,7 +305,6 @@ public class ActionsReporter extends BaseStatCollector implements Reporter, Stat
 			    		   		batchS=((ActionTHElement)thInfo).getBatchSize();
 			    		   		break;
 			    		   	case "update":
-			    		   		threadsU = threadsU +1;
 			    		   		avgExecU = (long) (avgExecU + per.getIMSFromNano(((ActionTHElement)thInfo).getAvgExecTime()));
 			    		   		avgConnLatU = (long)(avgConnLatU + ((ActionTHElement)thInfo).getAvgConnectionTime() );
 			    		   		avgExcLatU = (long) (avgExcLatU + per.getIMSFromNano(((ActionTHElement)thInfo).getAvgLatency()) );
@@ -279,7 +315,6 @@ public class ActionsReporter extends BaseStatCollector implements Reporter, Stat
 			    		   		batchU=((ActionTHElement)thInfo).getBatchSize();
 			    		   		break;
 			    		   	case "delete":
-			    		   		threadsD = threadsD +1;
 			    		   		avgExecD = (long) (avgExecD + per.getIMSFromNano(((ActionTHElement)thInfo).getAvgExecTime()));
 			    		   		avgConnLatD = (long)(avgConnLatD + ((ActionTHElement)thInfo).getAvgConnectionTime() );
 			    		   		avgExcLatD = (long) (avgExcLatD + per.getIMSFromNano(((ActionTHElement)thInfo).getAvgLatency()) );
@@ -301,27 +336,29 @@ public class ActionsReporter extends BaseStatCollector implements Reporter, Stat
  		   if(maxExecU > 0 )pw.println("update tot " + (tUpdates * batchU) + " Up/S " + (tUpdates/maxExecU) * batchU);
  		   if(maxExecD > 0 )pw.println("delete tot " + (tDeletes * batchD) + " Del/S " + (tDeletes/maxExecD)*batchD );
  		   pw.println("------------------------------  Threads csv info AVG  -----------------------------------------");
- 		   pw.println("avgExecI,avgExecU,avgExecS,avgExecD,"
+ 		   pw.println("totRunThs,avgExecI(ms),avgExecU(ms),avgExecS(ms),avgExecD(ms),"
  		   		+ "avgConnLatI(ns),avgConnLatU(ns),avgConnLatS(ns),avgConnLatD(ns),"
- 		   		+ "avgExcLatI,avgExcLatU,avgExcLatS,avgExcLatD,"
+ 		   		+ "avgExcLatI(ms),avgExcLatU(ms),avgExcLatS(ms),avgExcLatD(ms),"
  		   		+ "sumEventsI,sumEventsU,sumEventsS,sumEventsD,"
  		   		+ "Insert_total,Update_total,Select_total,Delete_total,"
  		   		+ "Insert_sec,Update_sec,Select_sec,Delete_sec");
  		   
- 		   if(threadsI > 0){pw.append(avgExecI/threadsI + ",");}else{pw.append( "0,");};	  
- 		   if(threadsU > 0){pw.append(avgExecU/threadsU + ",");}else{pw.append( "0,");};
- 		   if(threadsS > 0){pw.append(avgExecS/threadsS + ",");}else{pw.append( "0,");};
- 		   if(threadsD > 0){pw.append(avgExecD/threadsD + ",");}else{pw.append( "0,");};
+ 		   pw.append((runningThI + runningThU +runningThS + runningThD) + ",");
+ 		   
+ 		   if(runningThI > 0){pw.append(avgExecI/runningThI + ",");}else{pw.append( "0,");};	  
+ 		   if(runningThU > 0){pw.append(avgExecU/runningThU + ",");}else{pw.append( "0,");};
+ 		   if(runningThS > 0){pw.append(avgExecS/runningThS + ",");}else{pw.append( "0,");};
+ 		   if(runningThD > 0){pw.append(avgExecD/runningThD + ",");}else{pw.append( "0,");};
 		   
- 		   if(threadsI > 0){pw.append(avgConnLatI/threadsI + ",");}else{pw.append( "0,");};
- 		   if(threadsU > 0){pw.append(avgConnLatU/threadsU + ",");}else{pw.append( "0,");};
- 		   if(threadsS > 0){pw.append(avgConnLatS/threadsS + ",");}else{pw.append( "0,");};
- 		   if(threadsD > 0){pw.append(avgConnLatD/threadsD + ",");}else{pw.append( "0,");};
+ 		   if(runningThI > 0){pw.append(avgConnLatI/runningThI + ",");}else{pw.append( "0,");};
+ 		   if(runningThU > 0){pw.append(avgConnLatU/runningThU + ",");}else{pw.append( "0,");};
+ 		   if(runningThS > 0){pw.append(avgConnLatS/runningThS + ",");}else{pw.append( "0,");};
+ 		   if(runningThD > 0){pw.append(avgConnLatD/runningThD + ",");}else{pw.append( "0,");};
 		   
- 		   if(threadsI > 0){pw.append(avgExcLatI/threadsI + ",");}else{pw.append( "0,");};
- 		   if(threadsU > 0){pw.append(avgExcLatU/threadsU + ",");}else{pw.append( "0,");};
- 		   if(threadsS > 0){pw.append(avgExcLatS/threadsS + ",");}else{pw.append( "0,");};
- 		   if(threadsD > 0){pw.append(avgExcLatD/threadsD + ",");}else{pw.append( "0,");};
+ 		   if(runningThI > 0){pw.append(avgExcLatI/runningThI + ",");}else{pw.append( "0,");};
+ 		   if(runningThU > 0){pw.append(avgExcLatU/runningThU + ",");}else{pw.append( "0,");};
+ 		   if(runningThS > 0){pw.append(avgExcLatS/runningThS + ",");}else{pw.append( "0,");};
+ 		   if(runningThD > 0){pw.append(avgExcLatD/runningThD + ",");}else{pw.append( "0,");};
 		   
  		   pw.append(sumEventsI + ",");
  		   pw.append(sumEventsU + ",");

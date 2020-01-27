@@ -232,7 +232,7 @@ public class StressTool {
 	             if(launcher.getInteractive() >0  && consolePrinter != null){
 	               consolePrinter.printLine(i);
 	               //	             }
-	               if(launcher.getInteractive() ==2 ){
+	               if(launcher.getInteractive()> 0 ){
 	            	 if(!consolePrinter.askQuestion("Press \"#\" to stop StressTool", "#",false)){
 	            	   StressTool.setStressToolRunning(false);
 	            	 };
