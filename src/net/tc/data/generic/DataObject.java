@@ -337,9 +337,12 @@ public class DataObject extends MultiLanguage
 					try{StressTool.getLogProvider().getLogger(LogProvider.LOG_SQL).info("Returned Rows:" + lines[ac] + " | " +commands.get(ac)  );}catch(StressToolConfigurationException e){}
 			  }catch(Exception mx){
 				  String errorStackTrace= new String();
-				  PrintStream ps =new PrintStream(errorStackTrace);
-				  mx.printStackTrace(ps);
-				  ps.flush();
+				  PrintStream ps = null;
+				  try{ ps = new PrintStream(errorStackTrace);}catch(Throwable th){}
+				  if(ps != null) {
+					  mx.printStackTrace(ps);
+					  ps.flush();
+				  }
 				  try{StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).error(commands.get(ac));}catch(StressToolConfigurationException e){}
 				  try{StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).error(errorStackTrace);}catch(StressToolConfigurationException e){}
 				  
