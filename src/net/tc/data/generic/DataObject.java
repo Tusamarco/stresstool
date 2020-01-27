@@ -351,8 +351,8 @@ public class DataObject extends MultiLanguage
 					  mx.printStackTrace(ps);
 					  ps.flush();
 				  }
-				  try{StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).error(commands.get(ac));}catch(StressToolConfigurationException e){}
-				  try{StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).error(errorStackTrace);}catch(StressToolConfigurationException e){}
+//				  try{StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).error(commands.get(ac));}catch(StressToolConfigurationException e){}
+//				  try{StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).error(errorStackTrace);}catch(StressToolConfigurationException e){}
 				  
 				  }
 			  
