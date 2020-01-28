@@ -370,10 +370,10 @@ public class ActionsReporter extends BaseStatCollector implements Reporter, Stat
  		   pw.append(tSelects * batchS +",");
  		   pw.append(tDeletes * batchD +",");
  		   
- 		   if(tInserts > 0 ){pw.append((tInserts/(totalExecutionTime/1000)) *batchI  +",");}else {pw.append("0,");}
- 		   if(tUpdates > 0 ){pw.append((tUpdates/(totalExecutionTime/1000)) *batchU  +",");}else {pw.append("0,");}
- 		   if(tSelects > 0 ){pw.append((tSelects/(totalExecutionTime/1000)) *batchS  +",");}else {pw.append("0,");}
- 		   if(tDeletes > 0 ){pw.append((tDeletes/(totalExecutionTime/1000)) *batchD  +"");}else {pw.append("0");}
+ 		   if(tInserts > 0 ){pw.append(((tInserts * batchI)/(totalExecutionTime/1000)) + ",");}else {pw.append("0,");}
+ 		   if(tUpdates > 0 ){pw.append(((tUpdates * batchU)/(totalExecutionTime/1000)) +",");}else {pw.append("0,");}
+ 		   if(tSelects > 0 ){pw.append(((tSelects * batchS)/(totalExecutionTime/1000)) +",");}else {pw.append("0,");}
+ 		   if(tDeletes > 0 ){pw.append(((tDeletes * batchD)/(totalExecutionTime/1000)) +"");}else {pw.append("0");}
  		   pw.append("\n");
  		   
  		   
