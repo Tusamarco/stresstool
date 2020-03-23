@@ -87,6 +87,7 @@ public class Configurator {
 				}
 			}
 			catch (InvalidFileFormatException e) {
+				e.printStackTrace();
 				new StressToolConfigurationException(e).printStackTrace();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
