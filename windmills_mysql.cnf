@@ -60,11 +60,17 @@ daysdiffernce=720
 #==========
 # scalability / load settings  
 #==========
-poolNumber=1
+poolNumber=4
 pctInsert=100
+<<<<<<< HEAD
 pctUpdate=00 
 pctSelect=00 
 pctDelete=0
+=======
+pctUpdate=50 
+pctSelect=100 
+pctDelete=50
+>>>>>>> 950d32c2d110dd09da7ff84463cc11271f816a0e
 #repeatNumber=1
 repeatNumber=10000
 
@@ -81,7 +87,7 @@ StatLoops = 100
 SemaphoreCountdownTime = 3
 
 # Interactive mode [0 no|1 console output|2 console output + not exit until question is answered ] default 2 
-interactive = 2
+interactive = 1
 
 #==========
 # class/Actions assignments 

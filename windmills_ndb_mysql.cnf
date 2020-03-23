@@ -162,19 +162,18 @@ maxLifetime=300000
 [net.tc.stresstool.actions.DeleteBase] 
 sleepDelete=100 
 usePrepareStatement=false
-deleteRange = 500
-batchSize=6
+deleteRange = 100
 lazyInterval=0
 lazyDelete=false
 numberOfprimaryTables=1
-batchSize=3
+batchSize=6
 
 [net.tc.stresstool.actions.SelectBase]
 #for consistency the number of tables should never be higher than the ones declared in the Insert class
 usePrepareStatement=false
 SelectFilterMethod=in
 #range|in|match
-sleepSelect=500
+sleepSelect=100
 
 numberOfIntervalKeys=100
 lazySelect=true
@@ -196,7 +195,7 @@ indexName=IDX_as
 [net.tc.stresstool.actions.InsertBase]
 usePrepareStatement=false
 useAutoIncrement=true
-sleepWrite=500
+sleepWrite=100
 lazyCreation=true
 lazyInterval=5
 batchSize=20
@@ -215,7 +214,7 @@ usePrepareStatement=false
 delayStartRecords = 1000
 useAutoIncrement=true
 joinField=a
-sleepUpdate=500
+sleepUpdate=100
 lazyUpdate=false
 lazyInterval=10
 batchSize=5

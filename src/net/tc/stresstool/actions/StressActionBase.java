@@ -558,7 +558,7 @@ public class StressActionBase implements StressAction, Runnable {
         		
         		if (!ExecutePreliminaryAction())
         			 new StressToolException("Action failed to initialize");
-        		        		
+       		
         	    latch.await();
         	    /**
         	     * run action loop here

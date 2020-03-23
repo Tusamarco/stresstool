@@ -237,14 +237,20 @@ public class BaseStatCollector implements StatsProvider, Reporter {
         if(rootPath != null && !rootPath.equals("")){
         	
             try{
-        	statsFile = new FileHandler(rootPath + "/" +getStatGroup()+"_"+Utility.getTimestamp()+".txt", FileHandler.FILE_FOR_WRITE );
-        	
-        	if(flushrowonfile && this.isCsvProgressive()){
-        		if(getLogName() != null)
-        			csvFile = new FileHandler(rootPath + "/" +this.getLogName() +"_"+Utility.getTimestamp()+".csv", FileHandler.FILE_FOR_WRITE);
-        		else
-        			csvFile = new FileHandler(rootPath + "/" +getStatGroup()+"_"+Utility.getTimestamp()+".csv", FileHandler.FILE_FOR_WRITE);
-        	}
+            	
+            	if(getLogName() != null) {	
+                	statsFile = new FileHandler(rootPath + "/" +this.getLogName()+".txt", FileHandler.FILE_FOR_WRITE );
+            	}
+            	else {
+                	statsFile = new FileHandler(rootPath + "/" +getStatGroup()+"_"+Utility.getTimestamp()+".txt", FileHandler.FILE_FOR_WRITE );            		
+            	}
+            	
+            	if(flushrowonfile && this.isCsvProgressive()){
+            		if(getLogName() != null)
+            			csvFile = new FileHandler(rootPath + "/" +this.getLogName() +".csv", FileHandler.FILE_FOR_WRITE);
+            		else
+            			csvFile = new FileHandler(rootPath + "/" +getStatGroup()+"_"+Utility.getTimestamp()+".csv", FileHandler.FILE_FOR_WRITE);
+            	}
             }
             catch(Throwable ex){
         	new StressToolGenericException(ex);

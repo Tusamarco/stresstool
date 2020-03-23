@@ -615,7 +615,7 @@ public class Table {
 							  );
 					  }
 					  catch(Exception ex){
-						  System.out.println(whereCondition);
+						  System.out.println(whereCondition + " | "+ condition);
 						  ex.printStackTrace();
 					  }
 				  }

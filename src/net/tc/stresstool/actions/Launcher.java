@@ -839,6 +839,7 @@ public class Launcher {
 	        			sa.setActionCode(StressAction.INSERT_ID_CONST );
 	        			sa.setTHInfo(new ActionTHElement(StressAction.INSERT_ID_CONST + iA,false,ActionTHElement.SEMAPHORE_NOT_INITIALIZED));
 	        			sa.getTHInfo().setAction(sa.getActionType());
+	        			sa.getTHInfo().setRunningThreads(aInsert);
 	        			writeImplementationMap.put(new Integer(StressAction.INSERT_ID_CONST + iA), sa);
         		    }
         		    StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).debug("Assign  Insert class parameters [end] ");
@@ -855,6 +856,7 @@ public class Launcher {
 	        			sa.setActionCode(StressAction.UPDATE_ID_CONST );
 	        			sa.setTHInfo(new ActionTHElement(StressAction.UPDATE_ID_CONST + iA,false,ActionTHElement.SEMAPHORE_NOT_INITIALIZED));
 	        			sa.getTHInfo().setAction(sa.getActionType());
+	        			sa.getTHInfo().setRunningThreads(aUpdate);
 	        			updateImplementationMap.put(new Integer(StressAction.UPDATE_ID_CONST + iA), sa);
         		    }
         		    StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).debug("Assign  Update class parameters [end] ");
@@ -876,6 +878,7 @@ public class Launcher {
 	        			sa.setActionCode(StressAction.SELECT_ID_CONST );
 	        			sa.setTHInfo(new ActionTHElement(StressAction.SELECT_ID_CONST + iA,false,ActionTHElement.SEMAPHORE_NOT_INITIALIZED));
 	        			sa.getTHInfo().setAction(sa.getActionType());
+	        			sa.getTHInfo().setRunningThreads(aSelect);
 	        			readImplementationMap.put(new Integer(StressAction.SELECT_ID_CONST + iA), sa);
         		    }
         		    StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).debug("Assign  Select class parameters [end] ");
@@ -897,6 +900,7 @@ public class Launcher {
 	        			sa.setActionCode(StressAction.DELETE_ID_CONST );
 	        			sa.setTHInfo(new ActionTHElement(StressAction.DELETE_ID_CONST + iA,false,ActionTHElement.SEMAPHORE_NOT_INITIALIZED));
 	        			sa.getTHInfo().setAction(sa.getActionType());
+	        			sa.getTHInfo().setRunningThreads(aDelete);
 	        			deleteImplementationMap.put(new Integer(StressAction.DELETE_ID_CONST + iA), sa);
         		    }
         		    StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).debug("Assign  Delete class parameters [end] ");
