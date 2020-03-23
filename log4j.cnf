@@ -3,7 +3,7 @@ stresstool.root.logger=INFO
 stresstool.log.dir=/tmp/statlogs
 stresstool.log.file=stresstool.log
 
-log4j.logger.APPLICATION=ERROR,console
+log4j.logger.APPLICATION=error,console
 #,APPLICATION
 log4j.logger.ACTIONS=error,console
 #,ACTIONS

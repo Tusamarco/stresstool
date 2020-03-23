@@ -288,7 +288,7 @@
 							[
 								{"name":"id","datatype":"bigint","datadimension":"11","default":"","null":false,"autoincrement":true,"where_attribute":true},
 								{"name":"uuid","datatype":"char","datadimension":"36","default":"","null":false,"specialFunction":"UUID()"},
-								{"name":"millid","datatype":"smallint","datadimension":"6","default":"","null":false,"upperlimit":"400","lazy":"0"},
+								{"name":"millid","datatype":"smallint","datadimension":"6","default":"","null":false,"upperlimit":"700","lazy":"0"},
 								{"name":"kwatts_s","datatype":"int","datadimension":"11","default":"","null":false,"upperlimit":"5000","lazy":"0"},	
 								{"name":"date","datatype":"date","default":"","null":false,"lazy":"0"},			
 								{"name":"location","datatype":"varchar","datadimension":"50","default":"","null":false},
@@ -312,6 +312,8 @@
 							{"name":"europe","value":"201"},
 							{"name":"namerica","value":"301"},
 							{"name":"samerica","value":"401"},
+							{"name":"china","value":"501"},
+							{"name":"australia","value":"601"},
 							{"name":"universe","value":"1001"}						
 						]}
 	
@@ -392,9 +394,9 @@
 						"subpartition":false,
 						"attributes":["date"],
 						"function":"TO_DAYS",
-						"interval":"MONTH",
-						"starttime":"2017-01-01",
-						"endtime":"2019-12-31",
+						"interval":"WEEK",
+						"starttime":"2019-01-01",
+						"endtime":"2022-12-31",
 						"partitions":"",
 						"lists":{"list":[]},
 						"ranges":{"range":[]}

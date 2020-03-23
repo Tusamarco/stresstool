@@ -11,8 +11,8 @@ dbTypeName=mysql
 #==========
 # Connection section
 #==========
-#connUrl=jdbc:mysql://192.168.4.108:6033
-connUrl=jdbc:mysql://192.168.4.107:3306
+connUrl=jdbc:mysql://192.168.4.11:6033
+#connUrl=jdbc:mysql://192.168.4.107:3306
 #connUrl=jdbc:mysql://127.0.0.205:3316
 #database=test
 schema=windmills_ndb
@@ -60,7 +60,7 @@ doSimple=false
 #==========
 # scalability / load settings  
 #==========
-poolNumber=1
+poolNumber=30
 pctInsert=100
 pctUpdate=100 
 pctSelect=100 
@@ -71,7 +71,7 @@ repeatNumber=100000
 #==========
 # console display settings
 #==========
-HardStopLimit=30
+HardStopLimit=300
 UseHardStop=true
 StatIntervalMs=1000
 StatLoops = 100

@@ -11,13 +11,13 @@ dbTypeName=mysql
 #==========
 # Connection section
 #==========
-#connUrl=jdbc:mysql://192.168.4.11:6033
-i#connUrl=jdbc:mysql://192.168.4.55:3306
-connUrl=jdbc:mysql://127.0.0.1:3306
+connUrl=jdbc:mysql://192.168.4.191:6033
+#connUrl=jdbc:mysql://192.168.4.205:3306
+#connUrl=jdbc:mysql://127.0.0.1:3306
 #database=test
 schema=windmills
 database=windmills
-user=app_test
+user=app_test2
 password=test
 connParameters=autoReconnect=true  
 connectionPool=false
@@ -46,8 +46,8 @@ datafilepath=shakespere.txt
 #manage the calendar options
 # YYYY-MM-DD HH:MM:SS
 # daysdiffernce is the target/final date of the period 
-calendardate=2020-06-31 00:00:01 
-daysdiffernce=360
+calendardate=2021-12-31 00:00:01 
+daysdiffernce=720
 
 
 #deprecated
@@ -63,10 +63,10 @@ daysdiffernce=360
 poolNumber=1
 pctInsert=100
 pctUpdate=00 
-pctSelect=100 
+pctSelect=00 
 pctDelete=0
 #repeatNumber=1
-repeatNumber=100
+repeatNumber=10000
 
 #==========
 # console display settings
@@ -174,10 +174,10 @@ batchSize = 5
 [net.tc.stresstool.actions.InsertBase]
 usePrepareStatement=false
 useAutoIncrement=true
-sleepWrite=100
+sleepWrite=1000
 lazyCreation=true
-lazyInterval=5
-batchSize=50
+lazyInterval=1
+batchSize=1
 jsonFile=wind_mill_example.json
 
 

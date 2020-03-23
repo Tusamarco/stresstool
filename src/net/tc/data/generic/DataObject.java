@@ -425,9 +425,10 @@ public class DataObject extends MultiLanguage
 		      }
 		    }
 //		    stmt.execute("COMMIT");
-//		    stmt.addBatch("COMMIT");
+		    stmt.addBatch("COMMIT");
+		    
 		    rows = executeSQL(stmt);
-		    conn.commit();
+//		    conn.commit();
 		    stmt.clearBatch();
 		    stmt.close();
 	        
