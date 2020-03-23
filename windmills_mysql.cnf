@@ -178,7 +178,7 @@ batchSize = 5
 
 
 [net.tc.stresstool.actions.InsertBase]
-usePrepareStatement=false
+usePrepareStatement=false 
 useAutoIncrement=true
 sleepWrite=1000
 lazyCreation=true
