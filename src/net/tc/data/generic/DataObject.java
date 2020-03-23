@@ -334,9 +334,16 @@ public class DataObject extends MultiLanguage
 				  rs = stmt.executeQuery(commands.get(ac));
 				  
 				  if(rs != null) {
-					  rs.last();
-					  lines[ac] = rs.getRow();
-	  				  try{StressTool.getLogProvider().getLogger(LogProvider.LOG_SQL).info("Returned Rows:" + lines[ac] + " | " +commands.get(ac)  );}catch(StressToolConfigurationException e){}
+					  if(rs != null) {
+						  rs.last();
+						  lines[ac] = rs.getRow();
+		  				  try{StressTool.getLogProvider().getLogger(LogProvider.LOG_SQL).info("Returned Rows:" + lines[ac] + " | " +commands.get(ac)  );}catch(StressToolConfigurationException e){}
+					  }
+					  else {
+
+						  try{StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).warn("NULL RecordSet Returned by this command: " 
+						  +commands.get(ac));}catch(StressToolConfigurationException e){}
+					  }
 				  }
 				  else {
 					  
