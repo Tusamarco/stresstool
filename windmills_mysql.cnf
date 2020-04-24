@@ -12,18 +12,19 @@ dbTypeName=mysql
 # Connection section
 #==========
 connUrl=jdbc:mysql://192.168.4.191:6033
+#connUrl=jdbc:mysql://192.168.4.22:3306
 #connUrl=jdbc:mysql://192.168.4.205:3306
 #connUrl=jdbc:mysql://127.0.0.1:3306
 #database=test
 schema=windmills
 database=windmills
-user=app_test2
+user=app_test
 password=test
 connParameters=autoReconnect=true  
 connectionPool=false
 connectionPoolClass= 
 selectForceAutocommitOff=true
-stickyconnection=true
+stickyconnection=false
 useConnectionPool=false
 connectionPoolType=1
 #at the moment we only support hikari
@@ -36,7 +37,7 @@ skipPermissionTest=true
 FKEnable=false
 createTable=true 
 
-droptable=true
+droptable=false
 truncate=false
 ignoreBinlog=false
 
@@ -46,8 +47,8 @@ datafilepath=shakespere.txt
 #manage the calendar options
 # YYYY-MM-DD HH:MM:SS
 # daysdiffernce is the target/final date of the period 
-calendardate=2021-12-31 00:00:01 
-daysdiffernce=720
+calendardate=2020-04-1 00:00:01 
+daysdiffernce=365
 
 
 #deprecated
@@ -62,9 +63,9 @@ daysdiffernce=720
 #==========
 poolNumber=4
 pctInsert=100
-pctUpdate=00 
-pctSelect=00 
-pctDelete=0
+pctUpdate=100 
+pctSelect=100 
+pctDelete=50
 #=======
 
 #repeatNumber=1
@@ -76,14 +77,14 @@ repeatNumber=10000
 #time in seconds
 #if you do not want to run by time but by TRX then set USEHARDSTOP false
 # and set the repeatNumber to the number of TRX you want to execute
-HardStopLimit=1200
+HardStopLimit=12000
 UseHardStop=true
 StatIntervalMs=1000
 StatLoops = 100
 SemaphoreCountdownTime = 3
 
 # Interactive mode [0 no|1 console output|2 console output + not exit until question is answered ] default 2 
-interactive = 1
+interactive = 2
 
 #==========
 # class/Actions assignments 
@@ -178,7 +179,7 @@ batchSize = 5
 [net.tc.stresstool.actions.InsertBase]
 usePrepareStatement=false 
 useAutoIncrement=true
-sleepWrite=1000
+sleepWrite=500
 lazyCreation=true
 lazyInterval=1
 batchSize=1

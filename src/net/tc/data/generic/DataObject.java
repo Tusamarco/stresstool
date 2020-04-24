@@ -351,13 +351,14 @@ public class DataObject extends MultiLanguage
 					  +commands.get(ac));}catch(StressToolConfigurationException e){}
 				  }
 			  }catch(Exception mx){
-				  String errorStackTrace= new String();
-				  PrintStream ps = null;
-				  try{ ps = new PrintStream(errorStackTrace);}catch(Throwable th){}
-				  if(ps != null) {
-					  mx.printStackTrace(ps);
-					  ps.flush();
-				  }
+				  mx.printStackTrace();
+//				  String errorStackTrace= new String();
+//				  PrintStream ps = null;
+//				  try{ ps = new PrintStream(errorStackTrace);}catch(Throwable th){}
+//				  if(ps != null) {
+//					  mx.printStackTrace(ps);
+//					  ps.flush();
+//				  }
 //				  try{StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).error(commands.get(ac));}catch(StressToolConfigurationException e){}
 //				  try{StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).error(errorStackTrace);}catch(StressToolConfigurationException e){}
 				  
@@ -496,14 +497,14 @@ public class DataObject extends MultiLanguage
 		    lockRetry++;
     		try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).info("Lock Found for thread = " + Thread.currentThread().getId() + " repeat N: " + lockRetry + " OF 3");}catch(StressToolConfigurationException e){}
 		    
-		    iLine = executeSQL(stmt);
+//		    iLine = executeSQL(stmt);
 		    try {
 		    	iLine = executeSQL(stmt);
 		    	Thread.sleep(500);
 		    } catch (InterruptedException e) {
 		    		try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).warn("Error from JDBC for thread = " + Thread.currentThread().getId() +" | " + sqle.getErrorCode() + " : " +sqle.getMessage()+ "\n Reducing the FLOW and try to recover transaction");}catch(StressToolConfigurationException ee){}
-		    		Thread.sleep(500);
-		    		executeSQL(stmt);
+//		    		Thread.sleep(500);
+//		    		executeSQL(stmt);
 
 		    		try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).warn("========= Reporting stack trace for debug =========");}catch(StressToolConfigurationException ew){}
 
@@ -529,7 +530,7 @@ public class DataObject extends MultiLanguage
 		    } catch (InterruptedException e) {
 		    	try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).warn("Error from JDBC for thread = " + Thread.currentThread().getId() +" | " + sqle.getErrorCode() + " : " +sqle.getMessage()+ "\n Reducing the FLOW and try to recover transaction");}catch(StressToolConfigurationException ew){}
 		    	Thread.sleep(500);
-		    	executeSQL(stmt);
+//		    	executeSQL(stmt);
 		    	// TODO Auto-generated catch block
 	    		try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).warn("========= Reporting stack trace for debug =========");}catch(StressToolConfigurationException ew){}
 		    	e.printStackTrace();

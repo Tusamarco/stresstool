@@ -407,20 +407,20 @@ public class InsertBase extends StressActionBase implements WriteAction,
     	 */
 	  Connection conn = null;
 	  if(this.getActiveConnection()==null){
-		try {
-	      conn = this.getConnProvider().getConnection();
-        } catch (SQLException e) {
-			try{					
-				ByteArrayOutputStream baos = new ByteArrayOutputStream();
-				PrintStream ps = new PrintStream(baos);				
-				e.printStackTrace(ps);
-				String s =new String(baos.toByteArray());
-				StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error(s);
-				System.exit(1)  ;
-		}catch(Exception ex){ex.printStackTrace();}
+//		try {
+	      conn = this.getActiveConnection();//  this.getConnProvider().getConnection();
+//        } catch (SQLException e) {
+//			try{					
+//				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//				PrintStream ps = new PrintStream(baos);				
+//				e.printStackTrace(ps);
+//				String s =new String(baos.toByteArray());
+//				StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).error(s);
+//				System.exit(1)  ;
+//		}catch(Exception ex){ex.printStackTrace();}
 
 
-        }
+//        }
 	  }
 	  else
 		conn = this.getActiveConnection();

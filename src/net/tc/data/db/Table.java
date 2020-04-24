@@ -33,7 +33,7 @@ public class Table {
     public static final Integer TABLE_CHILD=1;
 	protected String name = null;
 	protected int rowsNumber = 0;
-	protected int fillFactor = 0;
+	protected long fillFactor = 0;
 	protected String defaultCharacterSet = null;
 	protected String defaultCollation = null;
 	protected String storageEngine = null;
@@ -73,6 +73,7 @@ public class Table {
 	protected boolean readOnly = false;
 	protected long writeFactor = 100;
 	protected long readFactor = 100;
+	protected String dataFile = null;
 
 	
 	public Table() {
@@ -202,10 +203,10 @@ public class Table {
 	public void setRowsNumber(int rowsNumber) {
 		this.rowsNumber = rowsNumber;
 	}
-	public int getFillFactor() {
+	public long getFillFactor() {
 		return fillFactor;
 	}
-	public void setFillFactor(int fillFactor) {
+	public void setFillFactor(long fillFactor) {
 		this.fillFactor = fillFactor;
 	}
 	public String getDefaultCharacterSet() {
@@ -969,6 +970,16 @@ public class Table {
 
 	public void setReadFactor(long readFactor) {
 		this.readFactor = readFactor;
+	}
+
+
+	public String getDataFile() {
+		return dataFile;
+	}
+
+
+	public void setDataFile(String dataFile) {
+		this.dataFile = dataFile;
 	}
 
 }

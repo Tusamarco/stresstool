@@ -108,6 +108,9 @@ public class StructureDefinitionParserPostgres implements
 					table.setReadOnly((Boolean)(oTable.get("readOnly")!=null?oTable.get("readOnly"):false));
 					table.setWriteFactor(oTable.get("writeFactor")!=null?(Long)oTable.get("writeFactor"):100);
 					table.setReadFactor(oTable.get("readFactor")!=null?(Long)oTable.get("readFactor"):100);
+					table.setFillFactor(oTable.get("fillFactor")!=null?(Long)oTable.get("fillFactor"):0);
+					table.setDataFile(oTable.get("dataFile")!=null?(String)oTable.get("dataFile"):null);
+					
 
 					/*
 					 * Parse select conditions

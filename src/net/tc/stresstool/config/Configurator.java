@@ -212,24 +212,27 @@ System.out.println(" Parameter #" + i +" = " + args2[i]);
 	public void printConfiguration(){
 	    
 	    Iterator it = configurationCollection.keySet().iterator();
-	    log.info("============================================================");
-	    log.info("Configuration section READING configuration file:");
-	    while(it.hasNext()){
-		/* return the section */
-		Configuration config = (Configuration)configurationCollection.get(it.next());
-		String sectionName = config.getSectionName();
-		String configurationFile = config.getConfigurationFile()!=null?config.getConfigurationFile().getAbsoluteFile().toString():"";
-		log.info("SECTION = " + sectionName);
-		log.info("FILE = " + configurationFile);
-		log.info("SECTION STARTS---------------------------------------------------");
-		Iterator itV = config.getParametersName();
-		while(itV.hasNext()){
-		    ConfigValue cfValue = config.getParameter((String) itV.next());
-		    log.info(cfValue.getId() + " = " + cfValue.getValue());
-		}
-		log.info("SECTION ENDS-----------------------------------------------------");
+	    if(it != null) {
+		    log.info("============================================================");
+		    log.info("Configuration section READING configuration file:");
+		    while(it.hasNext()){
+			/* return the section */
+			Configuration config = (Configuration)configurationCollection.get(it.next());
+			String sectionName = config.getSectionName();
+			String configurationFile = config.getConfigurationFile()!=null?config.getConfigurationFile().getAbsoluteFile().toString():"";
+			log.info("SECTION = " + sectionName);
+			log.info("FILE = " + configurationFile);
+			log.info("SECTION STARTS---------------------------------------------------");
+			Iterator itV = config.getParametersName();
+			if(itV != null) {
+				while(itV.hasNext()){
+				    ConfigValue cfValue = config.getParameter((String) itV.next());
+				    log.info(cfValue.getId() + " = " + cfValue.getValue());
+				}
+			}
+			log.info("SECTION ENDS-----------------------------------------------------");
+		    }
 	    }
-	    
 	    
 	}
 private Logger getLog() {

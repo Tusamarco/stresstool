@@ -231,7 +231,7 @@ public class ConnectionProvider {
 			    String connectionString = connInfo.getConnUrl()
 			        	    +"/"+ connInfo.getDatabase()
 			        	    +"?user="+connInfo.getUser()
-			        	    +"&useSSL=false"
+			        	   +"&useSSL=false"
 			        	    +"&"+ connInfo.getConnParameters();
 			    
 			    connectionString =  connInfo.getPassword()!=null?connectionString + "&password="+ connInfo.getPassword():connectionString +"";
@@ -381,9 +381,10 @@ public class ConnectionProvider {
     		}
     	}catch(SQLException ex){
     		ex.printStackTrace();
+    		return false;
     	}
     	
-    	return false;
+    	return true;
     }
 
 	private DataSource getDataSource() {
