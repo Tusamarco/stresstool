@@ -5,6 +5,7 @@ import java.io.PrintStream;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Iterator;
+import java.util.Map;
 
 import net.tc.data.db.Schema;
 import net.tc.data.db.Table;
@@ -17,10 +18,14 @@ import net.tc.stresstool.logs.LogProvider;
 import net.tc.stresstool.statistics.ActionTHElement;
 import net.tc.stresstool.value.MaxValuesProvider;
 
-public class LoadDataBase extends StressActionBase {
+public class LoadDataBase extends StressActionBase implements LoadData {
 	
 	private boolean collectMax = false;
 	private int sleepTools = 1000;
+	private Map<String,Table> tables = null;
+	private int loadChunk = 100;
+	private int parallelThreads=1;
+	private boolean provideStatus = false;
 
 	public boolean isCollectMax() {
 		return collectMax;
@@ -314,12 +319,53 @@ public class LoadDataBase extends StressActionBase {
     	
     }
 	
+	@Override
 	public int getSleepTools() {
 		return sleepTools;
 	}
 
 	public void setSleepTools(int sleepTools) {
 		this.sleepTools = sleepTools;
+	}
+
+	@Override
+	public Map<String, Table> getTables() {
+		return tables;
+	}
+
+	@Override
+	public void setTables(Map<String, Table> tables) {
+		this.tables = tables;
+	}
+
+	@Override
+	public int getLoadChunk() {
+		return loadChunk;
+	}
+
+	@Override
+	public void setLoadChunk(int loadChunk) {
+		this.loadChunk = loadChunk;
+	}
+
+	@Override
+	public int getParallelThreads() {
+		return parallelThreads;
+	}
+
+	@Override
+	public void setParallelThreads(int parallelThreads) {
+		this.parallelThreads = parallelThreads;
+	}
+
+	@Override
+	public boolean isProvideStatus() {
+		return provideStatus;
+	}
+
+	@Override
+	public void setProvideStatus(boolean provideStatus) {
+		this.provideStatus = provideStatus;
 	}
 
 	

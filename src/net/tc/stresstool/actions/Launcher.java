@@ -48,6 +48,7 @@ public class Launcher {
     private String updateClass = null;
     private String selectClass = null;
     private String valueProvider = null;
+    private String dataLoadClass = null;
     private String toolsClass = "net.tc.stresstool.actions.ToolsAction";
 //    private WriteAction writeImplementation = null;
 //    private WriteAction updateImplementation = null;
@@ -177,18 +178,31 @@ public class Launcher {
     			    this.deleteClass =(String) config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParameter("DeleteClass").getValue();
     			    
     			}
-    			if(config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParameter("ValueProvider") != null &&
-    				config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParameter("ValueProvider").getValue() != null){
-    			    this.valueProvider =(String) config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParameter("ValueProvider").getValue();
-    			    
-    			}
-    			
-
     			else{
     			    ExceptionMessages.setCurrentError(ExceptionMessages.ERROR_FATAL);
     			    throw new StressToolConfigurationException(" Delete Class not define");
     			    
     			}
+
+    			
+    			if(config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParameter("ValueProvider") != null &&
+    				config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParameter("ValueProvider").getValue() != null){
+    			    this.valueProvider =(String) config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParameter("ValueProvider").getValue();
+    			    
+    			}
+    			else{
+    			    ExceptionMessages.setCurrentError(ExceptionMessages.ERROR_FATAL);
+    			    throw new StressToolConfigurationException(" Value Provider Class not define");
+    			    
+    			}
+
+    			if(config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParameter("LoadDataClass") != null &&
+        				config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParameter("LoadDataClass").getValue() != null){
+        			    this.dataLoadClass =(String) config.getConfiguration(Configurator.MAIN_SECTION_NAME,StressTool.class).getParameter("LoadDataClass").getValue();
+        			    
+        		}
+    			
+
     			
     
     	   }

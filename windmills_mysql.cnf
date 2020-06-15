@@ -11,14 +11,14 @@ dbTypeName=mysql
 #==========
 # Connection section
 #==========
-connUrl=jdbc:mysql://192.168.4.191:6033
+connUrl=jdbc:mysql://192.168.4.194:6033
 #connUrl=jdbc:mysql://192.168.4.22:3306
 #connUrl=jdbc:mysql://192.168.4.205:3306
 #connUrl=jdbc:mysql://127.0.0.1:3306
 #database=test
 schema=windmills
 database=windmills
-user=app_test
+user=app_test2
 password=test
 connParameters=autoReconnect=true  
 connectionPool=false
@@ -61,9 +61,9 @@ daysdiffernce=365
 #==========
 # scalability / load settings  
 #==========
-poolNumber=4
+poolNumber=2
 pctInsert=100
-pctUpdate=100 
+pctUpdate=00 
 pctSelect=100 
 pctDelete=50
 #=======
@@ -94,6 +94,8 @@ SelectClass=net.tc.stresstool.actions.SelectBase
 InsertClass=net.tc.stresstool.actions.InsertBase
 UpdateClass=net.tc.stresstool.actions.UpdateBase
 ValueProvider=net.tc.stresstool.value.BasicFileValueProvider
+DataLoadClass=net.tc.stresstool.actions.DataLoadBase
+
 
 #==========
 # global log settings
