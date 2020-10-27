@@ -141,7 +141,7 @@ public class InsertBase extends StressActionBase implements WriteAction,
 	    	
 	    	try{
 
-			if(this.getJsonFile() == null){
+			if(this.getJsonFile() == null || this.getJsonFile().equals("")){
 				StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).warn("Table structure definition from Json file is null for Insert Class");
 				StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).warn("check parameter : jsonfile");
 				return null;

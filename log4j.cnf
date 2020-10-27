@@ -11,7 +11,7 @@ log4j.logger.MONITORS=ERROR,console
 #,MONITORS
 log4j.logger.STATS=ERROR,console
 #,STATS
-log4j.logger.SQL=error,console 
+log4j.logger.SQL=ERROR,console 
 #,SQL
 log4j.logger.PERFORMANCE=error,console
 #,PERFORMANCE
