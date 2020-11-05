@@ -125,6 +125,17 @@ public class StressTool {
 	        config.setLog(logProvider.getLogger(LogProvider.LOG_APPLICATION));
 	        
 	        launcher = new Launcher(config);
+
+	    	long loops = 0;
+	    	if(launcher.isUseHardStop()
+	    			&& launcher.getHardStopLimit() > 0) {
+	    		loops = launcher.getHardStopLimit();
+	    		launcher.setRepeatNumber(Integer.MAX_VALUE);
+	    	}
+	    	else
+	    		loops = launcher.getRepeatNumber(); 
+	        
+	        
 	        /*
 	         * test connection against the declared url
 	         */
@@ -150,6 +161,7 @@ public class StressTool {
 	            
 	        }
 	        
+	        
 	        if(launcher.prepareLauncher()){
 	            logProvider.getLogger(LogProvider.LOG_APPLICATION).info("*********************************");
 	            logProvider.getLogger(LogProvider.LOG_APPLICATION).info("Classes sucessfully initialized");
@@ -173,8 +185,18 @@ public class StressTool {
 	         * looping for a number of X loop = StatLoops if lower than repeatNumber
 	         * Or force the close if UseHardStop is true  
 	         */
+
+//	    	long loops = 0;
+//	    	if(launcher.isUseHardStop()
+//	    			&& launcher.getHardStopLimit() > 0) {
+//	    		loops = launcher.getHardStopLimit();
+//	    		launcher.setRepeatNumber(Integer.MAX_VALUE);
+//	    	}
+//	    	else
+//	    		loops = launcher.getRepeatNumber();
+
 	    	int timeForLoop =launcher.getStatIntervalMs();
-	    	long loops = launcher.getStatLoops()> launcher.getRepeatNumber()?launcher.getStatLoops():launcher.getRepeatNumber();
+	    	
 	    	if(timeForLoop < 1000){
 	    		loops = loops * (1000/timeForLoop);
 	    	}
@@ -186,11 +208,15 @@ public class StressTool {
 	        StressTool.setStressToolRunning(true);
 	        
 	        ConsoleStatePrinter consolePrinter =null;
-	        
-	        if(launcher.getInteractive() >0 )
+//	        int launchCountDown = 0 ;
+	        if(launcher.getInteractive() >0 ) {
 	            consolePrinter = new ConsoleStatePrinter(launcher);
+//	            launchCountDown = launcher.getSemaphoreCountdownTime();
+	        
+	        }
 
 	        
+	
 	        while(StressTool.isStressToolRunning()){
 	          int line =1;
 	          float curPct = (float) 0.0;
@@ -198,12 +224,15 @@ public class StressTool {
 	          int calendarReset = 10;
 //	          int aInsert =  new Float( maxInsert).intValue();
 	          
-	          if(launcher.getHardStopLimit() > 0  
-		         && launcher.isUseHardStop()) {
-	        	 loops = launcher.getHardStopLimit(); 
-	        	  
-	          }
+//		      consolePrinter.printCountDown(--launchCountDown);
 	          
+//	          
+//	          if(launcher.getHardStopLimit() > 0  
+//		         && launcher.isUseHardStop()) {
+//	        	 loops = launcher.getHardStopLimit(); 
+//	        	  
+//	          }
+
 	          for(int i = 0 ; i < loops; i++ ){
 	            
 	        	 if(StressTool.isStressToolRunning()) 
@@ -225,7 +254,7 @@ public class StressTool {
 	             else
 	            	 calendarReset--;
 	             
-	             StressTool.setStressToolRunning(launcher.LaunchActions());
+	             StressTool.setStressToolRunning(launcher.LaunchActions(consolePrinter));
 	             logProvider.getLogger(LogProvider.LOG_APPLICATION).debug("Running loop = " + i);
 
 	             

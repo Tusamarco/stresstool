@@ -25,6 +25,7 @@ import net.tc.stresstool.exceptions.StressToolException;
 import net.tc.stresstool.logs.LogProvider;
 import net.tc.stresstool.statistics.ActionTHElement;
 import net.tc.stresstool.statistics.StatCollector;
+import net.tc.stresstool.statistics.providers.ConsoleStatePrinter;
 import net.tc.stresstool.statistics.providers.StatsProvider;
 import net.tc.stresstool.value.BasicFileValueProvider;
 import net.tc.stresstool.value.BasicValueProvider;
@@ -567,7 +568,7 @@ public class Launcher {
 
     /**
 						 */
-    public boolean LaunchActions() {
+    public boolean LaunchActions(ConsoleStatePrinter consolePrinter) {
 	int semaphore = this.checkForRunningOrBreak();
 	if(this.actionInitialized 
 		&& semaphore != ActionTHElement.SEMAPHORE_NOT_INITIALIZED
@@ -591,6 +592,14 @@ public class Launcher {
 	    return false;
 	
 	for(int ic = 0; ic < SemaphoreCountdownTime ; ic++){
+		if(this.getInteractive() >0  && consolePrinter != null){
+			if(this.getSemaphoreCountdownTime() - ic > 5) {
+				consolePrinter.printCountDown(this.getSemaphoreCountdownTime() - ic,false,false);
+			}
+			else {
+				consolePrinter.printCountDown(this.getSemaphoreCountdownTime() - ic,false,true);
+			}
+		}
 	   try {Thread.sleep(1000);
 	   StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).info("Countdown to start the threads ("+ this.getSemaphoreCountdownTime() +") current : "+ (getSemaphoreCountdownTime() - ic));
 	    latch.countDown();
@@ -606,6 +615,9 @@ public class Launcher {
 
 	   }
 	    
+	}
+	if(this.getInteractive() >0  && consolePrinter != null){
+		consolePrinter.printCountDown(0,true,false);
 	}
 //	this.LaunchActions();
 	return true;
@@ -847,6 +859,7 @@ public class Launcher {
 	        			StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).debug("Assign  Insert class parameters ["+ (iA +1) +"] ");
 	        			StressActionBase sa = (StressActionBase)setParametersClassInsert();
 	        			sa.setLatch(latch);
+	        			sa.setRepeatNumber(this.getRepeatNumber());
 	        			sa.setConnProvider(this.connProvider);
 	        			sa.setSchema(this.getCurrentSchema());
 	        			sa.setActionType(StressAction.ACTION_TYPE_Insert);
@@ -864,6 +877,7 @@ public class Launcher {
 	        			StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).debug("Assign  Update class parameters ["+ (iA +1) +"] ");
 	        			StressActionBase sa = (StressActionBase)setParametersClassUpdate();
 	        			sa.setLatch(latch);
+	        			sa.setRepeatNumber(this.getRepeatNumber());
 	        			sa.setConnProvider(this.connProvider);
 	        			sa.setSchema(this.getCurrentSchema());
 	        			sa.setActionType(StressAction.ACTION_TYPE_Update);
@@ -886,6 +900,7 @@ public class Launcher {
 	        			StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).debug("Assign  Select class parameters ["+ (iA +1) +"] ");
 	        			StressActionBase sa = (StressActionBase)setParametersClassSelect();
 	        			sa.setLatch(latch);
+	        			sa.setRepeatNumber(this.getRepeatNumber());
 	        			sa.setConnProvider(this.connProvider);
 	        			sa.setSchema(this.getCurrentSchema());
 	        			sa.setActionType(StressAction.ACTION_TYPE_Select);
@@ -908,6 +923,7 @@ public class Launcher {
 	        			StressTool.getLogProvider().getLogger(LogProvider.LOG_APPLICATION).debug("Assign  Delete class parameters ["+ (iA +1) +"] ");
 	        			StressActionBase sa = (StressActionBase)setParametersClassDelete();
 	        			sa.setLatch(latch);   
+	        			sa.setRepeatNumber(this.getRepeatNumber());
 	        			sa.setConnProvider(this.connProvider);
 	        			sa.setSchema(this.getCurrentSchema());
 	        			sa.setActionType(StressAction.ACTION_TYPE_Delete);
@@ -1052,7 +1068,8 @@ public class Launcher {
 			
 		    } 	
 		}
-
+		
+		
 		it = config.getConfiguration(updateClass,StressTool.class).getParametersName();
 		while (it.hasNext()){
 		    String propertyName = it.next();

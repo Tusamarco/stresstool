@@ -61,15 +61,15 @@ daysdiffernce=365
 #==========
 # scalability / load settings  
 #==========
-poolNumber=4
+poolNumber=1
 pctInsert=00
 pctUpdate=100 
-pctSelect=100 
+pctSelect=00 
 pctDelete=0
 #=======
 
 #repeatNumber=1
-repeatNumber=2000
+repeatNumber=1000
 
 #==========
 # console display settings
@@ -77,11 +77,11 @@ repeatNumber=2000
 #time in seconds
 #if you do not want to run by time but by TRX then set USEHARDSTOP false
 # and set the repeatNumber to the number of TRX you want to execute
-HardStopLimit=800
+HardStopLimit=1200
 UseHardStop=true
 StatIntervalMs=1000
 StatLoops = 100
-SemaphoreCountdownTime = 30
+SemaphoreCountdownTime = 40
 
 # Interactive mode [0 no|1 console output|2 console output + not exit until question is answered ] default 2 
 interactive = 2
@@ -191,8 +191,8 @@ jsonFile=wind_mill_example.json
 [net.tc.stresstool.actions.UpdateBase]
 usePrepareStatement=false
 useAutoIncrement=true
-sleepUpdate=200
-lazyUpdate=false
+sleepUpdate=10
+lazyUpdate=true
 lazyInterval=10
 batchSize=50
 

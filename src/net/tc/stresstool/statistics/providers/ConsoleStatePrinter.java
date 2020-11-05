@@ -9,6 +9,7 @@ import java.util.Map;
 import com.googlecode.lanterna.*;
 import com.googlecode.lanterna.input.*;
 import com.googlecode.lanterna.screen.Screen;
+import com.googlecode.lanterna.screen.ScreenCharacterStyle;
 import com.googlecode.lanterna.terminal.Terminal;
 import com.googlecode.lanterna.terminal.TerminalPosition;
 import com.googlecode.lanterna.terminal.TerminalSize;
@@ -43,7 +44,24 @@ public class ConsoleStatePrinter implements StatsProvider,Reporter,Runnable {
     	this.launcher = launcher;
     	
     	timeForLoop =launcher.getStatIntervalMs();
-    	int loops = launcher.getStatLoops()> launcher.getRepeatNumber()?launcher.getStatLoops():launcher.getRepeatNumber();
+    	
+    	long loops = 0;
+    	if(launcher.isUseHardStop()
+    			&& launcher.getHardStopLimit() > 0) {
+    		loops = launcher.getHardStopLimit();
+    	}
+    	else
+    		loops = launcher.getRepeatNumber();
+    	
+    	if(timeForLoop < 1000){
+    		loops = loops * (1000/timeForLoop);
+    	}
+    	else{
+    		loops = loops / (timeForLoop/1000);
+    	}
+
+    	
+    	
     	if(timeForLoop < 1000){
     		loops = loops * (1000/timeForLoop);
     	}
@@ -59,14 +77,15 @@ public class ConsoleStatePrinter implements StatsProvider,Reporter,Runnable {
     	screen.putString(14, 0, "TR#", Terminal.Color.WHITE, Terminal.Color.BLACK);
     	screen.putString(18, 0, "TU#", Terminal.Color.WHITE, Terminal.Color.BLACK);
     	screen.putString(22, 0, "TD#", Terminal.Color.WHITE, Terminal.Color.BLACK);
-    	screen.putString(26, 0, "|| Threads information (time in ms)", Terminal.Color.WHITE, Terminal.Color.BLACK);
+    	screen.putString(26, 0, "|| Threads information (time in ms)|count down (" 
+    			+ launcher.getSemaphoreCountdownTime() +"/" +launcher.getSemaphoreCountdownTime() + ")", Terminal.Color.WHITE, Terminal.Color.BLACK);
     	
     	for(int x = 0 ; x <= columns;x++){
     		screen.putString(x, 1, "-", Terminal.Color.WHITE, Terminal.Color.BLACK);
     	}
     	for(int x = 0; x <= rows +1;x++){
-		screen.putString(26, x, "||", Terminal.Color.WHITE, Terminal.Color.BLACK);
-	}
+    		screen.putString(26, x, "||", Terminal.Color.WHITE, Terminal.Color.BLACK);
+	    }
     	
     	int cRow = 2;
     	int cCol = 28;
@@ -115,6 +134,22 @@ public class ConsoleStatePrinter implements StatsProvider,Reporter,Runnable {
     	
     	
     }
+    public void printCountDown(int cdown,boolean stop, boolean lastrun) {
+    	String scDown = new Integer(cdown).toString();
+    	if(cdown <10) {
+    		scDown = "0" +scDown; 
+    	}
+    	if(stop) {
+    		screen.putString(74, 0, scDown, Terminal.Color.YELLOW, Terminal.Color.BLACK);
+    	}
+    	else if(lastrun) {
+    		screen.putString(74, 0, scDown, Terminal.Color.RED, Terminal.Color.BLACK,ScreenCharacterStyle.Blinking,ScreenCharacterStyle.Bold);
+    	}
+    	else {
+    		screen.putString(74, 0, scDown, Terminal.Color.YELLOW, Terminal.Color.BLACK,ScreenCharacterStyle.Blinking,ScreenCharacterStyle.Bold);
+    	}
+    	screen.refresh();
+    }
 	public int printLine(int loop){
         curPct=(rows * (loop/maxPct));
         
@@ -135,15 +170,22 @@ public class ConsoleStatePrinter implements StatsProvider,Reporter,Runnable {
                 Long minLoop = (Long) toPrint.get("MinLoop");
                 Long maxLoop = (Long) toPrint.get("MaxLoop");
             	
-            	if(this.timeForLoop < 1000){
-            		minLoop = minLoop * (1000/timeForLoop);
-            		maxLoop = maxLoop * (1000/timeForLoop);
-            	}
-            	else{
-            		minLoop = minLoop / (timeForLoop/1000);
-            		maxLoop = maxLoop / (timeForLoop/1000);
-            	}
-
+            	//if we use hardstop (time) we calculate the advance of the * by time
+            	//if we use repeat number (cycles by action) then we calculate the * by performance
+                if(launcher.isUseHardStop()) {
+            		minLoop = new Long(loop);
+            		maxLoop = new Long(loop);
+                }
+                else {
+	                if(this.timeForLoop < 1000){
+	            		minLoop = minLoop * (1000/timeForLoop);
+	            		maxLoop = maxLoop * (1000/timeForLoop);
+	            	}
+	            	else{
+	            		minLoop = minLoop / (timeForLoop/1000);
+	            		maxLoop = maxLoop / (timeForLoop/1000);
+	            	}
+                }
             	
             	float minXl = (rows * (minLoop/maxPct));
             	float maxXl = (rows * (maxLoop/maxPct));
