@@ -27,11 +27,11 @@
 					"aselectcondition":"millid,id, kwatts_s,date,time,active",
 					"selectcondition":{
 							"condition":[
-								{"weight":100,"condition_string":"millid,id, kwatts_s,date,time,active"},
-								{"weight":100,"condition_string":"millid,id, #wmillMID.millid, #wmillMIDUUID.uuid","joinoption":" LEFT JOIN wmillMID on #table1#.millid=wmillMID.millid join wmillMIDUUID ON #table1#.millid=wmillMIDUUID.millid"},
-								{"weight":100,"condition_string":"uuid,date,kwatts_s"},
-								{"weight":100,"condition_string":"id,millid,location"},
-								{"weight":100,"condition_string":"millid,active,date"}
+								{"weight":100,"limit":10,"condition_string":"millid,id, kwatts_s,date,time,active"},
+								{"weight":100,"distinct":true,"limit":10,"condition_string":"millid,id, #wmillMID.millid, #wmillMIDUUID.uuid","joinoption":" LEFT JOIN wmillMID on #table1#.millid=wmillMID.millid join wmillMIDUUID ON #table1#.millid=wmillMIDUUID.millid"},
+								{"weight":100,"limit":10,"condition_string":"uuid,date,kwatts_s"},
+								{"weight":100,"limit":10,"condition_string":"id,millid,location"},
+								{"weight":100,"limit":10,"condition_string":"millid,active,date"}
 							]
 					},
 					"example_selectcondition":"autoinc,uuid,serverid,a,b,c,counter,time,partitionid,date,strrecordtype",
@@ -103,11 +103,11 @@
 					"aselectcondition":"millid,id, kwatts_s,date,time,active",
 					"selectcondition":{
 							"condition":[
-								{"weight":100,"condition_string":"millid,id, kwatts_s,date,time,active"},
-								{"weight":100,"condition_string":"millid,id"},
-								{"weight":100,"condition_string":"uuid,date,kwatts_s"},
-								{"weight":100,"condition_string":"id,millid,location"},
-								{"weight":100,"condition_string":"millid,active,date"}
+								{"weight":100,"limit":10,"condition_string":"millid,id, kwatts_s,date,time,active"},
+								{"weight":100,"limit":10,"condition_string":"millid,id"},
+								{"weight":100,"limit":10,"condition_string":"uuid,date,kwatts_s"},
+								{"weight":100,"limit":10,"condition_string":"id,millid,location"},
+								{"weight":100,"limit":10,"condition_string":"millid,active,date"}
 							]
 					},
 					"example_selectcondition":"autoinc,uuid,serverid,a,b,c,counter,time,partitionid,date,strrecordtype",
@@ -179,11 +179,11 @@
 					"aselectcondition":"millid,id, kwatts_s,date,time,active",
 					"selectcondition":{
 							"condition":[
-								{"weight":100,"condition_string":"millid,id, kwatts_s,date,time,active"},
-								{"weight":100,"condition_string":"millid,id"},
-								{"weight":100,"condition_string":"uuid,date,kwatts_s"},
-								{"weight":100,"condition_string":"id,millid,location"},
-								{"weight":100,"condition_string":"millid,active,date"}
+								{"weight":100,"limit":10,"condition_string":"millid,id, kwatts_s,date,time,active"},
+								{"weight":100,"limit":10,"condition_string":"millid,id"},
+								{"weight":100,"limit":10,"condition_string":"uuid,date,kwatts_s"},
+								{"weight":100,"limit":10,"condition_string":"id,millid,location"},
+								{"weight":100,"limit":10,"condition_string":"millid,active,date"}
 							]
 					},
 					"example_selectcondition":"autoinc,uuid,serverid,a,b,c,counter,time,partitionid,date,strrecordtype",
@@ -255,11 +255,11 @@
 					"aselectcondition":"millid,id, kwatts_s,date,time,active",
 					"selectcondition":{
 							"condition":[
-								{"weight":100,"condition_string":"millid,id, kwatts_s,date,time,active"},
-								{"weight":100,"condition_string":"millid,id"},
-								{"weight":100,"condition_string":"uuid,date,kwatts_s"},
-								{"weight":100,"condition_string":"id,millid,location"},
-								{"weight":100,"condition_string":"millid,active,date"}
+								{"weight":100,"limit":10,"condition_string":"millid,id, kwatts_s,date,time,active"},
+								{"weight":100,"limit":10,"condition_string":"millid,id"},
+								{"weight":100,"limit":10,"condition_string":"uuid,date,kwatts_s"},
+								{"weight":100,"limit":10,"condition_string":"id,millid,location"},
+								{"weight":100,"limit":10,"condition_string":"millid,active,date"}
 							]
 					},
 
@@ -350,11 +350,11 @@
 					"aselectcondition":"millid,id, kwatts_s,date,time,active",
 					"selectcondition":{
 							"condition":[
-								{"weight":100,"condition_string":"millid,id, kwatts_s,date,time,active"},
-								{"weight":100,"condition_string":"date,millid,id"},
-								{"weight":100,"condition_string":"uuid,date,kwatts_s"},
-								{"weight":100,"condition_string":"date,id,millid,location"},
-								{"weight":100,"condition_string":"millid,active,date"}
+								{"weight":100,"limit":10,"condition_string":"millid,id, kwatts_s,date,time,active"},
+								{"weight":100,"limit":10,"condition_string":"date,millid,id"},
+								{"weight":100,"limit":10,"condition_string":"uuid,date,kwatts_s"},
+								{"weight":100,"limit":10,"condition_string":"date,id,millid,location"},
+								{"weight":100,"limit":10,"condition_string":"millid,active,date"}
 							]
 					},
 					"example_selectcondition":"autoinc,uuid,serverid,a,b,c,counter,time,partitionid,date,strrecordtype",

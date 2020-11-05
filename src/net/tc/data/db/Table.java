@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -802,11 +803,12 @@ public class Table {
 		this.rangeLength = rangeLength;
 	}
 	
-	public String[] parseSelectCondition(){
+	public Map parseSelectCondition(){
 		if(selectCondition_S == null 
 			||selectCondition_S.size() <1   )
 			return null;
 		String[] values =null;
+		HashMap<String,Object> conditions = new HashMap();
 		Condition condition =this.getSelectCondition() ; 
 		String[] selects=condition.getCondition().split(",");
 		StringBuffer sb = new StringBuffer();
@@ -819,17 +821,32 @@ public class Table {
 				sb.append(select.replace("#", ""));
 			
 		}
-		if(condition.getJoinoption() == null
-		    || condition.getJoinoption().equals("")) {
-			values = new String[1];
-			values[0]=sb.toString();
+		conditions.put("condition_string", sb.toString());
+//		if(condition.getJoinoption() == null
+//		    || condition.getJoinoption().equals("")) {
+//			values = new String[1];
+//			values[0]=sb.toString();
+//		}
+//		else {
+//			values = new String[2];
+//			values[0]=sb.toString();
+//			values[1]=condition.getJoinoption();
+//		}
+		if(condition.getJoinoption() != null
+			    && !condition.getJoinoption().equals("")) {
+			conditions.put("joinoption", condition.getJoinoption());
+
 		}
-		else {
-			values = new String[2];
-			values[0]=sb.toString();
-			values[1]=condition.getJoinoption();
+		
+		if(condition.isDistinct()) {
+			conditions.put("distinct", true);
 		}
-		return values;
+		if(condition.getLimit() > 0) {
+			conditions.put("limit", condition.getLimit());
+		}
+
+		
+		return conditions;
 	}
 
 

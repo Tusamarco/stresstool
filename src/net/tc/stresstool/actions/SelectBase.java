@@ -235,6 +235,8 @@ public class SelectBase extends StressActionBase implements ReadAction{
 	  
 	  sqlSelectCommand = createGroupBy(sqlSelectCommand,newTable);
 	  sqlSelectCommand = createOrderBy(sqlSelectCommand,newTable);
+	  //TODO
+	  // THIS MUST BE REMOVED
 	  sqlSelectCommand = createLimit(sqlSelectCommand,newTable);
 	  lSQLObj.getSQLCommands().add(sqlSelectCommand);
 	  
@@ -417,15 +419,31 @@ private String getJoinCondition(Table table){
 	//getMainTable();
 	if(table == null )
 		return null;
-	String[] conditionValues= table.parseSelectCondition(); 
-	sb.append(conditionValues[0]);
+	Map conditionValues= table.parseSelectCondition();
+	
+	if(conditionValues.get("distinct") !=null 
+			&& !conditionValues.get("distinct").equals("false")) {
+		sb.append(" DISTINCT ");
+	}
+	
+	if(conditionValues.get("condition_string") !=null 
+			&& !conditionValues.get("condition_string").equals("")) {
+		sb.append(conditionValues.get("condition_string"));
+	}
+	else {
+		sb.append(conditionValues.get(" * "));
+	}
 	sb.append( " FROM " + table.getSchemaName() + "." + table.getName() );
-	if(conditionValues.length >1) {
-		sb.append( " " + conditionValues[1].replace("#table1#", table.getName())  );
+	if(conditionValues.get("joinoption") !=null 
+			&& !conditionValues.get("joinoption").equals("")) {
+		sb.append( " " + ((String)conditionValues.get("joinoption")).replace("#table1#", table.getName())  );
 	} 
 
 
 	sqlSelectCommand = sqlSelectCommand.replaceAll("#TABLE_CONDITION#", sb.toString());
+	if(conditionValues.get("limit") != null && (Integer)conditionValues.get("limit") > 0){
+		sqlSelectCommand = sqlSelectCommand + " LIMIT " + (Integer)conditionValues.get("limit");
+	}
 
 	return sqlSelectCommand;
 

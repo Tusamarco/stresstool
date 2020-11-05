@@ -127,7 +127,13 @@ public class StructureDefinitionParserMySQL implements
 								Condition condition = new Condition();
 								condition.setWeight((Long) aCondition.get("weight"));
 								condition.setCondition((String) aCondition.get("condition_string"));
-								condition.setJoinoption((String) aCondition.get("joinoption"));								
+								condition.setJoinoption((String) aCondition.get("joinoption"));
+								if(aCondition.get("distinct") != null) {
+									condition.setDistinct((boolean) aCondition.get("distinct"));
+								}
+								if(aCondition.get("limit") != null) {
+									condition.setLimit(((Long)aCondition.get("limit")).intValue());
+								}
 								condition.setType(Condition.SELECT_CONDITION);
 								condCol.setCondition(id++, condition);
 							}

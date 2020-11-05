@@ -11,6 +11,8 @@ public class Condition {
 	public int type = 0;
 	public String condition = null;
 	public String joinoption = null;
+	public int limit = 0;
+	public boolean distinct = false;
 	
 	public Long getWeight() {
 		return weight;
@@ -35,6 +37,18 @@ public class Condition {
 	}
 	public void setJoinoption(String joinoption) {
 		this.joinoption = joinoption;
+	}
+	public int getLimit() {
+		return limit;
+	}
+	public void setLimit(int limit) {
+		this.limit = limit;
+	}
+	public boolean isDistinct() {
+		return distinct;
+	}
+	public void setDistinct(boolean distinct) {
+		this.distinct = distinct;
 	}
 	
 	

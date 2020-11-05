@@ -11,19 +11,19 @@ dbTypeName=mysql
 #==========
 # Connection section
 #==========
-connUrl=jdbc:mysql://192.168.4.194:6033
-#connUrl=jdbc:mysql://192.168.4.22:3306
+connUrl=jdbc:mysql://192.168.4.191:6033
 #connUrl=jdbc:mysql://192.168.4.205:3306
+#connUrl=jdbc:mysql://192.168.4.233:3306
 #connUrl=jdbc:mysql://127.0.0.1:3306
 #database=test
 schema=windmills
 database=windmills
-user=app_test2
+user=app_test
 password=test
 connParameters=autoReconnect=true  
 connectionPool=false
 connectionPoolClass= 
-selectForceAutocommitOff=true
+selectForceAutocommitOff=false
 stickyconnection=false
 useConnectionPool=false
 connectionPoolType=1
@@ -61,15 +61,15 @@ daysdiffernce=365
 #==========
 # scalability / load settings  
 #==========
-poolNumber=2
-pctInsert=100
-pctUpdate=00 
+poolNumber=4
+pctInsert=00
+pctUpdate=100 
 pctSelect=100 
-pctDelete=50
+pctDelete=0
 #=======
 
 #repeatNumber=1
-repeatNumber=10000
+repeatNumber=2000
 
 #==========
 # console display settings
@@ -77,11 +77,11 @@ repeatNumber=10000
 #time in seconds
 #if you do not want to run by time but by TRX then set USEHARDSTOP false
 # and set the repeatNumber to the number of TRX you want to execute
-HardStopLimit=12000
+HardStopLimit=800
 UseHardStop=true
 StatIntervalMs=1000
 StatLoops = 100
-SemaphoreCountdownTime = 3
+SemaphoreCountdownTime = 30
 
 # Interactive mode [0 no|1 console output|2 console output + not exit until question is answered ] default 2 
 interactive = 2
@@ -161,9 +161,9 @@ maxLifetime=300000
 
 
 [net.tc.stresstool.actions.DeleteBase] 
-sleepDelete=200 
+sleepDelete=800 
 usePrepareStatement=false
-deleteRange = 100
+deleteRange = 10
 batchSize=5
 lazyInterval=0
 lazyDelete=false
@@ -172,7 +172,7 @@ lazyDelete=false
 [net.tc.stresstool.actions.SelectBase]
 #for consistency the number of tables should never be higher than the ones declared in the Insert class
 usePrepareStatement=false
-sleepSelect=100
+sleepSelect=500
 lazySelect=true
 lazyInterval=1
 batchSize = 5
@@ -181,23 +181,23 @@ batchSize = 5
 [net.tc.stresstool.actions.InsertBase]
 usePrepareStatement=false 
 useAutoIncrement=true
-sleepWrite=500
+sleepWrite=100
 lazyCreation=true
 lazyInterval=1
-batchSize=1
+batchSize=50
 jsonFile=wind_mill_example.json
 
 
 [net.tc.stresstool.actions.UpdateBase]
 usePrepareStatement=false
 useAutoIncrement=true
-sleepUpdate=100
+sleepUpdate=200
 lazyUpdate=false
 lazyInterval=10
-batchSize=5
+batchSize=50
 
 
 
 [net.tc.stresstool.actions.ToolsAction]
 collectMax=true
-sleepTools=2000
+sleepTools=200000
