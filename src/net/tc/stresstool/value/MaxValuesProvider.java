@@ -48,7 +48,8 @@ public class MaxValuesProvider {
 			e1.printStackTrace();
 		}
 		
-		log.info(" Inititalizinng Max Values static reference [START]");
+		log.info(" Inititalizing Max Values static reference [START]");
+		long start = System.currentTimeMillis();
 		Iterator<String> it = tables.keySet().iterator();
 		
 		
@@ -94,7 +95,7 @@ public class MaxValuesProvider {
 		}
 		
 		
-		log.info(" Inititalizinng Max Values static reference [END]");
+		log.info(" Inititalizinng Max Values static reference [END] - time taken " + (System.currentTimeMillis() - start));
 		return false;
 		
 	}
@@ -103,6 +104,8 @@ public class MaxValuesProvider {
 	public static Connection setAttributeMaxValues(Connection  conn) throws SQLException {
 		
 		log.info(" REFRESH Max Values static reference [START]");
+		long start = System.currentTimeMillis();
+		
 		if(conn == null 
 			|| conn.isClosed()
 			|| schemaName == null
@@ -169,7 +172,7 @@ public class MaxValuesProvider {
 			}
 			maxAttributes.put(tableName, maxAttribute);
 		}
-		log.info(" REFRESH Max Values static reference [END]");
+		log.info(" REFRESH Max Values static reference [END]" + (System.currentTimeMillis() - start));
 		return conn;
 		
 	}

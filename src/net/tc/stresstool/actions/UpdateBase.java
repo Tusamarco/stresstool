@@ -317,72 +317,72 @@ private boolean checkIfTableExists(Table tableIn,SQLObject lSQL){
 		this.leadingTable = leadingTable;
 	}
 
-	private void loadMaxWhereValues(Table table){
-		// TODO Add method to load values from max value in tables.
-		ArrayList<Attribute> maxAttribute =  new ArrayList();
-		table.parseAttributeWhere(table.getWhereCondition(this.getMyDataObject().SQL_UPDATE), maxAttribute);
-		StringBuffer sb = new StringBuffer();
-		
-		for(Object attrib : (Object[]) (maxAttribute.toArray())){
-				if (sb.length() > 0)
-					sb.append(",");
-				sb.append("MAX("+ ((Attribute)attrib).getName() +") as " +((Attribute)attrib).getName()+" ");
-		}	
-			String SQL = "Select " + sb.toString() + " FROM "+ table.getSchemaName() +"." + table.getName();
-			if(sb.length() > 0){
-				Connection conn = null;
-				if(this.getActiveConnection()==null){
-				  try {
-					conn = this.getConnProvider().getConnection();
-					Statement stmt = (Statement) conn.createStatement();
-					ResultSet rs = stmt.executeQuery(SQL);
-					if(rs != null ){
-						while (rs.next()){
-							for(Object attrib : (Object[]) (maxAttribute.toArray())){
-//								if(((Attribute)attrib).getValue()== null){
-									((Attribute)attrib).setValue(rs.getObject(((Attribute)attrib).getName()));
-									if(Utility.isNumeric(((Attribute)attrib).getValue()) 
-											&& (
-													((Attribute)attrib).getValue() instanceof Long
-													|| ((Attribute)attrib).getValue() instanceof Integer
-												)
-											){
-												if(((Attribute)attrib).getValue() instanceof Long)
-												try{
-													
-													String localValue = String.valueOf(((Attribute)attrib).getValue());
-													if(localValue ==null || localValue.equals("NULL")){
-														localValue = "0";
-													}
-													((Attribute)attrib).setUpperLimit(Long.valueOf(localValue));
-												}
-												catch(NumberFormatException en){
-													en.printStackTrace();
-												} 
-												else
-													((Attribute)attrib).setUpperLimit(Long.valueOf(String.valueOf(((Attribute)attrib).getValue().equals("NULL")?"0":String.valueOf(((Attribute)attrib).getValue()))));
-									}
-									table.getMetaAttributes().put(((Attribute)attrib).getName(), ((Attribute)attrib));
-//								}
-							}
-						}
-					}
-					
-					
-				  } catch (Exception e) {
-						e.printStackTrace();
-				  }
-				  finally{
-					  this.getConnProvider().returnConnection((java.sql.Connection) conn);
-				  }
-				}
-				
-				
-			
-		}
-//		List<String> list = new ArrayList<String>(Arrays.asList(string.split(" , ")));
-		
-	}
+//	private void loadMaxWhereValues(Table table){
+//		// TODO Add method to load values from max value in tables.
+//		ArrayList<Attribute> maxAttribute =  new ArrayList();
+//		table.parseAttributeWhere(table.getWhereCondition(this.getMyDataObject().SQL_UPDATE), maxAttribute);
+//		StringBuffer sb = new StringBuffer();
+//		
+//		for(Object attrib : (Object[]) (maxAttribute.toArray())){
+//				if (sb.length() > 0)
+//					sb.append(",");
+//				sb.append("MAX("+ ((Attribute)attrib).getName() +") as " +((Attribute)attrib).getName()+" ");
+//		}	
+//			String SQL = "Select " + sb.toString() + " FROM "+ table.getSchemaName() +"." + table.getName();
+//			if(sb.length() > 0){
+//				Connection conn = null;
+//				if(this.getActiveConnection()==null){
+//				  try {
+//					conn = this.getConnProvider().getConnection();
+//					Statement stmt = (Statement) conn.createStatement();
+//					ResultSet rs = stmt.executeQuery(SQL);
+//					if(rs != null ){
+//						while (rs.next()){
+//							for(Object attrib : (Object[]) (maxAttribute.toArray())){
+////								if(((Attribute)attrib).getValue()== null){
+//									((Attribute)attrib).setValue(rs.getObject(((Attribute)attrib).getName()));
+//									if(Utility.isNumeric(((Attribute)attrib).getValue()) 
+//											&& (
+//													((Attribute)attrib).getValue() instanceof Long
+//													|| ((Attribute)attrib).getValue() instanceof Integer
+//												)
+//											){
+//												if(((Attribute)attrib).getValue() instanceof Long)
+//												try{
+//													
+//													String localValue = String.valueOf(((Attribute)attrib).getValue());
+//													if(localValue ==null || localValue.equals("NULL")){
+//														localValue = "0";
+//													}
+//													((Attribute)attrib).setUpperLimit(Long.valueOf(localValue));
+//												}
+//												catch(NumberFormatException en){
+//													en.printStackTrace();
+//												} 
+//												else
+//													((Attribute)attrib).setUpperLimit(Long.valueOf(String.valueOf(((Attribute)attrib).getValue().equals("NULL")?"0":String.valueOf(((Attribute)attrib).getValue()))));
+//									}
+//									table.getMetaAttributes().put(((Attribute)attrib).getName(), ((Attribute)attrib));
+////								}
+//							}
+//						}
+//					}
+//					
+//					
+//				  } catch (Exception e) {
+//						e.printStackTrace();
+//				  }
+//				  finally{
+//					  this.getConnProvider().returnConnection((java.sql.Connection) conn);
+//				  }
+//				}
+//				
+//				
+//			
+//		}
+////		List<String> list = new ArrayList<String>(Arrays.asList(string.split(" , ")));
+//		
+//	}
 	
 	private String getUpdateSetValues(Table table,String sqlUpdateCommand){
 		if(table.getUpdateSetAttributes() == null || table.getUpdateSetAttributes().equals(""))

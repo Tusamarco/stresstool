@@ -5,6 +5,7 @@ import java.io.PrintStream;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Iterator;
+import java.util.concurrent.CountDownLatch;
 
 import net.tc.data.db.*;
 import net.tc.stresstool.PerformanceEvaluator;
@@ -92,8 +93,7 @@ public class ToolsAction extends StressActionBase {
         		
         		if (!ExecutePreliminaryAction())
         			 new StressToolException("Action failed to initialize");
-        		        		
-        	    getLatch().await();
+//        		getLatch().await();
         	    /**
         	     * run action loop here
         	     * the run action can be Override on each action class
@@ -234,7 +234,7 @@ public class ToolsAction extends StressActionBase {
         	    try{StressTool.getLogProvider().getLogger(LogProvider.LOG_ACTIONS).debug(" ==== ACTION "+ this.getTHInfo().getAction() +" Thread internal Id "+ this.getTHInfo().getId() +" Sys Thread Id "+ this.getTHInfo().getThId()+" ended ===="  );}catch(StressToolConfigurationException e){}
 
 
-        	} catch (InterruptedException e) {
+        	} catch (Exception e) {
         	    // TODO Auto-generated catch block
 				try{					
 					ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -246,7 +246,7 @@ public class ToolsAction extends StressActionBase {
 			}catch(Exception ex){ex.printStackTrace();}
 
 
-        	} catch (StressToolActionException e1) {
+        	} catch (Throwable e1) {
 				// TODO Auto-generated catch block
 				try{					
 					ByteArrayOutputStream baos = new ByteArrayOutputStream();
