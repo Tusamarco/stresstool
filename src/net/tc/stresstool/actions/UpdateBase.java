@@ -15,6 +15,7 @@ import net.tc.data.db.Table;
 import net.tc.data.generic.DataObject;
 import net.tc.data.generic.SQLObject;
 import net.tc.stresstool.StressTool;
+import net.tc.stresstool.exceptions.StressToolConfigurationException;
 import net.tc.stresstool.logs.LogProvider;
 import net.tc.utils.SynchronizedMap;
 import net.tc.utils.Utility;
@@ -192,7 +193,7 @@ public class UpdateBase extends StressActionBase implements UpdateAction {
 		  
 		  String sqlUpdateCommand = DataObject.SQL_UPDATE_TEMPLATE;
 /*
- * Dperecated
+ * Deprecated
  */
 //		  loadMaxWhereValues(newTable);
 		  sqlUpdateCommand = createUpdate(sqlUpdateCommand,newTable);
@@ -274,9 +275,28 @@ public class UpdateBase extends StressActionBase implements UpdateAction {
 //			return table;
 //
 //	  }
-private Table getMainTable(SQLObject lSQl){
-	Table table = (Table) getTables()[Utility.getNumberFromRandomMinMax(new Long(0), new Long(getTables().length) ).intValue()];
 
+/*
+ * Returns the table to use for the action and filter it by write factor	  
+ */
+private Table getMainTable(SQLObject lSQl){
+	int writeFactor = Utility.getNumberFromRandomMinMax(new Long(1), 100).intValue();
+	
+	Table table = (Table) getTables()[Utility.getNumberFromRandomMinMax(new Long(0), new Long(getTables().length) ).intValue()];
+	String tableName = table.getName();
+    int writeTableFactor = (int) ((Table)table).getWriteFactor();
+    int origWriteTableFactor = writeTableFactor;
+    
+    while(writeTableFactor < writeFactor|| table.isReadOnly()) {
+    	table = (Table) getTables()[Utility.getNumberFromRandomMinMax(new Long(0), new Long(getTables().length) ).intValue()];
+        writeTableFactor = (int) ((Table)table).getWriteFactor();
+		try{StressTool.getLogProvider().getLogger(LogProvider.LOG_SQL).debug("Skip table by write [UPDATE] factor TABLE " +
+				  tableName 
+				  + " factor = "
+				  + origWriteTableFactor
+				  + " Filter write factor = " + writeFactor);}catch(StressToolConfigurationException e){}    	
+    }
+	
 	if(checkIfTableExists(table,lSQl))
 		return getMainTable(lSQl);
 			

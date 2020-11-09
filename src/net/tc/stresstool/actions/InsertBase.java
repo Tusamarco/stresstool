@@ -27,6 +27,7 @@ import net.tc.stresstool.exceptions.StressToolActionException;
 import net.tc.stresstool.exceptions.StressToolConfigurationException;
 import net.tc.stresstool.logs.LogProvider;
 import net.tc.utils.SynchronizedMap;
+import net.tc.utils.Utility;
 
 import org.ini4j.jdk14.edu.emory.mathcs.backport.java.util.Arrays;
 import org.json.simple.parser.JSONParser;
@@ -523,13 +524,23 @@ public class InsertBase extends StressActionBase implements WriteAction,
 /*
  * the SQLObjectContainer will be used to store the SQLObject referencing to each table<>SQL statement 
  * SQLObject has the a counter with the number of execution done (lazyExecCount), that will be used to refresh the 
- * values in accordance to the lazyInterval value 
+ * values in accordance to the lazyInterval value
+ * 
+ *  Table will also be filtered by read only. 
  */
+	
+	
 	for (Object inTable : thisSQLObject.getTables()) {
 	    if(sbAttribs.length() > 0) sbAttribs.delete(0, sbAttribs.length());
 
+	    
+	    
 	    if(((Table)inTable).isReadOnly())
+	    {
+			try{StressTool.getLogProvider().getLogger(LogProvider.LOG_SQL).debug("Excluding table by write [INSERT] because READ Only TABLE " +
+					((Table)inTable).getName() );}catch(StressToolConfigurationException e){}    	
 	    	continue;
+	    }
 	     
 	    Table table = ((Table) inTable);
 	    

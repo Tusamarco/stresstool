@@ -1,0 +1,356 @@
+{
+	"database":"social1",
+	"characterSet":"utf8",
+	"tables":{
+		"table":[
+				{
+					"database":"social1",
+					"tablename":"status_emo",
+					"numberOfTables":1,
+					"initializeValues":true,
+					"readOnly":false,
+					"writeFactor":100,
+					"readFactor":60,
+					"fillFactor":0,
+					"dataFile":"",					
+					"multiple":false,
+					"engine":"innodb",
+					"primarykey":["id"],
+					"autoincrementvalue":0,
+					"defaultcharset":"utf8",
+					"defaultcollation":"utf8_bin",
+					"haspartition":false,
+					"tablespace":"",
+					"datadir":"",
+					"rowformat":"dynamic",
+					"rangeLength":"100",
+					"aselectcondition":"millid,id, kwatts_s,date,time,active",
+					"aselectcondition2":"userid,id, users.id buid,users.name","joinoption":" LEFT JOIN users on #table1#.userid=users.id join address ON users.address_id=address.id",
+					"selectcondition":{
+							"condition":[
+								{"weight":80,"limit":10,"condition_string":"userid,id, userid_partner,date,time,active"},
+								{"weight":100,"limit":10,"condition_string":"userid,id, #users.id buid,#users.name,#users.lastname,#address.city,#address.street,#countries.official_name_en,#continents.name continent,#countries.languages spoken_languages,status","joinoption":" LEFT JOIN users on #table1#.userid=users.id join address ON users.address_id=address.id join countries on address.country_iso3=countries.iso3 join continents on countries.continent=continents.iso2"},
+								{"weight":80,"limit":10,"condition_string":"uuid,date,status"},
+								{"weight":50,"limit":10,"condition_string":"id,userid,userid_partner,status"},
+								{"weight":50,"limit":10,"condition_string":"userid,active,date"}   
+							]
+					},
+					"example_selectcondition":"autoinc,uuid,serverid,a,b,c,counter,time,partitionid,date,strrecordtype",
+					"updatesetattributes":"#active#",
+					"wherecondition_s":{
+							"condition":[
+								{"weight":100,"condition_string":" #userid#=#?userid?userid# and #active#=#?active?active#"},
+								{"weight":10,"condition_string":" #id#=#?id?id#"}
+							]
+					},
+					"wherecondition_u":{
+							"condition":[
+								{"weight":1,"condition_string":" #id#=#?id?id#"}
+							]
+					},
+					"wherecondition_d":{
+							"condition":[
+								{"weight":10,"condition_string":" #userid#=#?userid?userid# and #active#=0"},
+								{"weight":100,"condition_string":" #id#=#?id?id#"}
+							]
+					},
+				    "example_where":" #autoinc# = #?autoinc?autoinc#  and #date# #?date_RANGE_OPTION_BETWEEN?date#  and #b# like #?b|20?b# " ,
+					"keys":
+							{
+							"key":
+								[
+									{"name":"IDX_uid","unique":false,"attributes":["userid","active"]},
+									{"name":"IDX_active","unique":false,"attributes":["id","active"]}
+								]
+							},	
+					"attributes":{
+						"attribute":
+							[
+								{"name":"id","datatype":"bigint","datadimension":"11","default":"","null":false,"autoincrement":true,"where_attribute":true},
+								{"name":"uuid","datatype":"char","datadimension":"36","default":"","null":false,"specialFunction":"UUID()"},
+								{"name":"userid","datatype":"bigint","datadimension":"11","default":"0","null":false,"upperlimit":"20000000","lazy":"0"},
+								{"name":"userid_partner","datatype":"bigint","datadimension":"11","default":"","null":false,"upperlimit":"20000000","lazy":"0"},	
+								{"name":"date","datatype":"date","default":"","null":false,"lazy":"0"},			
+								{"name":"status","datatype":"varchar","datadimension":"50","default":"","null":false},
+								{"name":"active","datatype":"tinyint","datadimension":"2","default":"1","null":false,"upperlimit":"2","lazy":"0"},								
+								{"name":"time","datatype":"timestamp","default":"CURRENT_TIMESTAMP","onUpdate":"CURRENT_TIMESTAMP","null":false,"specialFunction":"NOW()","where_attribute":true},
+								{"name":"strrecordtype","datatype":"char","datadimension":"3","default":"","null":true}				
+							]
+					},
+					"partitionDefinition":{
+	
+					}
+				},
+				{
+					"database":"social1",
+					"tablename":"room_status",
+					"engine":"innodb",
+					"primarykey":["roomid","id"],
+					"initializeValues":true,
+					"readOnly":false,
+					"writeFactor":50,
+					"readFactor":100,
+					"fillFactor":0,	
+					"dataFile":"",														
+					"autoincrementvalue":0,
+					"defaultcharset":"utf8",
+					"defaultcollation":"utf8_bin",
+					"haspartition":false,
+					"tablespace":"",
+					"datadir":"",
+					"rowformat":"dynamic",
+					"multiple":true,
+					"rangeLength":"100",
+					"aselectcondition":"millid,id, kwatts_s,date,time,active",
+					"selectcondition":{
+							"condition":[
+								{"weight":100,"limit":10,"condition_string":"roomid,id, message,date,time,active"},
+								{"weight":100,"limit":10,"condition_string":"roomid,id"},
+								{"weight":100,"limit":10,"condition_string":"uuid,date,message"},
+								{"weight":100,"limit":10,"condition_string":"id,roomid,message"},
+								{"weight":100,"limit":10,"condition_string":"roomid,active,date"}
+							]
+					},
+					"example_selectcondition":"autoinc,uuid,serverid,a,b,c,counter,time,partitionid,date,strrecordtype",
+					"updatesetattributes":"#active#",
+					"wherecondition_s":{
+							"condition":[
+								{"weight":100,"condition_string":" #roomid#=#?roomid?roomid# and #active#=#?active?active#"},
+								{"weight":10,"condition_string":" #id#=#?id?id#"}
+							]
+					},
+					"wherecondition_u":{
+							"condition":[
+								{"weight":100,"condition_string":" #id#=#?id?id#"}
+							]
+					},
+					"wherecondition_d":{
+							"condition":[
+								{"weight":100,"condition_string":" #roomid#=#?roomid?roomid# and #active#=0"},
+								{"weight":100,"condition_string":" #id#=#?id?id#"}
+							]
+					},
+				    "example_where":" #autoinc# = #?autoinc?autoinc#  and #date# #?date_RANGE_OPTION_BETWEEN?date#  and #b# like #?b|20?b# " ,
+					"keys":
+							{
+							"key":
+								[
+									{"name":"IDX_id","unique":false,"attributes":["id"]},
+									{"name":"IDX_roomid","unique":false,"attributes":["roomid","active"]}
+								]
+							},	
+					"attributes":{
+						"attribute":
+							[
+								{"name":"id","datatype":"bigint","datadimension":"11","default":"","null":false,"autoincrement":true,"where_attribute":true},
+								{"name":"uuid","datatype":"char","datadimension":"36","default":"","null":false,"specialFunction":"UUID()"},
+								{"name":"roomid","datatype":"int","datadimension":"6","default":"","null":false,"upperlimit":"1800","lazy":"0"},
+								{"name":"userid","datatype":"bigint","datadimension":"11","default":"","null":false,"upperlimit":"20000000","lazy":"0"},	
+								{"name":"date","datatype":"date","default":"","null":false,"lazy":"0"},			
+								{"name":"message","datatype":"varchar","datadimension":"200","default":"","null":false},
+								{"name":"active","datatype":"tinyint","datadimension":"2","default":"1","null":false,"upperlimit":"2","lazy":"0"},								
+								{"name":"time","datatype":"timestamp","default":"CURRENT_TIMESTAMP","onUpdate":"CURRENT_TIMESTAMP","null":false,"specialFunction":"NOW()","where_attribute":true},
+								{"name":"strrecordtype","datatype":"char","datadimension":"3","default":"","null":true}				
+							]
+					},
+					"partitionDefinition":{
+	
+					}
+				},
+				{
+					"database":"social1",
+					"tablename":"room_messages",
+					"engine":"innodb",
+					"primarykey":["roomid","id"],
+					"initializeValues":true,
+					"readOnly":false,
+					"writeFactor":100,
+					"readFactor":100,
+					"fillFactor":0,
+					"dataFile":"",										
+					"autoincrementvalue":0,
+					"defaultcharset":"utf8",
+					"defaultcollation":"utf8_bin",
+					"haspartition":true,
+					"tablespace":"",
+					"datadir":"",
+					"rowformat":"dynamic",
+					"multiple":true,
+					"rangeLength":"100",
+					"aselectcondition":"millid,id, kwatts_s,date,time,active",
+					"selectcondition":{
+							"condition":[
+								{"weight":100,"limit":10,"condition_string":"roomid,id, userid,date,time,active"},
+								{"weight":100,"limit":10,"condition_string":"roomid,id"},
+								{"weight":100,"limit":10,"condition_string":"roomid,date,userid"},
+								{"weight":100,"limit":10,"condition_string":"id,roomid,message"},
+								{"weight":100,"limit":10,"condition_string":"roomid,active,date"}
+							]
+					},
+
+					"example_selectcondition":"autoinc,uuid,serverid,a,b,c,counter,time,partitionid,date,strrecordtype",
+					"updatesetattributes":"#active#",
+					"wherecondition_s":{
+							"condition":[
+								{"weight":100,"condition_string":" #roomid#=#?roomid?roomid# and #active#=#?active?active#"},
+								{"weight":10,"condition_string":" #id#=#?id?id#"}
+							]
+					},
+					"wherecondition_u":{
+							"condition":[
+								{"weight":100,"condition_string":" #id#=#?id?id#"}
+							]
+					},
+					"wherecondition_d":{
+							"condition":[
+								{"weight":100,"condition_string":" #roomid#=#?roomid?roomid# and #active#=0"},
+								{"weight":100,"condition_string":" #id#=#?id?id#"}
+							]
+					},
+				    "example_where":" #autoinc# = #?autoinc?autoinc#  and #date# #?date_RANGE_OPTION_BETWEEN?date#  and #b# like #?b|20?b# " ,
+					"keys":
+							{
+							"key":
+								[
+									{"name":"IDX_id","unique":false,"attributes":["id"]},
+									{"name":"IDX_roomid","unique":false,"attributes":["roomid","active"]}
+								]
+							},	
+					"attributes":{
+						"attribute":
+							[
+								{"name":"id","datatype":"bigint","datadimension":"11","default":"","null":false,"autoincrement":true,"where_attribute":true},
+								{"name":"uuid","datatype":"char","datadimension":"36","default":"","null":false,"specialFunction":"UUID()"},
+								{"name":"userid","datatype":"bigint","datadimension":"6","default":"","null":false,"upperlimit":"20000000","lazy":"0"},
+								{"name":"roomid","datatype":"int","datadimension":"11","default":"","null":false,"upperlimit":"1800","lazy":"0"},	
+								{"name":"date","datatype":"date","default":"","null":false,"lazy":"0"},			
+								{"name":"message","datatype":"text","datadimension":"2000","default":"","null":true},
+								{"name":"active","datatype":"tinyint","datadimension":"2","default":"1","null":false,"upperlimit":"2","lazy":"0"},								
+								{"name":"time","datatype":"timestamp","default":"CURRENT_TIMESTAMP","onUpdate":"CURRENT_TIMESTAMP","null":false,"specialFunction":"NOW()","where_attribute":true},
+								{"name":"strrecordtype","datatype":"char","datadimension":"3","default":"","null":true}				
+							]
+					},
+						"partitionDefinition":{
+						"partitionBy":"range",
+						"subpartition":false,
+						"attributes":["roomid"],
+						"function":"",
+						"interval":"",
+						"starttime":"",
+						"endtime":"",
+						"partitions":"",
+						"lists":{"list":[]},
+						"ranges":{"range":[
+							{"name":"auto","value":"101"},
+							{"name":"sailing","value":"201"},
+							{"name":"gardening","value":"301"},
+							{"name":"sex","value":"401"},
+							{"name":"cooking","value":"501"},
+							{"name":"movies","value":"601"},
+							{"name":"travel","value":"701"},
+							{"name":"computer","value":"801"},
+							{"name":"politics","value":"901"},
+							{"name":"health","value":"1001"},
+							{"name":"sport","value":"1101"},
+							{"name":"religion","value":"1201"},
+							{"name":"photos","value":"1301"},
+							{"name":"science","value":"1401"},
+							{"name":"music","value":"1501"},
+							{"name":"movies","value":"1601"},
+							{"name":"universe","value":"1701"}						
+						]}
+	
+					}
+				},
+				{
+					"database":"social1",
+					"tablename":"messages",
+					"engine":"innodb",
+					"primarykey":["date","id"],
+					"initializeValues":true,
+					"readOnly":false,
+					"writeFactor":100,
+					"readFactor":100,
+					"fillFactor":0,
+					"dataFile":"",															
+					"autoincrementvalue":0,
+					"defaultcharset":"utf8",
+					"defaultcollation":"utf8_bin",
+					"haspartition":true,
+					"tablespace":"",
+					"datadir":"",
+					"rowformat":"dynamic",
+					"multiple":true,
+					"rangeLength":"100",
+					"aselectcondition":"millid,id, kwatts_s,date,time,active",
+					"selectcondition":{
+							"condition":[
+								{"weight":100,"limit":10,"condition_string":"userid,id, userid_receiver,date,time,active"},
+								{"weight":100,"limit":10,"condition_string":"date,userid,id"},
+								{"weight":100,"limit":10,"condition_string":"userid,userid_receiver,message"},
+								{"weight":100,"limit":10,"condition_string":"date,id,userid,message"},
+								{"weight":100,"limit":10,"condition_string":"userid,active,date"}
+							]
+					},
+					"example_selectcondition":"autoinc,uuid,serverid,a,b,c,counter,time,partitionid,date,strrecordtype",
+					"updatesetattributes":"#active#",
+					"wherecondition_s":{
+							"condition":[
+								{"weight":100,"condition_string":"  #date# #?date_RANGE_OPTION_BETWEEN?date#  AND #userid#=#?userid?userid# and #active#=#?active?active#"},
+								{"weight":10,"condition_string":" #id#=#?id?id#"}
+							]
+					},
+					"wherecondition_u":{
+							"condition":[
+								{"weight":100,"condition_string":" #id#=#?id?id#"}
+							]
+					},
+					"wherecondition_d":{
+							"condition":[
+								{"weight":100,"condition_string":" #userid#=#?userid?userid# and #date# #?date_RANGE_OPTION_BETWEEN?date#  and #active#=0"},
+								{"weight":100,"condition_string":" #id#=#?id?id#"}
+							]
+					},
+				    "example_where":" #autoinc# = #?autoinc?autoinc#  and #date# #?date_RANGE_OPTION_BETWEEN?date#  and #b# like #?b|20?b# " ,
+					"keys":
+							{
+							"key":
+								[
+									{"name":"IDX_userid","unique":false,"attributes":["userid","active"]},
+									{"name":"IDX_active","unique":false,"attributes":["id","active"]}
+								]
+							},	
+					"attributes":{
+						"attribute":
+							[
+								{"name":"id","datatype":"bigint","datadimension":"11","default":"","null":false,"autoincrement":true,"where_attribute":true},
+								{"name":"imageuuid","datatype":"char","datadimension":"36","default":"","null":false,"specialFunction":"UUID()"},
+								{"name":"userid","datatype":"bigint","datadimension":"11","default":"","null":false,"upperlimit":"20000000","lazy":"0"},
+								{"name":"userid_receiver","datatype":"bigint","datadimension":"11","default":"","null":false,"upperlimit":"20000","lazy":"0"},	
+								{"name":"date","datatype":"date","default":"","null":false,"lazy":"0"},			
+								{"name":"message","datatype":"varchar","datadimension":"2000","default":"","null":false},
+								{"name":"active","datatype":"tinyint","datadimension":"2","default":"1","null":false,"upperlimit":"2","lazy":"0"},								
+								{"name":"time","datatype":"timestamp","default":"CURRENT_TIMESTAMP","onUpdate":"CURRENT_TIMESTAMP","null":false,"specialFunction":"NOW()","where_attribute":true},
+								{"name":"status","datatype":"char","datadimension":"3","default":"","null":true}				
+							]
+					},
+					"partitionDefinition":{
+						"partitionBy":"range",
+						"subpartition":false,
+						"attributes":["date"],
+						"function":"TO_DAYS",
+						"interval":"WEEK",
+						"starttime":"2019-01-01",
+						"endtime":"2022-12-31",
+						"partitions":"",
+						"lists":{"list":[]},
+						"ranges":{"range":[]}
+	
+					}
+				}								
+				
+				
+
+			]
+		}
+}

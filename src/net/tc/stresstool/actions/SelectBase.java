@@ -287,10 +287,26 @@ public class SelectBase extends StressActionBase implements ReadAction{
 	return null;
   }
 
+  /*
+   * Provide table to build the select filtering by readfactor 
+   */
   private Table getMainTable(SQLObject lSQl){
 	Table table = (Table) getTables()[Utility.getNumberFromRandomMinMax(new Long(0), new Long(getTables().length) ).intValue()];
-	int readFactor = Utility.getNumberFromRandomMinMax(new Long(0), 100).intValue();
+	int tableReadFactor = (int) table.getReadFactor();
+	int readFactor = Utility.getNumberFromRandomMinMax(new Long(1), 100).intValue();
 
+	while(tableReadFactor < readFactor) {
+		table = (Table) getTables()[Utility.getNumberFromRandomMinMax(new Long(0), new Long(getTables().length) ).intValue()];
+		tableReadFactor = (int) table.getReadFactor();
+		 try{StressTool.getLogProvider().getLogger(LogProvider.LOG_SQL).debug("Skip table by read factor TABLE " +
+		  table.getName() 
+		  + " factor = "
+		  + table.getReadFactor()
+		  + " Filter read factor = " + readFactor);}catch(StressToolConfigurationException e){}
+	}
+	
+	
+	
 	if(checkIfTableExists(table,lSQl,readFactor))
 		return getMainTable(lSQl);
 	

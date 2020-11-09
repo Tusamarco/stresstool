@@ -13,8 +13,18 @@ public class ConditionCollection {
 	}
 	
 	public Condition getCondition(){
-		//#TODO implement weight not there yet
-		return (Condition)Conditions.getValueByPosition(Utility.getNumberFromRandom(new Long(Conditions.size())).intValue());	
+		int weight_factor =Utility.getNumberFromRandomMinMax(1,new Long(100)).intValue();
+		if(Conditions.size()==1)
+			return (Condition) Conditions.getValueByPosition(0);
+		
+		Condition condition = (Condition) Conditions.getValueByPosition(Utility.getNumberFromRandom(new Long(Conditions.size())).intValue());
+		int weight = condition.weight.intValue();
+		
+		while (weight < weight_factor) {
+			condition =(Condition) Conditions.getValueByPosition(Utility.getNumberFromRandom(new Long(Conditions.size())).intValue());
+			weight = condition.weight.intValue();
+		}
+		return (Condition) condition;	
 	}
 	public Map getAllCondition(){
 		//#TODO implement weight not there yet

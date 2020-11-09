@@ -218,8 +218,21 @@ public class DeleteBase extends StressActionBase implements DeleteAction{
 		return sqlSelectCommand.replaceAll("#ORDER_BY#", "");
 	  }	
 	  private Table getMainTable(SQLObject lSQl){
+			int writeFactor = Utility.getNumberFromRandomMinMax(new Long(1), 100).intValue();
+			
 			Table table = (Table) getTables()[Utility.getNumberFromRandomMinMax(new Long(0), new Long(getTables().length) ).intValue()];
-
+		    int writeTableFactor = (int) ((Table)table).getWriteFactor();
+		    
+		    while(writeTableFactor < writeFactor || table.isReadOnly()) {
+		    	table = (Table) getTables()[Utility.getNumberFromRandomMinMax(new Long(0), new Long(getTables().length) ).intValue()];
+		        writeTableFactor = (int) ((Table)table).getWriteFactor();
+				try{StressTool.getLogProvider().getLogger(LogProvider.LOG_SQL).debug("Skip table by write [DELETE] factor TABLE " +
+						  table.getName() 
+						  + " factor = "
+						  + table.getWriteFactor()
+						  + " Filter write factor = " + writeFactor);}catch(StressToolConfigurationException e){}    	    	
+		    }
+			
 			if(checkIfTableExists(table,lSQl))
 				return getMainTable(lSQl);
 					
@@ -229,6 +242,7 @@ public class DeleteBase extends StressActionBase implements DeleteAction{
 					
 			this.setLeadingTable(table);
 				return table;
+
 	  }
 	  
 	  private boolean checkIfTableExists(Table tableIn,SQLObject lSQL){

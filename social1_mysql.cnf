@@ -1,0 +1,203 @@
+#v2
+[main]
+#==========
+# Mandatory
+#==========
+#DBTYPE is mandatory from this version of StressTool 
+#possible options are mysql|postgres|oracle
+#dbTypeName=postgres
+dbTypeName=mysql
+
+#==========
+# Connection section
+#==========
+#connUrl=jdbc:mysql://192.168.4.191:6033
+#connUrl=jdbc:mysql://192.168.4.205:3306
+connUrl=jdbc:mysql://192.168.4.55:3306
+#connUrl=jdbc:mysql://127.0.0.1:3306
+#database=test
+schema=social1
+database=social1
+user=app_test
+password=test
+connParameters=autoReconnect=true  
+connectionPool=false
+connectionPoolClass= 
+selectForceAutocommitOff=false
+stickyconnection=false
+useConnectionPool=false
+connectionPoolType=1
+#at the moment we only support hikari
+skipPermissionTest=true
+
+
+#========== 
+# Global options
+#==========
+FKEnable=false
+createTable=true 
+
+droptable=false
+truncate=false
+ignoreBinlog=false
+
+datafilepath=shakespere.txt
+#datafilepath=thai.txt
+
+#manage the calendar options
+# YYYY-MM-DD HH:MM:SS
+# daysdiffernce is the target/final date of the period 
+calendardate=2020-04-1 00:00:01 
+daysdiffernce=365
+
+
+#deprecated
+#doSimplePk=false 
+#operationShort=false
+#doDelete=false 
+#doReport=true 
+#doSimple=false
+  
+#==========
+# scalability / load settings  
+#==========
+poolNumber=8
+pctInsert=100
+pctUpdate=100 
+pctSelect=100 
+pctDelete=50
+#=======
+
+#repeatNumber=1
+repeatNumber=2000
+
+#==========
+# console display settings
+#==========
+#time in seconds
+#if you do not want to run by time but by TRX then set USEHARDSTOP false
+# and set the repeatNumber to the number of TRX you want to execute
+HardStopLimit=800
+UseHardStop=true
+StatIntervalMs=1000
+StatLoops = 100
+SemaphoreCountdownTime = 10
+
+# Interactive mode [0 no|1 console output|2 console output + not exit until question is answered ] default 2 
+interactive = 2
+
+#==========
+# class/Actions assignments 
+#==========
+DeleteClass=net.tc.stresstool.actions.DeleteBase 
+SelectClass=net.tc.stresstool.actions.SelectBase
+InsertClass=net.tc.stresstool.actions.InsertBase
+UpdateClass=net.tc.stresstool.actions.UpdateBase
+ValueProvider=net.tc.stresstool.value.BasicFileValueProvider
+DataLoadClass=net.tc.stresstool.actions.DataLoadBase
+
+
+#==========
+# global log settings
+#==========
+appendLogStat=true
+insertStatHeaders=true
+appendLogReport=true
+
+
+
+
+[logs]
+stresstool=log4j.cnf
+applicationlog=APPLICATION
+actionlog=ACTIONS
+statlog=STATS
+monitorlog=MONITORS
+
+[statistics]
+rootdirectory=/tmp/stats
+
+#this parameter says to write a CSV file for each provider (in root dir)
+flushrowonfile=true
+providerclass=net.tc.stresstool.statistics.providers.ActionsReporter
+
+#,net.tc.stresstool.statistics.providers.MySQLStatus
+
+#,net.tc.stresstool.statistics.providers.InnoDBMetrics
+#,net.tc.stresstool.statistics.providers.InnoDB
+#,net.tc.stresstool.statistics.providers.MySQLPerfSchema,net.tc.stresstool.statistics.providers.MySQLSProclist
+eventhistory=350
+actionhistory=120
+processaverage=true
+
+[net.tc.stresstool.statistics.providers.ActionsReporter]
+logName=threadsFlush
+csvProgressive=false
+
+
+
+
+[com.zaxxer.hikari]
+#dataSource properties
+#dataSourceClassName=org.postgresql.ds.PGSimpleDataSource
+#dataSource.user=test
+
+idleTimeout=100000
+cachePrepStmts=true
+prepStmtCacheSize=250
+prepStmtCacheSqlLimit=2048
+leakDetectionThreshold=100000
+maximumPoolSize = 50
+useServerPrepStmts=true
+useLocalSessionState=true
+useLocalTransactionState=true
+rewriteBatchedStatements=true
+cacheResultSetMetadata=true
+cacheServerConfiguration=true
+autoCommits=false
+maintainTimeStats=false
+useSSL=false
+maxLifetime=300000
+
+
+[net.tc.stresstool.actions.DeleteBase] 
+sleepDelete=800 
+usePrepareStatement=false
+deleteRange = 100
+batchSize=2
+lazyInterval=0
+lazyDelete=false
+
+
+[net.tc.stresstool.actions.SelectBase]
+#for consistency the number of tables should never be higher than the ones declared in the Insert class
+usePrepareStatement=false
+sleepSelect=800
+lazySelect=true
+lazyInterval=1
+batchSize = 10
+
+
+[net.tc.stresstool.actions.InsertBase]
+usePrepareStatement=false 
+useAutoIncrement=true
+sleepWrite=500
+lazyCreation=true
+lazyInterval=1
+batchSize=20
+jsonFile=social_test1.json
+
+
+[net.tc.stresstool.actions.UpdateBase]
+usePrepareStatement=false
+useAutoIncrement=true
+sleepUpdate=200
+lazyUpdate=false
+lazyInterval=10
+batchSize=10
+
+
+
+[net.tc.stresstool.actions.ToolsAction]
+collectMax=true
+sleepTools=2000
