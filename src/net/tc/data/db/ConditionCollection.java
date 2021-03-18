@@ -14,6 +14,8 @@ public class ConditionCollection {
 	
 	public Condition getCondition(){
 		int weight_factor =Utility.getNumberFromRandomMinMax(1,new Long(100)).intValue();
+//		System.out.println(weight_factor);
+		
 		if(Conditions.size()==1)
 			return (Condition) Conditions.getValueByPosition(0);
 		
