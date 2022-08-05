@@ -408,9 +408,9 @@
 						"subpartition":false,
 						"attributes":["date"],
 						"function":"TO_DAYS",
-						"interval":"WEEK",
-						"starttime":"2019-01-01",
-						"endtime":"2022-12-31",
+						"interval":"MONTH",
+						"starttime":"2022-01-01",
+						"endtime":"2024-05-31",
 						"partitions":"",
 						"lists":{"list":[]},
 						"ranges":{"range":[]}
