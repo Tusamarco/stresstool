@@ -1,8 +1,8 @@
 package net.tc.data.db;
 
+import net.tc.comparators.WeightComparable;
 
-
-public class Condition {
+public class Condition implements WeightComparable{
 	public static int SELECT_CONDITION=1;
 	public static int WHERE_CONDITION=2;
 	public static int UPDATE_CONDITION=3;
@@ -14,9 +14,9 @@ public class Condition {
 	public int limit = 0;
 	public boolean distinct = false;
 	
-	public Long getWeight() {
-		return weight;
-	}
+//	public Long getWeight() {
+//		return weight;
+//	}
 	public void setWeight(Long weight) {
 		this.weight = weight;
 	}
@@ -49,6 +49,16 @@ public class Condition {
 	}
 	public void setDistinct(boolean distinct) {
 		this.distinct = distinct;
+	}
+	@Override
+	public int compareTo(Object o) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	@Override
+	public int getWeight() {
+		return this.weight.intValue();
+		
 	}
 	
 	

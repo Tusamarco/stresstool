@@ -27,18 +27,18 @@
 					"aselectcondition":"millid,id, kwatts_s,date,time,active",
 					"selectcondition":{
 							"condition":[
-								{"weight":100,"limit":10,"condition_string":"millid,id, kwatts_s,date,time,active"},
-								{"weight":100,"distinct":true,"limit":10,"condition_string":"millid,id, #wmillMID.millid, #wmillMIDUUID.uuid","joinoption":" LEFT JOIN wmillMID on #table1#.millid=wmillMID.millid join wmillMIDUUID ON #table1#.millid=wmillMIDUUID.millid"},
-								{"weight":100,"limit":10,"condition_string":"uuid,date,kwatts_s"},
-								{"weight":100,"limit":10,"condition_string":"id,millid,location"},
-								{"weight":100,"limit":10,"condition_string":"millid,active,date"}
+								{"weight":50,"limit":10,"condition_string":"millid,id, kwatts_s,date,time,active"},
+								{"weight":20,"distinct":true,"limit":10,"condition_string":"millid,id, #wmillMID.millid, #wmillMIDUUID.uuid","joinoption":" LEFT JOIN wmillMID on #table1#.millid=wmillMID.millid join wmillMIDUUID ON #table1#.millid=wmillMIDUUID.millid"},
+								{"weight":10,"limit":10,"condition_string":"uuid,date,kwatts_s"},
+								{"weight":10,"limit":10,"condition_string":"id,millid,location"},
+								{"weight":10,"limit":10,"condition_string":"millid,active,date"}
 							]
 					},
 					"example_selectcondition":"autoinc,uuid,serverid,a,b,c,counter,time,partitionid,date,strrecordtype",
 					"updatesetattributes":"#active#,#location#,#kwatts_s#",
 					"wherecondition_s":{
 							"condition":[
-								{"weight":100,"condition_string":" #millid#=#?millid?millid# and #active#=#?active?active#"},
+								{"weight":90,"condition_string":" #millid#=#?millid?millid# and #active#=#?active?active#"},
 								{"weight":10,"condition_string":" #id#=#?id?id#"}
 							]
 					},
@@ -49,8 +49,9 @@
 					},
 					"wherecondition_d":{
 							"condition":[
-								{"weight":50,"condition_string":" #millid#=#?millid?millid# and #active#=0"},
-								{"weight":100,"condition_string":" #id#=#?id?id#"}
+							    {"weight":50,"condition_string":" #millid# #?millid_RANGE_OPTION_BETWEEN?millid# and #active#=#?active?active#"},
+								{"weight":20,"condition_string":" #millid#=#?millid?millid# and #active#=0"},
+								{"weight":30,"condition_string":" #id#=#?id?id#"}
 							]
 					},
 				    "example_where":" #autoinc# = #?autoinc?autoinc#  and #date# #?date_RANGE_OPTION_BETWEEN?date#  and #b# like #?b|20?b# " ,
@@ -103,18 +104,18 @@
 					"aselectcondition":"millid,id, kwatts_s,date,time,active",
 					"selectcondition":{
 							"condition":[
-								{"weight":100,"limit":10,"condition_string":"millid,id, kwatts_s,date,time,active"},
-								{"weight":100,"limit":10,"condition_string":"millid,id"},
-								{"weight":100,"limit":10,"condition_string":"uuid,date,kwatts_s"},
-								{"weight":100,"limit":10,"condition_string":"id,millid,location"},
-								{"weight":100,"limit":10,"condition_string":"millid,active,date"}
+								{"weight":10,"limit":10,"condition_string":"millid,id, kwatts_s,date,time,active"},
+								{"weight":10,"limit":10,"condition_string":"millid,id"},
+								{"weight":10,"limit":10,"condition_string":"uuid,date,kwatts_s"},
+								{"weight":50,"limit":10,"condition_string":"id,millid,location"},
+								{"weight":20,"limit":10,"condition_string":"millid,active,date"}
 							]
 					},
 					"example_selectcondition":"autoinc,uuid,serverid,a,b,c,counter,time,partitionid,date,strrecordtype",
 					"updatesetattributes":"#active#,#location#,#kwatts_s#",
 					"wherecondition_s":{
 							"condition":[
-								{"weight":100,"condition_string":" #millid#=#?millid?millid# and #active#=#?active?active#"},
+								{"weight":90,"condition_string":" #millid#=#?millid?millid# and #active#=#?active?active#"},
 								{"weight":10,"condition_string":" #id#=#?id?id#"}
 							]
 					},
@@ -125,8 +126,8 @@
 					},
 					"wherecondition_d":{
 							"condition":[
-								{"weight":50,"condition_string":" #millid#=#?millid?millid# and #active#=0"},
-								{"weight":100,"condition_string":" #id#=#?id?id#"}
+							    {"weight":40,"condition_string":" #millid# #?millid_RANGE_OPTION_BETWEEN?millid# and #active#=#?active?active#"},
+								{"weight":60,"condition_string":" #id#=#?id?id#"}
 							]
 					},
 				    "example_where":" #autoinc# = #?autoinc?autoinc#  and #date# #?date_RANGE_OPTION_BETWEEN?date#  and #b# like #?b|20?b# " ,
@@ -179,19 +180,19 @@
 					"aselectcondition":"millid,id, kwatts_s,date,time,active",
 					"selectcondition":{
 							"condition":[
-								{"weight":100,"limit":10,"condition_string":"millid,id, kwatts_s,date,time,active"},
-								{"weight":100,"limit":10,"condition_string":"millid,id"},
-								{"weight":100,"limit":10,"condition_string":"uuid,date,kwatts_s"},
-								{"weight":100,"limit":10,"condition_string":"id,millid,location"},
-								{"weight":100,"limit":10,"condition_string":"millid,active,date"}
+								{"weight":10,"limit":10,"condition_string":"millid,id, kwatts_s,date,time,active"},
+								{"weight":10,"limit":10,"condition_string":"millid,id"},
+								{"weight":10,"limit":10,"condition_string":"uuid,date,kwatts_s"},
+								{"weight":40,"limit":10,"condition_string":"id,millid,location"},
+								{"weight":30,"limit":10,"condition_string":"millid,active,date"}
 							]
 					},
 					"example_selectcondition":"autoinc,uuid,serverid,a,b,c,counter,time,partitionid,date,strrecordtype",
 					"updatesetattributes":"#active#,#location#,#kwatts_s#",
 					"wherecondition_s":{
 							"condition":[
-								{"weight":100,"condition_string":" #millid#=#?millid?millid# and #active#=#?active?active#"},
-								{"weight":10,"condition_string":" #id#=#?id?id#"}
+								{"weight":40,"condition_string":" #millid#=#?millid?millid# and #active#=#?active?active#"},
+								{"weight":60,"condition_string":" #id#=#?id?id#"}
 							]
 					},
 					"wherecondition_u":{
@@ -201,8 +202,9 @@
 					},
 					"wherecondition_d":{
 							"condition":[
-								{"weight":50,"condition_string":" #millid#=#?millid?millid# and #active#=0"},
-								{"weight":100,"condition_string":" #id#=#?id?id#"}
+							    {"weight":40,"condition_string":" #millid# #?millid_RANGE_OPTION_BETWEEN?millid# and #active#=#?active?active#"},
+								{"weight":10,"condition_string":" #millid#=#?millid?millid# and #active#=0"},
+								{"weight":50,"condition_string":" #id#=#?id?id#"}
 							]
 					},
 				    "example_where":" #autoinc# = #?autoinc?autoinc#  and #date# #?date_RANGE_OPTION_BETWEEN?date#  and #b# like #?b|20?b# " ,
@@ -255,11 +257,11 @@
 					"aselectcondition":"millid,id, kwatts_s,date,time,active",
 					"selectcondition":{
 							"condition":[
-								{"weight":100,"limit":10,"condition_string":"millid,id, kwatts_s,date,time,active"},
-								{"weight":100,"limit":10,"condition_string":"millid,id"},
-								{"weight":100,"limit":10,"condition_string":"uuid,date,kwatts_s"},
-								{"weight":100,"limit":10,"condition_string":"id,millid,location"},
-								{"weight":100,"limit":10,"condition_string":"millid,active,date"}
+								{"weight":10,"limit":10,"condition_string":"millid,id, kwatts_s,date,time,active"},
+								{"weight":10,"limit":10,"condition_string":"millid,id"},
+								{"weight":10,"limit":10,"condition_string":"uuid,date,kwatts_s"},
+								{"weight":40,"limit":10,"condition_string":"id,millid,location"},
+								{"weight":30,"limit":10,"condition_string":"millid,active,date"}
 							]
 					},
 
@@ -267,8 +269,8 @@
 					"updatesetattributes":"#active#,#location#,#kwatts_s#",
 					"wherecondition_s":{
 							"condition":[
-								{"weight":100,"condition_string":" #millid#=#?millid?millid# and #active#=#?active?active#"},
-								{"weight":10,"condition_string":" #id#=#?id?id#"}
+								{"weight":40,"condition_string":" #millid#=#?millid?millid# and #active#=#?active?active#"},
+								{"weight":60,"condition_string":" #id#=#?id?id#"}
 							]
 					},
 					"wherecondition_u":{
@@ -278,8 +280,9 @@
 					},
 					"wherecondition_d":{
 							"condition":[
-								{"weight":50,"condition_string":" #millid#=#?millid?millid# and #active#=0"},
-								{"weight":100,"condition_string":" #id#=#?id?id#"}
+							    {"weight":20,"condition_string":" #millid# #?millid_RANGE_OPTION_BETWEEN?millid# and #active#=#?active?active#"},
+								{"weight":30,"condition_string":" #millid#=#?millid?millid# and #active#=0"},
+								{"weight":50,"condition_string":" #id#=#?id?id#"}
 							]
 					},
 				    "example_where":" #autoinc# = #?autoinc?autoinc#  and #date# #?date_RANGE_OPTION_BETWEEN?date#  and #b# like #?b|20?b# " ,
@@ -350,19 +353,19 @@
 					"aselectcondition":"millid,id, kwatts_s,date,time,active",
 					"selectcondition":{
 							"condition":[
-								{"weight":100,"limit":10,"condition_string":"millid,id, kwatts_s,date,time,active"},
-								{"weight":100,"limit":10,"condition_string":"date,millid,id"},
-								{"weight":100,"limit":10,"condition_string":"uuid,date,kwatts_s"},
-								{"weight":100,"limit":10,"condition_string":"date,id,millid,location"},
-								{"weight":100,"limit":10,"condition_string":"millid,active,date"}
+								{"weight":10,"limit":10,"condition_string":"millid,id, kwatts_s,date,time,active"},
+								{"weight":10,"limit":10,"condition_string":"date,millid,id"},
+								{"weight":10,"limit":10,"condition_string":"uuid,date,kwatts_s"},
+								{"weight":20,"limit":10,"condition_string":"date,id,millid,location"},
+								{"weight":50,"limit":10,"condition_string":"millid,active,date"}
 							]
 					},
 					"example_selectcondition":"autoinc,uuid,serverid,a,b,c,counter,time,partitionid,date,strrecordtype",
 					"updatesetattributes":"#active#,#location#,#kwatts_s#",
 					"wherecondition_s":{
 							"condition":[
-								{"weight":100,"condition_string":"  #date# #?date_RANGE_OPTION_BETWEEN?date#  AND #millid#=#?millid?millid# and #active#=#?active?active#"},
-								{"weight":10,"condition_string":" #id#=#?id?id#"}
+								{"weight":10,"condition_string":"  #date# #?date_RANGE_OPTION_BETWEEN?date#  AND #millid#=#?millid?millid# and #active#=#?active?active#"},
+								{"weight":90,"condition_string":" #id#=#?id?id#"}
 							]
 					},
 					"wherecondition_u":{
@@ -372,8 +375,9 @@
 					},
 					"wherecondition_d":{
 							"condition":[
-								{"weight":50,"condition_string":" #millid#=#?millid?millid# and #date# #?date_RANGE_OPTION_BETWEEN?date#  and #active#=0"},
-								{"weight":100,"condition_string":" #id#=#?id?id#"}
+							    {"weight":40,"condition_string":" #millid# #?millid_RANGE_OPTION_BETWEEN?millid# and #active#=#?active?active#"},
+								{"weight":10,"condition_string":" #millid#=#?millid?millid# and #date# #?date_RANGE_OPTION_BETWEEN?date#  and #active#=0"},
+								{"weight":50,"condition_string":" #id#=#?id?id#"}
 							]
 					},
 				    "example_where":" #autoinc# = #?autoinc?autoinc#  and #date# #?date_RANGE_OPTION_BETWEEN?date#  and #b# like #?b|20?b# " ,

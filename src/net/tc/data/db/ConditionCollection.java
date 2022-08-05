@@ -1,7 +1,10 @@
 package net.tc.data.db;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Map;
 
+import net.tc.comparators.WeightComparator;
 import net.tc.utils.SynchronizedMap;
 import net.tc.utils.Utility;
 
@@ -19,14 +22,22 @@ public class ConditionCollection {
 		if(Conditions.size()==1)
 			return (Condition) Conditions.getValueByPosition(0);
 		
-		Condition condition = (Condition) Conditions.getValueByPosition(Utility.getNumberFromRandom(new Long(Conditions.size())).intValue());
-		int weight = condition.weight.intValue();
+		ArrayList sortedConditions = Conditions.getValuesAsArrayList();
+		Collections.sort(sortedConditions, new WeightComparator());
+		Condition condition = new Condition();
 		
-		while (weight < weight_factor) {
-			condition =(Condition) Conditions.getValueByPosition(Utility.getNumberFromRandom(new Long(Conditions.size())).intValue());
-			weight = condition.weight.intValue();
+		for (int i = 0 ; i < sortedConditions.size();i++) {
+			condition = (Condition) sortedConditions.get(i);
+			int weight = condition.getWeight();
+			if(weight >= weight_factor) {
+				return (Condition) condition;
+			}else if(weight < weight_factor 
+					&& i == (sortedConditions.size() -1)) {
+						return (Condition) condition;
+			}
+			
 		}
-		return (Condition) condition;	
+		return null;	
 	}
 	public Map getAllCondition(){
 		//#TODO implement weight not there yet

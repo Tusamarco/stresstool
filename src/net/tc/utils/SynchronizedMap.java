@@ -366,6 +366,16 @@ public void putAll( Map t )
 	 return null;
    }
 
+   public ArrayList getValuesAsArrayList() {
+	   
+	   ArrayList myArray = new ArrayList();
+	   Iterator it =  values.iterator();
+	   while ( it.hasNext()){
+		   myArray.add(it.next());
+	   }
+	   
+	   return myArray;
+   }
 
    public Object[] getKeyasOrderedArray()
    {

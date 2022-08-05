@@ -11,8 +11,8 @@ dbTypeName=mysql
 #==========
 # Connection section
 #==========
-connUrl=jdbc:mysql://192.168.4.191:6033
-#connUrl=jdbc:mysql://192.168.4.205:3306
+#connUrl=jdbc:mysql://192.168.4.191:6033
+connUrl=jdbc:mysql://192.168.4.55:3306
 #connUrl=jdbc:mysql://192.168.4.233:3306
 #connUrl=jdbc:mysql://127.0.0.1:3306
 #database=test
@@ -47,7 +47,7 @@ datafilepath=shakespere.txt
 #manage the calendar options
 # YYYY-MM-DD HH:MM:SS
 # daysdiffernce is the target/final date of the period 
-calendardate=2020-04-1 00:00:01 
+calendardate=2022-08-1 00:00:01 
 daysdiffernce=365
 
 
@@ -61,15 +61,15 @@ daysdiffernce=365
 #==========
 # scalability / load settings  
 #==========
-poolNumber=1
-pctInsert=00
-pctUpdate=100 
-pctSelect=00 
-pctDelete=0
+poolNumber=8
+pctInsert=100
+pctUpdate=00 
+pctSelect=100 
+pctDelete=100
 #=======
 
 #repeatNumber=1
-repeatNumber=1000
+repeatNumber=10000
 
 #==========
 # console display settings
@@ -77,11 +77,11 @@ repeatNumber=1000
 #time in seconds
 #if you do not want to run by time but by TRX then set USEHARDSTOP false
 # and set the repeatNumber to the number of TRX you want to execute
-HardStopLimit=1200
+HardStopLimit=240
 UseHardStop=true
 StatIntervalMs=1000
 StatLoops = 100
-SemaphoreCountdownTime = 40
+SemaphoreCountdownTime = 5
 
 # Interactive mode [0 no|1 console output|2 console output + not exit until question is answered ] default 2 
 interactive = 2
@@ -161,11 +161,11 @@ maxLifetime=300000
 
 
 [net.tc.stresstool.actions.DeleteBase] 
-sleepDelete=800 
+sleepDelete=100 
 usePrepareStatement=false
-deleteRange = 10
-batchSize=5
-lazyInterval=0
+deleteRange = 50
+batchSize=1
+lazyInterval=1
 lazyDelete=false
 
 
@@ -175,26 +175,26 @@ usePrepareStatement=false
 sleepSelect=500
 lazySelect=true
 lazyInterval=1
-batchSize = 5
+batchSize = 10
 
 
 [net.tc.stresstool.actions.InsertBase]
 usePrepareStatement=false 
 useAutoIncrement=true
-sleepWrite=100
+sleepWrite=500
 lazyCreation=true
-lazyInterval=1
-batchSize=50
+lazyInterval=10
+batchSize=20
 jsonFile=wind_mill_example.json
 
 
 [net.tc.stresstool.actions.UpdateBase]
 usePrepareStatement=false
 useAutoIncrement=true
-sleepUpdate=10
+sleepUpdate=1000
 lazyUpdate=true
-lazyInterval=10
-batchSize=50
+lazyInterval=50
+batchSize=10
 
 
 
