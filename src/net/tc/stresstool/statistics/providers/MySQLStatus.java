@@ -296,15 +296,15 @@ public class MySQLStatus extends BaseStatCollector implements StatsProvider, Rep
             pw.println("Number of Key_blocks_used = " + this.getResultByName("Key_blocks_used",false).getSumValue() + " xsec = " + ((this.getResultByName("Key_blocks_used",false).getSumValue())/(totalExecutionTime/1000)));
     
             
-            pw.println("----------------------------------- QUERY CACHE --------------------------------------------");
-            pw.println("Number of Qcache_hits = " + this.getResultByName("Qcache_hits",false).getSumValue() + " xsec = " + ((this.getResultByName("Qcache_hits",false).getSumValue())/(totalExecutionTime/1000)));
-            pw.println("Number of Qcache_inserts = " + this.getResultByName("Qcache_inserts",false).getSumValue() + " xsec = " + ((this.getResultByName("Qcache_inserts",false).getSumValue())/(totalExecutionTime/1000)));
-            pw.println("Number of Qcache_not_cached = " + this.getResultByName("Qcache_not_cached",false).getSumValue() + " xsec = " + ((this.getResultByName("Qcache_not_cached",false).getSumValue())/(totalExecutionTime/1000)));
-            pw.println("Number of Qcache_lowmem_prunes = " + this.getResultByName("Qcache_lowmem_prunes",false).getSumValue() + " xsec = " + ((this.getResultByName("Qcache_lowmem_prunes",false).getSumValue())/(totalExecutionTime/1000)));
-    
-            pw.println("Number of Qcache_free_memory = " + this.getResultByName("Qcache_free_memory",false).getSumValue() + " xsec = " + ((this.getResultByName("Qcache_free_memory",false).getSumValue())/(totalExecutionTime/1000)));        
-            pw.println("Number of Qcache_queries_in_cache = " + this.getResultByName("Qcache_queries_in_cache",false).getSumValue() + " xsec = " + ((this.getResultByName("Qcache_queries_in_cache",false).getSumValue())/(totalExecutionTime/1000)));
-            pw.println("Number of Qcache_total_blocks = " + this.getResultByName("Qcache_total_blocks",false).getSumValue() + " xsec = " + ((this.getResultByName("Qcache_total_blocks",false).getSumValue())/(totalExecutionTime/1000)));
+//            pw.println("----------------------------------- QUERY CACHE --------------------------------------------");
+//            pw.println("Number of Qcache_hits = " + this.getResultByName("Qcache_hits",false).getSumValue() + " xsec = " + ((this.getResultByName("Qcache_hits",false).getSumValue())/(totalExecutionTime/1000)));
+//            pw.println("Number of Qcache_inserts = " + this.getResultByName("Qcache_inserts",false).getSumValue() + " xsec = " + ((this.getResultByName("Qcache_inserts",false).getSumValue())/(totalExecutionTime/1000)));
+//            pw.println("Number of Qcache_not_cached = " + this.getResultByName("Qcache_not_cached",false).getSumValue() + " xsec = " + ((this.getResultByName("Qcache_not_cached",false).getSumValue())/(totalExecutionTime/1000)));
+//            pw.println("Number of Qcache_lowmem_prunes = " + this.getResultByName("Qcache_lowmem_prunes",false).getSumValue() + " xsec = " + ((this.getResultByName("Qcache_lowmem_prunes",false).getSumValue())/(totalExecutionTime/1000)));
+//    
+//            pw.println("Number of Qcache_free_memory = " + this.getResultByName("Qcache_free_memory",false).getSumValue() + " xsec = " + ((this.getResultByName("Qcache_free_memory",false).getSumValue())/(totalExecutionTime/1000)));        
+//            pw.println("Number of Qcache_queries_in_cache = " + this.getResultByName("Qcache_queries_in_cache",false).getSumValue() + " xsec = " + ((this.getResultByName("Qcache_queries_in_cache",false).getSumValue())/(totalExecutionTime/1000)));
+//            pw.println("Number of Qcache_total_blocks = " + this.getResultByName("Qcache_total_blocks",false).getSumValue() + " xsec = " + ((this.getResultByName("Qcache_total_blocks",false).getSumValue())/(totalExecutionTime/1000)));
             
             pw.println("------------------------------------ THREADS    --------------------------------------------");
             pw.println("Number of Threads_cached = " + this.getResultByName("Threads_cached",false).getSumValue() );

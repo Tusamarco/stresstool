@@ -61,11 +61,11 @@ daysdiffernce=365
 #==========
 # scalability / load settings  
 #==========
-poolNumber=8
+poolNumber=1
 pctInsert=100
 pctUpdate=00 
-pctSelect=100 
-pctDelete=100
+pctSelect=00 
+pctDelete=00
 #=======
 
 #repeatNumber=1
@@ -119,9 +119,7 @@ rootdirectory=/tmp/stats
 
 #this parameter says to write a CSV file for each provider (in root dir)
 flushrowonfile=true
-providerclass=net.tc.stresstool.statistics.providers.ActionsReporter
-
-#,net.tc.stresstool.statistics.providers.MySQLStatus
+providerclass=net.tc.stresstool.statistics.providers.ActionsReporter,net.tc.stresstool.statistics.providers.MySQLStatus
 
 #,net.tc.stresstool.statistics.providers.InnoDBMetrics
 #,net.tc.stresstool.statistics.providers.InnoDB
@@ -135,7 +133,7 @@ logName=threadsFlush
 csvProgressive=false
 
 
-
+[net.tc.stresstool.statistics.providers.MySQLStatus]
 
 [com.zaxxer.hikari]
 #dataSource properties
